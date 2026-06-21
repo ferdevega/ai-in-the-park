@@ -374,8 +374,20 @@ function viewStage(slug) {
   $('[data-stage-title]', frag).textContent = stage.title;
   $('[data-stage-summary]', frag).textContent = stage.summary || '';
 
-  // Stage primer (collapsible). If no primer text, remove the wrapper.
-  const primerWrap = $('[data-stage-primer-wrap]', frag);
+  // Optional stage illustration — sits above Fer's bubble when present.
+  const illustration = $('[data-stage-illustration]', frag);
+  if (illustration) {
+    if (stage.illustration) {
+      illustration.setAttribute('src', stage.illustration);
+      illustration.setAttribute('alt', `Illustration for ${stage.title}`);
+      illustration.hidden = false;
+    } else {
+      illustration.remove();
+    }
+  }
+
+  // Stage primer — shown in Fer's speech bubble. Remove the bubble if no primer.
+  const primerWrap = $('[data-stage-intro-wrap]', frag);
   const primerBody = $('[data-stage-primer]', frag);
   if (stage.primer && primerBody) {
     primerBody.innerHTML = stage.primer;
@@ -504,6 +516,19 @@ function openModal(slug) {
     body.innerHTML = '<h1>Not found</h1><p>That card slug does not exist.</p>';
   } else {
     const frag = tpl('tpl-card');
+
+    // Optional card illustration — banner at the top of the modal
+    const illustration = $('[data-card-illustration]', frag);
+    if (illustration) {
+      if (card.illustration) {
+        illustration.setAttribute('src', card.illustration);
+        illustration.setAttribute('alt', `Illustration for ${card.title}`);
+        illustration.hidden = false;
+      } else {
+        illustration.remove();
+      }
+    }
+
     const types = $('[data-card-types]', frag);
     cardTypes(card).forEach((t) => types.appendChild(makeChip(t)));
 

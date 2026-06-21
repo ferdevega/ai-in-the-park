@@ -155,10 +155,13 @@
           <h1 data-stage-title></h1>
           <p class="lede" data-stage-summary></p>
         </div>
-        <aside class="stage-intro" data-stage-intro-wrap>
-          <img class="stage-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
-          <div class="stage-intro-bubble" data-stage-primer></div>
-        </aside>
+        <div class="stage-header-right">
+          <img class="stage-illustration" data-stage-illustration hidden alt="" />
+          <aside class="stage-intro" data-stage-intro-wrap>
+            <img class="stage-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
+            <div class="stage-intro-bubble" data-stage-primer></div>
+          </aside>
+        </div>
       </div>
 
       <div class="toolbar">
@@ -212,6 +215,7 @@
   </template>
 
   <template id="tpl-card">
+    <img class="card-illustration" data-card-illustration hidden alt="" />
     <div class="chip-row" data-card-types></div>
     <h1 data-card-title></h1>
     <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>

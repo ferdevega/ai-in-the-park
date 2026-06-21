@@ -558,7 +558,7 @@ p  { margin: 0 0 1em; }
   flex: 0 0 auto;
 }
 
-/* Stage header — H1 + lede on the left, Fer's intro bubble on the right */
+/* Stage header — H1 + lede on the left, optional illustration + Fer's bubble on the right */
 .stage-header-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -569,6 +569,42 @@ p  { margin: 0 0 1em; }
 .stage-header-text { min-width: 0; }
 .stage-header-text h1 { margin-bottom: 8px; }
 .stage-header-text .lede { margin-bottom: 0; }
+.stage-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Stage illustration — optional, sits above Fer's bubble in the right column */
+.stage-illustration {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 6px;
+  box-shadow: var(--shadow-card);
+}
+.stage-illustration[hidden] { display: none; }
+
+/* Card illustration — optional banner at the top of the modal */
+.card-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-card);
+}
+.card-illustration[hidden] { display: none; }
 
 /* Stage intro speech bubble — Fer talking to the visitor about this stage */
 .stage-intro {

@@ -45,12 +45,29 @@ Stages live in [`data/stages.json`](data/stages.json). Empty stages render as "c
 ai-playbook/
 ├─ index.html          # shell + view templates
 ├─ styles.css          # handcrafted, no framework
-├─ app.js              # hash router, filters, search, modal
-├─ assets/             # avatar + future static assets
+├─ app.js              # path router, filters, search, modal
+├─ build.js            # pre-renders per-route HTML + RSS + sitemap
+├─ assets/
+│  ├─ avatar.jpg       # author photo
+│  ├─ stages/          # optional stage illustrations
+│  └─ cards/           # optional card illustrations
 └─ data/
    ├─ stages.json      # the 10 stages
    └─ cards.json       # the how-to cards
 ```
+
+## Illustrations
+
+Each stage and each card can have an optional illustration that renders in
+the stage header (right column) or at the top of the card modal.
+
+- Stage: drop a PNG at `assets/stages/<slug>.png` and add
+  `"illustration": "/assets/stages/<slug>.png"` to the stage entry in
+  `data/stages.json`.
+- Card: same idea, at `assets/cards/<slug>.png` with the field on the card.
+
+Recommended dimensions: 1600×900 PNG, monochrome line art, transparent or
+white background. See the FAST page and the prompting model for tone.
 
 ## Deploy
 
