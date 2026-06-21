@@ -278,18 +278,37 @@ function viewHome() {
   renderSpine(null);
   const frag = tpl('tpl-home');
 
-  const cardCount = state.cards.length;
-  const openStages = state.stages.filter((s) => stageHasCards(s.slug)).length;
-  const totalStages = state.stages.length;
+  // Featured card — newest by `added` date
+  const featuredHost = $('[data-home-featured]', frag);
+  if (featuredHost && state.cards.length > 0) {
+    const newest = state.cards
+      .slice()
+      .sort((a, b) => (b.added || '').localeCompare(a.added || ''))[0];
+    featuredHost.appendChild(renderCardPreview(newest, { showStageLabel: true }));
+  }
 
-  // Set counter values directly; CSS handles the entrance feel.
-  const set = (sel, val) => { const el = $(sel, frag); if (el) el.textContent = String(val); };
-  set('[data-count-cards]', cardCount);
-  set('[data-count-open]', openStages);
-  set('[data-count-total]', totalStages);
-
-  const cardsLabel = $('[data-cards-label]', frag);
-  if (cardsLabel) cardsLabel.textContent = cardCount === 1 ? 'card in the playbook' : 'cards in the playbook';
+  // Stages overview — all 10 stages as color-dot chips
+  const stagesHost = $('[data-home-stages]', frag);
+  if (stagesHost) {
+    state.stages.forEach((stage) => {
+      const open = stageHasCards(stage.slug);
+      const chip = document.createElement(open ? 'a' : 'span');
+      chip.className = 'stages-chip' + (open ? '' : ' disabled');
+      if (open) chip.setAttribute('href', `/stages/${stage.slug}`);
+      chip.style.setProperty('--chip-color', stageColorVar(stage));
+      const dot = document.createElement('span');
+      dot.className = 'stages-chip-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      const num = document.createElement('span');
+      num.className = 'stages-chip-num';
+      num.textContent = String(stage.order);
+      const name = document.createElement('span');
+      name.className = 'stages-chip-name';
+      name.textContent = stage.title;
+      chip.append(dot, num, name);
+      stagesHost.appendChild(chip);
+    });
+  }
 
   mount(frag);
 }
