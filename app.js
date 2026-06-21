@@ -278,36 +278,49 @@ function viewHome() {
   renderSpine(null);
   const frag = tpl('tpl-home');
 
-  // Featured card — newest by `added` date
+  // Compact featured card — newest by `added` date
   const featuredHost = $('[data-home-featured]', frag);
   if (featuredHost && state.cards.length > 0) {
     const newest = state.cards
       .slice()
       .sort((a, b) => (b.added || '').localeCompare(a.added || ''))[0];
-    featuredHost.appendChild(renderCardPreview(newest, { showStageLabel: true }));
-  }
+    const primary = primaryStageOf(newest);
+    featuredHost.setAttribute('href', cardHref(newest));
 
-  // Stages overview — all 10 stages as color-dot chips
-  const stagesHost = $('[data-home-stages]', frag);
-  if (stagesHost) {
-    state.stages.forEach((stage) => {
-      const open = stageHasCards(stage.slug);
-      const chip = document.createElement(open ? 'a' : 'span');
-      chip.className = 'stages-chip' + (open ? '' : ' disabled');
-      if (open) chip.setAttribute('href', `/stages/${stage.slug}`);
-      chip.style.setProperty('--chip-color', stageColorVar(stage));
-      const dot = document.createElement('span');
-      dot.className = 'stages-chip-dot';
-      dot.setAttribute('aria-hidden', 'true');
-      const num = document.createElement('span');
-      num.className = 'stages-chip-num';
-      num.textContent = String(stage.order);
-      const name = document.createElement('span');
-      name.className = 'stages-chip-name';
-      name.textContent = stage.title;
-      chip.append(dot, num, name);
-      stagesHost.appendChild(chip);
-    });
+    const body = document.createElement('div');
+    body.className = 'home-featured-body';
+
+    const meta = document.createElement('div');
+    meta.className = 'home-featured-meta';
+    meta.textContent = primary ? primary.title : 'newest';
+    body.appendChild(meta);
+
+    const title = document.createElement('div');
+    title.className = 'home-featured-title';
+    title.textContent = newest.title;
+    body.appendChild(title);
+
+    if (newest.teaser) {
+      const teaser = document.createElement('p');
+      teaser.className = 'home-featured-teaser';
+      teaser.textContent = newest.teaser;
+      body.appendChild(teaser);
+    }
+
+    const chips = document.createElement('div');
+    chips.className = 'home-featured-chips';
+    newest.type.forEach((t) => chips.appendChild(makeChip(t)));
+    body.appendChild(chips);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'home-featured-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '→';
+
+    featuredHost.append(body, arrow);
+  } else if (featuredHost) {
+    // No cards yet — drop the empty link entirely so we don't show an orphan.
+    featuredHost.parentElement?.remove();
   }
 
   mount(frag);
