@@ -426,20 +426,14 @@ p  { margin: 0 0 1em; }
 /* ============================================================
    Home — "how this works" + anatomy of a card
    ============================================================ */
-.how-it-works { margin: 8px 0 32px; max-width: 920px; }
-.how-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
-  gap: 36px;
-  align-items: start;
-}
+.how-it-works { margin: 8px 0 28px; max-width: 720px; }
 .how-steps {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 .how-steps li {
   display: flex;
@@ -460,19 +454,20 @@ p  { margin: 0 0 1em; }
 .how-step-title {
   font-family: 'Fraunces', serif;
   font-weight: 800;
-  font-size: 1.08rem;
-  margin-bottom: 4px;
+  font-size: 1.05rem;
+  margin-bottom: 2px;
   color: var(--ink);
 }
 .how-step-body {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   color: var(--ink-2);
   line-height: 1.5;
 }
 
-/* Anatomy of a card — non-interactive sample with the same vocabulary as a real card */
-.anatomy { margin: 0; padding: 0; }
-.anatomy-meta {
+/* Mobile-only: vertical stage list on the home page so first-time visitors
+   can see all 10 stage names without opening the dropdown. Hidden on desktop. */
+.home-stages-list { display: none; margin: 0 0 28px; max-width: 720px; }
+.home-stages-list-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.66rem;
   letter-spacing: 0.18em;
@@ -481,63 +476,115 @@ p  { margin: 0 0 1em; }
   font-weight: 600;
   margin-bottom: 10px;
 }
-.anatomy-card {
-  position: relative;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  background-image: repeating-linear-gradient(
-    180deg, transparent 0, transparent 27px, rgba(42,34,26,0.05) 28px
-  );
-}
-.anatomy-band {
-  height: 8px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--t-mindset) 0% 50%, var(--t-prompt) 50% 100%);
-}
-.anatomy-stage-label {
-  position: absolute;
-  top: 18px;
-  right: 14px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
-  color: var(--ink-3);
-  text-transform: uppercase;
-  background: rgba(255,250,238,0.85);
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-}
-.anatomy-body { padding: 18px 16px 10px; }
-.anatomy-chips { margin-bottom: 10px; }
-.anatomy-card-title {
-  font-family: 'Fraunces', serif;
-  font-weight: 800;
-  font-size: 1.05rem;
-  line-height: 1.25;
-  margin-bottom: 6px;
-}
-.anatomy-card-teaser {
-  font-size: 0.86rem;
-  color: var(--ink-2);
-  line-height: 1.4;
+.home-stages-list ol {
+  list-style: none;
+  padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.anatomy-card-foot {
-  padding: 10px 16px;
-  border-top: 1px dashed var(--line-2);
-  background: rgba(244,236,214,0.4);
+.home-stage-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.72rem;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--btn-color, var(--ink-3));
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.home-stage-button:hover {
+  text-decoration: none;
+  transform: translateX(2px);
+  box-shadow: var(--shadow-card);
+}
+.home-stage-button.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background: transparent;
+  border-style: dashed;
   color: var(--ink-2);
 }
-.anatomy-foot-text { text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; font-size: 0.66rem; }
+.home-stage-button-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  color: var(--ink-3);
+  width: 20px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+.home-stage-button-name { flex: 1; }
+.home-stage-button-soon {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: rgba(42,34,26,0.05);
+  border: 1px solid var(--line);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.home-stage-button-arrow {
+  color: var(--ink-3);
+  font-size: 1.2rem;
+  flex: 0 0 auto;
+}
+
+/* Stage intro speech bubble — Fer talking to the visitor about this stage */
+.stage-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 18px 0 26px;
+  max-width: 760px;
+}
+.stage-intro-photo {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  flex: 0 0 auto;
+  object-fit: cover;
+  margin-top: 4px;
+}
+.stage-intro-bubble {
+  position: relative;
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.55;
+  box-shadow: var(--shadow-card);
+}
+.stage-intro-bubble::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: -7px;
+  width: 13px; height: 13px;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+.stage-intro-bubble p { margin: 0 0 0.6em; }
+.stage-intro-bubble p:last-child { margin-bottom: 0; }
+
+@media (max-width: 720px) {
+  .home-stages-list { display: block; }
+  .stage-intro-photo { width: 40px; height: 40px; }
+  .stage-intro-bubble { font-size: 0.92rem; padding: 12px 14px; }
+}
 
 /* Level dots — used on previews, modals, and the anatomy */
 .level-dots {
@@ -684,46 +731,7 @@ p  { margin: 0 0 1em; }
   margin-bottom: 6px;
 }
 
-/* ============================================================
-   Stage primer (collapsible "what happens in this stage")
-   ============================================================ */
-.stage-primer {
-  margin: 16px 0 0;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 250, 238, 0.45);
-  max-width: 760px;
-}
-.stage-primer summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 10px 16px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.stage-primer summary::-webkit-details-marker { display: none; }
-.stage-primer summary::after {
-  content: '+';
-  font-size: 1.1rem;
-  color: var(--ink-3);
-  transition: transform 0.2s var(--ease);
-}
-.stage-primer[open] summary::after { content: '–'; }
-.stage-primer summary:hover { color: var(--ink); }
-.stage-primer-body {
-  padding: 0 16px 14px;
-  font-size: 0.92rem;
-  color: var(--ink-2);
-  line-height: 1.55;
-}
-.stage-primer-body p { margin: 0 0 0.7em; }
-.stage-primer-body p:last-child { margin-bottom: 0; }
+/* (stage primer styles moved to .stage-intro speech bubble above) */
 
 /* ============================================================
    Grouped card grid (cards split into Beginner / Intermediate / Advanced)
@@ -1262,8 +1270,11 @@ body.modal-open { overflow: hidden; }
 
 /* ============================================================
    Spine toggle (mobile-only stage picker button)
+   On the home page we hide it on mobile, since the home shows the
+   full stage list in the body itself — no need for a redundant picker.
    ============================================================ */
 .spine-toggle { display: none; }
+body.view-home .spine-toggle { display: none !important; }
 
 /* ============================================================
    Responsive — spine becomes a dropdown picker on small screens

@@ -280,7 +280,48 @@ function setSpineOpen(open) {
 function viewHome() {
   state.view = 'home';
   renderSpine(null);
-  mount(tpl('tpl-home'));
+  const frag = tpl('tpl-home');
+
+  // Mobile-only stages list — populated from the same stage data as the spine.
+  const stagesList = $('[data-home-stages-list]', frag);
+  if (stagesList) {
+    state.stages.forEach((stage) => {
+      const li = document.createElement('li');
+      const hasCards = stageHasCards(stage.slug);
+      const a = document.createElement('a');
+      a.className = 'home-stage-button' + (hasCards ? '' : ' disabled');
+      if (hasCards) a.setAttribute('href', `/stages/${stage.slug}`);
+      a.style.setProperty('--btn-color', stageColorVar(stage));
+
+      const num = document.createElement('span');
+      num.className = 'home-stage-button-num';
+      num.textContent = String(stage.order);
+
+      const name = document.createElement('span');
+      name.className = 'home-stage-button-name';
+      name.textContent = stage.title;
+
+      a.append(num, name);
+
+      if (hasCards) {
+        const arrow = document.createElement('span');
+        arrow.className = 'home-stage-button-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '→';
+        a.appendChild(arrow);
+      } else {
+        const soon = document.createElement('span');
+        soon.className = 'home-stage-button-soon';
+        soon.textContent = 'soon';
+        a.appendChild(soon);
+      }
+
+      li.appendChild(a);
+      stagesList.appendChild(li);
+    });
+  }
+
+  mount(frag);
 }
 
 // Helper: render a row of 3 level dots (1, 2, or 3 filled)
@@ -435,6 +476,11 @@ function mount(frag) {
   const view = $('#view');
   view.innerHTML = '';
   view.appendChild(frag);
+  // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
+  const v = state.view || '';
+  const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-notfound');
+  document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
 

@@ -5,7 +5,7 @@
     "abbr": "AN",
     "order": 1,
     "summary": "Understand the audience, the gap, and the constraints before designing anything.",
-    "primer": "<p>Where you figure out the real problem before designing anything. Stakeholder conversations, performance data, audience research, and a written brief. The biggest trap here is jumping to solutions before understanding what's broken.</p>"
+    "primer": "<p>Before you design anything, you need to understand what's actually broken. Talk to stakeholders, look at the performance data, write a real brief. Skip this part and you're just guessing — and you find out the hard way, weeks later, when nobody learns anything.</p>"
   },
   {
     "slug": "strategy",
@@ -13,7 +13,7 @@
     "abbr": "ST",
     "order": 2,
     "summary": "Decide what kind of learning experience this needs to be, and why.",
-    "primer": "<p>The bets you make before you start building: modality, depth, audience priorities, business outcomes. You're not designing yet — you're deciding what kind of training this should even be, and what success looks like.</p>"
+    "primer": "<p>Strategy is the bets you make before you start designing. Modality, depth, who you're really designing for, what success looks like. I've watched people skip this and jump straight to 'let's build a course' — it almost never ends well. The decisions you make here shape the next 80% of the work.</p>"
   },
   {
     "slug": "curriculum",
@@ -21,7 +21,7 @@
     "abbr": "CU",
     "order": 3,
     "summary": "Shape the arc — modules, outcomes, the learner journey.",
-    "primer": "<p>Shaping the arc. Learning outcomes, the order of modules, what each one teaches, what's assessed. This is where a brief turns into a learner journey.</p>"
+    "primer": "<p>This is where you shape the arc. What comes first, what builds on what, what gets assessed. People sometimes confuse it with design, but it's higher altitude — outcomes and sequence, not slides and activities. Get this right and the rest gets easier.</p>"
   },
   {
     "slug": "design",
@@ -29,7 +29,7 @@
     "abbr": "DE",
     "order": 4,
     "summary": "Storyboard and prototype the experience.",
-    "primer": "<p>Storyboarding the actual learner experience. Activities, narrative, interactions, assessment, the moment-to-moment of what happens in each module. The point where a training program starts to feel like something specific.</p>"
+    "primer": "<p>Design is where 'we'll teach X' turns into 'here's exactly how the learner experiences X.' Activities, narrative, decisions, assessment. This is the most creative stage of the work — and the most likely to spiral if the earlier brief was vague.</p>"
   },
   {
     "slug": "development",
@@ -37,7 +37,7 @@
     "abbr": "DV",
     "order": 5,
     "summary": "Build the assets — slides, video, code, copy.",
-    "primer": "<p>Production. Building the actual assets — slides, video, scripts, voiceover, code, copy. This is where AI saves the most hours if you know which jobs to give it.</p>"
+    "primer": "<p>This is production. Slides, video, scripts, code, copy. It used to be the most time-consuming part of any project by a wide margin. With AI it doesn't have to be — most of the time-saving cards in this playbook live in this stage.</p>"
   },
   {
     "slug": "plan",
@@ -45,7 +45,7 @@
     "abbr": "PL",
     "order": 6,
     "summary": "Logistics, comms, rollout sequencing.",
-    "primer": "<p>The unglamorous logistics: rollout sequence, comms, registration, scheduling, facilitator prep. The work that decides whether anyone actually shows up — and whether the first cohort goes smoothly or as a near-miss.</p>"
+    "primer": "<p>Plan is the part nobody romanticizes. Rollout, comms, registration, scheduling, who's facilitating which session. It's the work that decides whether anyone actually shows up — and whether the first cohort feels intentional or improvised.</p>"
   },
   {
     "slug": "execution",
@@ -53,7 +53,7 @@
     "abbr": "EX",
     "order": 7,
     "summary": "Deliver the experience to real learners.",
-    "primer": "<p>Delivering the experience. Whether it's live, async, or hybrid, this is where training meets reality and the learners' actual context shows up. Good design survives execution; great execution can rescue mediocre design.</p>"
+    "primer": "<p>Execution is where training meets reality. Live, async, hybrid — doesn't matter. The learners' actual context shows up here, and you'll see exactly which parts of your design hold up. Great execution can rescue mediocre design; bad execution can ruin great design.</p>"
   },
   {
     "slug": "measurement",
@@ -61,7 +61,7 @@
     "abbr": "MS",
     "order": 8,
     "summary": "Find out whether it worked, on the dimensions that matter.",
-    "primer": "<p>Finding out whether it worked, on the dimensions that actually matter. Beyond completion rates and smile sheets: behavior change, business impact, what stuck, what didn't.</p>"
+    "primer": "<p>Did it actually work? Beyond completion rates and smile sheets — did behavior change? Did the business outcome move? Most projects either skip this or measure the wrong thing. The ones that get it right have something concrete to point at when they ask for the next budget.</p>"
   },
   {
     "slug": "improvement",
@@ -69,7 +69,7 @@
     "abbr": "IM",
     "order": 9,
     "summary": "Iterate. Training is a product, not a project.",
-    "primer": "<p>Treating training as a product, not a project. Reading the signals from execution and measurement, deciding what to iterate, and shipping the next version.</p>"
+    "primer": "<p>Treat training like a product, not a project. Read the signals from execution and measurement, decide what to iterate, ship the next version. The first cohort is rarely the best version — the second one usually is.</p>"
   },
   {
     "slug": "project-management",
@@ -77,6 +77,6 @@
     "abbr": "PM",
     "order": 10,
     "summary": "Keep the work moving — scope, schedule, stakeholders, and risk.",
-    "primer": "<p>The connective tissue across every other stage. Scope, schedule, stakeholders, risks, decisions. Often the gap between a good design and a design that actually ships on time.</p>"
+    "primer": "<p>This one isn't a phase — it runs across everything else. Scope, schedule, stakeholders, risks, decisions. The gap between 'a good design' and 'a design that actually shipped on time' is almost always project management.</p>"
   }
 ]

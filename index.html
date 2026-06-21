@@ -95,61 +95,38 @@
       <h1>Design better training, with AI by your side.</h1>
       <p class="lede">
         I use AI every day to design training. This playbook is where I keep
-        what works — the mindsets, tools, prompts and accelerators I actually
-        use, and any lessons I learned along the way. If you find something
-        useful, take it and make it your own.
+        what works — the mindsets, tools, prompts and accelerators.
       </p>
 
       <div class="how-it-works">
-        <div class="how-grid">
-          <ol class="how-steps">
-            <li>
-              <span class="how-step-num">1</span>
-              <div>
-                <div class="how-step-title">Pick a stage</div>
-                <div class="how-step-body">10 stages of training development, from analysis through project management. Tabs on the left.</div>
-              </div>
-            </li>
-            <li>
-              <span class="how-step-num">2</span>
-              <div>
-                <div class="how-step-title">Choose your level</div>
-                <div class="how-step-body">Beginner, intermediate, advanced. Every card is tagged so you can start anywhere.</div>
-              </div>
-            </li>
-            <li>
-              <span class="how-step-num">3</span>
-              <div>
-                <div class="how-step-title">Read, copy, or run</div>
-                <div class="how-step-body">Each card has the why, the how-to, and (when it's a prompt) a copy-and-go template.</div>
-              </div>
-            </li>
-          </ol>
-
-          <figure class="anatomy" aria-label="What a card looks like">
-            <figcaption class="anatomy-meta">anatomy of a card</figcaption>
-            <div class="anatomy-card">
-              <div class="anatomy-band"></div>
-              <div class="anatomy-stage-label">Stage</div>
-              <div class="anatomy-body">
-                <div class="chip-row anatomy-chips">
-                  <span class="chip mindset">mindset</span>
-                  <span class="chip prompt">prompt</span>
-                </div>
-                <div class="anatomy-card-title">A specific, useful technique</div>
-                <div class="anatomy-card-teaser">One-line teaser that tells you whether it's worth opening.</div>
-              </div>
-              <div class="anatomy-card-foot">
-                <span class="level-dots" aria-label="Difficulty: beginner">
-                  <span class="level-dot filled"></span>
-                  <span class="level-dot"></span>
-                  <span class="level-dot"></span>
-                </span>
-                <span class="anatomy-foot-text">beginner</span>
-              </div>
+        <ol class="how-steps">
+          <li>
+            <span class="how-step-num">1</span>
+            <div>
+              <div class="how-step-title">Pick a stage</div>
+              <div class="how-step-body">10 stages of training development, from analysis through project management.</div>
             </div>
-          </figure>
-        </div>
+          </li>
+          <li>
+            <span class="how-step-num">2</span>
+            <div>
+              <div class="how-step-title">Choose your level</div>
+              <div class="how-step-body">Beginner, intermediate, advanced. Every card is tagged so you can start anywhere.</div>
+            </div>
+          </li>
+          <li>
+            <span class="how-step-num">3</span>
+            <div>
+              <div class="how-step-title">Read, copy, or run</div>
+              <div class="how-step-body">Each card has the why, the how-to, and (when it's a prompt) a copy-and-go template.</div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="home-stages-list" aria-label="Open a stage">
+        <div class="home-stages-list-label">Open a stage</div>
+        <ol data-home-stages-list></ol>
       </div>
 
       <div class="home-author-row">
@@ -175,10 +152,10 @@
       <h1 data-stage-title></h1>
       <p class="lede" data-stage-summary></p>
 
-      <details class="stage-primer" data-stage-primer-wrap>
-        <summary>What happens in this stage</summary>
-        <div class="stage-primer-body" data-stage-primer></div>
-      </details>
+      <div class="stage-intro" data-stage-intro-wrap>
+        <img class="stage-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
+        <div class="stage-intro-bubble" data-stage-primer></div>
+      </div>
 
       <div class="toolbar">
         <input type="search" class="search" placeholder="Search this stage..." data-search autocomplete="off" />
