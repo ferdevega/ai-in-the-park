@@ -276,7 +276,18 @@ function setSpineOpen(open) {
 function viewHome() {
   state.view = 'home';
   renderSpine(null);
-  mount(tpl('tpl-home'));
+  const frag = tpl('tpl-home');
+  // Live counter: "X cards · Y of Z stages open"
+  const counter = $('[data-home-counter]', frag);
+  if (counter) {
+    const cardCount = state.cards.length;
+    const openStages = state.stages.filter((s) => stageHasCards(s.slug)).length;
+    counter.innerHTML =
+      `<span><strong>${cardCount}</strong> ${cardCount === 1 ? 'card' : 'cards'} in the playbook</span>` +
+      `<span class="dot" aria-hidden="true"></span>` +
+      `<span><strong>${openStages}</strong> of <strong>${state.stages.length}</strong> stages open</span>`;
+  }
+  mount(frag);
 }
 
 function viewStage(slug) {
