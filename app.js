@@ -56,7 +56,7 @@ function applyFilters(cards) {
   const { types, tags, query, sort } = state.filters;
   const q = query.trim().toLowerCase();
   let out = cards.filter((c) => {
-    if (types.size && !c.type.some((t) => types.has(t))) return false;
+    if (types.size && !cardTypes(c).some((t) => types.has(t))) return false;
     if (tags.size && !(c.tags || []).some((t) => tags.has(t))) return false;
     if (q) {
       const hay = [c.title, c.teaser || '', c.body || '', (c.tags || []).join(' ')]
@@ -103,6 +103,14 @@ function stageColorVar(stage) {
   return `var(--s-${stage.order})`;
 }
 
+// Normalize a card's type — schema is now a single string per card.
+// Legacy arrays still work (returns first entry).
+function cardTypes(card) {
+  if (Array.isArray(card.type)) return card.type;
+  if (typeof card.type === 'string') return [card.type];
+  return [];
+}
+
 function bandStyleForTypes(types) {
   const colors = types.map((t) => `var(--t-${t})`);
   if (colors.length === 1) return `background: ${colors[0]};`;
@@ -130,7 +138,7 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   a.setAttribute('href', cardHref(card));
 
   const band = $('[data-band]', frag);
-  band.setAttribute('style', bandStyleForTypes(card.type));
+  band.setAttribute('style', bandStyleForTypes(cardTypes(card)));
 
   if (showStageLabel) {
     const stage = primaryStageOf(card);
@@ -146,7 +154,7 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   $('[data-teaser]', frag).textContent = card.teaser || '';
 
   const chips = $('[data-types]', frag);
-  card.type.forEach((t) => chips.appendChild(makeChip(t)));
+  cardTypes(card).forEach((t) => chips.appendChild(makeChip(t)));
 
   const levelHost = $('[data-level]', frag);
   if (levelHost) renderLevelDots(levelHost, card.level);
@@ -497,7 +505,7 @@ function openModal(slug) {
   } else {
     const frag = tpl('tpl-card');
     const types = $('[data-card-types]', frag);
-    card.type.forEach((t) => types.appendChild(makeChip(t)));
+    cardTypes(card).forEach((t) => types.appendChild(makeChip(t)));
 
     // Append a level badge alongside the type chips
     const levelBadge = document.createElement('span');
@@ -521,30 +529,85 @@ function openModal(slug) {
       if (i < stages.length - 1) stagesEl.appendChild(document.createTextNode(', '));
     });
 
-    $('[data-card-body]', frag).innerHTML = card.body || '';
+    // Structured card body — each section has an emoji + name heading, consistent across cards.
+    const bodyHost = $('[data-card-body]', frag);
 
-    // Steps (how-to-use it) — optional, renders as a numbered list
-    if (Array.isArray(card.steps) && card.steps.length) {
-      const stepsHost = $('[data-card-steps]', frag);
+    const renderSection = (emoji, title, contentHTML, options = {}) => {
+      if (!contentHTML) return;
       const wrap = document.createElement('div');
-      wrap.className = 'card-steps';
-      const label = document.createElement('div');
-      label.className = 'card-steps-label';
-      label.textContent = 'how to use it';
-      wrap.appendChild(label);
+      wrap.className = 'card-section' + (options.extraClass ? ` ${options.extraClass}` : '');
+      if (title) {
+        const h = document.createElement('h3');
+        h.className = 'card-section-heading';
+        if (emoji) {
+          const e = document.createElement('span');
+          e.className = 'card-section-heading-emoji';
+          e.setAttribute('aria-hidden', 'true');
+          e.textContent = emoji;
+          h.appendChild(e);
+        }
+        h.appendChild(document.createTextNode(title));
+        wrap.appendChild(h);
+      }
+      const body = document.createElement('div');
+      body.className = 'prose';
+      body.innerHTML = contentHTML;
+      wrap.appendChild(body);
+      bodyHost.appendChild(wrap);
+    };
+
+    // Intro — no heading, just the narrative opener
+    if (card.intro) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section card-section-intro prose';
+      wrap.innerHTML = card.intro;
+      bodyHost.appendChild(wrap);
+    } else if (card.body) {
+      // Legacy: single body field still supported
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section prose';
+      wrap.innerHTML = card.body;
+      bodyHost.appendChild(wrap);
+    }
+
+    renderSection('🎯', 'Why this matters', card.why_matters);
+    renderSection('🤖', 'How AI can help', card.how_ai_helps);
+    renderSection('⚠️', "What AI won't do", card.ai_wont);
+
+    // How to run it — numbered steps with emerald circle markers
+    if (Array.isArray(card.steps) && card.steps.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section';
+      const h = document.createElement('h3');
+      h.className = 'card-section-heading';
+      const e = document.createElement('span');
+      e.className = 'card-section-heading-emoji';
+      e.setAttribute('aria-hidden', 'true');
+      e.textContent = '⚙️';
+      h.appendChild(e);
+      h.appendChild(document.createTextNode('How to run it'));
+      wrap.appendChild(h);
       const ol = document.createElement('ol');
+      ol.className = 'card-section-steps';
       card.steps.forEach((step) => {
         const li = document.createElement('li');
         li.textContent = step;
         ol.appendChild(li);
       });
       wrap.appendChild(ol);
-      stepsHost.appendChild(wrap);
+      bodyHost.appendChild(wrap);
     }
 
     // Prompt: either prompt_fast (preferred, labeled FAST sections) or legacy prompt_body
     if (card.prompt_fast) {
       const host = $('[data-card-prompt]', frag);
+
+      // FAST disclaimer note — small italic above the prompt block
+      const disclaimer = document.createElement('p');
+      disclaimer.className = 'prompt-fast-disclaimer';
+      disclaimer.innerHTML = 'This prompt follows the <a href="/fast">FAST</a> model — Frame · Ask · Shape · Tune.';
+      host.appendChild(disclaimer);
+
       const block = document.createElement('div');
       block.className = 'prompt-block';
 
@@ -557,7 +620,7 @@ function openModal(slug) {
         const content = card.prompt_fast[key];
         if (!content) return;
         const section = document.createElement('div');
-        section.className = 'prompt-fast-section';
+        section.className = `prompt-fast-section fast-${key}`;
         const label = document.createElement('span');
         label.className = 'prompt-fast-label';
         label.textContent = key;
@@ -586,7 +649,7 @@ function openModal(slug) {
       });
       block.appendChild(btn);
       host.appendChild(block);
-    } else if (card.type.includes('prompt') && card.prompt_body) {
+    } else if (cardTypes(card).includes('prompt') && card.prompt_body) {
       const host = $('[data-card-prompt]', frag);
       const block = document.createElement('div');
       block.className = 'prompt-block';

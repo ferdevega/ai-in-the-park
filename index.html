@@ -33,8 +33,8 @@
       <a href="/" data-home-link>Home</a>
       <a href="/cards">All cards</a>
       <a href="/recent">Recent</a>
-      <a href="/fast">FAST</a>
       <a href="/about">About</a>
+      <a href="/fast" class="topbar-cta">New to AI? Click here</a>
     </nav>
   </header>
 
@@ -150,12 +150,15 @@
 
   <template id="tpl-stage-panel">
     <section class="section section-stage">
-      <h1 data-stage-title></h1>
-      <p class="lede" data-stage-summary></p>
-
-      <div class="stage-intro" data-stage-intro-wrap>
-        <img class="stage-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
-        <div class="stage-intro-bubble" data-stage-primer></div>
+      <div class="stage-header-grid">
+        <div class="stage-header-text">
+          <h1 data-stage-title></h1>
+          <p class="lede" data-stage-summary></p>
+        </div>
+        <aside class="stage-intro" data-stage-intro-wrap>
+          <img class="stage-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
+          <div class="stage-intro-bubble" data-stage-primer></div>
+        </aside>
       </div>
 
       <div class="toolbar">
@@ -212,8 +215,7 @@
     <div class="chip-row" data-card-types></div>
     <h1 data-card-title></h1>
     <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>
-    <div class="prose" data-card-body></div>
-    <div data-card-steps></div>
+    <div data-card-body></div>
     <div data-card-prompt></div>
     <div data-card-tip></div>
     <div data-card-share></div>
@@ -225,27 +227,22 @@
 
   <template id="tpl-fast">
     <section class="fast-page">
-      <div class="section-meta">a quick reference</div>
-      <h1>FAST — a prompting model for designing training with AI</h1>
+      <div class="section-meta">starter guide</div>
+      <h1>New to AI? Start here.</h1>
       <p class="lede">
-        Every Prompt card in this playbook follows the same four moves. Learn
-        them once and you can write your own prompts that hold up. Not a
-        course — just a reference you can come back to.
+        For learning designers picking up the playbook for the first time. Not a course — just the few things that change how you'll use it.
       </p>
 
-      <div class="fast-intro">
-        <img class="fast-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
-        <div class="fast-intro-bubble">
-          <p>I didn't invent these moves — most experienced prompters do them
-          without thinking. What FAST does is name them, so you can spot when
-          you're skipping one. That's usually why a prompt didn't work.</p>
-        </div>
+      <div class="fast-mindset">
+        <h2 class="fast-h2">The mindset reset</h2>
+        <p>AI isn't a vending machine. The quality of what comes back is shaped almost entirely by what you put in. Most disappointing AI output comes from treating it like a search engine — "give me X." The fix is structure. Four moves, every time.</p>
       </div>
 
+      <h2 class="fast-h2">The four-move prompt — FAST</h2>
       <ol class="fast-moves">
         <li class="fast-move">
           <div class="fast-move-letter">F</div>
-          <h2 class="fast-move-title">Frame</h2>
+          <h3 class="fast-move-title">Frame</h3>
           <p class="fast-move-def">Set the role and the situation. Who is the AI being? What's the context?</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -258,7 +255,7 @@
         </li>
         <li class="fast-move">
           <div class="fast-move-letter">A</div>
-          <h2 class="fast-move-title">Ask</h2>
+          <h3 class="fast-move-title">Ask</h3>
           <p class="fast-move-def">The actual request. One sentence. One verb.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -271,11 +268,11 @@
         </li>
         <li class="fast-move">
           <div class="fast-move-letter">S</div>
-          <h2 class="fast-move-title">Shape</h2>
-          <p class="fast-move-def">Constraints, format, scope. The more you constrain, the better the output.</p>
+          <h3 class="fast-move-title">Shape</h3>
+          <p class="fast-move-def">Constraints, format, scope. The more you constrain, the better the output. Strong Shape sections always include explicit Don'ts.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
-            <em>4 to 6 modules. Each needs an outcome with a Bloom-level verb. Don't go over.</em>
+            <em>4 to 6 modules. Each needs an outcome with a Bloom-level verb. Don't pad with filler.</em>
           </div>
           <div class="fast-move-skip">
             <span class="fast-move-tag warn">Skip it</span>
@@ -284,7 +281,7 @@
         </li>
         <li class="fast-move">
           <div class="fast-move-letter">T</div>
-          <h2 class="fast-move-title">Tune</h2>
+          <h3 class="fast-move-title">Tune</h3>
           <p class="fast-move-def">The quality move. Tells AI to push back, flag assumptions, disagree where it would.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -297,10 +294,25 @@
         </li>
       </ol>
 
-      <div class="fast-takeaway">
-        <p><strong>The promise:</strong> Frame what's happening. Ask what you need. Shape how the answer should look. Tune what good means. That's the whole model.</p>
-        <p>Open any Prompt card in the playbook and you'll see all four. <a href="/cards">Browse the cards →</a></p>
+      <div class="fast-intro">
+        <img class="fast-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
+        <div class="fast-intro-bubble">
+          <p>FAST isn't the only model. There's CRAFT (Context, Role, Action, Format, Test), CO-STAR (Context, Objective, Style, Tone, Audience, Response), CRISPE, RTF — they all converge on similar ideas. I went with FAST because it's the shortest acronym I could find that still includes Tune. Tune is the move most people miss.</p>
+        </div>
       </div>
+
+      <h2 class="fast-h2">How to use this playbook</h2>
+      <ul class="fast-howto">
+        <li>10 stages of training development, from Analysis to Project Management. Walk them in order, or jump to what you need today.</li>
+        <li>Cards are tagged by level — beginner, intermediate, advanced. Start with beginner.</li>
+        <li>Every Prompt card has a runnable prompt + a pro tip with the next-level move.</li>
+        <li>"All cards" lets you search and filter across the whole playbook.</li>
+      </ul>
+
+      <a class="fast-cta-button" href="/cards/topic-to-module-outline">
+        Start with the first card
+        <span aria-hidden="true">→</span>
+      </a>
     </section>
   </template>
 
