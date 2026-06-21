@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 0.10  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0 0.06 0"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="#cde0d0"/>
+  <rect width="1200" height="630" filter="url(#grain)" opacity="0.7"/>
+  <g transform="translate(0, 0)">
+    <path d="M880 80 C 920 220, 1080 280, 1140 360 C 1080 380, 940 360, 880 280 Z" fill="#0f5239" opacity="0.18"/>
+    <path d="M880 80 C 950 180, 1050 240, 1140 360" fill="none" stroke="#0f5239" stroke-width="3" stroke-linecap="round"/>
+    <path d="M960 200 L 1000 160" fill="none" stroke="#0f5239" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M1000 270 L 1050 220" fill="none" stroke="#0f5239" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <text x="80" y="220" font-family="Georgia, serif" font-style="italic" font-weight="400" font-size="32" fill="#0f5239">AI in the Park</text>
+  <text x="80" y="350" font-family="Georgia, serif" font-weight="800" font-size="92" fill="#1a2520">A playbook for</text>
+  <text x="80" y="450" font-family="Georgia, serif" font-weight="800" font-size="92" fill="#1a2520">learning designers</text>
+  <text x="80" y="540" font-family="Inter, sans-serif" font-size="28" fill="#2a4538">Mindsets · Tools · Accelerators · Best Practices · Prompts</text>
+</svg>

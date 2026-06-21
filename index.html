@@ -4,18 +4,34 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI in the Park 🐕‍🦺 — Playbook for Learning Designers</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="A field notebook of how-to cards for designing training with AI in the loop — mindsets, tools, accelerators, lessons learned, and prompts." />
+  <link rel="canonical" href="https://ai-in-the-park.vercel.app/" />
+
+  <meta property="og:title" content="AI in the Park 🐕‍🦺 — Playbook for Learning Designers" />
+  <meta property="og:description" content="A field notebook of how-to cards for designing training with AI in the loop — mindsets, tools, accelerators, lessons learned, and prompts." />
+  <meta property="og:url" content="https://ai-in-the-park.vercel.app/" />
+  <meta property="og:image" content="https://ai-in-the-park.vercel.app/assets/og-default.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AI in the Park 🐕‍🦺" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI in the Park 🐕‍🦺 — Playbook for Learning Designers" />
+  <meta name="twitter:description" content="A field notebook of how-to cards for designing training with AI in the loop — mindsets, tools, accelerators, lessons learned, and prompts." />
+  <meta name="twitter:image" content="https://ai-in-the-park.vercel.app/assets/og-default.svg" />
+
+  <link rel="alternate" type="application/rss+xml" title="AI in the Park 🐕‍🦺 RSS" href="/feed.xml" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <a href="#/" class="brand">
+    <a href="/" class="brand">
       <span class="brand-text">AI in the Park <span class="brand-emoji">🐕‍🦺</span></span>
     </a>
     <nav class="topbar-links">
-      <a href="#/" data-home-link>Home</a>
-      <a href="#/cards">All cards</a>
-      <a href="#/recent">Recently added</a>
-      <a href="#/about">About</a>
+      <a href="/" data-home-link>Home</a>
+      <a href="/cards">All cards</a>
+      <a href="/recent">Recently added</a>
+      <a href="/about">About</a>
     </nav>
   </header>
 
@@ -82,7 +98,7 @@
       </p>
 
       <div class="home-author">
-        <img class="home-author-photo" src="assets/avatar.jpg" alt="Fernando Vega" />
+        <img class="home-author-photo" src="/assets/avatar.jpg" alt="Fernando Vega" />
         <div class="home-author-text">
           <div class="home-author-name">Fernando Vega</div>
           <p class="home-author-bio">
@@ -160,6 +176,7 @@
     <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>
     <div class="prose" data-card-body></div>
     <div data-card-prompt></div>
+    <div data-card-share></div>
     <section class="related" data-related hidden>
       <div class="section-meta">related cards</div>
       <div class="card-grid" data-related-grid></div>
@@ -172,7 +189,7 @@
       <h1>About</h1>
 
       <div class="about-author">
-        <img class="about-photo" src="assets/avatar.jpg" alt="Fernando Vega" />
+        <img class="about-photo" src="/assets/avatar.jpg" alt="Fernando Vega" />
         <div class="about-text">
           <h2 class="about-name">Fernando Vega</h2>
           <p>
@@ -204,6 +221,14 @@
           If you have feedback, want to contribute, or want to compare notes — reach out on LinkedIn.
         </p>
       </div>
+
+      <div class="about-work">
+        <div class="section-meta">work together</div>
+        <p>
+          Designing a learning program and want a thought partner who's lived in the AI-meets-L&amp;D space?
+          <a href="https://www.linkedin.com/in/ferdevega/" target="_blank" rel="noopener">Get in touch on LinkedIn ↗</a>.
+        </p>
+      </div>
     </section>
   </template>
 
@@ -213,7 +238,7 @@
       <p class="lede" data-empty-summary></p>
       <div class="empty">
         I haven't added cards for this stage yet. The playbook is growing —
-        check back, or open <a href="#/stages/analysis">Analysis &amp; Discovery</a>
+        check back, or open <a href="/stages/analysis">Analysis &amp; Discovery</a>
         for what's stocked so far.
       </div>
     </section>
@@ -222,7 +247,7 @@
   <template id="tpl-not-found">
     <section class="section">
       <h1>Not found</h1>
-      <p><a href="#/">back to home</a></p>
+      <p><a href="/">back to home</a></p>
     </section>
   </template>
 
@@ -251,6 +276,6 @@
     </a>
   </template>
 
-  <script src="app.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>

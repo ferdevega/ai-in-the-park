@@ -768,6 +768,38 @@ body.modal-open { overflow: hidden; }
 }
 .copy-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 var(--ink); }
 
+/* Share row (Copy link + Share on LinkedIn) on every card modal */
+.share-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px 0 8px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--line);
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.share-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 var(--ink); text-decoration: none; }
+.share-btn-linkedin {
+  background: #0a66c2;
+  color: #fff;
+  border-color: #0a66c2;
+}
+.share-btn-linkedin:hover { box-shadow: 3px 3px 0 #053b71; }
+
 .related {
   margin-top: 48px;
   padding-top: 24px;
@@ -854,6 +886,25 @@ body.modal-open { overflow: hidden; }
   color: var(--ink-2);
   line-height: 1.6;
 }
+.about-work {
+  max-width: 720px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1.5px dashed var(--line);
+}
+.about-work p {
+  font-size: 0.98rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.about-work a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+.about-work a:hover { color: var(--ink); }
 @media (max-width: 600px) {
   .about-author { flex-direction: column; gap: 18px; }
   .about-photo { width: 96px; height: 96px; }

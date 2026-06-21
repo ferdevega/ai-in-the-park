@@ -1,14 +1,16 @@
-// AI Playbook — vanilla JS app (field-notebook layout)
+// AI in the Park — vanilla JS app, path-based routing.
 //
-// Routes (hash-based):
-//   #/                                          → home landing
-//   #/stages/:slug                              → open that stage section
-//   #/cards                                     → all-cards index
-//   #/recent                                    → recently added
-//   #/about                                     → about
-//   #/cards/:slug                               → modal on top of home
-//   #/stages/:slug/cards/:cardSlug              → modal on top of that stage
-//   #/cards-index/:cardSlug → modal on cards index (not used directly, but supported)
+// URLs:
+//   /                          → home landing
+//   /stages/:slug              → that stage's section
+//   /cards                     → all-cards index
+//   /recent                    → recently added
+//   /about                     → about page
+//   /cards/:slug               → opens the card modal on top of the home view
+//
+// Each URL above also exists as a pre-built /…/index.html file (see build.js)
+// so social shares (LinkedIn, Twitter) get rich previews. Once the SPA loads,
+// navigation between URLs uses history.pushState — no full page reload.
 
 const CARD_TYPES = ['mindset', 'tool', 'accelerator', 'best-practice', 'prompt'];
 
@@ -18,14 +20,14 @@ const state = {
   filters: { types: new Set(), tags: new Set(), query: '', sort: 'default' },
   view: null,        // 'home' | 'stage:<slug>' | 'cards' | 'recent' | 'about' | 'notfound'
   modalSlug: null,
-  lastBgHash: '#/',
+  lastBgPath: '/',
 };
 
 // ---------- Data ----------
 async function loadData() {
   const [stagesRes, cardsRes] = await Promise.all([
-    fetch('data/stages.json'),
-    fetch('data/cards.json'),
+    fetch('/data/stages.json'),
+    fetch('/data/cards.json'),
   ]);
   state.stages = await stagesRes.json();
   state.cards = await cardsRes.json();
@@ -102,7 +104,6 @@ function stageColorVar(stage) {
 }
 
 function bandStyleForTypes(types) {
-  // Solid color for single type; equal stripes for multi-type.
   const colors = types.map((t) => `var(--t-${t})`);
   if (colors.length === 1) return `background: ${colors[0]};`;
   const stops = [];
@@ -120,19 +121,13 @@ function primaryStageOf(card) {
   return stageBySlug(refs[0]);
 }
 
-function makeCardHref(card) {
-  // Stack the card route on top of the current view, when meaningful.
-  if (state.view && state.view.startsWith('stage:')) {
-    const slug = state.view.slice('stage:'.length);
-    return `#/stages/${slug}/cards/${card.slug}`;
-  }
-  return `#/cards/${card.slug}`;
-}
+const cardHref = (card) => `/cards/${card.slug}`;
+const stageHref = (stage) => `/stages/${stage.slug}`;
 
 function renderCardPreview(card, { showStageLabel = false } = {}) {
   const frag = tpl('tpl-card-preview');
   const a = $('a', frag);
-  a.setAttribute('href', makeCardHref(card));
+  a.setAttribute('href', cardHref(card));
 
   const band = $('[data-band]', frag);
   band.setAttribute('style', bandStyleForTypes(card.type));
@@ -152,7 +147,6 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
 
   const chips = $('[data-types]', frag);
   card.type.forEach((t) => chips.appendChild(makeChip(t)));
-
   return frag;
 }
 
@@ -174,7 +168,6 @@ function renderFilterBar(target, { availableTypes = CARD_TYPES, tags = [], onCha
     typeLabel.textContent = 'type';
     target.appendChild(typeLabel);
 
-    // Render in CARD_TYPES order so colors stay in the same sequence.
     CARD_TYPES.filter((t) => availableTypes.includes(t)).forEach((t) => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -229,14 +222,12 @@ function renderSpine(activeSlug = null) {
     const frag = tpl('tpl-spine-tab');
     const a = $('a', frag);
     a.style.setProperty('--tab-color', stageColorVar(stage));
-    const hasCards = stageHasCards(stage.slug);
-    if (hasCards) {
-      a.setAttribute('href', `#/stages/${stage.slug}`);
+    if (stageHasCards(stage.slug)) {
+      a.setAttribute('href', stageHref(stage));
       if (activeSlug === stage.slug) a.classList.add('active');
     } else {
       a.classList.add('disabled');
       a.setAttribute('aria-disabled', 'true');
-      // No href so it doesn't navigate.
       $('[data-soon]', frag).hidden = false;
     }
     $('[data-order]', frag).textContent = stage.order;
@@ -267,7 +258,6 @@ function updateSpineToggle(activeSlug) {
 }
 
 function setSpineOpen(open) {
-  // Toggle on the outer .spine element (not the inner .spine-tabs which carries data-spine).
   const spine = document.querySelector('.spine');
   const toggle = $('[data-spine-toggle]');
   let backdrop = $('.spine-backdrop');
@@ -296,8 +286,6 @@ function viewStage(slug) {
   renderSpine(slug);
 
   const cards = cardsForStage(slug);
-
-  // Empty stage: show a friendly "coming soon" placeholder instead of toolbar/grid.
   if (cards.length === 0) {
     const empty = tpl('tpl-stage-empty');
     $('[data-empty-title]', empty).textContent = `${stage.title} — coming soon`;
@@ -353,9 +341,7 @@ function viewRecent() {
   renderSpine(null);
   const frag = tpl('tpl-recent');
   const grid = $('[data-card-grid]', frag);
-  const sorted = state.cards
-    .slice()
-    .sort((a, b) => (b.added || '').localeCompare(a.added || ''));
+  const sorted = state.cards.slice().sort((a, b) => (b.added || '').localeCompare(a.added || ''));
   renderCardGrid(grid, sorted, { showStageLabel: true });
   mount(frag);
 }
@@ -390,7 +376,7 @@ function openModal(slug) {
     const stagesEl = $('[data-card-stages]', frag);
     stages.forEach((s, i) => {
       const link = document.createElement('a');
-      link.href = `#/stages/${s.slug}`;
+      link.href = stageHref(s);
       link.textContent = s.title;
       stagesEl.appendChild(link);
       if (i < stages.length - 1) stagesEl.appendChild(document.createTextNode(', '));
@@ -423,6 +409,10 @@ function openModal(slug) {
       host.appendChild(block);
     }
 
+    // Share + Copy link buttons — always shown on cards
+    const shareHost = $('[data-card-share]', frag);
+    if (shareHost) shareHost.appendChild(buildShareRow(card));
+
     const related = (card.related || []).map(cardBySlug).filter(Boolean);
     if (related.length) {
       const wrap = $('[data-related]', frag);
@@ -437,49 +427,85 @@ function openModal(slug) {
   state.modalSlug = slug;
 }
 
-function closeModal({ updateHash = true } = {}) {
+function buildShareRow(card) {
+  const row = document.createElement('div');
+  row.className = 'share-row';
+
+  const url = new URL(cardHref(card), window.location.origin).href;
+
+  const copy = document.createElement('button');
+  copy.type = 'button';
+  copy.className = 'share-btn';
+  copy.innerHTML = '<span>Copy link</span>';
+  copy.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      const orig = copy.innerHTML;
+      copy.innerHTML = '<span>Link copied!</span>';
+      setTimeout(() => (copy.innerHTML = orig), 1500);
+    } catch {}
+  });
+
+  const share = document.createElement('a');
+  share.className = 'share-btn share-btn-linkedin';
+  share.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+  share.target = '_blank';
+  share.rel = 'noopener';
+  share.innerHTML = '<span>Share on LinkedIn ↗</span>';
+
+  row.appendChild(copy);
+  row.appendChild(share);
+  return row;
+}
+
+function closeModal({ updateHistory = true } = {}) {
   const modal = $('#modal');
   modal.hidden = true;
   $('#modal-body').innerHTML = '';
   document.body.classList.remove('modal-open');
   state.modalSlug = null;
-  if (updateHash) {
-    const hash = window.location.hash;
-    const stripped = hash.replace(/\/cards\/[^/]+$/, '');
-    const next = stripped && stripped !== '#' ? stripped : state.lastBgHash;
-    if (next !== hash) history.replaceState(null, '', next);
+  if (updateHistory) {
+    // If the user opened this card directly (no background view yet), send them home.
+    if (history.state && history.state.bg) {
+      history.back();
+    } else {
+      navigate(state.lastBgPath || '/', { replace: true });
+    }
   }
 }
 
 // ---------- Router ----------
-function parseHash() {
-  const hash = window.location.hash.replace(/^#/, '') || '/';
-  return hash.split('/').filter(Boolean);
+function parsePath(pathname) {
+  return pathname.replace(/\/+$/, '').split('/').filter(Boolean);
 }
 
 function route() {
   state.filters = { types: new Set(), tags: new Set(), query: '', sort: 'default' };
-  const parts = parseHash();
+  const parts = parsePath(window.location.pathname);
 
   let bgRenderer = viewHome;
   let modalSlug = null;
+  let bgPath = '/';
 
   if (parts.length === 0) {
     bgRenderer = viewHome;
+    bgPath = '/';
   } else if (parts[0] === 'about') {
     bgRenderer = viewAbout;
+    bgPath = '/about';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
+    bgPath = '/recent';
   } else if (parts[0] === 'cards' && parts.length === 1) {
     bgRenderer = viewCardsIndex;
+    bgPath = '/cards';
   } else if (parts[0] === 'cards' && parts[1]) {
     bgRenderer = viewHome;
+    bgPath = state.lastBgPath || '/';
     modalSlug = parts[1];
-  } else if (parts[0] === 'stages' && parts[1] && parts[2] === 'cards' && parts[3]) {
-    bgRenderer = () => viewStage(parts[1]);
-    modalSlug = parts[3];
   } else if (parts[0] === 'stages' && parts[1]) {
     bgRenderer = () => viewStage(parts[1]);
+    bgPath = `/stages/${parts[1]}`;
   } else {
     bgRenderer = viewNotFound;
   }
@@ -487,28 +513,33 @@ function route() {
   bgRenderer();
 
   if (modalSlug) openModal(modalSlug);
-  else if (state.modalSlug) closeModal({ updateHash: false });
+  else if (state.modalSlug) closeModal({ updateHistory: false });
 
-  if (!modalSlug) state.lastBgHash = window.location.hash || '#/';
+  if (!modalSlug) state.lastBgPath = bgPath;
+}
+
+function navigate(pathname, { replace = false } = {}) {
+  if (replace) history.replaceState({}, '', pathname);
+  else history.pushState({}, '', pathname);
+  route();
 }
 
 // ---------- Wiring ----------
-window.addEventListener('hashchange', () => {
+window.addEventListener('popstate', () => {
   setSpineOpen(false);
   route();
 });
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    if (state.modalSlug) history.back();
+    if (state.modalSlug) closeModal();
     else if (document.querySelector('.spine')?.classList.contains('open')) setSpineOpen(false);
   }
 });
 
 document.addEventListener('click', (e) => {
   if (e.target.matches('[data-modal-close]')) {
-    if (state.modalSlug) history.back();
-    else closeModal();
+    if (state.modalSlug) closeModal();
     return;
   }
   if (e.target.closest('[data-spine-toggle]')) {
@@ -516,14 +547,38 @@ document.addEventListener('click', (e) => {
     setSpineOpen(!open);
     return;
   }
+
+  // Intercept internal <a href> clicks for SPA navigation
+  const link = e.target.closest('a[href]');
+  if (!link) return;
+  if (link.classList.contains('disabled')) {
+    // Disabled spine tabs — prevent navigation
+    e.preventDefault();
+    return;
+  }
+  const href = link.getAttribute('href');
+  if (!href || !href.startsWith('/') || link.target === '_blank' || link.hasAttribute('download')) return;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+  e.preventDefault();
+  if (href !== window.location.pathname) navigate(href);
+  // If user clicked a tab while spine dropdown is open, close it
+  setSpineOpen(false);
 });
 
 (async function init() {
+  // Legacy hash bookmarks: convert /#/cards/foo to /cards/foo on first load.
+  if (window.location.hash && window.location.hash.length > 1 && window.location.pathname === '/') {
+    const legacy = window.location.hash.replace(/^#/, '');
+    if (legacy.startsWith('/')) {
+      history.replaceState({}, '', legacy);
+    }
+  }
+
   try {
     await loadData();
   } catch (e) {
     document.getElementById('view').innerHTML =
-      '<div class="empty">Could not load data files. Make sure you are running this via a local server (e.g. <code>python -m http.server</code>).</div>';
+      '<div class="empty">Could not load data files. Make sure you are running this via a local server.</div>';
     return;
   }
   route();

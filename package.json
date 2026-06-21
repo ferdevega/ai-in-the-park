@@ -1,0 +1,9 @@
+{
+  "name": "ai-in-the-park",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A field notebook of how-to cards for designing training with AI in the loop.",
+  "scripts": {
+    "build": "node build.js"
+  }
+}
