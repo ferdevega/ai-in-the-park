@@ -1,5 +1,21 @@
 [
   {
+    "slug": "stakeholder-board-before-the-meeting",
+    "title": "Build a board of stakeholders and let them tear your strategy apart first",
+    "stage": "strategy",
+    "type": ["mindset", "prompt"],
+    "tags": ["prompting", "stakeholders", "strategy-review"],
+    "added": "2026-06-21",
+    "teaser": "Multi-persona prompting: have AI play the people in the room, so you hear the objections before the meeting.",
+    "steps": [
+      "Pick your board. Two or three people who'd push back hardest, and what each one cares about.",
+      "Load them into a project. Drop the context and personas into Claude or ChatGPT (prompt below). Tell each to name itself before it answers.",
+      "Run them one at a time. Pass each answer to the next so they react to each other. Watch where they disagree."
+    ],
+    "body": "<p>Ever walked into a meeting and watched someone raise a flag you never saw coming? Multi-persona prompting lets you hear it first. You build a small board of the people who'll be in the room, hand it to AI, and let them argue over your strategy before the real ones do.</p><p>Example board, for a factory training rollout:</p><ul><li>Operations lead — wants output, hates anything that stops the line.</li><li>Compliance officer — wants everything documented and defensible.</li><li>Instructional designer — wants people to actually retain it.</li></ul><p>Where it falls apart: vague personas. They blur into one polite voice that agrees with everything, which feels like it worked but didn't. If nobody disagrees, sharpen what each one wants. The disagreement is the whole point.</p>",
+    "prompt_body": "You are a roundtable of [N] stakeholders reviewing a [strategy / plan / design]. Here is the context:\n\n[Paste your strategy and the situation.]\n\nThe board:\n- [Stakeholder 1]: cares most about [priority]. Pushes back when [X].\n- [Stakeholder 2]: cares most about [priority]. Pushes back when [Y].\n- [Stakeholder 3]: cares most about [priority]. Pushes back when [Z].\n\nRules:\n- Critique and build on this together, but NOT all at once.\n- Each stakeholder names themselves before they speak.\n- Respond as ONE stakeholder per turn. I'll prompt you for the next.\n- Disagree where you genuinely would. Don't smooth it over.\n\nStart with [Stakeholder 1]."
+  },
+  {
     "slug": "ai-as-discovery-partner",
     "title": "Make AI interview you about the problem",
     "stage": "analysis",

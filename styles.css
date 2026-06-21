@@ -905,6 +905,53 @@ body.modal-open { overflow: hidden; }
   font-size: 0.9em;
 }
 
+/* Card "how to use it" steps — emerald numbered circles */
+.card-steps {
+  margin: 28px 0 8px;
+}
+.card-steps-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.card-steps ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+.card-steps ol li {
+  position: relative;
+  padding-left: 40px;
+  margin: 0 0 14px;
+  min-height: 28px;
+  counter-increment: step;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.card-steps ol li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  background: var(--accent);
+  color: var(--paper);
+  border-radius: 50%;
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 0.88rem;
+  display: grid;
+  place-items: center;
+}
+.card-steps ol li:last-child { margin-bottom: 0; }
+
 .prompt-block { margin: 28px 0 8px; }
 .prompt-block pre {
   background: #1f1a14;

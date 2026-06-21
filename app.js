@@ -431,6 +431,25 @@ function openModal(slug) {
 
     $('[data-card-body]', frag).innerHTML = card.body || '';
 
+    // Steps (how-to-use it) — optional, renders as a numbered list
+    if (Array.isArray(card.steps) && card.steps.length) {
+      const stepsHost = $('[data-card-steps]', frag);
+      const wrap = document.createElement('div');
+      wrap.className = 'card-steps';
+      const label = document.createElement('div');
+      label.className = 'card-steps-label';
+      label.textContent = 'how to use it';
+      wrap.appendChild(label);
+      const ol = document.createElement('ol');
+      card.steps.forEach((step) => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        ol.appendChild(li);
+      });
+      wrap.appendChild(ol);
+      stepsHost.appendChild(wrap);
+    }
+
     if (card.type.includes('prompt') && card.prompt_body) {
       const host = $('[data-card-prompt]', frag);
       const block = document.createElement('div');
