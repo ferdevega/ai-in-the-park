@@ -32,7 +32,8 @@
     <nav class="topbar-links">
       <a href="/" data-home-link>Home</a>
       <a href="/cards">All cards</a>
-      <a href="/recent">Recently added</a>
+      <a href="/recent">Recent</a>
+      <a href="/fast">FAST</a>
       <a href="/about">About</a>
     </nav>
   </header>
@@ -214,10 +215,92 @@
     <div class="prose" data-card-body></div>
     <div data-card-steps></div>
     <div data-card-prompt></div>
+    <div data-card-tip></div>
     <div data-card-share></div>
     <section class="related" data-related hidden>
       <div class="section-meta">related cards</div>
       <div class="card-grid" data-related-grid></div>
+    </section>
+  </template>
+
+  <template id="tpl-fast">
+    <section class="fast-page">
+      <div class="section-meta">a quick reference</div>
+      <h1>FAST — a prompting model for designing training with AI</h1>
+      <p class="lede">
+        Every Prompt card in this playbook follows the same four moves. Learn
+        them once and you can write your own prompts that hold up. Not a
+        course — just a reference you can come back to.
+      </p>
+
+      <div class="fast-intro">
+        <img class="fast-intro-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
+        <div class="fast-intro-bubble">
+          <p>I didn't invent these moves — most experienced prompters do them
+          without thinking. What FAST does is name them, so you can spot when
+          you're skipping one. That's usually why a prompt didn't work.</p>
+        </div>
+      </div>
+
+      <ol class="fast-moves">
+        <li class="fast-move">
+          <div class="fast-move-letter">F</div>
+          <h2 class="fast-move-title">Frame</h2>
+          <p class="fast-move-def">Set the role and the situation. Who is the AI being? What's the context?</p>
+          <div class="fast-move-example">
+            <span class="fast-move-tag">Example</span>
+            <em>You are a senior instructional designer.</em>
+          </div>
+          <div class="fast-move-skip">
+            <span class="fast-move-tag warn">Skip it</span>
+            Generic, hedging tone. AI tries to please everyone.
+          </div>
+        </li>
+        <li class="fast-move">
+          <div class="fast-move-letter">A</div>
+          <h2 class="fast-move-title">Ask</h2>
+          <p class="fast-move-def">The actual request. One sentence. One verb.</p>
+          <div class="fast-move-example">
+            <span class="fast-move-tag">Example</span>
+            <em>Draft a module-by-module outline for a training program.</em>
+          </div>
+          <div class="fast-move-skip">
+            <span class="fast-move-tag warn">Skip it</span>
+            Fuzzy ask, fuzzy output. If you can't say it in one sentence, you don't know what you want yet.
+          </div>
+        </li>
+        <li class="fast-move">
+          <div class="fast-move-letter">S</div>
+          <h2 class="fast-move-title">Shape</h2>
+          <p class="fast-move-def">Constraints, format, scope. The more you constrain, the better the output.</p>
+          <div class="fast-move-example">
+            <span class="fast-move-tag">Example</span>
+            <em>4 to 6 modules. Each needs an outcome with a Bloom-level verb. Don't go over.</em>
+          </div>
+          <div class="fast-move-skip">
+            <span class="fast-move-tag warn">Skip it</span>
+            Sprawling, generic, over-delivers. You end up editing the AI's choices instead of yours.
+          </div>
+        </li>
+        <li class="fast-move">
+          <div class="fast-move-letter">T</div>
+          <h2 class="fast-move-title">Tune</h2>
+          <p class="fast-move-def">The quality move. Tells AI to push back, flag assumptions, disagree where it would.</p>
+          <div class="fast-move-example">
+            <span class="fast-move-tag">Example</span>
+            <em>Where you assumed something, call it out. If the brief is too thin, ask one clarifying question first.</em>
+          </div>
+          <div class="fast-move-skip">
+            <span class="fast-move-tag warn">Skip it</span>
+            AI flatters you. You get an answer that feels right but isn't sharp.
+          </div>
+        </li>
+      </ol>
+
+      <div class="fast-takeaway">
+        <p><strong>The promise:</strong> Frame what's happening. Ask what you need. Shape how the answer should look. Tune what good means. That's the whole model.</p>
+        <p>Open any Prompt card in the playbook and you'll see all four. <a href="/cards">Browse the cards →</a></p>
+      </div>
     </section>
   </template>
 

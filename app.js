@@ -470,6 +470,7 @@ function viewRecent() {
 }
 
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
+function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
 function viewNotFound() { state.view = 'notfound'; renderSpine(null); mount(tpl('tpl-not-found')); }
 
 function mount(frag) {
@@ -479,7 +480,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-notfound');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -541,7 +542,51 @@ function openModal(slug) {
       stepsHost.appendChild(wrap);
     }
 
-    if (card.type.includes('prompt') && card.prompt_body) {
+    // Prompt: either prompt_fast (preferred, labeled FAST sections) or legacy prompt_body
+    if (card.prompt_fast) {
+      const host = $('[data-card-prompt]', frag);
+      const block = document.createElement('div');
+      block.className = 'prompt-block';
+
+      const inner = document.createElement('div');
+      inner.className = 'prompt-fast-block';
+
+      const order = ['frame', 'ask', 'shape', 'tune'];
+      const cleanParts = [];
+      order.forEach((key) => {
+        const content = card.prompt_fast[key];
+        if (!content) return;
+        const section = document.createElement('div');
+        section.className = 'prompt-fast-section';
+        const label = document.createElement('span');
+        label.className = 'prompt-fast-label';
+        label.textContent = key;
+        const body = document.createElement('div');
+        body.className = 'prompt-fast-content';
+        body.textContent = content;
+        section.append(label, body);
+        inner.appendChild(section);
+        cleanParts.push(content);
+      });
+      block.appendChild(inner);
+
+      // Copy strips the section labels — pastes a clean, runnable prompt
+      const cleanPrompt = cleanParts.join('\n\n');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy prompt';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(cleanPrompt);
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => (btn.textContent = orig), 1500);
+        } catch {}
+      });
+      block.appendChild(btn);
+      host.appendChild(block);
+    } else if (card.type.includes('prompt') && card.prompt_body) {
       const host = $('[data-card-prompt]', frag);
       const block = document.createElement('div');
       block.className = 'prompt-block';
@@ -564,6 +609,28 @@ function openModal(slug) {
       });
       block.appendChild(btn);
       host.appendChild(block);
+    }
+
+    // Pro tip: Fer in a speech bubble at the end of the card
+    if (card.pro_tip) {
+      const tipHost = $('[data-card-tip]', frag);
+      const wrap = document.createElement('aside');
+      wrap.className = 'card-pro-tip';
+      const photo = document.createElement('img');
+      photo.className = 'card-pro-tip-photo';
+      photo.src = '/assets/avatar.jpg';
+      photo.alt = 'Fernando De Vega';
+      const bubble = document.createElement('div');
+      bubble.className = 'card-pro-tip-bubble';
+      const label = document.createElement('span');
+      label.className = 'card-pro-tip-label';
+      label.textContent = 'Pro tip';
+      bubble.appendChild(label);
+      const body = document.createElement('div');
+      body.innerHTML = `<p>${card.pro_tip}</p>`;
+      bubble.appendChild(body);
+      wrap.append(photo, bubble);
+      tipHost.appendChild(wrap);
     }
 
     // Share + Copy link buttons — always shown on cards
@@ -650,6 +717,9 @@ function route() {
   } else if (parts[0] === 'about') {
     bgRenderer = viewAbout;
     bgPath = '/about';
+  } else if (parts[0] === 'fast') {
+    bgRenderer = viewFast;
+    bgPath = '/fast';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
     bgPath = '/recent';

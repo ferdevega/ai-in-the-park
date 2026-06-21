@@ -72,6 +72,13 @@ const routes = [
     description: 'The latest cards added to the playbook.',
     url: `${SITE_URL}/recent`,
   },
+  {
+    out: 'fast/index.html',
+    title: `FAST — a prompting model for designing training with AI`,
+    description:
+      'A quick reference for the four-move prompting model used across the AI in the Park playbook: Frame, Ask, Shape, Tune.',
+    url: `${SITE_URL}/fast`,
+  },
 ];
 
 for (const r of routes) {
@@ -141,6 +148,7 @@ const sitemapUrls = [
   '/cards',
   '/recent',
   '/about',
+  '/fast',
   ...stages.map((s) => `/stages/${s.slug}`),
   ...cards.map((c) => `/cards/${c.slug}`),
 ];

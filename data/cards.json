@@ -1,14 +1,25 @@
 [
   {
-    "slug": "ai-as-discovery-partner",
-    "title": "Make AI interview you about the problem",
-    "stage": "analysis",
-    "type": ["mindset", "prompt"],
+    "slug": "topic-to-module-outline",
+    "title": "Turn a topic into a module outline",
+    "stage": "development",
+    "type": ["prompt", "accelerator"],
     "level": "beginner",
-    "tags": ["discovery", "framing", "interviews"],
+    "tags": ["outline", "structure", "module-design", "bloom"],
     "added": "2026-06-21",
-    "teaser": "Before you ask AI for answers, get it to ask you better questions about the problem.",
-    "body": "<p>Most people open ChatGPT and ask for a needs analysis template. That's the wrong first move. The fastest way to build a real understanding of a training need is to have AI <em>interview you</em> — playing the role of a sharp consultant who refuses to start designing until the brief is honest.</p><p><strong>Why this works:</strong></p><ul><li>It forces you to articulate what you actually know and don't know, in your own words.</li><li>It surfaces the assumptions you'd otherwise smuggle into the design.</li><li>It gives you a transcript you can paste into a discovery brief, share with stakeholders, or come back to in a week.</li></ul><p><strong>How to use it:</strong> Paste the prompt below into Claude or ChatGPT. Answer the questions one at a time — don't batch them. When the AI is satisfied with your answers, ask it to summarize what it heard into a one-page discovery brief.</p><p><strong>What it won't do:</strong> Replace real stakeholder interviews. This is for clarifying <em>your own</em> understanding before you go in — or after you come out, to stress-test what you heard.</p>",
-    "prompt_body": "You are a senior learning consultant. I'm about to design a training program and I want you to make sure I actually understand the problem before I start.\n\nInterview me one question at a time. Don't move on until I give you a real answer — push back if I'm vague, hand-wavy, or jumping to solutions.\n\nCover, in this order:\n\n1. The performance gap — what should people be doing that they aren't, and how do you know?\n2. The audience — who are they, what do they already know, what's their motivation level?\n3. The constraints — time, budget, modality preferences, political sensitivities.\n4. The success criteria — how will we know this worked? What changes for the business?\n5. The risks — what's the most likely way this training fails to land?\n\nWhen you're satisfied with my answers, summarize them as a one-page discovery brief in clear, no-jargon language."
+    "teaser": "Skip the blank page. Hand AI a topic, get back a sequenced, outcome-driven module outline you can actually use.",
+    "body": "<p>You've got a topic and a deadline. Maybe some bullet points from a kickoff call. The blank document is staring at you. This is the place to use AI as a starting-point engine — not for the final product, but for the structure you'll build on.</p><p>What makes an outline actually useful isn't a list of topics. It's a <em>sequence</em> that takes a learner from where they are to where they need to be, with each module building on the last. The prompt below bakes in a few instructional design moves so what you get back isn't generic:</p><ul><li>Each module needs a stated <strong>outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know <em>why</em> it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul><p><strong>Optional upgrade:</strong> if you have actual source material — SOPs, transcripts, articles — drop it all into a NotebookLM notebook and run the prompt in there. The outline comes back grounded in your sources, with citations. Way less hallucination, much easier to defend to an SME.</p><p><strong>What it won't do:</strong> Validate that the outline is right for <em>your</em> audience. AI doesn't know your learners. After you have an outline, you still need to check it against what you learned in Analysis &amp; Discovery.</p><p class=\"prompt-model-note\">This prompt uses the <a href=\"/fast\">FAST model</a> — Frame · Ask · Shape · Tune. Every Prompt card in the playbook follows it.</p>",
+    "steps": [
+      "Have your topic, audience description, and any source bullet points ready. The more you give it up front, the better the first draft.",
+      "Paste the prompt into Claude or ChatGPT (or into a NotebookLM notebook if you've loaded sources). Fill in the brackets.",
+      "Iterate. Ask for a different sequence, a different module count, a different cognitive progression. The first output is rarely the final outline."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior instructional designer.",
+      "ask": "Draft a module-by-module outline for a training program.",
+      "shape": "Topic: [TOPIC]\nAudience: [WHO THE LEARNERS ARE — role, expertise level, motivation]\nFormat: [e.g., 60-minute live workshop / 4-hour async / 30-min microlearning]\nSource material (optional): [BULLET POINTS OR PASTED SOURCE CONTENT]\n\nRules:\n- 4 to 6 modules. Don't go over.\n- Each module needs: a title, a stated outcome (use a Bloom-level verb), 3–5 sub-points, and a one-line rationale for why this module sits in this position.\n- Sequence the modules so each one enables the next.",
+      "tune": "Where you assumed something, call it out — those assumptions become the questions I bring to the SME. If the brief is too thin to design from, ask me one clarifying question first instead of guessing."
+    },
+    "pro_tip": "Try backward design. Describe what the learner needs to <em>do</em> at the end — what they'd be doing in the final assessment or on the job — and ask AI to outline backwards from there. The result is always sharper than \"outline this topic.\" Wiggins &amp; McTighe wrote a whole book about why, but you can feel the difference on your next outline."
   }
 ]
