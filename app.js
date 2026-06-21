@@ -277,16 +277,20 @@ function viewHome() {
   state.view = 'home';
   renderSpine(null);
   const frag = tpl('tpl-home');
-  // Live counter: "X cards · Y of Z stages open"
-  const counter = $('[data-home-counter]', frag);
-  if (counter) {
-    const cardCount = state.cards.length;
-    const openStages = state.stages.filter((s) => stageHasCards(s.slug)).length;
-    counter.innerHTML =
-      `<span><strong>${cardCount}</strong> ${cardCount === 1 ? 'card' : 'cards'} in the playbook</span>` +
-      `<span class="dot" aria-hidden="true"></span>` +
-      `<span><strong>${openStages}</strong> of <strong>${state.stages.length}</strong> stages open</span>`;
-  }
+
+  const cardCount = state.cards.length;
+  const openStages = state.stages.filter((s) => stageHasCards(s.slug)).length;
+  const totalStages = state.stages.length;
+
+  // Set counter values directly; CSS handles the entrance feel.
+  const set = (sel, val) => { const el = $(sel, frag); if (el) el.textContent = String(val); };
+  set('[data-count-cards]', cardCount);
+  set('[data-count-open]', openStages);
+  set('[data-count-total]', totalStages);
+
+  const cardsLabel = $('[data-cards-label]', frag);
+  if (cardsLabel) cardsLabel.textContent = cardCount === 1 ? 'card in the playbook' : 'cards in the playbook';
+
   mount(frag);
 }
 

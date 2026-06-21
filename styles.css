@@ -95,9 +95,10 @@ p  { margin: 0 0 1em; }
   padding: 8px 24px;
   background: #6b2a16; /* brick */
   background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.05  0 0 0 0 0.03  0 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.02  0 0 0 0 0.01  0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   border-bottom: 1px solid rgba(0,0,0,0.25);
   color: #f4ecd6;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.18);
 }
 .brand {
   font-family: 'Fraunces', serif;
@@ -421,31 +422,130 @@ p  { margin: 0 0 1em; }
   max-width: 700px;
 }
 
-/* Home: live counter (sits between lede and bio) */
+/* Home: live counter — feels alive, shows the playbook growing */
 .home-counter {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin: 28px 0 36px;
+  position: relative;
+}
+.home-counter-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px 22px;
+  background: rgba(255, 250, 238, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-width: 130px;
+}
+.home-counter-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 2.8rem;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  animation: numPop 0.5s var(--ease) 0.2s both;
+}
+@keyframes numPop {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+.home-counter-stat:nth-child(2) .home-counter-num { animation-delay: 0.35s; }
+@media (prefers-reduced-motion: reduce) {
+  .home-counter-num { animation: none; }
+}
+.home-counter-divider {
+  color: var(--ink-3);
+  font-weight: 400;
+  margin: 0 2px;
+}
+.home-counter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-top: 6px;
+}
+.home-counter-live {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 28px;
-  padding: 8px 16px;
-  background: rgba(255, 250, 238, 0.55);
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 4px 10px 4px 8px;
+  background: rgba(255, 250, 238, 0.5);
   border: 1px solid var(--line);
   border-radius: 999px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ink-2);
-}
-.home-counter strong {
   font-weight: 600;
-  color: var(--accent);
 }
-.home-counter .dot {
-  display: inline-block;
-  width: 6px; height: 6px;
+.home-counter-live .live-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--accent);
-  margin: 0 6px;
-  vertical-align: middle;
+  background: #2da563;
+  box-shadow: 0 0 0 0 rgba(45, 165, 99, 0.7);
+  animation: livePulse 1.8s ease-out infinite;
+}
+@keyframes livePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(45, 165, 99, 0.6); }
+  70%  { box-shadow: 0 0 0 8px rgba(45, 165, 99, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(45, 165, 99, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-counter-live .live-dot { animation: none; }
+}
+
+/* Three value-prop pillars between lede and counter */
+.home-pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 8px 0 32px;
+  max-width: 880px;
+}
+.pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: rgba(255, 250, 238, 0.55);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.pillar-mark {
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+.pillar-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 1.02rem;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.pillar-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .home-counter { flex-direction: column; gap: 10px; }
+  .home-counter-stat { padding: 12px 18px; }
+  .home-counter-num { font-size: 2.2rem; }
 }
 
 /* Home: bio block (author intro on the landing) */
