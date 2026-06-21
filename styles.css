@@ -24,17 +24,14 @@
   --t-best-practice:  #379b6b;
   --t-prompt:         #d8434a;
 
-  /* Stage colors — assigned in order, cycling through the type palette */
-  --s-1: #d8434a;  /* analysis     */
-  --s-2: #ed8a2a;  /* strategy     */
-  --s-3: #d4a82a;  /* curriculum   */
-  --s-4: #379b6b;  /* design       */
-  --s-5: #2a9da3;  /* development  */
-  --s-6: #3aa1d4;  /* plan         */
-  --s-7: #6e6dd8;  /* execution    */
-  --s-8: #9b6dd8;  /* measurement  */
-  --s-9: #c54f9b;  /* improvement  */
-  --s-10: #a8682a; /* project mgmt */
+  /* Stage colors — 7 stages, each a different hue across the rainbow */
+  --s-1: #d8434a;  /* analysis                  */
+  --s-2: #ed8a2a;  /* strategy & curriculum     */
+  --s-3: #379b6b;  /* design                    */
+  --s-4: #2a9da3;  /* development               */
+  --s-5: #3aa1d4;  /* plan & execution          */
+  --s-6: #9b6dd8;  /* measurement & improvement */
+  --s-7: #a8682a;  /* project management        */
 
   --radius: 4px;
   --pad: 28px;
@@ -282,6 +279,37 @@ p  { margin: 0 0 1em; }
 }
 /* Spine tabs container (separate from the sign so JS can re-render only tabs) */
 .spine-tabs { display: flex; flex-direction: column; gap: 4px; flex: 1; min-height: 0; }
+
+/* Separator between the stage tabs and the all-cards entry */
+.spine-separator {
+  margin: 10px 14px 6px 6px;
+  border-top: 1px dashed var(--line);
+}
+
+/* All cards entry — same shape as a stage tab, distinct visual treatment */
+.spine-tab.spine-tab-all {
+  background: transparent;
+  color: var(--ink-2);
+}
+.spine-tab.spine-tab-all::before {
+  background: var(--ink-3);
+  opacity: 0.45;
+}
+.spine-tab-all .spine-tab-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+.spine-tab.spine-tab-all:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.spine-tab.spine-tab-all.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.spine-tab.spine-tab-all.active::before { background: var(--accent); opacity: 1; }
+.spine-tab.spine-tab-all.active .spine-tab-num { color: var(--accent); }
 
 .spine-tab {
   position: relative;
@@ -556,6 +584,16 @@ p  { margin: 0 0 1em; }
   color: var(--ink-3);
   font-size: 1.2rem;
   flex: 0 0 auto;
+}
+.home-stage-button.home-stage-button-all {
+  border-left-color: var(--ink-3);
+  margin-top: 8px;
+  border-top: 1px dashed var(--line);
+  padding-top: 14px;
+  border-radius: 0 0 8px 8px;
+}
+.home-stage-button-all .home-stage-button-num {
+  color: var(--accent);
 }
 
 /* Stage header — H1 + lede on the left, optional illustration + Fer's bubble on the right */

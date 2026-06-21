@@ -247,6 +247,23 @@ function renderSpine(activeSlug = null) {
     $('[data-abbr]', frag).textContent = stage.abbr || '';
     host.appendChild(frag);
   });
+
+  // Dashed separator + "All cards" entry below the stage list
+  const sep = document.createElement('div');
+  sep.className = 'spine-separator';
+  sep.setAttribute('aria-hidden', 'true');
+  host.appendChild(sep);
+
+  const allFrag = tpl('tpl-spine-tab');
+  const allLink = $('a', allFrag);
+  allLink.classList.add('spine-tab-all');
+  allLink.setAttribute('href', '/cards');
+  if (state.view === 'cards') allLink.classList.add('active');
+  $('[data-order]', allFrag).textContent = '★';
+  $('[data-title]', allFrag).textContent = 'All cards';
+  $('[data-abbr]', allFrag).textContent = 'ALL';
+  host.appendChild(allFrag);
+
   updateSpineToggle(activeSlug);
 }
 
@@ -327,6 +344,29 @@ function viewHome() {
       li.appendChild(a);
       stagesList.appendChild(li);
     });
+
+    // All cards entry — visually distinct, sits below the stages
+    const allLi = document.createElement('li');
+    const allBtn = document.createElement('a');
+    allBtn.className = 'home-stage-button home-stage-button-all';
+    allBtn.setAttribute('href', '/cards');
+
+    const allNum = document.createElement('span');
+    allNum.className = 'home-stage-button-num';
+    allNum.textContent = '★';
+
+    const allName = document.createElement('span');
+    allName.className = 'home-stage-button-name';
+    allName.textContent = 'All cards';
+
+    const allArrow = document.createElement('span');
+    allArrow.className = 'home-stage-button-arrow';
+    allArrow.setAttribute('aria-hidden', 'true');
+    allArrow.textContent = '→';
+
+    allBtn.append(allNum, allName, allArrow);
+    allLi.appendChild(allBtn);
+    stagesList.appendChild(allLi);
   }
 
   mount(frag);

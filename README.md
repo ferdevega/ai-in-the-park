@@ -37,7 +37,10 @@ Cards live in [`data/cards.json`](data/cards.json). Add an entry like:
 - `type` is an array — a card can be both a Mindset and a Best Practice.
 - `related` (optional) — array of card slugs to surface as Related cards.
 
-Stages live in [`data/stages.json`](data/stages.json). Empty stages render as "coming soon" in the spine.
+Stages live in [`data/stages.json`](data/stages.json). The playbook has 7
+stages: Analysis & Discovery, Strategy & Curriculum, Design, Development,
+Plan & Execution, Measurement & Improvement, and Project Management. Empty
+stages render as "coming soon" in the spine.
 
 ## Project layout
 

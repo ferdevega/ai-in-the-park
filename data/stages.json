@@ -8,26 +8,18 @@
     "primer": "<p>Before you design anything, you need to understand what's actually broken. Talk to stakeholders, look at the performance data, write a real brief. Skip this part and you're just guessing — and you find out the hard way, weeks later, when nobody learns anything.</p>"
   },
   {
-    "slug": "strategy",
-    "title": "Strategy",
-    "abbr": "ST",
+    "slug": "strategy-curriculum",
+    "title": "Strategy & Curriculum",
+    "abbr": "SC",
     "order": 2,
-    "summary": "Decide what kind of learning experience this needs to be, and why.",
-    "primer": "<p>Strategy is the bets you make before you start designing. Modality, depth, who you're really designing for, what success looks like. I've watched people skip this and jump straight to 'let's build a course' — it almost never ends well. The decisions you make here shape the next 80% of the work.</p>"
-  },
-  {
-    "slug": "curriculum",
-    "title": "Curriculum",
-    "abbr": "CU",
-    "order": 3,
-    "summary": "Shape the arc — modules, outcomes, the learner journey.",
-    "primer": "<p>This is where you shape the arc. What comes first, what builds on what, what gets assessed. People sometimes confuse it with design, but it's higher altitude — outcomes and sequence, not slides and activities. Get this right and the rest gets easier.</p>"
+    "summary": "Decide what kind of experience this needs to be, then shape the arc that gets there.",
+    "primer": "<p>Strategy is the bets you make before you start designing — modality, depth, who you're really for, what success looks like. Curriculum is shaping the arc that follows: what comes first, what builds on what, what gets assessed. I treat them as one move — the decisions that set up everything you'll design next.</p>"
   },
   {
     "slug": "design",
     "title": "Design",
     "abbr": "DE",
-    "order": 4,
+    "order": 3,
     "summary": "Storyboard and prototype the experience.",
     "primer": "<p>Design is where 'we'll teach X' turns into 'here's exactly how the learner experiences X.' Activities, narrative, decisions, assessment. This is the most creative stage of the work — and the most likely to spiral if the earlier brief was vague.</p>"
   },
@@ -35,47 +27,31 @@
     "slug": "development",
     "title": "Development",
     "abbr": "DV",
-    "order": 5,
+    "order": 4,
     "summary": "Build the assets — slides, video, code, copy.",
     "primer": "<p>This is production. Slides, video, scripts, code, copy. It used to be the most time-consuming part of any project by a wide margin. With AI it doesn't have to be — most of the time-saving cards in this playbook live in this stage.</p>"
   },
   {
-    "slug": "plan",
-    "title": "Plan",
-    "abbr": "PL",
+    "slug": "plan-execution",
+    "title": "Plan & Execution",
+    "abbr": "PE",
+    "order": 5,
+    "summary": "Plan the rollout, then deliver the experience to real learners.",
+    "primer": "<p>Plan is the unromantic logistics — rollout, comms, scheduling, who's facilitating which session. Execution is where training meets reality, and the learners' actual context shows up. They live together because one feeds the other. Bad plan, rough execution. Good plan, the room feels intentional.</p>"
+  },
+  {
+    "slug": "measurement-improvement",
+    "title": "Measurement & Improvement",
+    "abbr": "MI",
     "order": 6,
-    "summary": "Logistics, comms, rollout sequencing.",
-    "primer": "<p>Plan is the part nobody romanticizes. Rollout, comms, registration, scheduling, who's facilitating which session. It's the work that decides whether anyone actually shows up — and whether the first cohort feels intentional or improvised.</p>"
-  },
-  {
-    "slug": "execution",
-    "title": "Execution",
-    "abbr": "EX",
-    "order": 7,
-    "summary": "Deliver the experience to real learners.",
-    "primer": "<p>Execution is where training meets reality. Live, async, hybrid — doesn't matter. The learners' actual context shows up here, and you'll see exactly which parts of your design hold up. Great execution can rescue mediocre design; bad execution can ruin great design.</p>"
-  },
-  {
-    "slug": "measurement",
-    "title": "Measurement",
-    "abbr": "MS",
-    "order": 8,
-    "summary": "Find out whether it worked, on the dimensions that matter.",
-    "primer": "<p>Did it actually work? Beyond completion rates and smile sheets — did behavior change? Did the business outcome move? Most projects either skip this or measure the wrong thing. The ones that get it right have something concrete to point at when they ask for the next budget.</p>"
-  },
-  {
-    "slug": "improvement",
-    "title": "Improvement",
-    "abbr": "IM",
-    "order": 9,
-    "summary": "Iterate. Training is a product, not a project.",
-    "primer": "<p>Treat training like a product, not a project. Read the signals from execution and measurement, decide what to iterate, ship the next version. The first cohort is rarely the best version — the second one usually is.</p>"
+    "summary": "Find out whether it worked, then ship the next version sharper.",
+    "primer": "<p>Did it actually work? And what would make the next cohort better? These two questions belong together. Most projects either skip measurement or measure the wrong thing. The ones that don't have something concrete to point at — and a clear list of what to iterate on for v2.</p>"
   },
   {
     "slug": "project-management",
     "title": "Project Management",
     "abbr": "PM",
-    "order": 10,
+    "order": 7,
     "summary": "Keep the work moving — scope, schedule, stakeholders, and risk.",
     "primer": "<p>This one isn't a phase — it runs across everything else. Scope, schedule, stakeholders, risks, decisions. The gap between 'a good design' and 'a design that actually shipped on time' is almost always project management.</p>"
   }
