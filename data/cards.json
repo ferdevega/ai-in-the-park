@@ -1,0 +1,13 @@
+[
+  {
+    "slug": "ai-as-discovery-partner",
+    "title": "Make AI interview you about the problem",
+    "stage": "analysis",
+    "type": ["mindset", "prompt"],
+    "tags": ["discovery", "framing", "interviews"],
+    "added": "2026-06-21",
+    "teaser": "Before you ask AI for answers, get it to ask you better questions about the problem.",
+    "body": "<p>Most people open ChatGPT and ask for a needs analysis template. That's the wrong first move. The fastest way to build a real understanding of a training need is to have AI <em>interview you</em> — playing the role of a sharp consultant who refuses to start designing until the brief is honest.</p><p><strong>Why this works:</strong></p><ul><li>It forces you to articulate what you actually know and don't know, in your own words.</li><li>It surfaces the assumptions you'd otherwise smuggle into the design.</li><li>It gives you a transcript you can paste into a discovery brief, share with stakeholders, or come back to in a week.</li></ul><p><strong>How to use it:</strong> Paste the prompt below into Claude or ChatGPT. Answer the questions one at a time — don't batch them. When the AI is satisfied with your answers, ask it to summarize what it heard into a one-page discovery brief.</p><p><strong>What it won't do:</strong> Replace real stakeholder interviews. This is for clarifying <em>your own</em> understanding before you go in — or after you come out, to stress-test what you heard.</p>",
+    "prompt_body": "You are a senior learning consultant. I'm about to design a training program and I want you to make sure I actually understand the problem before I start.\n\nInterview me one question at a time. Don't move on until I give you a real answer — push back if I'm vague, hand-wavy, or jumping to solutions.\n\nCover, in this order:\n\n1. The performance gap — what should people be doing that they aren't, and how do you know?\n2. The audience — who are they, what do they already know, what's their motivation level?\n3. The constraints — time, budget, modality preferences, political sensitivities.\n4. The success criteria — how will we know this worked? What changes for the business?\n5. The risks — what's the most likely way this training fails to land?\n\nWhen you're satisfied with my answers, summarize them as a one-page discovery brief in clear, no-jargon language.\n\nReady? Ask your first question."
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "analysis",
+    "title": "Analysis & Discovery",
+    "abbr": "AN",
+    "order": 1,
+    "summary": "Understand the audience, the gap, and the constraints before designing anything.",
+    "primer": "<p>[Placeholder primer] What's the actual performance gap? Who is the learner, really? What constraints shape what we can build?</p>"
+  },
+  {
+    "slug": "strategy",
+    "title": "Strategy",
+    "abbr": "ST",
+    "order": 2,
+    "summary": "Decide what kind of learning experience this needs to be, and why.",
+    "primer": "<p>[Placeholder primer] Modality, sequencing, business outcomes — the bets we're making.</p>"
+  },
+  {
+    "slug": "curriculum",
+    "title": "Curriculum",
+    "abbr": "CU",
+    "order": 3,
+    "summary": "Shape the arc — modules, outcomes, the learner journey.",
+    "primer": "<p>[Placeholder primer] What does the learner need to know, in what order, and to what depth?</p>"
+  },
+  {
+    "slug": "design",
+    "title": "Design",
+    "abbr": "DE",
+    "order": 4,
+    "summary": "Storyboard and prototype the experience.",
+    "primer": "<p>[Placeholder primer] Activities, interactions, narrative, assessment.</p>"
+  },
+  {
+    "slug": "development",
+    "title": "Development",
+    "abbr": "DV",
+    "order": 5,
+    "summary": "Build the assets — slides, video, code, copy.",
+    "primer": "<p>[Placeholder primer] Production. Where AI compresses weeks into hours — if you let it.</p>"
+  },
+  {
+    "slug": "plan",
+    "title": "Plan",
+    "abbr": "PL",
+    "order": 6,
+    "summary": "Logistics, comms, rollout sequencing.",
+    "primer": "<p>[Placeholder primer] The unglamorous work that determines whether anyone actually shows up.</p>"
+  },
+  {
+    "slug": "execution",
+    "title": "Execution",
+    "abbr": "EX",
+    "order": 7,
+    "summary": "Deliver the experience to real learners.",
+    "primer": "<p>[Placeholder primer] Live or async — the moment training meets reality.</p>"
+  },
+  {
+    "slug": "measurement",
+    "title": "Measurement",
+    "abbr": "MS",
+    "order": 8,
+    "summary": "Find out whether it worked, on the dimensions that matter.",
+    "primer": "<p>[Placeholder primer] Beyond smile sheets — behavior change, business impact.</p>"
+  },
+  {
+    "slug": "improvement",
+    "title": "Improvement",
+    "abbr": "IM",
+    "order": 9,
+    "summary": "Iterate. Training is a product, not a project.",
+    "primer": "<p>[Placeholder primer] What signals do we listen to, and how do we close the loop?</p>"
+  },
+  {
+    "slug": "project-management",
+    "title": "Project Management",
+    "abbr": "PM",
+    "order": 10,
+    "summary": "Keep the work moving — scope, schedule, stakeholders, and risk.",
+    "primer": "<p>[Placeholder primer] The connective tissue across every stage.</p>"
+  }
+]

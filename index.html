@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI in the Park 🐕‍🦺 — Playbook for Learning Designers</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="#/" class="brand">
+      <span class="brand-text">AI in the Park <span class="brand-emoji">🐕‍🦺</span></span>
+    </a>
+    <nav class="topbar-links">
+      <a href="#/" data-home-link>Home</a>
+      <a href="#/cards">All cards</a>
+      <a href="#/recent">Recently added</a>
+      <a href="#/about">About</a>
+    </nav>
+  </header>
+
+  <!-- Mobile stage picker (replaces the spine on small screens) -->
+  <button class="spine-toggle" data-spine-toggle aria-expanded="false">
+    <span class="spine-toggle-swatch" data-toggle-swatch></span>
+    <span class="spine-toggle-text">
+      <span class="spine-toggle-label" data-toggle-label>Pick a stage</span>
+      <span class="spine-toggle-meta" data-toggle-meta>10 stages</span>
+    </span>
+    <span class="spine-toggle-arrow">▾</span>
+  </button>
+
+  <div class="layout">
+    <!-- The spine: stage tabs (vertical on desktop, dropdown on mobile) -->
+    <aside class="spine">
+      <div class="spine-sign" aria-hidden="true">
+        <span class="spine-sign-text">pick a stage</span>
+        <svg class="spine-sign-arrow" viewBox="0 0 50 30" aria-hidden="true">
+          <path d="M5 4 C 14 8, 22 14, 32 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" />
+          <path d="M26 26 L 32 24 L 30 18" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <div class="spine-tabs" data-spine></div>
+    </aside>
+
+    <!-- The page area: home landing, stage section, all-cards, recent, about -->
+    <main id="view" class="page"></main>
+  </div>
+
+  <!-- Card detail modal (backdrop blurs the page behind, spine stays visible) -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button class="modal-close" data-modal-close aria-label="Close">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">from AI in the Park 🐕‍🦺 · an evergrowing playbook</div>
+  </footer>
+
+  <!-- ============ Templates ============ -->
+
+  <template id="tpl-home">
+    <section class="landing">
+      <svg class="hero-leaf" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M8 32 C 10 20, 18 8, 32 6 C 32 22, 22 30, 8 32 Z"
+              fill="currentColor" opacity="0.32" />
+        <path d="M8 32 C 14 24, 22 18, 32 6" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" />
+        <path d="M20 22 L 24 16" fill="none" stroke="currentColor"
+              stroke-width="1.2" stroke-linecap="round" />
+      </svg>
+
+      <h1>Welcome to my learning playbook.</h1>
+      <p class="lede">
+        This is my working notebook for designing training with AI in the loop —
+        there's no right or wrong in here, just things that have worked for me.
+        If you find something useful, take it and make it your own.
+      </p>
+
+      <div class="home-author">
+        <img class="home-author-photo" src="assets/avatar.jpg" alt="Fernando Vega" />
+        <div class="home-author-text">
+          <div class="home-author-name">Fernando Vega</div>
+          <p class="home-author-bio">
+            Learning experience designer experimenting with AI in the wild.
+            This playbook is where I keep what I learn.
+          </p>
+          <a class="home-author-link"
+             href="https://www.linkedin.com/in/ferdevega/"
+             target="_blank" rel="noopener">
+            Find me on LinkedIn ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-stage-panel">
+    <section class="section section-stage">
+      <h1 data-stage-title></h1>
+      <p class="lede" data-stage-summary></p>
+
+      <div class="toolbar">
+        <input type="search" class="search" placeholder="Search this stage..." data-search autocomplete="off" />
+        <div class="sort-wrap">
+          <span>Sort</span>
+          <select class="sort" data-sort>
+            <option value="default">Default</option>
+            <option value="alpha">A → Z</option>
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-bar" data-filter-bar></div>
+      <div class="card-grid" data-card-grid></div>
+    </section>
+  </template>
+
+  <template id="tpl-cards-index">
+    <section class="section">
+      <div class="section-meta">all cards</div>
+      <h1>The full collection</h1>
+      <p class="lede">Every card across every stage. Filter, search, sort.</p>
+
+      <div class="toolbar">
+        <input type="search" class="search" placeholder="Search all cards..." data-search autocomplete="off" />
+        <div class="sort-wrap">
+          <span>Sort</span>
+          <select class="sort" data-sort>
+            <option value="default">Default</option>
+            <option value="alpha">A → Z</option>
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="stage">By stage</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-bar" data-filter-bar></div>
+      <div class="card-grid" data-card-grid></div>
+    </section>
+  </template>
+
+  <template id="tpl-recent">
+    <section class="section">
+      <div class="section-meta">recently added</div>
+      <h1>What's new in the notebook</h1>
+      <p class="lede">The latest cards I've added, newest first.</p>
+      <div class="card-grid" data-card-grid></div>
+    </section>
+  </template>
+
+  <template id="tpl-card">
+    <div class="chip-row" data-card-types></div>
+    <h1 data-card-title></h1>
+    <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>
+    <div class="prose" data-card-body></div>
+    <div data-card-prompt></div>
+    <section class="related" data-related hidden>
+      <div class="section-meta">related cards</div>
+      <div class="card-grid" data-related-grid></div>
+    </section>
+  </template>
+
+  <template id="tpl-about">
+    <section class="section">
+      <div class="section-meta">about</div>
+      <h1>About</h1>
+
+      <div class="about-author">
+        <img class="about-photo" src="assets/avatar.jpg" alt="Fernando Vega" />
+        <div class="about-text">
+          <h2 class="about-name">Fernando Vega</h2>
+          <p>
+            Learning experience designer experimenting with AI in the wild. I've spent years building
+            training programs across industries, and over the last couple of years I've been figuring
+            out — by doing — how AI changes the craft.
+          </p>
+          <p>
+            This playbook is where I keep what I learn. It's not a textbook. It's a working notebook,
+            growing as I do. If something in here saves you time or sharpens your thinking, that's
+            the point.
+          </p>
+          <a class="about-link"
+             href="https://www.linkedin.com/in/ferdevega/"
+             target="_blank" rel="noopener">
+            Find me on LinkedIn ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="about-playbook">
+        <div class="section-meta">about this playbook</div>
+        <p>
+          The playbook is organized around the end-to-end process of training development — 10 stages,
+          from Analysis through Project Management. Each stage holds cards: Mindsets, Tools, Accelerators,
+          Best Practices, and Prompts. I add cards as I learn things worth sharing.
+        </p>
+        <p>
+          If you have feedback, want to contribute, or want to compare notes — reach out on LinkedIn.
+        </p>
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-stage-empty">
+    <section class="section section-empty">
+      <h1 data-empty-title></h1>
+      <p class="lede" data-empty-summary></p>
+      <div class="empty">
+        I haven't added cards for this stage yet. The playbook is growing —
+        check back, or open <a href="#/stages/analysis">Analysis &amp; Discovery</a>
+        for what's stocked so far.
+      </div>
+    </section>
+  </template>
+
+  <template id="tpl-not-found">
+    <section class="section">
+      <h1>Not found</h1>
+      <p><a href="#/">back to home</a></p>
+    </section>
+  </template>
+
+  <!-- A single playbook card (preview tile) -->
+  <template id="tpl-card-preview">
+    <a class="card-preview" data-href>
+      <div class="card-band" data-band></div>
+      <div class="card-stage-label" data-stage-label hidden></div>
+      <div class="card-body">
+        <h3 data-title></h3>
+        <p class="teaser" data-teaser></p>
+      </div>
+      <div class="chip-row card-chips" data-types></div>
+    </a>
+  </template>
+
+  <!-- A single tab on the spine -->
+  <template id="tpl-spine-tab">
+    <a class="spine-tab" data-href>
+      <span class="spine-tab-num" data-order></span>
+      <span class="spine-tab-text">
+        <span class="spine-tab-title" data-title></span>
+        <span class="spine-tab-soon" data-soon hidden>coming soon</span>
+      </span>
+      <span class="spine-tab-abbr" data-abbr></span>
+    </a>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

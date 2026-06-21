@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "name": "ai-in-the-park",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
