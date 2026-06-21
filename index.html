@@ -100,20 +100,56 @@
         useful, take it and make it your own.
       </p>
 
-      <ul class="home-principles">
-        <li>
-          <span class="home-principles-mark" aria-hidden="true">✦</span>
-          <strong>Skip the slop.</strong> Every card is something I've actually used, not generic LinkedIn-bait.
-        </li>
-        <li>
-          <span class="home-principles-mark" aria-hidden="true">✦</span>
-          <strong>From mindset to prompt.</strong> The playbook covers how to think, not just what to type.
-        </li>
-      </ul>
+      <div class="how-it-works">
+        <div class="how-grid">
+          <ol class="how-steps">
+            <li>
+              <span class="how-step-num">1</span>
+              <div>
+                <div class="how-step-title">Pick a stage</div>
+                <div class="how-step-body">10 stages of training development, from analysis through project management. Tabs on the left.</div>
+              </div>
+            </li>
+            <li>
+              <span class="how-step-num">2</span>
+              <div>
+                <div class="how-step-title">Choose your level</div>
+                <div class="how-step-body">Beginner, intermediate, advanced. Every card is tagged so you can start anywhere.</div>
+              </div>
+            </li>
+            <li>
+              <span class="how-step-num">3</span>
+              <div>
+                <div class="how-step-title">Read, copy, or run</div>
+                <div class="how-step-body">Each card has the why, the how-to, and (when it's a prompt) a copy-and-go template.</div>
+              </div>
+            </li>
+          </ol>
 
-      <div class="home-section">
-        <div class="home-section-meta">latest in the playbook</div>
-        <a class="home-featured" data-home-featured></a>
+          <figure class="anatomy" aria-label="What a card looks like">
+            <figcaption class="anatomy-meta">anatomy of a card</figcaption>
+            <div class="anatomy-card">
+              <div class="anatomy-band"></div>
+              <div class="anatomy-stage-label">Stage</div>
+              <div class="anatomy-body">
+                <div class="chip-row anatomy-chips">
+                  <span class="chip mindset">mindset</span>
+                  <span class="chip prompt">prompt</span>
+                </div>
+                <div class="anatomy-card-title">A specific, useful technique</div>
+                <div class="anatomy-card-teaser">One-line teaser that tells you whether it's worth opening.</div>
+              </div>
+              <div class="anatomy-card-foot">
+                <span class="level-dots" aria-label="Difficulty: beginner">
+                  <span class="level-dot filled"></span>
+                  <span class="level-dot"></span>
+                  <span class="level-dot"></span>
+                </span>
+                <span class="anatomy-foot-text">beginner</span>
+              </div>
+            </div>
+          </figure>
+        </div>
       </div>
 
       <div class="home-author-row">
@@ -139,6 +175,11 @@
       <h1 data-stage-title></h1>
       <p class="lede" data-stage-summary></p>
 
+      <details class="stage-primer" data-stage-primer-wrap>
+        <summary>What happens in this stage</summary>
+        <div class="stage-primer-body" data-stage-primer></div>
+      </details>
+
       <div class="toolbar">
         <input type="search" class="search" placeholder="Search this stage..." data-search autocomplete="off" />
         <div class="sort-wrap">
@@ -152,7 +193,7 @@
         </div>
       </div>
       <div class="filter-bar" data-filter-bar></div>
-      <div class="card-grid" data-card-grid></div>
+      <div class="card-grid-grouped" data-card-grid-grouped></div>
     </section>
   </template>
 
@@ -280,7 +321,10 @@
         <h3 data-title></h3>
         <p class="teaser" data-teaser></p>
       </div>
-      <div class="chip-row card-chips" data-types></div>
+      <div class="card-chips">
+        <div class="chip-row" data-types></div>
+        <span class="level-dots" data-level></span>
+      </div>
     </a>
   </template>
 

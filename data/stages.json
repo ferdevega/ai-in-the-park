@@ -5,7 +5,7 @@
     "abbr": "AN",
     "order": 1,
     "summary": "Understand the audience, the gap, and the constraints before designing anything.",
-    "primer": "<p>[Placeholder primer] What's the actual performance gap? Who is the learner, really? What constraints shape what we can build?</p>"
+    "primer": "<p>Where you figure out the real problem before designing anything. Stakeholder conversations, performance data, audience research, and a written brief. The biggest trap here is jumping to solutions before understanding what's broken.</p>"
   },
   {
     "slug": "strategy",
@@ -13,7 +13,7 @@
     "abbr": "ST",
     "order": 2,
     "summary": "Decide what kind of learning experience this needs to be, and why.",
-    "primer": "<p>[Placeholder primer] Modality, sequencing, business outcomes — the bets we're making.</p>"
+    "primer": "<p>The bets you make before you start building: modality, depth, audience priorities, business outcomes. You're not designing yet — you're deciding what kind of training this should even be, and what success looks like.</p>"
   },
   {
     "slug": "curriculum",
@@ -21,7 +21,7 @@
     "abbr": "CU",
     "order": 3,
     "summary": "Shape the arc — modules, outcomes, the learner journey.",
-    "primer": "<p>[Placeholder primer] What does the learner need to know, in what order, and to what depth?</p>"
+    "primer": "<p>Shaping the arc. Learning outcomes, the order of modules, what each one teaches, what's assessed. This is where a brief turns into a learner journey.</p>"
   },
   {
     "slug": "design",
@@ -29,7 +29,7 @@
     "abbr": "DE",
     "order": 4,
     "summary": "Storyboard and prototype the experience.",
-    "primer": "<p>[Placeholder primer] Activities, interactions, narrative, assessment.</p>"
+    "primer": "<p>Storyboarding the actual learner experience. Activities, narrative, interactions, assessment, the moment-to-moment of what happens in each module. The point where a training program starts to feel like something specific.</p>"
   },
   {
     "slug": "development",
@@ -37,7 +37,7 @@
     "abbr": "DV",
     "order": 5,
     "summary": "Build the assets — slides, video, code, copy.",
-    "primer": "<p>[Placeholder primer] Production. Where AI compresses weeks into hours — if you let it.</p>"
+    "primer": "<p>Production. Building the actual assets — slides, video, scripts, voiceover, code, copy. This is where AI saves the most hours if you know which jobs to give it.</p>"
   },
   {
     "slug": "plan",
@@ -45,7 +45,7 @@
     "abbr": "PL",
     "order": 6,
     "summary": "Logistics, comms, rollout sequencing.",
-    "primer": "<p>[Placeholder primer] The unglamorous work that determines whether anyone actually shows up.</p>"
+    "primer": "<p>The unglamorous logistics: rollout sequence, comms, registration, scheduling, facilitator prep. The work that decides whether anyone actually shows up — and whether the first cohort goes smoothly or as a near-miss.</p>"
   },
   {
     "slug": "execution",
@@ -53,7 +53,7 @@
     "abbr": "EX",
     "order": 7,
     "summary": "Deliver the experience to real learners.",
-    "primer": "<p>[Placeholder primer] Live or async — the moment training meets reality.</p>"
+    "primer": "<p>Delivering the experience. Whether it's live, async, or hybrid, this is where training meets reality and the learners' actual context shows up. Good design survives execution; great execution can rescue mediocre design.</p>"
   },
   {
     "slug": "measurement",
@@ -61,7 +61,7 @@
     "abbr": "MS",
     "order": 8,
     "summary": "Find out whether it worked, on the dimensions that matter.",
-    "primer": "<p>[Placeholder primer] Beyond smile sheets — behavior change, business impact.</p>"
+    "primer": "<p>Finding out whether it worked, on the dimensions that actually matter. Beyond completion rates and smile sheets: behavior change, business impact, what stuck, what didn't.</p>"
   },
   {
     "slug": "improvement",
@@ -69,7 +69,7 @@
     "abbr": "IM",
     "order": 9,
     "summary": "Iterate. Training is a product, not a project.",
-    "primer": "<p>[Placeholder primer] What signals do we listen to, and how do we close the loop?</p>"
+    "primer": "<p>Treating training as a product, not a project. Reading the signals from execution and measurement, deciding what to iterate, and shipping the next version.</p>"
   },
   {
     "slug": "project-management",
@@ -77,6 +77,6 @@
     "abbr": "PM",
     "order": 10,
     "summary": "Keep the work moving — scope, schedule, stakeholders, and risk.",
-    "primer": "<p>[Placeholder primer] The connective tissue across every stage.</p>"
+    "primer": "<p>The connective tissue across every other stage. Scope, schedule, stakeholders, risks, decisions. Often the gap between a good design and a design that actually ships on time.</p>"
   }
 ]

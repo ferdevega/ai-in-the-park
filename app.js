@@ -147,6 +147,10 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
 
   const chips = $('[data-types]', frag);
   card.type.forEach((t) => chips.appendChild(makeChip(t)));
+
+  const levelHost = $('[data-level]', frag);
+  if (levelHost) renderLevelDots(levelHost, card.level);
+
   return frag;
 }
 
@@ -276,54 +280,30 @@ function setSpineOpen(open) {
 function viewHome() {
   state.view = 'home';
   renderSpine(null);
-  const frag = tpl('tpl-home');
+  mount(tpl('tpl-home'));
+}
 
-  // Compact featured card — newest by `added` date
-  const featuredHost = $('[data-home-featured]', frag);
-  if (featuredHost && state.cards.length > 0) {
-    const newest = state.cards
-      .slice()
-      .sort((a, b) => (b.added || '').localeCompare(a.added || ''))[0];
-    const primary = primaryStageOf(newest);
-    featuredHost.setAttribute('href', cardHref(newest));
-
-    const body = document.createElement('div');
-    body.className = 'home-featured-body';
-
-    const meta = document.createElement('div');
-    meta.className = 'home-featured-meta';
-    meta.textContent = primary ? primary.title : 'newest';
-    body.appendChild(meta);
-
-    const title = document.createElement('div');
-    title.className = 'home-featured-title';
-    title.textContent = newest.title;
-    body.appendChild(title);
-
-    if (newest.teaser) {
-      const teaser = document.createElement('p');
-      teaser.className = 'home-featured-teaser';
-      teaser.textContent = newest.teaser;
-      body.appendChild(teaser);
-    }
-
-    const chips = document.createElement('div');
-    chips.className = 'home-featured-chips';
-    newest.type.forEach((t) => chips.appendChild(makeChip(t)));
-    body.appendChild(chips);
-
-    const arrow = document.createElement('span');
-    arrow.className = 'home-featured-arrow';
-    arrow.setAttribute('aria-hidden', 'true');
-    arrow.textContent = '→';
-
-    featuredHost.append(body, arrow);
-  } else if (featuredHost) {
-    // No cards yet — drop the empty link entirely so we don't show an orphan.
-    featuredHost.parentElement?.remove();
+// Helper: render a row of 3 level dots (1, 2, or 3 filled)
+function levelDotsCount(level) {
+  if (level === 'advanced') return 3;
+  if (level === 'intermediate') return 2;
+  return 1; // beginner or unspecified
+}
+function renderLevelDots(host, level) {
+  host.innerHTML = '';
+  const count = levelDotsCount(level);
+  for (let i = 0; i < 3; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'level-dot' + (i < count ? ' filled' : '');
+    host.appendChild(dot);
   }
+  host.setAttribute('aria-label', `Difficulty: ${level || 'beginner'}`);
+}
 
-  mount(frag);
+function levelLabel(level) {
+  if (level === 'advanced') return 'advanced';
+  if (level === 'intermediate') return 'intermediate';
+  return 'beginner';
 }
 
 function viewStage(slug) {
@@ -345,22 +325,77 @@ function viewStage(slug) {
   $('[data-stage-title]', frag).textContent = stage.title;
   $('[data-stage-summary]', frag).textContent = stage.summary || '';
 
+  // Stage primer (collapsible). If no primer text, remove the wrapper.
+  const primerWrap = $('[data-stage-primer-wrap]', frag);
+  const primerBody = $('[data-stage-primer]', frag);
+  if (stage.primer && primerBody) {
+    primerBody.innerHTML = stage.primer;
+  } else if (primerWrap) {
+    primerWrap.remove();
+  }
+
   const tags = Array.from(new Set(cards.flatMap((c) => c.tags || []))).sort();
   const availableTypes = Array.from(new Set(cards.flatMap((c) => c.type)));
 
   const search = $('[data-search]', frag);
   const sort = $('[data-sort]', frag);
   const filterBar = $('[data-filter-bar]', frag);
-  const grid = $('[data-card-grid]', frag);
+  const groupedGrid = $('[data-card-grid-grouped]', frag);
   const countNode = makeCountNode();
 
-  const update = () => renderCardGrid(grid, applyFilters(cards), { countTarget: countNode });
+  const update = () => renderGroupedCardGrid(groupedGrid, applyFilters(cards), { countTarget: countNode });
   search.addEventListener('input', () => { state.filters.query = search.value; update(); });
   sort.addEventListener('change', () => { state.filters.sort = sort.value; update(); });
   renderFilterBar(filterBar, { availableTypes, tags, onChange: update, countNode });
   update();
 
   mount(frag);
+}
+
+// Renders cards grouped into Beginner / Intermediate / Advanced sections.
+function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
+  target.innerHTML = '';
+  if (countTarget) countTarget.textContent = cards.length === 1 ? '1 card' : `${cards.length} cards`;
+  if (cards.length === 0) {
+    renderEmpty(target, 'no matches — try clearing filters');
+    return;
+  }
+
+  const order = ['beginner', 'intermediate', 'advanced'];
+  const groups = { beginner: [], intermediate: [], advanced: [] };
+  cards.forEach((c) => {
+    const level = order.includes(c.level) ? c.level : 'beginner';
+    groups[level].push(c);
+  });
+
+  order.forEach((level) => {
+    const groupCards = groups[level];
+    if (groupCards.length === 0) return;
+
+    const wrap = document.createElement('section');
+    wrap.className = 'card-group';
+    wrap.dataset.level = level;
+
+    const header = document.createElement('div');
+    header.className = 'card-group-header';
+    const title = document.createElement('div');
+    title.className = 'card-group-title';
+    title.textContent = level;
+    const dots = document.createElement('span');
+    dots.className = 'level-dots';
+    renderLevelDots(dots, level);
+    const rule = document.createElement('div');
+    rule.className = 'card-group-rule';
+    header.append(title, dots, rule);
+    wrap.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+    groupCards.forEach((c) => grid.appendChild(renderCardPreview(c)));
+    wrap.appendChild(grid);
+
+    target.appendChild(wrap);
+  });
 }
 
 function viewCardsIndex() {
@@ -416,6 +451,16 @@ function openModal(slug) {
     const frag = tpl('tpl-card');
     const types = $('[data-card-types]', frag);
     card.type.forEach((t) => types.appendChild(makeChip(t)));
+
+    // Append a level badge alongside the type chips
+    const levelBadge = document.createElement('span');
+    levelBadge.className = 'level-badge';
+    const levelDots = document.createElement('span');
+    levelDots.className = 'level-dots';
+    renderLevelDots(levelDots, card.level);
+    levelBadge.append(levelDots, document.createTextNode(levelLabel(card.level)));
+    types.appendChild(levelBadge);
+
     $('[data-card-title]', frag).textContent = card.title;
 
     const stages = cardStages(card);
