@@ -487,15 +487,16 @@ p  { margin: 0 0 1em; }
 .home-hero-text { min-width: 0; }
 .home-illustration {
   display: block;
-  width: 100%;
+  width: auto;
   height: auto;
+  max-width: 100%;
   max-height: 240px;
-  object-fit: contain;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 6px;
   box-shadow: var(--shadow-card);
+  justify-self: end;
 }
 
 .how-it-works { margin: 8px 0 28px; max-width: 720px; }
