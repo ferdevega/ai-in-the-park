@@ -111,17 +111,11 @@ function cardTypes(card) {
   return [];
 }
 
-function bandStyleForTypes(types) {
-  const colors = types.map((t) => `var(--t-${t})`);
-  if (colors.length === 1) return `background: ${colors[0]};`;
-  const stops = [];
-  const step = 100 / colors.length;
-  colors.forEach((c, i) => {
-    const from = (i * step).toFixed(2);
-    const to   = ((i + 1) * step).toFixed(2);
-    stops.push(`${c} ${from}%`, `${c} ${to}%`);
-  });
-  return `background: linear-gradient(90deg, ${stops.join(', ')});`;
+// Card preview band is now driven by the card's primary stage (was: by type).
+// Gives the all-cards view a visual signal for which stage a card belongs to.
+function bandStyleForStage(stage) {
+  if (!stage) return 'background: var(--ink-3);';
+  return `background: ${stageColorVar(stage)};`;
 }
 
 function primaryStageOf(card) {
@@ -137,24 +131,31 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   const a = $('a', frag);
   a.setAttribute('href', cardHref(card));
 
+  // Band color is now driven by the card's primary stage.
+  const stage = primaryStageOf(card);
   const band = $('[data-band]', frag);
-  band.setAttribute('style', bandStyleForTypes(cardTypes(card)));
+  band.setAttribute('style', bandStyleForStage(stage));
 
-  if (showStageLabel) {
-    const stage = primaryStageOf(card);
-    if (stage) {
-      const label = $('[data-stage-label]', frag);
-      label.textContent = stage.title;
-      label.style.setProperty('--label-color', stageColorVar(stage));
-      label.hidden = false;
-    }
+  if (showStageLabel && stage) {
+    const label = $('[data-stage-label]', frag);
+    label.textContent = stage.title;
+    label.style.setProperty('--label-color', stageColorVar(stage));
+    label.hidden = false;
   }
 
   $('[data-title]', frag).textContent = card.title;
   $('[data-teaser]', frag).textContent = card.teaser || '';
 
-  const chips = $('[data-types]', frag);
-  cardTypes(card).forEach((t) => chips.appendChild(makeChip(t)));
+  // Tags — up to 3, as small subtle pills below the teaser.
+  const tagsHost = $('[data-tags]', frag);
+  if (tagsHost && Array.isArray(card.tags) && card.tags.length) {
+    card.tags.slice(0, 3).forEach((tag) => {
+      const t = document.createElement('span');
+      t.className = 'card-preview-tag';
+      t.textContent = tag;
+      tagsHost.appendChild(t);
+    });
+  }
 
   const levelHost = $('[data-level]', frag);
   if (levelHost) renderLevelDots(levelHost, card.level);
@@ -570,17 +571,17 @@ function openModal(slug) {
       illustration.remove();
     }
 
-    const types = $('[data-card-types]', frag);
-    cardTypes(card).forEach((t) => types.appendChild(makeChip(t)));
-
-    // Append a level badge alongside the type chips
+    // Type chips removed (Option A: drop the chip noise; stage color band carries
+    // visual identity, tags carry topical variety). Only the level badge remains
+    // in the metadata row at the top of the modal.
+    const metaRow = $('[data-card-types]', frag);
     const levelBadge = document.createElement('span');
     levelBadge.className = 'level-badge';
     const levelDots = document.createElement('span');
     levelDots.className = 'level-dots';
     renderLevelDots(levelDots, card.level);
     levelBadge.append(levelDots, document.createTextNode(levelLabel(card.level)));
-    types.appendChild(levelBadge);
+    metaRow.appendChild(levelBadge);
 
     $('[data-card-title]', frag).textContent = card.title;
 
