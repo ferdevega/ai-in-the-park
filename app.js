@@ -557,18 +557,6 @@ function openModal(slug) {
   } else {
     const frag = tpl('tpl-card');
 
-    // Optional card illustration — banner at the top of the modal
-    const illustration = $('[data-card-illustration]', frag);
-    if (illustration) {
-      if (card.illustration) {
-        illustration.setAttribute('src', card.illustration);
-        illustration.setAttribute('alt', `Illustration for ${card.title}`);
-        illustration.hidden = false;
-      } else {
-        illustration.remove();
-      }
-    }
-
     const types = $('[data-card-types]', frag);
     cardTypes(card).forEach((t) => types.appendChild(makeChip(t)));
 
@@ -633,6 +621,16 @@ function openModal(slug) {
       wrap.className = 'card-section prose';
       wrap.innerHTML = card.body;
       bodyHost.appendChild(wrap);
+    }
+
+    // Optional illustration — sits between the intro and the first labeled section
+    if (card.illustration) {
+      const img = document.createElement('img');
+      img.className = 'card-illustration';
+      img.src = card.illustration;
+      img.alt = `Illustration for ${card.title}`;
+      img.loading = 'lazy';
+      bodyHost.appendChild(img);
     }
 
     renderSection('🎯', 'Why this matters', card.why_matters);

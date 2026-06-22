@@ -7,20 +7,21 @@
     "level": "beginner",
     "tags": ["outline", "structure", "module-design", "bloom"],
     "added": "2026-06-21",
+    "illustration": "/assets/cards/topic-to-module-outline.png",
     "teaser": "Skip the blank page. Hand AI a topic, get back a sequenced, outcome-driven module outline you can actually use.",
-    "intro": "<p>You've got a topic and some bullet points from a kickoff call. You're ready to create the course. The blank document is staring at you. The first thing you do is to draft an outline.</p>",
-    "why_matters": "<p>An outline isn't just a list of topics — it's a <em>sequence</em> that takes a learner from where they are to where they need to be, with each module building on the last. Get it wrong and the rest of development is fighting your structure. Get it right and every stage after this gets easier.</p>",
-    "how_ai_helps": "<p>AI is good at generating a defensible first-pass structure in seconds. The trick is constraining it — without constraints, AI sprawls. The prompt below bakes in three constraints that turn 'AI gave me an outline' into 'AI gave me a usable outline':</p><ul><li>Each module needs a stated <strong>outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know <em>why</em> it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul>",
+    "intro": "<p>You've got a topic and some bullet points from a kickoff call. You're ready to create the course. Wait — don't do it yet. The first thing you should do is <strong>draft an outline</strong>.</p>",
+    "why_matters": "<p>An outline is the ordered list of modules — each one with a stated learning outcome, a few key sub-topics, and a reason for sitting where it does. Get it wrong and you'll fight your way through development.</p>",
+    "how_ai_helps": "<p>AI is good at generating a defensible first-pass structure in seconds. The trick is constraining it so that it gives you what you need. The prompt below bakes in three constraints that turn 'AI gave me an outline' into 'AI gave me a usable outline':</p><ul><li>Each module needs a stated <strong>learning outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know why it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul>",
     "ai_wont": "<p>AI doesn't know your learners. After you have an outline, you still need to check it against what you learned in Analysis &amp; Discovery.</p>",
     "steps": [
-      "Have your topic, audience description, and any source bullet points ready. The more you give it up front, the better the first draft.",
+      "Collect your topic, audience description, and any source bullet points or documents. The more you give it up front, the better the first draft.",
       "Paste the prompt into Claude or ChatGPT. Fill in the brackets.",
       "Iterate. Ask for a different sequence, a different module count, a different cognitive progression. The first output is rarely the final outline."
     ],
     "prompt_fast": {
       "frame": "You are a senior instructional designer.",
       "ask": "Draft a module-by-module outline for a training program.",
-      "shape": "Topic: [TOPIC]\nAudience: [WHO THE LEARNERS ARE — role, expertise level, motivation]\nFormat: [e.g., 60-minute live workshop / 4-hour async / 30-min microlearning]\nSource material (optional): [BULLET POINTS OR PASTED SOURCE CONTENT]\n\nRules:\n- 4 to 6 modules. Don't go over.\n- Each module needs: a title, a stated outcome (use a Bloom-level verb), 3–5 sub-points, and a one-line rationale for why it sits in this position.\n- Sequence the modules so each one enables the next.\n\nDon't:\n- Pad with filler modules to hit a number.\n- Use vague verbs like \"understand\" or \"learn about\" — pick a Bloom verb that names a real behavior.\n- Number the modules 1–N unless the order actually matters.",
+      "shape": "Topic: [TOPIC]\nAudience: [WHO THE LEARNERS ARE — role, expertise level, motivation]\nFormat: [e.g., 60-minute live workshop / 4-hour async / 30-min microlearning]\nSource material (optional): [BULLET POINTS OR PASTED SOURCE CONTENT]\n\nRules:\n- 4 to 6 modules. Don't go over.\n- Each module needs: a title, a stated learning outcome (use a Bloom-level verb), 3–5 sub-points, and a one-line rationale for why it sits in this position.\n- Sequence the modules so each one enables the next.\n\nDon't:\n- Pad with filler modules to hit a number.\n- Use vague verbs like \"understand\" or \"learn about\" — pick a Bloom verb that names a real behavior.\n- Number the modules 1–N unless the order actually matters.",
       "tune": "Where you assumed something, call it out — those become my SME questions. If the brief is too thin to design from, ask me one clarifying question first instead of guessing."
     },
     "pro_tip": "If you have actual source material — SOPs, interview transcripts, articles — drop it all into a NotebookLM notebook and run this prompt in there. The outline comes back grounded in your real sources, with citations. Way less hallucinated content, and much easier to defend to an SME."

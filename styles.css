@@ -628,18 +628,19 @@ p  { margin: 0 0 1em; }
 }
 .stage-illustration[hidden] { display: none; }
 
-/* Card illustration — optional banner at the top of the modal */
+/* Card illustration — sits between the intro and the first labeled section */
 .card-illustration {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
-  max-height: 280px;
+  max-height: 240px;
   object-fit: contain;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 8px;
-  margin-bottom: 18px;
+  padding: 6px;
+  margin: 22px auto 4px;
   box-shadow: var(--shadow-card);
 }
 .card-illustration[hidden] { display: none; }
