@@ -474,7 +474,29 @@ p  { margin: 0 0 1em; }
 /* ============================================================
    Home — "how this works" + anatomy of a card
    ============================================================ */
-.how-it-works { margin: 8px 0 28px; max-width: 720px; }
+.how-it-works { margin: 8px 0 28px; max-width: 980px; }
+.how-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 36px;
+  align-items: center;
+}
+.home-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: var(--shadow-card);
+}
+@media (max-width: 720px) {
+  .how-grid { grid-template-columns: 1fr; gap: 22px; }
+  .home-illustration { max-height: 260px; }
+}
 .how-steps {
   list-style: none;
   padding: 0;
