@@ -474,18 +474,22 @@ p  { margin: 0 0 1em; }
 /* ============================================================
    Home — "how this works" + anatomy of a card
    ============================================================ */
-.how-it-works { margin: 8px 0 28px; max-width: 980px; }
-.how-grid {
+/* Home hero — title + lede on the left, illustration on the right (desktop).
+   Same 2-column pattern as the card header; same sizing as card illustrations. */
+.home-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 36px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px;
   align-items: center;
+  margin-bottom: 28px;
+  max-width: 960px;
 }
+.home-hero-text { min-width: 0; }
 .home-illustration {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 320px;
+  max-height: 240px;
   object-fit: contain;
   background: var(--card);
   border: 1px solid var(--line);
@@ -493,9 +497,12 @@ p  { margin: 0 0 1em; }
   padding: 6px;
   box-shadow: var(--shadow-card);
 }
+
+.how-it-works { margin: 8px 0 28px; max-width: 720px; }
+
 @media (max-width: 720px) {
-  .how-grid { grid-template-columns: 1fr; gap: 22px; }
-  .home-illustration { max-height: 260px; }
+  .home-hero { grid-template-columns: 1fr; gap: 18px; }
+  .home-illustration { max-height: 220px; }
 }
 .how-steps {
   list-style: none;
@@ -837,25 +844,7 @@ p  { margin: 0 0 1em; }
 .home-cta span { font-size: 0.9em; }
 
 /* Pressed-leaf in the home hero (small park-y accent) */
-.hero-leaf {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 64px;
-  height: 64px;
-  color: var(--accent);
-  pointer-events: none;
-  transform-origin: 80% 20%;
-  animation: leafSway 9s ease-in-out infinite;
-}
-@keyframes leafSway {
-  0%, 100% { transform: rotate(-2deg); }
-  50%      { transform: rotate(3deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-leaf { animation: none; }
-}
-.landing { position: relative; }
+/* (.hero-leaf retired — the home illustration is the visual anchor now.) */
 
 /* (removed: .how-to, .doors — homepage simplified to hero + lede + spine pointer) */
 
