@@ -1,5 +1,32 @@
 [
   {
+    "slug": "build-style-guide-for-your-project",
+    "title": "Build a Style Guide for your project",
+    "stage": "design",
+    "type": "prompt",
+    "level": "beginner",
+    "tags": ["style-guide", "voice", "consistency", "brand", "scale"],
+    "added": "2026-06-22",
+    "illustration": "/assets/cards/build-style-guide-for-your-project.png",
+    "teaser": "Pull from your brand guidelines, audience, and one piece of content you love — get back a living style guide that keeps your project consistent as it grows.",
+    "intro": "<p>Without a style guide, every piece of content you (or your team) writes sounds slightly different. The voice drifts, the vocabulary gets inconsistent, the naming conventions multiply. By the fourth module, you're not sure if you say \"users\" or \"learners,\" and the character names have switched halves. <strong>The fix is to overtly define those choices up front</strong> so everyone — including the AI you'll prompt — stays on the same page.</p>",
+    "why_matters": "<p>A style guide defines voice, vocabulary, examples, accessibility, and the small calls (contractions yes or no, second person or third, em-dash vs comma) that compound into inconsistency at scale. It's also what lets you scale beyond yourself — across SMEs, contractors, and AI runs.</p>",
+    "how_ai_helps": "<p>AI can do this in two ways:</p><ul><li><strong>From scratch.</strong> Tell it your audience, your modalities, and the tone you're going for. It drafts a complete, sectioned style guide — voice attributes, vocabulary, examples, conventions — ready for you to react to.</li><li><strong>From existing content.</strong> Paste in your brand guide, a past course you loved, or any content with the voice you want. AI extrapolates the design decisions baked into it and turns them into explicit, reusable rules.</li></ul><p>You get a real document — sections, examples, do's and don'ts — not a list of suggestions to write up later. The prompt below forces three constraints that turn \"AI gave me a style guide\" into \"AI gave me a <em>usable</em> style guide\":</p><ul><li>Every rule has a concrete example. No \"use a friendly tone\" without showing what that sounds like.</li><li>Sections are grounded in your input. AI skips what doesn't apply and adds new ones if your source warrants them.</li><li>Output is markdown — so you can paste it into other prompts and docs later.</li></ul>",
+    "ai_wont": "<p>AI doesn't know your brand the way someone who's lived in it does. The first draft is a 70% solution — it gets you off the blank page, but you (or someone who has) need to vet anything voice-or-tone related, plus what your organization considers off-limits. Treat AI as the drafter, not the decider.</p>",
+    "steps": [
+      "Gather your inputs. The big four: existing brand guidelines (if any), one piece of content you'd want this project to sound like, an audience description, and which modalities you'll produce.",
+      "Paste the prompt. Fill the brackets. The more you give it, the less it guesses.",
+      "Edit the output. AI gives you a starting point — you make the calls that don't match how you actually want to write."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior learning experience designer who has written style guides for dozens of projects across industries.",
+      "ask": "Draft a style guide for the project described below.",
+      "shape": "Project topic: [TOPIC]\nAudience: [WHO — role, expertise, motivation, context they'll read in]\nModalities you'll produce: [e.g., e-learning + job aids + facilitator notes]\nExisting brand guidelines: [PASTE OR DESCRIBE — voice attributes, banned words, tone rules, visual basics. If none yet, say \"none yet.\"]\nSample content (optional, strong signal): [PASTE one piece you'd want this project to sound like]\nAudience constraints (optional): [reading level, accessibility, languages, cultural considerations]\n\nFormat the output as Markdown so I can paste it into other prompts later.\n\nSections to include — but ONLY if I've given you input to ground them:\n- Voice & tone (3–5 voice attributes; each with do/don't + one example)\n- Vocabulary (terms to use, terms to avoid, terms to define on first use)\n- Examples & analogies (what kinds work for THIS audience, what to avoid)\n- Naming conventions (modules, characters, sections, files)\n- Modality-specific rules (different per modality — slide rules ≠ video rules)\n- Accessibility & inclusive language (concrete dos and don'ts for THIS audience)\n- Visual treatment (only if visual specs were provided; otherwise skip)\n\nAlso add any other sections the input suggests are needed. If the source uses emoji, include a section on emoji. If it references regulated terms, include a section on regulated language. Use your judgment.\n\nFor every rule, include a concrete example. No generic advice.\n\nDon't:\n- Pad with sections I didn't ground in input.\n- Use generic style-guide examples. Every example should be plausible for THIS project, with THIS audience, in THIS voice.\n- Add \"be authentic\" or \"be human\" or \"write clearly\" without a concrete behavioral example.",
+      "tune": "Where you had to guess at the brand voice because I didn't give you enough input, flag it explicitly under each section. If the brand guidelines and the audience pull in opposite directions (e.g., very formal brand, very young audience), surface the tension as a question for me to answer, not a guess. If a section can't be grounded in input, skip it instead of padding."
+    },
+    "pro_tip": "Treat the style guide as living. After you've written 2–3 modules, audit them: where did you violate the guide? Either revise the modules to match, or update the guide to reflect the call you actually made. Drop the latest version into a Claude Project or custom GPT so every future authoring conversation references it automatically. The guide gets sharper as you go, and the project stays consistent without you policing it."
+  },
+  {
     "slug": "topic-to-module-outline",
     "title": "Turn a topic into a module outline",
     "stage": "development",
