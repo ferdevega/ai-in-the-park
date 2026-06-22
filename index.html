@@ -213,9 +213,14 @@
   </template>
 
   <template id="tpl-card">
-    <div class="chip-row" data-card-types></div>
-    <h1 data-card-title></h1>
-    <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>
+    <div class="card-header" data-card-header>
+      <div class="card-header-text">
+        <div class="chip-row" data-card-types></div>
+        <h1 data-card-title></h1>
+        <div class="card-stages">Stage<span data-card-stages-plural></span>: <span data-card-stages></span></div>
+      </div>
+      <img class="card-illustration" data-card-illustration hidden alt="" />
+    </div>
     <div data-card-body></div>
     <div data-card-prompt></div>
     <div data-card-tip></div>

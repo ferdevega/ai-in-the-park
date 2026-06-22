@@ -557,6 +557,19 @@ function openModal(slug) {
   } else {
     const frag = tpl('tpl-card');
 
+    // Optional illustration — sits in the right column of the header on desktop, stacks on mobile.
+    const illustration = $('[data-card-illustration]', frag);
+    const header = $('[data-card-header]', frag);
+    if (card.illustration) {
+      illustration.setAttribute('src', card.illustration);
+      illustration.setAttribute('alt', `Illustration for ${card.title}`);
+      illustration.setAttribute('loading', 'lazy');
+      illustration.hidden = false;
+      header.classList.add('has-illustration');
+    } else {
+      illustration.remove();
+    }
+
     const types = $('[data-card-types]', frag);
     cardTypes(card).forEach((t) => types.appendChild(makeChip(t)));
 
@@ -621,16 +634,6 @@ function openModal(slug) {
       wrap.className = 'card-section prose';
       wrap.innerHTML = card.body;
       bodyHost.appendChild(wrap);
-    }
-
-    // Optional illustration — sits between the intro and the first labeled section
-    if (card.illustration) {
-      const img = document.createElement('img');
-      img.className = 'card-illustration';
-      img.src = card.illustration;
-      img.alt = `Illustration for ${card.title}`;
-      img.loading = 'lazy';
-      bodyHost.appendChild(img);
     }
 
     renderSection('🎯', 'Why this matters', card.why_matters);
