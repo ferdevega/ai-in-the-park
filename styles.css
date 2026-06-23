@@ -474,12 +474,13 @@ p  { margin: 0 0 1em; }
 /* ============================================================
    Home — "how this works" + anatomy of a card
    ============================================================ */
-/* Home hero — title + lede on the left, illustration on the right (desktop).
-   Same 2-column pattern as the card header; same sizing as card illustrations. */
+/* Home hero — title + lede on the left, a small illustration detail on the right
+   (desktop). Stacks on mobile, centered. The illustration is sized as a supporting
+   detail, not a hero — text remains the primary visual. */
 .home-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: 28px;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
   align-items: center;
   margin-bottom: 28px;
   max-width: 960px;
@@ -490,20 +491,24 @@ p  { margin: 0 0 1em; }
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 240px;
+  max-height: 180px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 6px;
+  border-radius: 8px;
+  padding: 5px;
   box-shadow: var(--shadow-card);
-  justify-self: end;
+  justify-self: center;
 }
 
 .how-it-works { margin: 8px 0 28px; max-width: 720px; }
 
 @media (max-width: 720px) {
-  .home-hero { grid-template-columns: 1fr; gap: 18px; }
-  .home-illustration { max-height: 220px; }
+  .home-hero { grid-template-columns: 1fr; gap: 14px; }
+  .home-illustration {
+    max-height: 150px;
+    justify-self: center;
+    margin: 0 auto;
+  }
 }
 .how-steps {
   list-style: none;
