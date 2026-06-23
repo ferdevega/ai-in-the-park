@@ -158,7 +158,7 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   }
 
   const levelHost = $('[data-level]', frag);
-  if (levelHost) renderLevelDots(levelHost, card.level);
+  if (levelHost) renderLevelBars(levelHost, card.level);
 
   return frag;
 }
@@ -373,19 +373,19 @@ function viewHome() {
   mount(frag);
 }
 
-// Helper: render a row of 3 level dots (1, 2, or 3 filled)
-function levelDotsCount(level) {
+// Helper: render a row of 3 ascending level bars (1, 2, or 3 filled)
+function levelBarsCount(level) {
   if (level === 'advanced') return 3;
   if (level === 'intermediate') return 2;
   return 1; // beginner or unspecified
 }
-function renderLevelDots(host, level) {
+function renderLevelBars(host, level) {
   host.innerHTML = '';
-  const count = levelDotsCount(level);
+  const count = levelBarsCount(level);
   for (let i = 0; i < 3; i++) {
-    const dot = document.createElement('span');
-    dot.className = 'level-dot' + (i < count ? ' filled' : '');
-    host.appendChild(dot);
+    const bar = document.createElement('span');
+    bar.className = 'level-bar' + (i < count ? ' filled' : '');
+    host.appendChild(bar);
   }
   host.setAttribute('aria-label', `Difficulty: ${level || 'beginner'}`);
 }
@@ -484,8 +484,8 @@ function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
     title.className = 'card-group-title';
     title.textContent = level;
     const dots = document.createElement('span');
-    dots.className = 'level-dots';
-    renderLevelDots(dots, level);
+    dots.className = 'level-bars';
+    renderLevelBars(dots, level);
     const rule = document.createElement('div');
     rule.className = 'card-group-rule';
     header.append(title, dots, rule);
@@ -578,8 +578,8 @@ function openModal(slug) {
     const levelBadge = document.createElement('span');
     levelBadge.className = 'level-badge';
     const levelDots = document.createElement('span');
-    levelDots.className = 'level-dots';
-    renderLevelDots(levelDots, card.level);
+    levelDots.className = 'level-bars';
+    renderLevelBars(levelDots, card.level);
     levelBadge.append(levelDots, document.createTextNode(levelLabel(card.level)));
     metaRow.appendChild(levelBadge);
 

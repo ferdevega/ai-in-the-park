@@ -747,18 +747,22 @@ p  { margin: 0 0 1em; }
   .stage-intro-bubble { font-size: 0.86rem; padding: 12px 14px; }
 }
 
-/* Level dots — used on previews, modals, and the anatomy */
-.level-dots {
+/* Level bars — three ascending bars (beginner / intermediate / advanced) */
+.level-bars {
   display: inline-flex;
-  align-items: center;
-  gap: 3px;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
 }
-.level-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
+.level-bar {
+  width: 3px;
+  border-radius: 1px;
   background: rgba(26,37,32,0.18);
 }
-.level-dot.filled { background: var(--accent); }
+.level-bar:nth-child(1) { height: 4px; }
+.level-bar:nth-child(2) { height: 8px; }
+.level-bar:nth-child(3) { height: 12px; }
+.level-bar.filled { background: var(--accent); }
 .level-badge {
   display: inline-flex;
   align-items: center;
@@ -1076,7 +1080,7 @@ p  { margin: 0 0 1em; }
   justify-content: flex-end;
   gap: 8px;
 }
-.card-preview .level-dots { flex: 0 0 auto; }
+.card-preview .level-bars { flex: 0 0 auto; }
 
 /* Inline tag pills on the card preview — below the teaser */
 .card-preview-tags {
