@@ -160,7 +160,28 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   const levelHost = $('[data-level]', frag);
   if (levelHost) renderLevelBars(levelHost, card.level);
 
+  // Role label — small emoji + name in the chips footer, left of the level bars.
+  const label = roleLabelForType(card.type);
+  if (label) {
+    const chips = $('.card-chips', frag);
+    if (chips) {
+      const tag = document.createElement('span');
+      tag.className = 'role-label';
+      tag.textContent = label;
+      chips.insertBefore(tag, chips.firstChild);
+    }
+  }
+
   return frag;
+}
+
+// Map the schema `type` field to a role label (emoji + name).
+function roleLabelForType(type) {
+  if (type === 'prompt') return '✍️ Creator AI';
+  if (type === 'tool') return '🔧 AI tool';
+  if (type === 'thought-partner') return '💭 Thought partner AI';
+  if (type === 'auditor') return '🔍 Auditor AI';
+  return null;
 }
 
 function renderCardGrid(target, cards, { countTarget, showStageLabel = false } = {}) {

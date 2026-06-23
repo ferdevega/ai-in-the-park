@@ -747,6 +747,16 @@ p  { margin: 0 0 1em; }
   .stage-intro-bubble { font-size: 0.86rem; padding: 12px 14px; }
 }
 
+/* Role label — small emoji + role name in the card-chips footer */
+.role-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
 /* Level bars — three ascending bars (beginner / intermediate / advanced) */
 .level-bars {
   display: inline-flex;
@@ -1077,7 +1087,7 @@ p  { margin: 0 0 1em; }
   background: rgba(244,236,214,0.4);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 8px;
 }
 .card-preview .level-bars { flex: 0 0 auto; }
