@@ -1104,9 +1104,10 @@ p  { margin: 0 0 1em; }
 }
 .card-preview .level-bars { flex: 0 0 auto; }
 
-/* Inline tag pills on the card preview — below the teaser */
+/* Inline tag pills on the card preview — hidden globally to keep previews compact.
+   Tags are still searchable and shown as filter chips above each grid. */
 .card-preview-tags {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 10px;
