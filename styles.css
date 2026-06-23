@@ -478,24 +478,27 @@ p  { margin: 0 0 1em; }
    (desktop). Stacks on mobile, centered. The illustration is sized as a supporting
    detail, not a hero — text remains the primary visual. */
 .home-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: 24px;
-  align-items: center;
-  margin-bottom: 28px;
-  max-width: 960px;
+  margin-bottom: 24px;
+  max-width: 820px;
 }
-.home-hero-text { min-width: 0; }
+
+.home-how-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  margin: 8px 0 28px;
+}
+.home-how-row .how-it-works { margin: 0; max-width: none; }
 .home-illustration {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 180px;
+  max-width: 420px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 5px;
+  border-radius: 10px;
+  padding: 8px;
   box-shadow: var(--shadow-card);
   justify-self: center;
 }
@@ -503,9 +506,9 @@ p  { margin: 0 0 1em; }
 .how-it-works { margin: 8px 0 28px; max-width: 720px; }
 
 @media (max-width: 720px) {
-  .home-hero { grid-template-columns: 1fr; gap: 14px; }
+  .home-how-row { grid-template-columns: 1fr; gap: 18px; }
   .home-illustration {
-    max-height: 150px;
+    max-width: 360px;
     justify-self: center;
     margin: 0 auto;
   }
