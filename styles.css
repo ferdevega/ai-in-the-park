@@ -767,6 +767,8 @@ p  { margin: 0 0 1em; }
   text-transform: uppercase;
   font-weight: 600;
   color: var(--ink-2);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Level bars — three ascending bars (beginner / intermediate / advanced) */
@@ -1019,7 +1021,7 @@ p  { margin: 0 0 1em; }
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 4px;
-  min-height: 260px;
+  min-height: 0;
   padding: 0;
   overflow: hidden;
   text-decoration: none;
