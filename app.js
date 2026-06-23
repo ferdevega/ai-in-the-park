@@ -12,7 +12,7 @@
 // so social shares (LinkedIn, Twitter) get rich previews. Once the SPA loads,
 // navigation between URLs uses history.pushState — no full page reload.
 
-const CARD_TYPES = ['mindset', 'tool', 'accelerator', 'best-practice', 'prompt'];
+const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'tool'];
 
 const state = {
   stages: [],
@@ -177,7 +177,7 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
 
 // Map the schema `type` field to a role label (emoji + name).
 function roleLabelForType(type) {
-  if (type === 'prompt') return '✍️ Creator AI';
+  if (type === 'creator') return '✍️ Creator AI';
   if (type === 'tool') return '🔧 AI tool';
   if (type === 'thought-partner') return '💭 Thought partner AI';
   if (type === 'auditor') return '🔍 Auditor AI';
@@ -199,7 +199,7 @@ function renderFilterBar(target, { availableTypes = CARD_TYPES, tags = [], onCha
   if (availableTypes.length > 0) {
     const typeLabel = document.createElement('span');
     typeLabel.className = 'filter-label';
-    typeLabel.textContent = 'type';
+    typeLabel.textContent = 'role';
     target.appendChild(typeLabel);
 
     CARD_TYPES.filter((t) => availableTypes.includes(t)).forEach((t) => {
@@ -207,7 +207,7 @@ function renderFilterBar(target, { availableTypes = CARD_TYPES, tags = [], onCha
       btn.type = 'button';
       btn.className = 'filter-chip';
       btn.dataset.type = t;
-      btn.textContent = t.replace('-', ' ');
+      btn.textContent = roleLabelForType(t) || t.replace('-', ' ');
       if (state.filters.types.has(t)) btn.classList.add('active');
       btn.addEventListener('click', () => {
         state.filters.types.has(t) ? state.filters.types.delete(t) : state.filters.types.add(t);

@@ -747,6 +747,18 @@ p  { margin: 0 0 1em; }
   .stage-intro-bubble { font-size: 0.86rem; padding: 12px 14px; }
 }
 
+/* Related Cards block — strip previews down to band + title only.
+   The reader has already committed to the current card; related links
+   just need a clickable hook, not the full preview. */
+.related .card-preview .teaser,
+.related .card-preview .card-preview-tags,
+.related .card-preview .card-chips,
+.related .card-preview .card-stage-label {
+  display: none;
+}
+.related .card-preview { min-height: 0; }
+.related .card-preview .card-body { padding: 18px 18px 22px; }
+
 /* Role label — small emoji + role name in the card-chips footer */
 .role-label {
   font-family: 'Inter', sans-serif;
