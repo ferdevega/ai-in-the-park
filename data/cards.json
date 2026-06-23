@@ -1,5 +1,27 @@
 [
   {
+    "slug": "set-up-your-ai-workspace",
+    "title": "Set up your AI workspace",
+    "stage": "design",
+    "type": "tool",
+    "level": "beginner",
+    "tags": ["workspace", "claude-projects", "custom-gpt", "consistency"],
+    "added": "2026-06-22",
+    "illustration": "/assets/cards/set-up-your-ai-workspace.png",
+    "teaser": "The onboarding pack for your AI project.",
+    "related": ["build-style-guide-for-your-project"],
+    "intro": "<p>By the end of Design, you've made a lot of calls about how this program should sound, who it's for, how it's structured, what counts as \"good.\" Soon you'll be authoring content — a lot of prompts, all of which need those calls to produce anything usable. You can paste them in every time. Or you can load them once.</p>",
+    "why_matters": "<p>Without a workspace, every chat starts cold. You re-explain the audience, re-paste the style guide, re-state the QA standards. You also forget pieces — different prompts get different context, and your modules quietly drift apart. <strong>A workspace is one place that holds your project decisions and applies them to every conversation.</strong></p>",
+    "how_ai_helps": "<p>Claude Projects, ChatGPT Custom GPTs, and Gemini Gems all do the same thing: load files and instructions once, and every chat inside that space starts with them in context. The AI stops drifting. You stop pasting. And if other people work on the project, they can use the same workspace.</p>",
+    "ai_wont": "<p>A workspace is only as good as what you load into it. If your style guide is half-baked, the workspace will confidently produce output that drifts from where you wanted to be. Also worth knowing: AI doesn't always actively reference loaded files unless you point at them. Sometimes you still have to say \"check the style guide before answering.\"</p>",
+    "steps": [
+      "Decide what goes in. The essentials: your style guide, audience profile, module template, QA checklist. If you have source content for the program, add the most important docs — 5 to 10 max, AI gets noisy past that. Skip anything you'd want kept private.",
+      "Set it up in your tool of choice. In Claude: New Project, upload files, write a short system prompt that names what each file is for (<a href=\"https://www.youtube.com/watch?v=GJ5jTgcbRHA\" target=\"_blank\" rel=\"noopener\">Anthropic's walkthrough video ↗</a>). In ChatGPT: Create a Custom GPT, upload to \"Knowledge,\" configure instructions (<a href=\"https://help.openai.com/en/articles/8554397-creating-a-gpt\" target=\"_blank\" rel=\"noopener\">OpenAI's official guide ↗</a>). Same idea works in Gemini Gems, NotebookLM, and most modern AI tools — only the buttons differ.",
+      "Verify it works. Start a fresh chat in the workspace and ask: \"What do you have access to in this project, and how will you use it when I ask you to write content?\" If the answer is vague or misses a file, your setup needs work."
+    ],
+    "pro_tip": "Keep the workspace alive. Every time you make a new call during authoring — a new naming convention, a refined audience insight, a style guide tweak — update the file in the workspace. Workspaces decay if you don't feed them. Treat the workspace as the source of truth for the project, not the Word doc on someone's desktop."
+  },
+  {
     "slug": "prep-for-a-needs-assessment-call",
     "title": "Prep for a needs assessment call",
     "stage": "analysis",
@@ -36,6 +58,7 @@
     "added": "2026-06-22",
     "illustration": "/assets/cards/build-style-guide-for-your-project.png",
     "teaser": "So your fourth module doesn't sound like a different person wrote it.",
+    "related": ["set-up-your-ai-workspace"],
     "intro": "<p>Without a style guide, every piece of content you (or your team) writes sounds slightly different. The voice drifts, the vocabulary gets inconsistent, the naming conventions multiply. By the fourth module, you're not sure if you say \"users\" or \"learners,\" and the character names have switched halves. <strong>The fix is to overtly define those choices up front</strong> so everyone — including the AI you'll prompt — stays on the same page.</p>",
     "why_matters": "<p>A style guide defines voice, vocabulary, examples, accessibility, and the small calls (contractions yes or no, second person or third, em-dash vs comma) that compound into inconsistency at scale. It's also what lets you scale beyond yourself — across SMEs, contractors, and AI runs.</p>",
     "how_ai_helps": "<p>AI can do this in two ways:</p><ul><li><strong>From scratch.</strong> Tell it your audience, your modalities, and the tone you're going for. It drafts a complete, sectioned style guide — voice attributes, vocabulary, examples, conventions — ready for you to react to.</li><li><strong>From existing content.</strong> Paste in your brand guide, a past course you loved, or any content with the voice you want. AI extrapolates the design decisions baked into it and turns them into explicit, reusable rules.</li></ul>",

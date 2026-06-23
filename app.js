@@ -658,7 +658,7 @@ function openModal(slug) {
       ol.className = 'card-section-steps';
       card.steps.forEach((step) => {
         const li = document.createElement('li');
-        li.textContent = step;
+        li.innerHTML = step;
         ol.appendChild(li);
       });
       wrap.appendChild(ol);
