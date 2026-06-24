@@ -771,18 +771,6 @@ p  { margin: 0 0 1em; }
   flex-shrink: 0;
 }
 
-/* Level name text — sits next to the level bars in the chips footer */
-.level-name {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--ink-2);
-  margin-right: 6px;
-  white-space: nowrap;
-}
-
 /* Level bars — three ascending bars (beginner / intermediate / advanced) */
 .level-bars {
   display: inline-flex;
@@ -1033,7 +1021,7 @@ p  { margin: 0 0 1em; }
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 4px;
-  min-height: 280px;
+  min-height: 0;
   padding: 0;
   overflow: hidden;
   text-decoration: none;

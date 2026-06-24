@@ -158,17 +158,7 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   }
 
   const levelHost = $('[data-level]', frag);
-  if (levelHost) {
-    renderLevelBars(levelHost, card.level);
-    // Add the level name text in the chips area, just before the bars.
-    const chips = $('.card-chips', frag);
-    if (chips && card.level) {
-      const levelName = document.createElement('span');
-      levelName.className = 'level-name';
-      levelName.textContent = card.level.toUpperCase();
-      chips.insertBefore(levelName, levelHost);
-    }
-  }
+  if (levelHost) renderLevelBars(levelHost, card.level);
 
   // Role label — small emoji + name in the chips footer, left of the level bars.
   const label = roleLabelForType(card.type);
@@ -502,17 +492,34 @@ function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
     groups[level].push(c);
   });
 
-  // Flatten into a single grid so cards from different levels can sit in the
-  // same row when there's space. The level name on each card preserves the
-  // classification — section headers are no longer needed.
-  const flat = [];
-  order.forEach((level) => flat.push(...groups[level]));
-  if (flat.length === 0) return;
+  order.forEach((level) => {
+    const groupCards = groups[level];
+    if (groupCards.length === 0) return;
 
-  const grid = document.createElement('div');
-  grid.className = 'card-grid';
-  flat.forEach((c) => grid.appendChild(renderCardPreview(c)));
-  target.appendChild(grid);
+    const wrap = document.createElement('section');
+    wrap.className = 'card-group';
+    wrap.dataset.level = level;
+
+    const header = document.createElement('div');
+    header.className = 'card-group-header';
+    const title = document.createElement('div');
+    title.className = 'card-group-title';
+    title.textContent = level;
+    const dots = document.createElement('span');
+    dots.className = 'level-bars';
+    renderLevelBars(dots, level);
+    const rule = document.createElement('div');
+    rule.className = 'card-group-rule';
+    header.append(title, dots, rule);
+    wrap.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+    groupCards.forEach((c) => grid.appendChild(renderCardPreview(c)));
+    wrap.appendChild(grid);
+
+    target.appendChild(wrap);
+  });
 }
 
 function viewCardsIndex() {
