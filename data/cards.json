@@ -1,5 +1,33 @@
 [
   {
+    "slug": "build-knowledge-checks-at-the-right-cognitive-level",
+    "title": "Build knowledge checks at the right cognitive level",
+    "stage": "development",
+    "type": "creator",
+    "level": "beginner",
+    "tags": ["assessments", "knowledge-checks", "bloom", "questions", "outcomes"],
+    "added": "2026-06-23",
+    "illustration": "/assets/cards/build-knowledge-checks-at-the-right-cognitive-level.png",
+    "teaser": "Most knowledge checks ask the wrong question.",
+    "related": ["topic-to-module-outline", "set-up-your-ai-workspace"],
+    "intro": "<p>You wrote the learning outcome. The outcome verb is \"apply.\" Your knowledge check is multiple choice: \"Which of the following is the definition of X?\" That's a recall question. You've now built a course that says \"learners will apply\" but only tests whether they remember. <strong>Welcome to one of the most common gaps in instructional design.</strong></p>",
+    "why_matters": "<p>If your outcome promises \"apply\" and your check measures \"recall,\" you don't actually know if anyone learned what you said they'd learn. You get inflated pass rates and underperforming behavior change. The fix is mechanical: every knowledge check should match the cognitive level of the outcome it's checking against.</p>",
+    "how_ai_helps": "<p>Give AI the learning outcome — including the Bloom verb (remember, understand, apply, analyze, evaluate, create) — and the audience, and it can draft knowledge checks at the right cognitive level. Recall outcomes get recall questions. Application outcomes get scenario questions. Analysis outcomes get questions that ask the learner to compare, contrast, or break something down. <strong>The trick is naming the Bloom level explicitly in the prompt</strong> — most AI drafts default to recall unless you push them off it.</p>",
+    "ai_wont": "<p>AI doesn't know if your distractors are plausible enough. A question with three obviously-wrong answers and one obviously-right answer doesn't measure anything — it just confirms the learner can read. You'll still need to check that wrong answers represent real misconceptions in your audience, not strawmen. AI also doesn't know what's actually hard for your learners; it can guess based on the topic but it'll miss the lived experience.</p>",
+    "steps": [
+      "Have your learning outcome ready, with the Bloom verb clearly visible. If your outcome says \"understand,\" stop — that's not a real Bloom verb. Pick one (remember, understand-as-explain, apply, analyze, evaluate, create).",
+      "Paste the prompt with the inputs filled in. The biggest miss in most knowledge-check prompts is forgetting the source content — without it, AI guesses at what's actually being taught. If you've <a href=\"/cards/set-up-your-ai-workspace\">set up your AI workspace</a>, you can just write \"see workspace\" and let it pull from there.",
+      "Review the distractors. AI's first pass usually has at least one too-easy distractor. Tell it which one is too obvious and ask for a replacement that represents a real misconception in your audience."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior instructional designer who writes assessments that actually match the cognitive level of the learning outcome. You don't default to recall.",
+      "ask": "Draft knowledge checks for the learning outcome below, at the cognitive level specified.",
+      "shape": "Source content: [PASTE the section of the module or source material this check relates to. If running from your AI workspace where source is already loaded, write \"see workspace.\"]\nLearning outcome: [PASTE — include the Bloom verb]\nBloom level: [remember / understand / apply / analyze / evaluate / create]\nAudience: [WHO, ROLE, WHAT THEY ALREADY KNOW]\nQuestion format: [e.g., multiple choice, scenario, drag-and-drop, short answer]\nHow many checks I need: [3-5]\n\nFormat the output as Markdown. For each check, include:\n- The question\n- The answer choices (with the correct one clearly marked)\n- A one-line rationale for why each distractor represents a plausible misconception, not a strawman\n- A note on which Bloom level the check actually operates at and why\n\nRules:\n- If the outcome is at \"apply\" or higher, do NOT write a recall question. The default temptation is to drop down to recall — resist it.\n- Distractors must be plausible. No \"obviously wrong to anyone paying attention\" options.\n- Use language the audience would actually use, not textbook phrasing.\n\nDon't:\n- Pad with extra questions to hit a round number.\n- Write a question where two of the answer choices could both be correct.\n- Use trick questions or \"all of the above / none of the above\" unless the outcome specifically calls for that judgment.",
+      "tune": "If the learning outcome is fuzzy (\"understand X\"), surface that as a problem — fuzzy outcomes can't be assessed. Ask me to sharpen the verb before drafting. If you genuinely can't write a non-recall check for what I've given you, say so and explain why."
+    },
+    "pro_tip": "After AI drafts the checks, run a quick test: cover the answer choices, read the question, and try to answer it yourself in your own words. If your answer matches one of the choices, the question is well-written. If your answer isn't there or there's ambiguity, the check needs work. This catches the questions that LOOK well-formed but actually measure \"can you guess what the test writer was thinking.\""
+  },
+  {
     "slug": "choose-the-right-modality",
     "title": "Choose the right modality",
     "stage": "strategy-curriculum",
@@ -65,7 +93,7 @@
     "added": "2026-06-22",
     "illustration": "/assets/cards/set-up-your-ai-workspace.png",
     "teaser": "The onboarding pack for your AI project.",
-    "related": ["build-style-guide-for-your-project", "audit-module-against-style-guide"],
+    "related": ["build-style-guide-for-your-project", "audit-module-against-style-guide", "build-knowledge-checks-at-the-right-cognitive-level"],
     "intro": "<p>By the end of Design, you've made a lot of calls about how this program should sound, who it's for, how it's structured, what counts as \"good.\" Soon you'll be authoring content — a lot of prompts, all of which need those calls to produce anything usable. You can paste them in every time. Or you can load them once.</p>",
     "why_matters": "<p>Without a workspace, every chat starts cold. You re-explain the audience, re-paste the style guide, re-state the QA standards. You also forget pieces — different prompts get different context, and your modules quietly drift apart. <strong>A workspace is one place that holds your project decisions and applies them to every conversation.</strong></p>",
     "how_ai_helps": "<p>Claude Projects, ChatGPT Custom GPTs, and Gemini Gems all do the same thing: load files and instructions once, and every chat inside that space starts with them in context. The AI stops drifting. You stop pasting. And if other people work on the project, they can use the same workspace.</p>",
@@ -143,7 +171,7 @@
     "added": "2026-06-21",
     "illustration": "/assets/cards/topic-to-module-outline.png",
     "teaser": "Because \"I'll just start with the slides\" never ends well.",
-    "related": ["choose-the-right-modality"],
+    "related": ["choose-the-right-modality", "build-knowledge-checks-at-the-right-cognitive-level"],
     "intro": "<p>You've got a topic and some bullet points from a kickoff call. You're ready to create the course. Wait — don't do it yet. The first thing you should do is <strong>draft an outline</strong>.</p>",
     "why_matters": "<p>An outline is the ordered list of modules — each one with a stated learning outcome, a few key sub-topics, and a reason for sitting where it does. Get it wrong and you'll fight your way through development.</p>",
     "how_ai_helps": "<p>AI is good at generating a defensible first-pass structure in seconds. The trick is constraining it so that it gives you what you need. The prompt below bakes in three constraints that turn 'AI gave me an outline' into 'AI gave me a usable outline':</p><ul><li>Each module needs a stated <strong>learning outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know why it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul>",
