@@ -12,7 +12,7 @@
 // so social shares (LinkedIn, Twitter) get rich previews. Once the SPA loads,
 // navigation between URLs uses history.pushState — no full page reload.
 
-const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'tool'];
+const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'panel', 'tool'];
 
 const state = {
   stages: [],
@@ -181,6 +181,7 @@ function roleLabelForType(type) {
   if (type === 'tool') return '🔧 AI tool';
   if (type === 'thought-partner') return '💭 Thought partner AI';
   if (type === 'auditor') return '🔍 Auditor AI';
+  if (type === 'panel') return '🎭 Panel AI';
   return null;
 }
 

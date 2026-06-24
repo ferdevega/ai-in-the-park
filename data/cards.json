@@ -1,5 +1,33 @@
 [
   {
+    "slug": "run-a-focus-group-on-your-draft",
+    "title": "Run a focus group on your draft",
+    "stage": "development",
+    "type": "panel",
+    "level": "advanced",
+    "tags": ["focus-group", "audience-panel", "critique", "multi-persona", "testing"],
+    "added": "2026-06-24",
+    "illustration": "/assets/cards/run-a-focus-group-on-your-draft.png",
+    "teaser": "The focus group you can run on a Tuesday afternoon.",
+    "related": ["build-a-learner-persona"],
+    "intro": "<p>You've built a module. You think it works. The next thing a careful designer does before shipping is run it past actual learners — a focus group, a test screening, anyone who'll walk through the draft and tell you what's broken.</p>",
+    "why_matters": "<p>By the time you've finished a draft, you've internalized too many assumptions to see it clearly. <strong>A real audience member — one not biased by being involved in the build — surfaces friction in ten minutes that you'd miss for weeks.</strong> Focus groups and test screenings exist for that reason in product design and film. In ID, most projects skip the equivalent step because recruiting is expensive and slow. The cost of skipping it: shipping content with obvious problems that any outsider would have flagged.</p>",
+    "how_ai_helps": "<p>AI can play 2–4 of your learner personas (built from the persona card) and walk through your content as each of them — independently, in voice, reacting to specific moments. You get focus-group output without the logistics. Not as rich as real human feedback, but it runs in an afternoon, and it catches the obvious problems before you spend real audience time on the texture.</p>",
+    "ai_wont": "<p>AI is playing personas based on what you gave it. It can't fully replicate being a real person — unexpected emotional reactions, cultural nuances, the things that surprise you. Use the panel for the obvious issues. Use real audience members for the surprising ones. Also: AI personas tend to be more articulate and patient than real learners. A real frustrated learner just closes the tab; the AI persona writes a thoughtful critique. Adjust your read accordingly.</p>",
+    "steps": [
+      "Pull together your personas (built from the persona card) and the content you want feedback on. At least 2 personas, ideally 3–4 to capture audience variety.",
+      "Paste the prompt. AI will give you each persona's independent reaction. Read for patterns (multiple personas flag the same thing — urgent) and for unique edge cases (one persona complains — note but don't necessarily fix).",
+      "Triage and revise. Address cross-persona patterns first. For unique critiques, decide if the persona's edge case matters enough to design for."
+    ],
+    "prompt_fast": {
+      "frame": "You are about to roleplay as multiple distinct learner personas reviewing a course. For each persona, you BECOME them — their concerns, their preferences, their frustrations, their language. You don't optimize for fairness or balance. Each persona reacts as themselves.",
+      "ask": "Walk through the content below as each of the personas. Give me their honest reaction.",
+      "shape": "Content to review: [PASTE the module, script, storyboard, or knowledge check set. Or write \"see workspace\" if loaded.]\n\nPersonas: [PASTE 2-4 personas — name, headline, story, key traits. Use the ones you built from the persona card, or paste fresh.]\n\nFor each persona, give me:\n\n1. **First reaction** — 2-3 sentences. The honest gut reaction this persona would have in the first 30 seconds of engaging.\n\n2. **What works for them** — Specific moments, scenes, examples, or framings that would land. Quote them.\n\n3. **What doesn't work** — Specific moments that would frustrate, bore, or annoy. Quote them and say why.\n\n4. **What's missing for them** — What they'd be looking for that isn't there. Be concrete.\n\n5. **Would they finish it? Why?** — Honest read on completion likelihood, not generic.\n\nRules:\n- Stay in voice. Each persona reacts as themselves — different language, different concerns, different focus.\n- Don't optimize for balance. If one persona loves what another hates, capture both.\n- Quote specific content when reacting. \"I'd skip this section\" is useless — \"I'd skip the 8-minute video on policy basics because I've done compliance training six times this year\" is useful.\n- No \"this is good but...\" softening. If the content has a real problem for this persona, say it.\n\nDon't:\n- Average across personas at the end.\n- Sanitize critique to be polite.\n- Repeat the same critique across personas — if they all have the same issue, that's a signal worth noting, but make sure it's actually the same issue, not similar wording.",
+      "tune": "If a persona genuinely has no strong reaction to a section, say so explicitly (\"nothing notable here for this persona\"). Don't manufacture critique to pad the response. After all personas have reacted, give me a one-paragraph \"pattern summary\" — what showed up across multiple personas vs. what was unique to one."
+    },
+    "pro_tip": "The most valuable signal isn't \"everyone hates section 4.\" It's WHEN personas disagree — Persona A loves the deep-dive, Persona B finds it overwhelming. Disagreement reveals a tradeoff you have to make consciously, not by default. Most courses get designed for one implicit persona; the panel forces you to choose who you're really designing for. Run the panel twice — once during storyboard (cheap to change), once on the first draft (still cheap-ish). Don't wait for a finished product."
+  },
+  {
     "slug": "build-a-learner-persona",
     "title": "Build a learner persona",
     "stage": "strategy-curriculum",
@@ -7,8 +35,9 @@
     "level": "beginner",
     "tags": ["persona", "audience", "design-decisions", "discovery", "motivation"],
     "added": "2026-06-23",
+    "illustration": "/assets/cards/build-a-learner-persona.png",
     "teaser": "Most learner personas are just LinkedIn bios.",
-    "related": ["prep-for-a-needs-assessment-call", "choose-the-right-modality", "set-up-your-ai-workspace"],
+    "related": ["prep-for-a-needs-assessment-call"],
     "intro": "<p>You've finished discovery. You know who your audience is — mid-career professionals, 35–50, in retail operations, with 5–15 years of experience. Great. That tells you nothing useful for design. A learner persona that actually helps you design has to go deeper: what they care about, what they resist, where they'll do this work, what they're already trying to solve. <strong>Demographics tell you WHO. A useful persona tells you WHAT to design and WHY.</strong></p>",
     "why_matters": "<p>Every design decision you make in Strategy and Design — modality, length, tone, examples, scenarios, assessment style — depends on understanding the learner beyond their job title. If your persona is a demographic profile, those decisions get made by default (\"we always do 30-minute modules\") instead of intent (\"this audience won't tolerate more than 15 minutes because of their workflow\"). Bad personas produce average courses for nobody in particular.</p>",
     "how_ai_helps": "<p>AI can build a strong first-draft persona from the messy inputs you gathered in discovery — interview transcripts, demographic data, observation notes, prior course feedback. The trick is asking for the kind of persona that drives design: not just demographics, but motivation, resistance, environment, current workarounds, and the lived experience of the gap. Specificity beats accuracy at this stage.</p>",
@@ -64,7 +93,7 @@
     "added": "2026-06-23",
     "illustration": "/assets/cards/choose-the-right-modality.png",
     "teaser": "Sometimes the answer isn't a course.",
-    "related": ["prep-for-a-needs-assessment-call", "topic-to-module-outline", "build-a-learner-persona"],
+    "related": ["prep-for-a-needs-assessment-call", "topic-to-module-outline"],
     "intro": "<p>Someone says \"we need training on X.\" You nod. You start sketching modules. But somewhere in the back of your head: is this even the right format? A workshop? Async? A job aid? A manager conversation that doesn't need \"training\" at all? Most modality decisions get made by reflex. <strong>This card helps you make them on purpose.</strong></p>",
     "why_matters": "<p>Choosing the wrong modality is one of the most expensive mistakes in instructional design. A 3-week microlearning project that should have been a 1-page job aid wastes everyone's time. A video series for content that changes every month is obsolete two months after launch. Modality decisions deserve more than the 10 minutes of reflex thinking they usually get.</p>",
     "how_ai_helps": "<p>This is a thought-partner card, not a recipe. AI's job here isn't to recommend a modality — it's to help you think through the decision properly. You tell it what you're considering and why. It pushes back. It asks the questions you'd ask if you weren't already half-committed. It maps tradeoffs. You decide.</p>",
