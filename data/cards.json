@@ -1,5 +1,33 @@
 [
   {
+    "slug": "choose-the-right-modality",
+    "title": "Choose the right modality",
+    "stage": "strategy-curriculum",
+    "type": "thought-partner",
+    "level": "beginner",
+    "tags": ["modality", "format", "scope", "decision"],
+    "added": "2026-06-23",
+    "illustration": "/assets/cards/choose-the-right-modality.png",
+    "teaser": "Sometimes the answer isn't a course.",
+    "related": ["prep-for-a-needs-assessment-call", "topic-to-module-outline"],
+    "intro": "<p>Someone says \"we need training on X.\" You nod. You start sketching modules. But somewhere in the back of your head: is this even the right format? A workshop? Async? A job aid? A manager conversation that doesn't need \"training\" at all? Most modality decisions get made by reflex. <strong>This card helps you make them on purpose.</strong></p>",
+    "why_matters": "<p>Choosing the wrong modality is one of the most expensive mistakes in instructional design. A 3-week microlearning project that should have been a 1-page job aid wastes everyone's time. A video series for content that changes every month is obsolete two months after launch. Modality decisions deserve more than the 10 minutes of reflex thinking they usually get.</p>",
+    "how_ai_helps": "<p>This is a thought-partner card, not a recipe. AI's job here isn't to recommend a modality — it's to help you think through the decision properly. You tell it what you're considering and why. It pushes back. It asks the questions you'd ask if you weren't already half-committed. It maps tradeoffs. You decide.</p>",
+    "ai_wont": "<p>AI doesn't know your audience's actual lived constraints (do they have laptops? are they on the road? do their managers care if they don't complete training?). It doesn't know your team's bandwidth or your sponsor's appetite for unconventional answers. Those are inputs you bring to the conversation. AI just makes sure you actually consider them.</p>",
+    "steps": [
+      "Start with your hunch. What modality are you already leaning toward, and why? If you can't name it, you're not ready for this conversation yet — go back to the needs assessment first.",
+      "Open the prompt and walk through the dialogue. AI will ask questions before recommending anything. Answer honestly — including the embarrassing \"I don't know yet.\"",
+      "Capture the decision and the reasoning. Modality choices get revisited mid-project; future-you needs to remember why you picked what you did."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior instructional designer who has watched a lot of projects pick the wrong modality and pay for it. You're known for asking sharp questions before offering opinions.",
+      "ask": "Help me think through which modality fits this learning need. Do NOT recommend anything yet. Ask me questions first.",
+      "shape": "Topic: [WHAT'S THE LEARNING NEED]\nAudience: [WHO, ROLE, WHERE THEY WORK, AVAILABLE TIME]\nWhat I'm currently leaning toward: [BE HONEST — even if it's \"slides because that's what we always do\"]\nWhat I know about constraints: [BUDGET, TIMELINE, TOOLS AVAILABLE, ANYTHING ELSE]\n\nRules of engagement:\n- Ask me one question at a time. Don't dump a questionnaire.\n- Start by interrogating my current leaning. Why am I considering it? What evidence supports it?\n- Surface my assumptions. If I'm assuming something about the audience, the constraints, or the goal, call it out.\n- Push back when I'm being reflexive. If I say \"we always do slides,\" ask why.\n- Map tradeoffs across at least three realistic modalities for THIS situation — not in the abstract.\n- Ask the disqualifying questions: \"If you committed to X, what could go wrong?\"\n- Don't recommend until you've stress-tested the leading option AND at least two alternatives.\n- When you do offer a recommendation, frame it as \"Based on what you've told me, here's the tradeoff to weigh — you decide.\"",
+      "tune": "If I give you thin input, ask for more rather than guessing. If my answers contradict each other (e.g., \"audience has no time\" plus \"I want a 2-hour workshop\"), surface the tension as a question. Treat \"because we always do it that way\" as a non-answer that deserves a follow-up."
+    },
+    "pro_tip": "The most valuable thought-partner sessions end with you saying \"I wasn't going to do that, but actually it makes sense.\" If the conversation just confirms your starting point every time, you're not being challenged enough — change up the Frame to make AI more skeptical (\"You are a senior ID who has seen too many bad modality picks. Be skeptical of my reasoning\")."
+  },
+  {
     "slug": "audit-module-against-style-guide",
     "title": "Audit a module against your style guide",
     "stage": "development",
@@ -59,6 +87,7 @@
     "added": "2026-06-22",
     "illustration": "/assets/cards/prep-for-a-needs-assessment-call.png",
     "teaser": "Because \"good conversation\" is not a deliverable.",
+    "related": ["choose-the-right-modality"],
     "intro": "<p>You've got a learning needs assessment call on the calendar. The temptation is to walk in lightly prepped and \"see where the conversation goes.\" Depending on the stakeholder, that can go really well, or really bad.</p>",
     "why_matters": "<p>A needs assessment is the meeting that shapes everything you do next. If you walk in without a clear idea of what you actually need by the end, you'll have a nice chat and then realize, back at your desk, you can't actually design from your notes. Then you're either booking another call or guessing your way through.</p>",
     "how_ai_helps": "<p>AI can help you get smarter about a topic. It can help you uncover questions you didn't even know you needed an answer for.</p>",
@@ -114,6 +143,7 @@
     "added": "2026-06-21",
     "illustration": "/assets/cards/topic-to-module-outline.png",
     "teaser": "Because \"I'll just start with the slides\" never ends well.",
+    "related": ["choose-the-right-modality"],
     "intro": "<p>You've got a topic and some bullet points from a kickoff call. You're ready to create the course. Wait — don't do it yet. The first thing you should do is <strong>draft an outline</strong>.</p>",
     "why_matters": "<p>An outline is the ordered list of modules — each one with a stated learning outcome, a few key sub-topics, and a reason for sitting where it does. Get it wrong and you'll fight your way through development.</p>",
     "how_ai_helps": "<p>AI is good at generating a defensible first-pass structure in seconds. The trick is constraining it so that it gives you what you need. The prompt below bakes in three constraints that turn 'AI gave me an outline' into 'AI gave me a usable outline':</p><ul><li>Each module needs a stated <strong>learning outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know why it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul>",
