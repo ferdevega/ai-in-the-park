@@ -1,8 +1,8 @@
 [
   {
     "slug": "draft-your-strategy-pov-with-a-podcast",
-    "title": "Draft your Strategy POV with a NotebookLM podcast",
-    "stage": "strategy-curriculum",
+    "title": "Synthesize your discovery into a Strategy POV",
+    "stage": "analysis",
     "type": "tool",
     "level": "intermediate",
     "tags": ["notebooklm", "podcast", "strategy", "pov", "synthesis"],
