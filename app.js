@@ -1012,6 +1012,18 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  // Tool-tabs (Claude / GPT / Gemini etc.) — delegated click handler.
+  const tabBtn = e.target.closest('.tool-tab-btn');
+  if (tabBtn) {
+    const wrap = tabBtn.closest('[data-tool-tabs]');
+    if (wrap) {
+      const tab = tabBtn.dataset.tab;
+      wrap.querySelectorAll('.tool-tab-btn').forEach((b) => b.classList.toggle('active', b === tabBtn));
+      wrap.querySelectorAll('.tool-tab-panel').forEach((p) => p.classList.toggle('active', p.dataset.panel === tab));
+    }
+    return;
+  }
+
   // Intercept internal <a href> clicks for SPA navigation
   const link = e.target.closest('a[href]');
   if (!link) return;
