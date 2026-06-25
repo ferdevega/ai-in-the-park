@@ -1,5 +1,33 @@
 [
   {
+    "slug": "build-your-curriculum",
+    "title": "Build your curriculum",
+    "stage": "strategy-curriculum",
+    "type": "creator",
+    "level": "beginner",
+    "tags": ["curriculum", "modules", "learning-objectives", "scope", "planning"],
+    "added": "2026-06-24",
+    "illustration": "/assets/cards/build-your-curriculum.png",
+    "teaser": "The doc that turns \"we'll figure it out\" into \"here's the plan.\"",
+    "related": ["build-a-learner-persona"],
+    "intro": "<p>You've finished Analysis and you've started forming Strategy decisions — modality, scope, success criteria. The next move is shape: how many modules, what each one is called, what each one teaches, how long it runs, who it's for. <strong>This is the curriculum document</strong> — the program-level spec that everyone else (stakeholders, SMEs, builders) reads to understand what you're actually building.</p>",
+    "why_matters": "<p>The curriculum doc is what gets approved, budgeted, scheduled, and built against. Sloppy curricula get rebuilt mid-project; consistent ones survive contact with reality. The craft is in <strong>parallel structure</strong> — module names follow the same convention, learning objectives sit at comparable cognitive levels, durations are estimated against the same scale, audience descriptions stay aligned. Without parallel structure, the program reads as a collection of modules rather than a coherent path.</p>",
+    "how_ai_helps": "<p>Give AI the inputs from Analysis and your Strategy decisions so far — the audience, the gap, the modality, the rough scope. It can draft a complete curriculum document with consistent module names, learning objectives at the right cognitive level, course descriptions that follow a parallel template, duration estimates, and audience callouts per module. The craft is in pushing AI to keep the structure parallel — not in generating module content from scratch.</p>",
+    "ai_wont": "<p>AI can't realistically estimate duration — it doesn't know your team's pace, your authoring tool's overhead, or your SME's response time. Treat durations as starting points to sanity-check, not gospel. AI also won't catch when one module's scope dwarfs another's; you'll need to read the draft as a whole to spot imbalances. Lastly: parallel structure can hide weak content. A module with a parallel-looking name and objective can still be a bad idea — the substantive audit comes from you.</p>",
+    "steps": [
+      "Gather your inputs: the audience (from your persona card), the gap (from Analysis), the modality decisions you've made, and any constraints (time, budget, regulatory). Have the program's terminal behavior ready — the curriculum is supposed to produce it.",
+      "Paste into the prompt. Ask for 4–8 modules — don't go higher unless your program genuinely needs it. AI's default is to pad.",
+      "Audit the result for parallel structure. Are module names following the same convention? Are objectives at comparable cognitive levels? Do durations make sense relative to each other? Cut, sharpen, rename."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior instructional designer drafting a curriculum document for a program. You care about parallel structure across modules — names, objectives, descriptions, durations all follow consistent patterns so the program reads as a coherent path, not a collection of separate modules.",
+      "ask": "Draft a curriculum document for the program described below.",
+      "shape": "Project context:\n- Topic / program focus: [WHAT THE PROGRAM IS ABOUT]\n- Terminal behavior: [WHAT LEARNERS WILL DO BY THE END]\n- Audience: [PASTE the persona, or summary]\n- Modality decisions: [e.g., async modules + one live workshop + a job aid]\n- Constraints: [time budget, regulatory, language, accessibility]\n\nHow many modules I want: [4–8 typical; tell me if the topic needs more or fewer]\n\nFor each module, provide:\n- **Module name** — follow a consistent naming convention across all modules\n- **Learning objective** — one observable Bloom-aligned outcome (\"learners will [verb] [behavior] [condition]\")\n- **Description** — 2–3 sentences. Follow the same template across modules: what it covers, why it matters, how learners engage.\n- **Estimated duration** — in minutes or hours, scaled consistently. Flag any module that feels disproportionately long or short.\n- **Audience callout** — note if any module is targeted at a sub-segment of the broader audience (e.g., managers only, new hires only).\n\nRules:\n- Parallel structure is non-negotiable. Don't switch naming conventions, objective verb levels, or description templates mid-curriculum.\n- Sequence modules in cognitive build order — each module should enable the next.\n- If two modules overlap or feel redundant, flag it.\n- If the time budget doesn't fit the scope, surface that as a tradeoff — don't silently shrink modules.\n- Don't pad. If the program needs 5 modules, don't write 8.\n\nDon't:\n- Use \"Introduction to X\" / \"Welcome to X\" / \"X Basics\" interchangeably. Pick one convention.\n- Default to vague verbs (\"understand,\" \"learn about\"). Use real Bloom verbs.\n- Estimate durations that don't add up to a realistic total program length.",
+      "tune": "Where you're guessing on duration or scope, label it explicitly (\"estimate — verify against team capacity\"). If the inputs don't justify a module, drop it and explain. If the program would be stronger with fewer modules, say so before adding more."
+    },
+    "pro_tip": "Treat the first draft as the structure, not the content. Once names + objectives + durations land, share with stakeholders for sign-off before you flesh out anything else. Curriculum changes after sign-off are easier than after development. The structure conversation is also where you'll discover whether your sponsor's hidden expectations match what you're proposing."
+  },
+  {
     "slug": "draft-your-strategy-pov-with-a-podcast",
     "title": "Synthesize your discovery into a Strategy POV",
     "stage": "analysis",
