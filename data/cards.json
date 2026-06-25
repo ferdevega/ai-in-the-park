@@ -312,13 +312,13 @@
     "teaser": "So your fourth course doesn't sound like a different person wrote it.",
     "related": ["set-up-your-ai-workspace", "audit-module-against-style-guide"],
     "intro": "<p>On my first project as a lead, I was coordinating a couple of instructional designers based out of Argentina and India. Development happened in shifts — Argentina would hand over to India, and the next day Argentina would get the work back. So we'd wake up to consistency and style issues. One course called the audience \"learners.\" Another said \"associates.\" A third went with \"users.\"</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Dracula.gif\" alt=\"Dracula being staked, geyser of blood\" class=\"inline-gif\" /><figcaption>Pictured: me waking up to quality issues.</figcaption></figure><p>This was because there was no single source of truth for designers to consult. We needed the bible for every instructional designer: <span class=\"gradient-text\">a style guide</span>.</p>",
-    "why_matters": "<p>You use a style guide to lock every voice, vocabulary, and format call upfront. So you're not relitigating them halfway through.</p>",
+    "why_matters": "<p>You use a style guide to lock every voice, vocabulary, and format call upfront.</p>",
     "how_ai_helps": "<p>Ask AI to draft the style guide. Two paths depending on where you start: from scratch (you describe the audience, modalities, tone — it drafts a sectioned guide) or from existing content (you paste a sample you'd want to sound like, it extrapolates the design choices baked in).</p>",
     "ai_wont": "<p>AI doesn't know your brand the way someone who's lived in it does. You'll need to mark up the first draft.</p>",
     "steps": [
       "Gather inputs: brand guidelines (if any), one piece of content that sounds the way you want this to sound, audience, modalities you'll produce.",
-      "Paste the prompt. Fill the brackets.",
-      "Edit the output. Cut what's generic. Sharpen what's specific."
+      "Use the prompt and edit the output. Cut what's generic. Sharpen what's specific.",
+      "Validate with your stakeholders."
     ],
     "prompt_fast": {
       "frame": "You are a senior learning experience designer who has written style guides for dozens of projects across industries.",
