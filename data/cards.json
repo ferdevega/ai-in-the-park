@@ -1,5 +1,33 @@
 [
   {
+    "slug": "build-your-stakeholder-map",
+    "title": "Build your stakeholder map",
+    "stage": "analysis",
+    "type": "thought-partner",
+    "level": "intermediate",
+    "tags": ["stakeholders", "governance", "roles", "raci", "project"],
+    "added": "2026-06-24",
+    "illustration": "/assets/cards/build-your-stakeholder-map.png",
+    "teaser": "Not everyone gets a vote in the same way.",
+    "related": ["prep-for-a-needs-assessment-call"],
+    "intro": "<p>Every project comes with a list of names — sponsor, SMEs, learning team lead, line managers, learners themselves. The list almost always has gaps. The compliance reviewer nobody mentioned. The line manager who isn't on the org chart but blocks every rollout. The exec who needs to sign off because the topic is politically sensitive. <strong>Knowing which roles a project needs, not just which roles came up in the kickoff, is what separates a stakeholder map that survives from one that gets surprises.</strong></p>",
+    "why_matters": "<p>Projects that confuse stakeholder roles — or skip the ones that should exist — end up with rework. Sign-off-level decisions made in input meetings. Reviewer feedback creating scope creep. The compliance team appearing in week 8 with a problem you could have surfaced in week 1. Knowing what kind of project needs what kind of stakeholder is craft — and most projects don't do it explicitly.</p>",
+    "how_ai_helps": "<p>AI can play the role of a senior PM walking you through who SHOULD be involved given your project type, not just who's on the list. Heavily regulated content? Compliance gets a lane. Public-facing? Legal might. International audience? Localization. AI asks the questions that surface missing stakeholders based on the project's risk and scope profile. <strong>The output is a stakeholder map that reflects who the project needs</strong> — even when you didn't think to ask.</p>",
+    "ai_wont": "<p>AI doesn't know your specific org chart, who's quietly powerful, or which roles your company calls something weird. It can propose roles that should exist based on project type and risk profile; you have to map those to actual people. AI also won't catch unofficial stakeholders — the person whose opinion the sponsor trusts, the team lead who'll block you. Add those yourself.</p>",
+    "steps": [
+      "Have a rough project description ready — topic, audience, what you know about the org, what regulatory or political context applies, any stakeholders already mentioned.",
+      "Walk through the prompt as a conversation. AI will ask about risk, regulation, scope, scale — answer honestly. The fewer assumptions you skip, the better the map.",
+      "Reality-check the proposed map. Real names, real politics, unofficial stakeholders. Move people between lanes where AI got it wrong."
+    ],
+    "prompt_fast": {
+      "frame": "You are a senior PM and instructional designer helping a colleague build a stakeholder map for a new project. You know that the most common project failures come from stakeholders who SHOULD have been involved but weren't — and that the answer depends heavily on project type, risk, regulation, and politics. You ask questions before recommending.",
+      "ask": "Help me think through who should be in the stakeholder map for the project below. Don't just sort what I've told you — push me on who I might be missing.",
+      "shape": "Project context:\n- Topic / focus: [WHAT THE PROJECT IS ABOUT]\n- Audience: [WHO WILL BE THE LEARNERS]\n- Business owner / sponsor: [NAME OR ROLE if known]\n- Organization context: [INDUSTRY, COMPANY TYPE, REGULATORY ENVIRONMENT IF RELEVANT]\n- People already mentioned: [NAMES AND ROLES YOU KNOW]\n\nRules of engagement:\n- Ask me about the project's risk and regulatory profile before sorting anyone. (Is the content regulated? Is it customer-facing? Is the audience scale large? Does failure carry legal or reputational risk?)\n- For each role you'd put in a lane, name WHY this project needs that role specifically — don't justify with \"every project needs...\"\n- Surface roles I'd likely be missing — compliance for regulated content, legal for public-facing, localization for multi-language, brand for customer-facing, IT for system integrations. Specifically flag these as \"you didn't mention X, but a project like this usually needs X.\"\n- Push back if I tell you a stakeholder belongs in a lane that doesn't fit (e.g., I say compliance is \"input\" when they're really \"sign-off\").\n\nThen organize the result into three lanes — Input providers, Reviewers, Sign-off — with these for each person:\n- Role and (if known) name\n- Why this project needs them specifically\n- What they're best positioned to give or approve\n- When in the process to involve them\n\nAlso include:\n- **Likely missing roles** — flagged with the reason this project type usually needs them\n- **Overlap warnings** — where one person sits in multiple lanes\n- **Questions for the sponsor** — anything you'd want me to verify before finalizing\n\nDon't:\n- Use generic role descriptions that aren't tied to this project's actual needs.\n- Skip the \"why\" — every stakeholder needs a project-specific reason to be there.\n- Sort silently without asking about the risk profile first.",
+      "tune": "Where you don't know enough about the project to say whether a role is needed, ask me directly rather than assuming. If the project is genuinely small enough that some lanes might be empty (e.g., internal job aid, no formal sign-off), say so."
+    },
+    "pro_tip": "Run this once in Analysis to scope your stakeholders. Run it AGAIN before Development if the project shifted. Regulatory scope often emerges late — a topic that started simple gets reclassified as customer-facing, or someone notices the audience includes a regulated geography. Re-running the map catches stakeholders who should now be in but weren't on the original list."
+  },
+  {
     "slug": "build-your-curriculum",
     "title": "Build your curriculum",
     "stage": "strategy-curriculum",
