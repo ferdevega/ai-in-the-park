@@ -2,45 +2,71 @@
    AI Playbook — field notebook design
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300..700&display=swap');
 
 :root {
-  /* Misty meadow palette — emerald-leaning green paper, warm cream notecards */
-  --paper:        #cde0d0;
-  --paper-2:      #b8cdbb;
-  --paper-3:      #9fb8a3;
-  --card:         #fffaee;
-  --ink:          #1a2520;
-  --ink-2:        #2a4538;
-  --ink-3:        #5a7568;
-  --line:         rgba(26,37,32,0.18);
-  --line-2:       rgba(26,37,32,0.10);
-  --accent:       #0f5239;   /* deep emerald — handwritten cues, brand, leaf */
-  --highlight:    rgba(250,230,160,0.70); /* warm-cream wash under the hero "smarter" */
+  /* Phase 1 — dark/modern shell.
+     Component-level rules still reference the legacy var names (--paper, --ink, etc.)
+     so we alias them to the new dark tokens for now. Phase 2 will refactor components
+     to use the new names directly. */
 
-  --t-mindset:        #9b6dd8;
-  --t-tool:           #3aa1d4;
-  --t-accelerator:    #ed8a2a;
-  --t-best-practice:  #379b6b;
-  --t-prompt:         #d8434a;
+  /* New foundation tokens (the design language) */
+  --bg:             #050505;
+  --bg-2:           #0d0d0d;
+  --bg-3:           #1a1a1a;
+  --surface:        rgba(17,17,17,0.7);
+  --surface-solid:  #111;
+  --glass-border:   rgba(255,255,255,0.06);
+  --glass-border-2: rgba(255,255,255,0.04);
 
-  /* Stage colors — 7 stages, each a different hue across the rainbow */
-  --s-1: #d8434a;  /* analysis                  */
-  --s-2: #ed8a2a;  /* strategy & curriculum     */
-  --s-3: #379b6b;  /* design                    */
-  --s-4: #2a9da3;  /* development               */
-  --s-5: #3aa1d4;  /* plan & execution          */
-  --s-6: #9b6dd8;  /* measurement & improvement */
-  --s-7: #a8682a;  /* project management        */
+  --text:       #f0f0f0;
+  --text-dim:   #888;
+  --text-muted: #555;
 
-  --radius: 4px;
+  /* Role palette — one color per AI role */
+  --r-creator:         #8b5cf6; /* purple — primary */
+  --r-auditor:         #ff6fd8; /* pink */
+  --r-thought-partner: #06b6d4; /* cyan */
+  --r-tool:            #34d399; /* green */
+  --r-panel:           #fbbf24; /* gold */
+
+  --heading: 'Space Grotesk', sans-serif;
+  --body:    'Inter', sans-serif;
+
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Legacy aliases — kept so existing component rules keep working
+     while we update the foundation. Phase 2 will refactor away from these. */
+  --paper:        var(--bg);
+  --paper-2:      var(--bg-2);
+  --paper-3:      var(--bg-3);
+  --card:         var(--surface-solid);
+  --ink:          var(--text);
+  --ink-2:        var(--text-dim);
+  --ink-3:        var(--text-muted);
+  --line:         var(--glass-border);
+  --line-2:       var(--glass-border-2);
+  --accent:       var(--r-creator);
+  --highlight:    rgba(139,92,246,0.18);
+
+  /* Stage colors — desaturated/brightened for dark backgrounds */
+  --s-1: #f87171;  /* analysis                  — soft red    */
+  --s-2: #fb923c;  /* strategy & curriculum     — soft orange */
+  --s-3: #34d399;  /* design                    — green       */
+  --s-4: #22d3ee;  /* development               — cyan        */
+  --s-5: #60a5fa;  /* plan & execution          — soft blue   */
+  --s-6: #a78bfa;  /* measurement & improvement — soft purple */
+  --s-7: #fcd34d;  /* project management        — gold        */
+
+  --radius: 8px;
   --pad: 28px;
 
-  --shadow-card: 0 1px 0 rgba(42,34,26,0.04), 0 6px 14px -8px rgba(42,34,26,0.22);
-  --shadow-card-hover: 0 2px 0 rgba(42,34,26,0.05), 0 14px 26px -10px rgba(42,34,26,0.32);
-  --shadow-modal: 0 30px 80px -20px rgba(42,34,26,0.55);
+  --shadow-card: 0 1px 0 rgba(0,0,0,0.4), 0 6px 14px -8px rgba(0,0,0,0.6);
+  --shadow-card-hover: 0 2px 0 rgba(0,0,0,0.5), 0 14px 26px -10px rgba(0,0,0,0.7);
+  --shadow-modal: 0 30px 80px -20px rgba(0,0,0,0.9);
 
-  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease: var(--ease-smooth);
 
   --spine-w: 168px;
   --topbar-h: 56px;
@@ -50,16 +76,15 @@
 html, body { margin: 0; padding: 0; }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   background-image:
-    radial-gradient(circle at 18% 8%, rgba(255,255,255,0.35), transparent 40%),
-    radial-gradient(circle at 82% 90%, rgba(15,82,57,0.10), transparent 50%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,92,246,0.12), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 70% 70%, rgba(6,182,212,0.06), transparent 50%);
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -67,11 +92,11 @@ body {
 a { color: inherit; text-decoration: none; }
 
 h1, h2, h3 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--heading);
   line-height: 1.1;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.03em;
   margin: 0;
-  font-weight: 800;
+  font-weight: 600;
 }
 h1 { font-size: clamp(2.2rem, 4.2vw, 3.4rem); }
 h2 { font-size: 1.5rem; font-weight: 700; }
@@ -880,6 +905,23 @@ p  { margin: 0 0 1em; }
 }
 .home-cta span { font-size: 0.9em; }
 
+/* Two-CTA group in the home author row — primary subscribe + secondary follow */
+.home-author-ctas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+.home-cta-secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+@media (max-width: 720px) {
+  .home-author-ctas { width: 100%; flex-direction: column; }
+  .home-cta-secondary { width: 100%; justify-content: center; }
+}
 /* Pressed-leaf in the home hero (small park-y accent) */
 /* (.hero-leaf retired — the home illustration is the visual anchor now.) */
 
