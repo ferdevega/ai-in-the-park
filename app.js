@@ -708,8 +708,37 @@ function openModal(slug) {
     }
 
     renderSection('🎯', 'Why this matters', card.why_matters);
-    renderSection('🤖', 'How AI can help', card.how_ai_helps);
-    renderSection('⚠️', "What AI won't do", card.ai_wont);
+
+    // How AI can help + What AI won't do — rendered as a two-column row of
+    // mini-cards so they read as paired tradeoffs rather than stacked prose.
+    // Falls back to single full-width section if only one field is populated.
+    if (card.how_ai_helps && card.ai_wont) {
+      const row = document.createElement('div');
+      row.className = 'card-row-2col';
+      const mkMini = (emoji, title, content) => {
+        const w = document.createElement('div');
+        w.className = 'card-section card-mini';
+        const h = document.createElement('h3');
+        h.className = 'card-section-heading';
+        const e = document.createElement('span');
+        e.className = 'card-section-heading-emoji';
+        e.setAttribute('aria-hidden', 'true');
+        e.textContent = emoji;
+        h.appendChild(e);
+        h.appendChild(document.createTextNode(title));
+        const body = document.createElement('div');
+        body.className = 'prose';
+        body.innerHTML = content;
+        w.append(h, body);
+        return w;
+      };
+      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps));
+      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont));
+      bodyHost.appendChild(row);
+    } else {
+      renderSection('🤖', 'How AI can help', card.how_ai_helps);
+      renderSection('⚠️', "What AI won't do", card.ai_wont);
+    }
 
     // How to run it — numbered steps with emerald circle markers
     if (Array.isArray(card.steps) && card.steps.length) {
