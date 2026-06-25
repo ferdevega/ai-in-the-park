@@ -330,29 +330,6 @@ function viewHome() {
   renderSpine(null);
   const frag = tpl('tpl-home');
 
-  // Stats — one tile per role type, count computed from cards.json.
-  const statsHost = $('[data-home-stats]', frag);
-  if (statsHost) {
-    const counts = {};
-    state.cards.forEach((c) => {
-      const t = c.type;
-      if (t) counts[t] = (counts[t] || 0) + 1;
-    });
-    CARD_TYPES.forEach((type) => {
-      const count = counts[type] || 0;
-      const tile = document.createElement('div');
-      tile.className = 'stat-tile';
-      const num = document.createElement('div');
-      num.className = 'stat-number';
-      num.textContent = String(count);
-      const label = document.createElement('div');
-      label.className = 'stat-label';
-      label.textContent = roleLabelForType(type) || type;
-      tile.append(num, label);
-      statsHost.appendChild(tile);
-    });
-  }
-
   // Mobile-only stages list — populated from the same stage data as the spine.
   const stagesList = $('[data-home-stages-list]', frag);
   if (stagesList) {
