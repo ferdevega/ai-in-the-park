@@ -888,7 +888,7 @@ p  { margin: 0 0 1em; color: var(--text); }
 .level-bar {
   width: 3px;
   border-radius: 1px;
-  background: rgba(26,37,32,0.18);
+  background: rgba(255,255,255,0.18);
 }
 .level-bar:nth-child(1) { height: 4px; }
 .level-bar:nth-child(2) { height: 8px; }
