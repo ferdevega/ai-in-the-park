@@ -761,12 +761,6 @@ p  { margin: 0 0 1em; color: var(--text); }
 }
 .card-illustration[hidden] { display: none; }
 
-/* When a card has neither an illustration nor an emoji, collapse the header
-   grid to a single full-width column so the title isn't squeezed by empty space. */
-.card-header-grid:not(.has-illustration) {
-  grid-template-columns: 1fr;
-}
-
 /* Emoji hero — alternative to a curated illustration. Compact, hairline-framed.
    On mobile it stays small so it doesn't push content down the page. */
 .card-emoji-hero {
