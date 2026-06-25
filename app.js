@@ -131,10 +131,14 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   const a = $('a', frag);
   a.setAttribute('href', cardHref(card));
 
-  // Band color is now driven by the card's primary stage.
+  // Role color becomes the card's primary visual identity.
+  const roleColor = roleColorVar(card.type);
+  if (roleColor) a.style.setProperty('--role-color', roleColor);
+
+  // Band color is driven by the card's role (the AI move).
   const stage = primaryStageOf(card);
   const band = $('[data-band]', frag);
-  band.setAttribute('style', bandStyleForStage(stage));
+  band.setAttribute('style', roleColor ? `background: ${roleColor};` : bandStyleForStage(stage));
 
   if (showStageLabel && stage) {
     const label = $('[data-stage-label]', frag);
@@ -160,14 +164,15 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   const levelHost = $('[data-level]', frag);
   if (levelHost) renderLevelBars(levelHost, card.level);
 
-  // Role label — small emoji + name in the chips footer, left of the level bars.
-  const label = roleLabelForType(card.type);
+  // Role label — geometric icon + name in the chips footer.
+  const label = roleLabelHtmlForType(card.type);
   if (label) {
     const chips = $('.card-chips', frag);
     if (chips) {
       const tag = document.createElement('span');
       tag.className = 'role-label';
-      tag.textContent = label;
+      if (roleColor) tag.style.setProperty('--role-color', roleColor);
+      tag.innerHTML = label;
       chips.insertBefore(tag, chips.firstChild);
     }
   }
@@ -175,13 +180,49 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   return frag;
 }
 
-// Map the schema `type` field to a role label (emoji + name).
+// Geometric SVG icons per role — small (14×14), use currentColor.
+const ROLE_ICONS = {
+  // Creator — pen-nib lower-right triangle
+  creator: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 13 L13 13 L13 3 Z"/></svg>',
+  // Thought partner — two arrows (back-and-forth)
+  'thought-partner': '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5 L13 5 M10 2 L13 5 L10 8"/><path d="M13 11 L3 11 M6 8 L3 11 L6 14"/></svg>',
+  // Auditor — magnifying glass
+  auditor: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10 L14 14"/></svg>',
+  // Tool — hexagon (configuration)
+  tool: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M8 1 L14 5 L14 11 L8 15 L2 11 L2 5 Z"/></svg>',
+  // Panel — three stacked lines (panel of voices)
+  panel: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 4 L13 4 M3 8 L13 8 M3 12 L13 12"/></svg>',
+};
+
+// Map the schema `type` field to label text + icon HTML.
+function roleLabelTextForType(type) {
+  if (type === 'creator') return 'Creator AI';
+  if (type === 'tool') return 'AI tool';
+  if (type === 'thought-partner') return 'Thought partner AI';
+  if (type === 'auditor') return 'Auditor AI';
+  if (type === 'panel') return 'Panel AI';
+  return null;
+}
+
+function roleLabelHtmlForType(type) {
+  const text = roleLabelTextForType(type);
+  if (!text) return null;
+  const icon = ROLE_ICONS[type] || '';
+  return `<span class="role-icon">${icon}</span><span class="role-text">${text}</span>`;
+}
+
+// Legacy callers (filter bar, etc.) may still use the text-only version.
 function roleLabelForType(type) {
-  if (type === 'creator') return '✍️ Creator AI';
-  if (type === 'tool') return '🔧 AI tool';
-  if (type === 'thought-partner') return '💭 Thought partner AI';
-  if (type === 'auditor') return '🔍 Auditor AI';
-  if (type === 'panel') return '🎭 Panel AI';
+  return roleLabelTextForType(type);
+}
+
+// CSS variable string for a role's color, used to tint cards.
+function roleColorVar(type) {
+  if (type === 'creator') return 'var(--r-creator)';
+  if (type === 'tool') return 'var(--r-tool)';
+  if (type === 'thought-partner') return 'var(--r-thought-partner)';
+  if (type === 'auditor') return 'var(--r-auditor)';
+  if (type === 'panel') return 'var(--r-panel)';
   return null;
 }
 
@@ -196,6 +237,13 @@ function renderCardGrid(target, cards, { countTarget, showStageLabel = false } =
 }
 
 function renderFilterBar(target, { availableTypes = CARD_TYPES, tags = [], onChange, countNode }) {
+  // Filters intentionally hidden for now — the catalog is small enough that
+  // they're more clutter than help. Re-enable by removing this early return.
+  target.innerHTML = '';
+  target.hidden = true;
+  if (countNode) target.appendChild(countNode);
+  return;
+  // eslint-disable-next-line no-unreachable
   target.innerHTML = '';
   if (availableTypes.length > 0) {
     const typeLabel = document.createElement('span');
@@ -944,6 +992,36 @@ document.addEventListener('click', (e) => {
   setSpineOpen(false);
 });
 
+// ---------- Mouse-tracked glow ----------
+// Updates --glow-x and --glow-y on :root so the body::before radial gradient
+// follows the cursor. Also updates --mx/--my inside cards on hover for the
+// per-card glow. Throttled with requestAnimationFrame for smoothness.
+function initMouseGlow() {
+  let pending = false;
+  let lastX = 50, lastY = 30;
+  window.addEventListener('pointermove', (e) => {
+    lastX = (e.clientX / window.innerWidth) * 100;
+    lastY = (e.clientY / window.innerHeight) * 100;
+    if (!pending) {
+      pending = true;
+      requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--glow-x', lastX + '%');
+        document.documentElement.style.setProperty('--glow-y', lastY + '%');
+        pending = false;
+      });
+    }
+  }, { passive: true });
+
+  // Per-card glow tracking via event delegation.
+  document.addEventListener('pointermove', (e) => {
+    const card = e.target.closest?.('.card-preview');
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+  }, { passive: true });
+}
+
 (async function init() {
   // Legacy hash bookmarks: convert /#/cards/foo to /cards/foo on first load.
   if (window.location.hash && window.location.hash.length > 1 && window.location.pathname === '/') {
@@ -960,5 +1038,6 @@ document.addEventListener('click', (e) => {
       '<div class="empty">Could not load data files. Make sure you are running this via a local server.</div>';
     return;
   }
+  initMouseGlow();
   route();
 })();
