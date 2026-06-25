@@ -1432,6 +1432,18 @@ body.modal-open { overflow: hidden; }
   font-style: normal;
 }
 .card-section .prose { font-size: 1rem; line-height: 1.65; color: var(--ink); }
+
+/* Inline reaction gifs in card prose — small, centered, modest margin. */
+.card-section img.inline-gif,
+.prose img.inline-gif {
+  display: block;
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin: 16px auto;
+  border: 1px solid var(--glass-border);
+}
 .card-section .prose p { margin: 0 0 0.8em; }
 .card-section .prose p:last-child { margin-bottom: 0; }
 .card-section .prose ul { padding-left: 22px; margin: 0; }
