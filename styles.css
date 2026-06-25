@@ -94,23 +94,41 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,92,246,0.12), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 70% 70%, rgba(6,182,212,0.06), transparent 50%);
+    radial-gradient(ellipse 90% 70% at 20% 10%, rgba(139,92,246,0.20), transparent 55%),
+    radial-gradient(ellipse 70% 60% at 85% 85%, rgba(6,182,212,0.12), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,111,216,0.05), transparent 60%);
 }
 
 a { color: inherit; text-decoration: none; }
 
 h1, h2, h3 {
   font-family: var(--heading);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
 }
-h1 { font-size: clamp(2.2rem, 4.2vw, 3.4rem); }
-h2 { font-size: 1.5rem; font-weight: 700; }
-h3 { font-size: 1.05rem; font-weight: 700; }
-p  { margin: 0 0 1em; }
+h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); }
+h2 { font-size: 1.6rem; font-weight: 600; }
+h3 { font-size: 1.08rem; font-weight: 600; letter-spacing: -0.02em; }
+p  { margin: 0 0 1em; color: var(--text); }
+
+/* Gradient eyebrow label — used above hero H1 and section markers
+   for the "slick accent" moment that signals modern design. */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
 
 /* ============================================================
    Top bar — slim dark with backdrop blur
@@ -505,7 +523,7 @@ p  { margin: 0 0 1em; }
   font-size: 1.05rem;
   color: var(--text-dim);
   font-family: var(--body);
-  font-weight: 300;
+  font-weight: 400;
   margin: 0 0 38px;
   max-width: 700px;
   line-height: 1.65;
@@ -569,25 +587,26 @@ p  { margin: 0 0 1em; }
 .how-step-num {
   width: 30px; height: 30px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--paper);
-  font-family: 'Fraunces', serif;
-  font-weight: 800;
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  color: #fff;
+  font-family: var(--heading);
+  font-weight: 600;
   display: grid; place-items: center;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   flex: 0 0 auto;
 }
 .how-step-title {
-  font-family: 'Fraunces', serif;
-  font-weight: 800;
-  font-size: 1.05rem;
-  margin-bottom: 2px;
-  color: var(--ink);
+  font-family: var(--heading);
+  font-weight: 600;
+  font-size: 1.02rem;
+  margin-bottom: 4px;
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
 .how-step-body {
   font-size: 0.9rem;
-  color: var(--ink-2);
-  line-height: 1.5;
+  color: var(--text-dim);
+  line-height: 1.55;
 }
 
 /* Mobile-only: vertical stage list on the home page so first-time visitors
@@ -757,13 +776,13 @@ p  { margin: 0 0 1em; }
 .stage-intro-bubble {
   position: relative;
   flex: 1;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 0.84rem;
-  color: var(--ink);
-  line-height: 1.5;
+  background: var(--surface-solid);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
   box-shadow: var(--shadow-card);
 }
 .stage-intro-bubble::before {
@@ -772,9 +791,9 @@ p  { margin: 0 0 1em; }
   top: 16px;
   left: -7px;
   width: 13px; height: 13px;
-  background: var(--card);
-  border-left: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  background: var(--surface-solid);
+  border-left: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
   transform: rotate(45deg);
 }
 .stage-intro-bubble p { margin: 0 0 0.6em; }
@@ -959,12 +978,17 @@ p  { margin: 0 0 1em; }
   to   { opacity: 1; transform: translateY(0); }
 }
 .section-meta {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 6px;
+  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
 /* (stage primer styles moved to .stage-intro speech bubble above) */
