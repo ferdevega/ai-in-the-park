@@ -308,7 +308,6 @@
     "level": "beginner",
     "tags": ["style-guide", "voice", "consistency", "brand", "scale"],
     "added": "2026-06-22",
-    "emoji": "🎨",
     "teaser": "So your fourth course doesn't sound like a different person wrote it.",
     "related": ["set-up-your-ai-workspace", "audit-module-against-style-guide"],
     "intro": "<p>On my first project as a lead, I was coordinating a couple of instructional designers based out of Argentina and India. Development happened in shifts — Argentina would hand over to India, and the next day Argentina would get the work back. So we'd wake up to consistency and style issues. One course called the audience \"learners.\" Another said \"associates.\" A third went with \"users.\"</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Dracula.gif\" alt=\"Dracula being staked, geyser of blood\" class=\"inline-gif\" /><figcaption>Pictured: me waking up to quality issues.</figcaption></figure><p>This was because there was no single source of truth for designers to consult. We needed the bible for every instructional designer: <span class=\"gradient-text\">a style guide</span>.</p>",
