@@ -628,7 +628,8 @@ function openModal(slug) {
   } else {
     const frag = tpl('tpl-card');
 
-    // Optional illustration — sits in the right column of the header on desktop, stacks on mobile.
+    // Optional illustration OR emoji hero — sits in the right column of the header
+    // on desktop, stacks on mobile. Illustration wins if both are set.
     const illustration = $('[data-card-illustration]', frag);
     const header = $('[data-card-header]', frag);
     if (card.illustration) {
@@ -636,6 +637,13 @@ function openModal(slug) {
       illustration.setAttribute('alt', `Illustration for ${card.title}`);
       illustration.setAttribute('loading', 'lazy');
       illustration.hidden = false;
+      header.classList.add('has-illustration');
+    } else if (card.emoji) {
+      const emojiBox = document.createElement('div');
+      emojiBox.className = 'card-emoji-hero';
+      emojiBox.setAttribute('aria-hidden', 'true');
+      emojiBox.textContent = card.emoji;
+      illustration.replaceWith(emojiBox);
       header.classList.add('has-illustration');
     } else {
       illustration.remove();
