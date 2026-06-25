@@ -1444,6 +1444,39 @@ body.modal-open { overflow: hidden; }
   margin: 16px auto;
   border: 1px solid var(--glass-border);
 }
+
+/* Figure wrap for gif + caption */
+.card-section figure.inline-gif-wrap,
+.prose figure.inline-gif-wrap {
+  margin: 16px auto;
+  max-width: 220px;
+}
+.card-section figure.inline-gif-wrap img.inline-gif,
+.prose figure.inline-gif-wrap img.inline-gif {
+  margin: 0 auto;
+}
+.card-section figure.inline-gif-wrap figcaption,
+.prose figure.inline-gif-wrap figcaption {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Inline gradient highlight — for the "color out of space" emphasis moment
+   on a single phrase inside prose. Uppercase, gradient text, geometric font. */
+.gradient-text {
+  font-family: var(--heading);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .card-section .prose p { margin: 0 0 0.8em; }
 .card-section .prose p:last-child { margin-bottom: 0; }
 .card-section .prose ul { padding-left: 22px; margin: 0; }
