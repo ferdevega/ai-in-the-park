@@ -861,7 +861,7 @@ function openModal(slug) {
       bubble.className = 'card-pro-tip-bubble';
       const label = document.createElement('span');
       label.className = 'card-pro-tip-label';
-      label.textContent = 'Pro tip';
+      label.textContent = card.tip_label || 'Pro tip';
       bubble.appendChild(label);
       const body = document.createElement('div');
       body.innerHTML = `<p>${card.pro_tip}</p>`;
