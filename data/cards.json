@@ -139,7 +139,6 @@
     "tags": ["persona", "audience", "design-decisions", "discovery", "motivation"],
     "added": "2026-06-23",
     "teaser": "Most learner personas are just LinkedIn bios.",
-    "related": ["prep-for-a-needs-assessment-call"],
     "intro": "<p>Have you ever watched Real Housewives? Every episode starts with the title cards, and each housewife gets one tagline that captures their entire deal in a single line.</p><p>A learner persona is basically that — a specific, loud, and opinionated description of who your learner is, what they care about, what they resist, and what they would never be caught doing.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Lisa.gif\" alt=\"Lisa Vanderpump tagline title card\" class=\"inline-gif\" /><figcaption>You got it, Lisa — no bitches on this eLearning.</figcaption></figure>",
     "why_matters": "",
     "how_ai_helps": "<p>Using interview quotes, demographic data, observation notes, and prior course feedback, AI can draft a persona profile that can help you make any course more real.</p>",
@@ -194,17 +193,16 @@
     "level": "beginner",
     "tags": ["modality", "format", "scope", "decision"],
     "added": "2026-06-23",
-    "illustration": "/assets/cards/choose-the-right-modality.png",
     "teaser": "Sometimes the answer isn't a course.",
-    "related": ["prep-for-a-needs-assessment-call", "topic-to-module-outline"],
-    "intro": "<p>Someone says \"we need training on X.\" You nod. You start sketching modules. But somewhere in the back of your head: is this even the right format? A workshop? Async? A job aid? A manager conversation that doesn't need \"training\" at all? Most modality decisions get made by reflex. <strong>This card helps you make them on purpose.</strong></p>",
-    "why_matters": "<p>Choosing the wrong modality is one of the most expensive mistakes in instructional design. A 3-week microlearning project that should have been a 1-page job aid wastes everyone's time. A video series for content that changes every month is obsolete two months after launch. Modality decisions deserve more than the 10 minutes of reflex thinking they usually get.</p>",
-    "how_ai_helps": "<p>This is a thought-partner card, not a recipe. AI's job here isn't to recommend a modality — it's to help you think through the decision properly. You tell it what you're considering and why. It pushes back. It asks the questions you'd ask if you weren't already half-committed. It maps tradeoffs. You decide.</p>",
-    "ai_wont": "<p>AI doesn't know your audience's actual lived constraints (do they have laptops? are they on the road? do their managers care if they don't complete training?). It doesn't know your team's bandwidth or your sponsor's appetite for unconventional answers. Those are inputs you bring to the conversation. AI just makes sure you actually consider them.</p>",
+    "related": ["topic-to-module-outline"],
+    "intro": "<p>Whenever I pack for my vacations, I create a list based on what I expect my vacation will be. I'm basically designing a wardrobe by making assumptions of what I will need based on the number of days, the weather, the activities I will be doing. I actually use AI to help me create that list by asking questions to me, so that its recommendation is data-driven.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Dog.gif\" alt=\"Happy dog\" class=\"inline-gif\" /><figcaption>The only right answer is ensuring my dog comes with.</figcaption></figure><p>When designing a strategy for training, you can also use AI to help you think through those decisions — for example, what modality to use.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Tell AI the topic, the audience, and the modality you're already leaning toward. Instead of recommending a format right away, AI will ask the questions a senior PM would — why this format, what you're assuming about the audience, what could go wrong if you committed.</p>",
+    "ai_wont": "<p>AI doesn't know your audience's actual constraints — whether they have laptops, whether they're on the road, whether their managers care if they finish.</p>",
     "steps": [
-      "Start with your hunch. What modality are you already leaning toward, and why? If you can't name it, you're not ready for this conversation yet — go back to the needs assessment first.",
-      "Open the prompt and walk through the dialogue. AI will ask questions before recommending anything. Answer honestly — including the embarrassing \"I don't know yet.\"",
-      "Capture the decision and the reasoning. Modality choices get revisited mid-project; future-you needs to remember why you picked what you did."
+      "Start with your hunch. What modality are you already leaning toward, and why? If you can't name it, go back to the needs assessment first.",
+      "Walk through the prompt as a conversation. Answer honestly — including the awkward \"I don't know yet.\"",
+      "Capture what you decided AND why. Modality decisions get revisited mid-project, and future-you will want the receipts."
     ],
     "prompt_fast": {
       "frame": "You are a senior instructional designer who has watched a lot of projects pick the wrong modality and pay for it. You're known for asking sharp questions before offering opinions.",
@@ -212,7 +210,7 @@
       "shape": "Topic: [WHAT'S THE LEARNING NEED]\nAudience: [WHO, ROLE, WHERE THEY WORK, AVAILABLE TIME]\nWhat I'm currently leaning toward: [BE HONEST — even if it's \"slides because that's what we always do\"]\nWhat I know about constraints: [BUDGET, TIMELINE, TOOLS AVAILABLE, ANYTHING ELSE]\n\nRules of engagement:\n- Ask me one question at a time. Don't dump a questionnaire.\n- Start by interrogating my current leaning. Why am I considering it? What evidence supports it?\n- Surface my assumptions. If I'm assuming something about the audience, the constraints, or the goal, call it out.\n- Push back when I'm being reflexive. If I say \"we always do slides,\" ask why.\n- Map tradeoffs across at least three realistic modalities for THIS situation — not in the abstract.\n- Ask the disqualifying questions: \"If you committed to X, what could go wrong?\"\n- Don't recommend until you've stress-tested the leading option AND at least two alternatives.\n- When you do offer a recommendation, frame it as \"Based on what you've told me, here's the tradeoff to weigh — you decide.\"",
       "tune": "If I give you thin input, ask for more rather than guessing. If my answers contradict each other (e.g., \"audience has no time\" plus \"I want a 2-hour workshop\"), surface the tension as a question. Treat \"because we always do it that way\" as a non-answer that deserves a follow-up."
     },
-    "pro_tip": "The most valuable thought-partner sessions end with you saying \"I wasn't going to do that, but actually it makes sense.\" If the conversation just confirms your starting point every time, you're not being challenged enough — change up the Frame to make AI more skeptical (\"You are a senior ID who has seen too many bad modality picks. Be skeptical of my reasoning\")."
+    "pro_tip": "If AI keeps confirming whatever you said you wanted to do, it's being too agreeable. Tighten the Frame to push back harder — try \"You are a senior ID who has seen too many bad modality picks. Push back on my reasoning.\" A good session ends with you saying \"I wasn't going to do that, but actually it makes sense.\""
   },
   {
     "slug": "audit-module-against-style-guide",
