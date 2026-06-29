@@ -2040,6 +2040,49 @@ body.modal-open { overflow: hidden; }
   box-shadow: var(--shadow-card);
 }
 .about-text { flex: 1; min-width: 0; }
+
+/* About page: photo on right (desktop) / bottom (mobile) */
+.about-top {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin: 1.5rem 0 2rem;
+}
+.about-top .about-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+.about-photo-wrap {
+  flex: 0 0 220px;
+  margin: 0;
+  text-align: center;
+}
+.about-photo-hero {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-card);
+  display: block;
+}
+.about-photo-wrap figcaption {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+@media (max-width: 720px) {
+  .about-top { flex-direction: column; gap: 20px; }
+  .about-photo-wrap {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 280px;
+    align-self: center;
+  }
+}
+
 .about-name {
   font-family: var(--heading);
   font-weight: 600;
