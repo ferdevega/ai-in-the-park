@@ -30,7 +30,7 @@ async function loadData() {
     fetch('/data/cards.json'),
   ]);
   state.stages = await stagesRes.json();
-  state.cards = await cardsRes.json();
+  state.cards = (await cardsRes.json()).filter((c) => !c.hidden);
   state.stages.sort((a, b) => a.order - b.order);
 }
 

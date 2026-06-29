@@ -55,6 +55,7 @@
   },
   {
     "slug": "draft-your-strategy-pov-with-a-podcast",
+    "hidden": true,
     "title": "Synthesize your discovery into a Strategy POV",
     "stage": "analysis",
     "type": "tool",
