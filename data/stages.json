@@ -4,55 +4,48 @@
     "title": "Analysis & Discovery",
     "abbr": "AN",
     "order": 1,
-    "summary": "Understand the audience, the gap, and the constraints before designing anything.",
-    "primer": "<p>Before you design anything, you need to understand what's actually broken. Talk to stakeholders, look at the performance data, write a real brief. Skip this part and you're just guessing — and you find out the hard way, weeks later, when nobody learns anything.</p>"
+    "summary": "Understand the audience, the gap, and the constraints before designing anything."
   },
   {
     "slug": "strategy-curriculum",
     "title": "Strategy & Curriculum",
     "abbr": "SC",
     "order": 2,
-    "summary": "Decide what kind of experience this needs to be, then shape the arc that gets there.",
-    "primer": "<p>Strategy is the bets you make before you start designing — modality, depth, who you're really for, what success looks like. Curriculum is shaping the arc that follows: what comes first, what builds on what, what gets assessed. I treat them as one move — the decisions that set up everything you'll design next.</p>"
+    "summary": "Decide what kind of experience this needs to be, then shape the arc that gets there."
   },
   {
     "slug": "design",
     "title": "Design",
     "abbr": "DE",
     "order": 3,
-    "summary": "Storyboard and prototype the experience.",
-    "primer": "<p>This is the most creative stage of the work, but also the one in which structure matters most. Your role is to design the foundations: persona, style guide, blueprint, assessment approach.</p>"
+    "summary": "Storyboard and prototype the experience."
   },
   {
     "slug": "development",
     "title": "Development",
     "abbr": "DV",
     "order": 4,
-    "summary": "Build the assets — slides, video, code, copy.",
-    "primer": "<p>This is production. Slides, video, scripts, code, copy. It used to be the most time-consuming part of any project by a wide margin. With AI it doesn't have to be — most of the time-saving cards in this playbook live in this stage.</p>"
+    "summary": "Build the assets: slides, video, code, copy."
   },
   {
     "slug": "plan-execution",
     "title": "Plan & Execution",
     "abbr": "PE",
     "order": 5,
-    "summary": "Plan the rollout, then deliver the experience to real learners.",
-    "primer": "<p>Plan is the unromantic logistics — rollout, comms, scheduling, who's facilitating which session. Execution is where training meets reality, and the learners' actual context shows up. They live together because one feeds the other. Bad plan, rough execution. Good plan, the room feels intentional.</p>"
+    "summary": "Plan the rollout, then deliver the experience to real learners."
   },
   {
     "slug": "measurement-improvement",
     "title": "Measurement & Improvement",
     "abbr": "MI",
     "order": 6,
-    "summary": "Find out whether it worked, then ship the next version sharper.",
-    "primer": "<p>Did it actually work? And what would make the next cohort better? These two questions belong together. Most projects either skip measurement or measure the wrong thing. The ones that don't have something concrete to point at — and a clear list of what to iterate on for v2.</p>"
+    "summary": "Find out whether it worked, then ship the next version sharper."
   },
   {
     "slug": "project-management",
     "title": "Project Management",
     "abbr": "PM",
     "order": 7,
-    "summary": "Keep the work moving — scope, schedule, stakeholders, and risk.",
-    "primer": "<p>This one isn't a phase — it runs across everything else. Scope, schedule, stakeholders, risks, decisions. The gap between 'a good design' and 'a design that actually shipped on time' is almost always project management.</p>"
+    "summary": "Keep the work moving: scope, schedule, stakeholders, and risk."
   }
 ]

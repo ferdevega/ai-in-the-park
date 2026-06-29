@@ -8,7 +8,7 @@ const ROOT = __dirname;
 const SITE_URL = 'https://ai-in-the-park.vercel.app';
 const SITE_NAME = 'AI in the Park 🐕‍🦺';
 const DEFAULT_DESCRIPTION =
-  'A field notebook of how-to cards for designing training with AI in the loop — mindsets, tools, accelerators, lessons learned, and prompts.';
+  'How instructional designers can actually use AI. Anecdotes, prompts, and moves that work.';
 const OG_IMAGE = `${SITE_URL}/assets/og-default.svg`;
 
 const stages = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/stages.json'), 'utf8'))

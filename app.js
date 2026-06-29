@@ -230,7 +230,7 @@ function renderCardGrid(target, cards, { countTarget, showStageLabel = false } =
   target.innerHTML = '';
   if (countTarget) countTarget.textContent = cards.length === 1 ? '1 card' : `${cards.length} cards`;
   if (cards.length === 0) {
-    renderEmpty(target, 'no matches — try clearing filters');
+    renderEmpty(target, 'no matches. Try clearing filters.');
     return;
   }
   cards.forEach((c) => target.appendChild(renderCardPreview(c, { showStageLabel })));
@@ -475,7 +475,7 @@ function viewStage(slug) {
   const cards = cardsForStage(slug);
   if (cards.length === 0) {
     const empty = tpl('tpl-stage-empty');
-    $('[data-empty-title]', empty).textContent = `${stage.title} — coming soon`;
+    $('[data-empty-title]', empty).textContent = `${stage.title}: coming soon`;
     $('[data-empty-summary]', empty).textContent = stage.summary || '';
     mount(empty);
     return;
@@ -495,15 +495,6 @@ function viewStage(slug) {
     } else {
       illustration.remove();
     }
-  }
-
-  // Stage primer — shown in Fer's speech bubble. Remove the bubble if no primer.
-  const primerWrap = $('[data-stage-intro-wrap]', frag);
-  const primerBody = $('[data-stage-primer]', frag);
-  if (stage.primer && primerBody) {
-    primerBody.innerHTML = stage.primer;
-  } else if (primerWrap) {
-    primerWrap.remove();
   }
 
   const tags = Array.from(new Set(cards.flatMap((c) => c.tags || []))).sort();
@@ -529,7 +520,7 @@ function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
   target.innerHTML = '';
   if (countTarget) countTarget.textContent = cards.length === 1 ? '1 card' : `${cards.length} cards`;
   if (cards.length === 0) {
-    renderEmpty(target, 'no matches — try clearing filters');
+    renderEmpty(target, 'no matches. Try clearing filters.');
     return;
   }
 
@@ -579,6 +570,10 @@ function viewCardsIndex() {
   const filterBar = $('[data-filter-bar]', frag);
   const grid = $('[data-card-grid]', frag);
   const countNode = makeCountNode();
+
+  // Default sort on /cards is by stage so the catalog reads in process order.
+  state.filters.sort = 'stage';
+  sort.value = 'stage';
 
   const tags = Array.from(new Set(state.cards.flatMap((c) => c.tags || []))).sort();
   const availableTypes = Array.from(new Set(state.cards.flatMap((c) => c.type)));
@@ -779,7 +774,7 @@ function openModal(slug) {
       // FAST disclaimer note — small italic above the prompt block
       const disclaimer = document.createElement('p');
       disclaimer.className = 'prompt-fast-disclaimer';
-      disclaimer.innerHTML = 'This prompt follows the <a href="/fast">FAST</a> model — Frame · Ask · Shape · Tune.';
+      disclaimer.innerHTML = 'This prompt follows the <a href="/fast">FAST</a> model: Frame · Ask · Shape · Tune.';
       host.appendChild(disclaimer);
 
       const block = document.createElement('div');
@@ -886,6 +881,16 @@ function openModal(slug) {
   modal.hidden = false;
   document.body.classList.add('modal-open');
   state.modalSlug = slug;
+
+  // Always reset scroll so the second card opens at the top, not mid-page.
+  const modalCard = modal.querySelector('.modal-card');
+  if (modalCard) modalCard.scrollTop = 0;
+  modal.scrollTop = 0;
+
+  // Sync browser tab title to the open card so the original card's title
+  // doesn't stick around in the tab when a second card is opened.
+  if (!state.savedTitle) state.savedTitle = document.title;
+  document.title = `${card.title} · AI in the Park 🐕‍🦺`;
 }
 
 function buildShareRow(card) {
@@ -925,6 +930,12 @@ function closeModal({ updateHistory = true } = {}) {
   $('#modal-body').innerHTML = '';
   document.body.classList.remove('modal-open');
   state.modalSlug = null;
+
+  // Restore the browser tab title to whatever it was before the modal opened.
+  if (state.savedTitle) {
+    document.title = state.savedTitle;
+    state.savedTitle = null;
+  }
   if (updateHistory) {
     // If the user opened this card directly (no background view yet), send them home.
     if (history.state && history.state.bg) {
