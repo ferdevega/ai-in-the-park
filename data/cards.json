@@ -218,17 +218,15 @@
     "level": "intermediate",
     "tags": ["audit", "style-guide", "qa", "voice", "consistency"],
     "added": "2026-06-23",
-    "illustration": "/assets/cards/audit-module-against-style-guide.png",
     "teaser": "Did you actually follow the guide you wrote?",
     "related": ["build-style-guide-for-your-project", "set-up-your-ai-workspace"],
-    "intro": "<p>You wrote the style guide. You went and wrote the module. Now you're staring at a 30-page deck and a 12-page style guide, and you need to know — does this actually match what you said it would?</p>",
-    "why_matters": "<p>A style guide is only useful if you actually follow it. After a couple of long writing sessions, you stop checking. Vocabulary slips. The voice drifts. Naming conventions split into three versions. The module reads \"fine,\" but somebody — an SME, a learner, a peer reviewer — will notice. <strong>The audit catches it before they do.</strong></p>",
-    "how_ai_helps": "<p>AI can read the module and the style guide together and tell you, line by line, where you diverged. Not in a generic \"this could be clearer\" way — specifically: <em>your style guide says use \"learner,\" you used \"student\" in modules 2, 4, and 5.</em> This is the kind of task that bores a human reviewer into skimming. AI doesn't skim.</p>",
-    "ai_wont": "<p>AI is good at line-level violations — vocabulary, naming, banned phrases, structural rules. It's worse at judgment calls — \"is this voice actually warm enough?\" or \"would your audience read this as condescending?\" Treat AI as your consistency checker. You're still the voice critic.</p>",
+    "intro": "<p>A style guide is only useful if you actually follow it. After a couple of long design sessions, it's likely that you'll slip. This is where AI can help you be an <span class=\"gradient-text\">objective auditor</span> of your work. It's one of those AI use cases that I find helps me focus on creative work, while they focus on the more \"tedious\" consistency check.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Creative.gif\" alt=\"Creative work in motion\" class=\"inline-gif\" /><figcaption>The creative work.</figcaption></figure>",
+    "why_matters": "",
+    "how_ai_helps": "<p>AI can read the module and the style guide together and tell you, line by line, where you diverged. Not in a generic \"this could be clearer\" way — specifically: your style guide says use \"learner,\" you used \"student\" in modules 2, 4, and 5.</p>",
+    "ai_wont": "<p>AI is good at line-level issues — vocabulary, naming, banned phrases, structural rules. It's worse at judgment calls — \"is this voice actually warm enough?\" or \"would your audience read this as condescending?\" Treat AI as your consistency checker. You're still the voice critic.</p>",
     "steps": [
-      "Have your draft and your style guide ready. The audit is only as sharp as the guide — if the guide is fuzzy, the findings will be too.",
-      "Paste both into the prompt. Or, even better, run this from inside your AI workspace where both files already live (<a href=\"/cards/set-up-your-ai-workspace\">Set up your AI workspace →</a>).",
-      "Triage the findings. Some are mechanical (just fix). Some are arguable (you broke the rule on purpose). Some are the guide being wrong — update the guide if the call you actually made is better than the rule."
+      "Have your draft and your style guide ready. Paste both into the prompt — or run this from inside your AI workspace where both files already live (workspace card listed below).",
+      "Triage the findings. Some are mechanical — just fix. Some are arguable — you broke the rule on purpose. Some are the guide being wrong — update the guide if the call you made is actually better than the rule."
     ],
     "prompt_fast": {
       "frame": "You are a senior instructional designer doing a careful line-level audit of a module against its style guide.",
@@ -236,7 +234,7 @@
       "shape": "Style guide: [PASTE OR REFERENCE]\nModule draft: [PASTE OR REFERENCE]\n\nFormat the output as Markdown with these four sections:\n\n1. **Voice & tone violations** — Where the module's voice diverges from the guide. Quote the line in the module. Quote the rule in the guide. Suggest a fix.\n\n2. **Vocabulary & terminology** — Banned words used, defined-on-first-use terms left undefined, inconsistent terminology. Specific instances only.\n\n3. **Structural & convention violations** — Naming conventions, formatting, length, anything the guide laid out as a rule.\n\n4. **Ambiguous cases** — Where the module is arguably fine but you're not sure. Flag for me to decide.\n\nDon't:\n- Pad with generic writing advice ('be clearer', 'use active voice') unless the guide actually says that.\n- Flag stylistic choices the guide doesn't speak to.\n- Skim. Cite the line in the module AND the rule in the guide for every finding.",
       "tune": "If the style guide is silent on something the module does, say so explicitly — that's a guide gap, not a module violation. If you're not confident in a finding, mark it as \"low confidence\" instead of dropping it."
     },
-    "pro_tip": "Run this audit halfway through, not just at the end. Catching three voice drifts at module 3 is easier than catching twelve at module 9. Make it a habit between drafts, not a final-stage QA gate."
+    "pro_tip": "Run this audit halfway through the build, not just at the end. Catching three voice drifts at module 3 is much easier than catching twelve at module 9."
   },
   {
     "slug": "set-up-your-ai-workspace",
