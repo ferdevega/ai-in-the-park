@@ -313,26 +313,24 @@
     "stage": "development",
     "type": "creator",
     "level": "beginner",
-    "tags": ["outline", "structure", "module-design", "bloom"],
+    "tags": ["outline", "structure", "module-design", "sequencing"],
     "added": "2026-06-21",
-    "illustration": "/assets/cards/topic-to-module-outline.png",
     "teaser": "Because \"I'll just start with the slides\" never ends well.",
     "related": ["choose-the-right-modality", "build-knowledge-checks-at-the-right-cognitive-level"],
-    "intro": "<p>You've got a topic and some bullet points from a kickoff call. You're ready to create the course. Wait — don't do it yet. The first thing you should do is <strong>draft an outline</strong>.</p>",
-    "why_matters": "<p>An outline is the ordered list of modules — each one with a stated learning outcome, a few key sub-topics, and a reason for sitting where it does. Get it wrong and you'll fight your way through development.</p>",
-    "how_ai_helps": "<p>AI is good at generating a defensible first-pass structure in seconds. The trick is constraining it so that it gives you what you need. The prompt below bakes in three constraints that turn 'AI gave me an outline' into 'AI gave me a usable outline':</p><ul><li>Each module needs a stated <strong>learning outcome</strong> (not just a topic).</li><li>Each module needs a one-line rationale — so you know why it sits in that position.</li><li>The module count is capped — fights the AI urge to over-deliver.</li></ul>",
-    "ai_wont": "<p>AI doesn't know your learners. After you have an outline, you still need to check it against what you learned in Analysis &amp; Discovery.</p>",
+    "intro": "<p>Have you ever assembled an IKEA piece without reading the instructions? You're three steps in, you've already used the wrong screws, and there's a piece called \"BESPIK\" that doesn't fit anywhere.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Kardashian.gif\" alt=\"Kardashian detective face\" class=\"inline-gif\" /><figcaption>The Federal Bureau of Instructional Design.</figcaption></figure><p>When creating a course, the first thing you should do is <span class=\"gradient-text\">draft an outline</span>. It will help you visualize where you want to get to so you don't have to figure it out along the way.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Feed AI the topic, audience, and any source material. It'll draft a first-pass outline — section names, content to include in each, and a quick reason for each section's position. The prompt below caps the section count, so you get something tight instead of bloated.</p>",
+    "ai_wont": "<p>AI doesn't know your learners. After you have an outline, you still need to check it against what you learned in Analysis and Discovery.</p>",
     "steps": [
-      "Collect your topic, audience description, and any source bullet points or documents. The more you give it up front, the better the first draft.",
-      "Paste the prompt into Claude or ChatGPT. Fill in the brackets.",
-      "Iterate. Ask for a different sequence, a different module count, a different cognitive progression. The first output is rarely the final outline."
+      "Gather your inputs — topic, audience, and any source bullet points or documents. The more you give the prompt, the better the first draft. Paste into the prompt and run.",
+      "Iterate. Ask for a different sequence, a different section count, a different progression. The first output is rarely the final outline."
     ],
     "prompt_fast": {
-      "frame": "You are a senior instructional designer.",
-      "ask": "Draft a module-by-module outline for a training program.",
-      "shape": "Topic: [TOPIC]\nAudience: [WHO THE LEARNERS ARE — role, expertise level, motivation]\nFormat: [e.g., 60-minute live workshop / 4-hour async / 30-min microlearning]\nSource material (optional): [BULLET POINTS OR PASTED SOURCE CONTENT]\n\nRules:\n- 4 to 6 modules. Don't go over.\n- Each module needs: a title, a stated learning outcome (use a Bloom-level verb), 3–5 sub-points, and a one-line rationale for why it sits in this position.\n- Sequence the modules so each one enables the next.\n\nDon't:\n- Pad with filler modules to hit a number.\n- Use vague verbs like \"understand\" or \"learn about\" — pick a Bloom verb that names a real behavior.\n- Number the modules 1–N unless the order actually matters.",
+      "frame": "You are a senior instructional designer outlining the content structure of a single course or module.",
+      "ask": "Draft a section-by-section outline for the topic below.",
+      "shape": "Topic: [TOPIC]\nAudience: [WHO THE LEARNERS ARE — role, expertise level, motivation]\nFormat: [e.g., 60-minute live workshop / 4-hour async / 30-min microlearning]\nSource material (optional): [BULLET POINTS OR PASTED SOURCE CONTENT]\n\nRules:\n- 4 to 6 sections. Don't go over.\n- Each section needs: a title, 3–5 sub-points covering the content, and a one-line rationale for why it sits in this position.\n- Sequence the sections so each one enables the next.\n\nDon't:\n- Pad with filler sections to hit a number.\n- Use generic section names like \"Introduction\" or \"Conclusion\" without specific content tied to the topic.\n- Number sections 1–N unless the order actually matters.\n- Include learning objectives — that's the curriculum's job, not the outline's.",
       "tune": "Where you assumed something, call it out — those become my SME questions. If the brief is too thin to design from, ask me one clarifying question first instead of guessing."
     },
-    "pro_tip": "If you have actual source material — SOPs, interview transcripts, articles — drop it all into a NotebookLM notebook and run this prompt in there. The outline comes back grounded in your real sources, with citations. Way less hallucinated content, and much easier to defend to an SME."
+    "pro_tip": "If you have actual source material — SOPs, interview transcripts, articles — drop it into a NotebookLM notebook and run this prompt in there. The outline comes back grounded in your real sources, with citations. Way less hallucinated content, and much easier to defend to an SME."
   }
 ]
