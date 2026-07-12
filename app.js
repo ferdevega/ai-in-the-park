@@ -666,9 +666,45 @@ function viewHomeV3() {
   const frag = tpl('tpl-home-v3');
 
   // Library: cards grouped by stage, editorial header per group.
-  // FAST sits above as a slim callout — no separate featured card section.
+  // FAST is rendered as the first card in a "Frameworks" section — a card about prompting.
   const libraryHost = $('[data-v3-library]', frag);
   if (libraryHost) {
+    // "Frameworks" section — currently just FAST, but the section signals room to grow.
+    const frameworksSection = document.createElement('section');
+    frameworksSection.className = 'v3-lib-section v3-lib-section-frameworks';
+    frameworksSection.style.setProperty('--stage-color', 'var(--r-thought-partner)');
+
+    const fwHeader = document.createElement('header');
+    fwHeader.className = 'v3-lib-header';
+    fwHeader.innerHTML = `
+      <div class="v3-lib-header-top">
+        <span class="v3-lib-dot"></span>
+        <h2 class="v3-lib-title">Frameworks</h2>
+        <span class="v3-lib-count">1 card</span>
+      </div>
+      <p class="v3-lib-editorial">[PLACEHOLDER — Fer's 1-line editorial framing for Frameworks.]</p>
+    `;
+    frameworksSection.appendChild(fwHeader);
+
+    const fwGrid = document.createElement('div');
+    fwGrid.className = 'card-grid v3-lib-grid';
+
+    // FAST rendered as a card, but click goes to /fast (not a modal).
+    const fastCard = {
+      slug: 'fast-framework',
+      title: 'FAST — the four moves behind every good prompt',
+      teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+      type: 'tool',
+      level: 'beginner',
+      stage: 'frameworks',
+    };
+    const fastFrag = renderCardPreview(fastCard, { showLevel: false });
+    const fastAnchor = fastFrag.querySelector('a');
+    if (fastAnchor) fastAnchor.setAttribute('href', '/fast');
+    fwGrid.appendChild(fastFrag);
+    frameworksSection.appendChild(fwGrid);
+    libraryHost.appendChild(frameworksSection);
+
     state.stages.forEach((stage) => {
       const inStage = state.cards.filter((c) => {
         const refs = Array.isArray(c.stage) ? c.stage : [c.stage];

@@ -948,16 +948,37 @@ body.view-preview2 .landing-v3 {
   body.view-preview2 .page { padding: 16px 18px 24px; }
 }
 
-/* Hero refresh — with the "Ask me" opt-in button */
-.v3-hero-refresh { margin: 8px 0 32px; max-width: 920px; }
-.v3-hero-line {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: #c8c8c8;
-  margin: 0 0 20px;
-  max-width: 780px;
+/* Compact intro strip — text on the left, "Ask me" on the right. Sits above the wall. */
+.v3-intro-strip {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 0 0 22px;
+  flex-wrap: wrap;
 }
-.v3-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.v3-intro-text { flex: 1 1 auto; min-width: 0; }
+.v3-intro-h1 {
+  font-size: clamp(1.55rem, 2.6vw, 2rem) !important;
+  line-height: 1.12 !important;
+  margin: 6px 0 8px !important;
+  letter-spacing: -0.02em !important;
+  max-width: 820px;
+}
+.v3-intro-line {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #b8b8b8;
+  margin: 0;
+  max-width: 720px;
+}
+.v3-intro-actions { flex: 0 0 auto; }
+@media (max-width: 720px) {
+  .v3-intro-strip { flex-direction: column; align-items: flex-start; }
+  .v3-intro-actions { align-self: stretch; }
+  .v3-intro-actions .v3-ask-btn { width: 100%; justify-content: center; }
+}
+
 .v3-ask-btn {
   display: inline-flex;
   align-items: center;
