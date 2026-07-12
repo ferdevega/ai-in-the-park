@@ -126,7 +126,7 @@ function primaryStageOf(card) {
 const cardHref = (card) => `/cards/${card.slug}`;
 const stageHref = (stage) => `/stages/${stage.slug}`;
 
-function renderCardPreview(card, { showStageLabel = false } = {}) {
+function renderCardPreview(card, { showStageLabel = false, showLevel = true } = {}) {
   const frag = tpl('tpl-card-preview');
   const a = $('a', frag);
 
@@ -178,7 +178,10 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
   }
 
   const levelHost = $('[data-level]', frag);
-  if (levelHost) renderLevelBars(levelHost, card.level);
+  if (levelHost) {
+    if (showLevel) renderLevelBars(levelHost, card.level);
+    else levelHost.remove();
+  }
 
   // Role label — geometric icon + name in the chips footer.
   const label = roleLabelHtmlForType(card.type);
@@ -592,7 +595,9 @@ function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
 
     const grid = document.createElement('div');
     grid.className = 'card-grid';
-    groupCards.forEach((c) => grid.appendChild(renderCardPreview(c)));
+    // On stage pages the level is already shown by the group header,
+    // so hide the level bar on each card to reduce visual noise.
+    groupCards.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: false })));
     wrap.appendChild(grid);
 
     target.appendChild(wrap);
