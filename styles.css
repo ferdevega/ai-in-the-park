@@ -776,6 +776,41 @@ p  { margin: 0 0 1em; color: var(--text); }
 /* Stage pages: hide search + sort toolbar and filter bar (not enough cards yet) */
 .section-stage .toolbar,
 .section-stage .filter-bar { display: none; }
+
+/* Collapsed reference at the bottom of each stage — explains what the card type chips mean */
+.card-types-reference {
+  margin: 48px 0 0;
+  padding: 16px 20px;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  font-size: 0.86rem;
+  color: var(--text-dim);
+  max-width: 820px;
+}
+.card-types-reference summary {
+  cursor: pointer;
+  font-family: var(--heading);
+  font-weight: 500;
+  color: #b8b8b8;
+  list-style: none;
+  padding: 2px 0;
+}
+.card-types-reference summary::-webkit-details-marker { display: none; }
+.card-types-reference summary::before {
+  content: '?';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  font-size: 0.72rem;
+  margin-right: 10px;
+  vertical-align: -3px;
+}
+.card-types-reference[open] summary { margin-bottom: 14px; }
+.card-types-reference .fast-chip-defs { margin: 0; }
 .stage-header-right {
   display: flex;
   flex-direction: column;
