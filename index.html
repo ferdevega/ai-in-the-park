@@ -27,7 +27,6 @@
   <header class="topbar">
     <a href="/" class="brand">
       <span class="brand-text">AI in the Park <span class="brand-emoji">🐕‍🦺</span></span>
-      <span class="brand-tagline">A playbook for learning designers on how to use AI with purpose.</span>
     </a>
     <nav class="topbar-links">
       <a href="/" data-home-link>Home</a>
@@ -95,49 +94,52 @@
   <template id="tpl-home">
     <section class="landing">
       <div class="home-hero">
-        <span class="eyebrow">The Playbook</span>
-        <h1>Welcome to my library of use cases for AI &amp; learning!</h1>
-        <p class="lede">
-          This is a playbook for instructional designers, learning managers and
-          content developers. Each card has a story, what AI does well, what it
-          doesn't, and a prompt you can take.
-        </p>
-        <p class="home-hero-second">
-          I created this because there's a lot of AI crap online. Everything you
-          see here, I've done it without AI many times, and I'm now adding AI to
-          it. Most of it gets thought up while I'm walking around Central Park
-          with my dog Pericles.
-        </p>
+        <h1>Welcome to my library of use cases for <span class="gradient-text">AI and learning</span>!</h1>
       </div>
 
       <div class="home-how-row">
-      <div class="how-it-works">
-        <ol class="how-steps">
-          <li>
-            <span class="how-step-num">1</span>
-            <div>
-              <div class="how-step-title">Pick a stage</div>
-              <div class="how-step-body">Based on where you are in your project.</div>
-            </div>
-          </li>
-          <li>
-            <span class="how-step-num">2</span>
-            <div>
-              <div class="how-step-title">Open a card</div>
-              <div class="how-step-body">Story, what AI does well, what it doesn't, the prompt.</div>
-            </div>
-          </li>
-          <li>
-            <span class="how-step-num">3</span>
-            <div>
-              <div class="how-step-title">Laugh at my jokes (mandatory)</div>
-              <div class="how-step-body">Then take my prompts. Every one of them is yours.</div>
-            </div>
-          </li>
-        </ol>
+        <div class="home-intro-text">
+          <p>
+            This is a playbook for instructional designers, content developers
+            and learning managers. Each section contains cards with ways to
+            include AI in your design process. They are not meant to replace
+            you, but to enhance how you work.
+          </p>
+          <p>I will continue to add cards as I try new things.</p>
+        </div>
+
+        <div class="how-it-works">
+          <ol class="how-steps">
+            <li>
+              <span class="how-step-num">1</span>
+              <div>
+                <div class="how-step-title">Pick a stage</div>
+                <div class="how-step-body">Based on where you are in your project.</div>
+              </div>
+            </li>
+            <li>
+              <span class="how-step-num">2</span>
+              <div>
+                <div class="how-step-title">Open a card</div>
+                <div class="how-step-body">Story, what AI does well, what it doesn't, the prompt.</div>
+              </div>
+            </li>
+            <li>
+              <span class="how-step-num">3</span>
+              <div>
+                <div class="how-step-title">Laugh at my jokes (mandatory)</div>
+                <div class="how-step-body">Then take my prompts. Every one of them is yours.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
       </div>
-        <img class="home-illustration" src="/assets/homepage.png" alt="Fer walking in Central Park with Pericles" />
-      </div>
+
+      <ul class="home-notes">
+        <li>7 stages of training development, from Analysis to Project Management. Walk them in order, or jump to what you need today.</li>
+        <li>Cards are tagged by level: beginner, intermediate, advanced. Start with beginner.</li>
+        <li>Every card has a runnable prompt plus a pro tip with the next-level move.</li>
+      </ul>
 
       <div class="home-stages-list" aria-label="Open a stage">
         <div class="home-stages-list-label">Open a stage</div>
@@ -149,7 +151,7 @@
           <img class="home-author-photo" src="/assets/avatar.jpg" alt="Fernando De Vega" />
           <div class="home-author-text">
             <div class="home-author-name">Fernando De Vega</div>
-            <div class="home-author-tagline">15+ years designing training. Now figuring out AI.</div>
+            <div class="home-author-tagline">15+ years designing training, now using AI.</div>
           </div>
         </div>
         <div class="home-author-ctas">
@@ -248,25 +250,24 @@
     <section class="fast-page">
       <div class="section-meta">starter guide</div>
       <h1>The "perfect prompt" doesn't exist.</h1>
-      <p class="lede">
-        You'll see a lot of posts online that talk about the "perfect prompt." Forget those. You don't need that. What you need is a "good enough prompt" that focuses exactly on what YOU need.
-      </p>
 
-      <figure class="inline-gif-wrap">
-        <img src="/assets/gifs/Rihanna.gif" alt="Rihanna pointing" class="inline-gif" />
-        <figcaption>Yes, YOU!</figcaption>
-      </figure>
+      <div class="fast-intro-row">
+        <p class="fast-intro-copy">
+          You'll see a lot of posts online that talk about the "perfect prompt." Forget those. You don't need that. What you need is a "good enough prompt" that focuses exactly on what YOU need.
+        </p>
+        <figure class="fast-intro-gif">
+          <img src="/assets/gifs/Rihanna.gif" alt="Rihanna pointing" class="inline-gif" />
+          <figcaption>Yes, YOU!</figcaption>
+        </figure>
+      </div>
 
-      <p>
-        This site is like therapy for prompting. Reflect before you act. Here's a framework I put together that you can use while prompting.
-      </p>
+      <p>Here's a framework I put together that you can use while prompting.</p>
 
-      <h2 class="fast-h2">The four-move prompt: FAST</h2>
       <ol class="fast-moves">
         <li class="fast-move">
           <div class="fast-move-letter">F</div>
           <h3 class="fast-move-title">Frame</h3>
-          <p class="fast-move-def">Set the role and the situation. Who is the AI being? What's the context?</p>
+          <p class="fast-move-def">Set the role and the situation. What role is AI playing? What's the context?</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
             <em>You are a senior instructional designer.</em>
@@ -275,7 +276,7 @@
         <li class="fast-move">
           <div class="fast-move-letter">A</div>
           <h3 class="fast-move-title">Ask</h3>
-          <p class="fast-move-def">The actual request. One sentence. One verb.</p>
+          <p class="fast-move-def">The actual request. A single sentence with one action verb.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
             <em>Draft a module-by-module outline for a training program.</em>
@@ -293,10 +294,10 @@
         <li class="fast-move">
           <div class="fast-move-letter">T</div>
           <h3 class="fast-move-title">Tune</h3>
-          <p class="fast-move-def">The quality move. Tells AI to push back, flag assumptions, disagree where it would.</p>
+          <p class="fast-move-def">Tells AI to push back, flag assumptions, or disagree with you.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
-            <em>Where you assumed something, call it out. If the brief is too thin, ask one clarifying question first.</em>
+            <em>State your assumptions, and ask any clarifying questions.</em>
           </div>
         </li>
       </ol>
@@ -316,14 +317,6 @@
         <li><span class="chip auditor">auditor</span> AI reviews existing work and flags issues: style-guide violations, cognitive-level mismatches, gaps in a past course.</li>
         <li><span class="chip panel">panel</span> AI roleplays multiple personas so you can pressure-test your draft as a virtual focus group.</li>
         <li><span class="chip tool">tool</span> A specific AI product or feature this card teaches you to use.</li>
-      </ul>
-
-      <h2 class="fast-h2">How to use this playbook</h2>
-      <ul class="fast-howto">
-        <li>7 stages of training development, from Analysis to Project Management. Walk them in order, or jump to what you need today.</li>
-        <li>Cards are tagged by level: beginner, intermediate, advanced. Start with beginner.</li>
-        <li>Every Prompt card has a runnable prompt plus a pro tip with the next-level move.</li>
-        <li>"All cards" lets you search and filter across the whole playbook.</li>
       </ul>
 
       <a class="fast-cta-button" href="/stages/analysis">
@@ -358,20 +351,20 @@
         When I went looking for resources on AI for instructional designers, I found
         a lot of prompt libraries. Some of them are useful, but most of them aren't,
         because they are not shared by instructional designers who have done the work
-        WITHOUT AI. Whatever you read here, is true.
+        <span class="gradient-text">without AI</span>. Whatever you read here, is true.
       </p>
 
       <h2 class="about-h2">Why "AI in the Park"</h2>
       <p>
         Two reasons. First, most of these ideas come together when I'm in the park.
-        Second, that's the goal. Using AI in training development should be a walk
-        in the park.
+        Second, that's the goal. Using AI in training development should be a
+        <span class="gradient-text">walk in the park</span>.
       </p>
 
       <h2 class="about-h2">Work together</h2>
       <p>
-        Designing a learning program and want a thought partner who's lived in the
-        AI-meets-L&amp;D space?
+        Designing a learning program and want a <span class="gradient-text">thought partner</span>
+        who's lived in the AI-meets-L&amp;D space?
         <a href="https://www.linkedin.com/in/ferdevega/" target="_blank" rel="noopener">Reach out on LinkedIn ↗</a>.
       </p>
     </section>
