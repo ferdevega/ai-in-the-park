@@ -525,8 +525,10 @@ p  { margin: 0 0 1em; color: var(--text); }
    ============================================================ */
 .page {
   position: relative;
-  padding: 36px 48px 40px;
+  padding: 36px 48px 32px;
   min-width: 0; /* allow inner grid to shrink */
+  display: flex;
+  flex-direction: column;
 }
 
 /* ============================================================
@@ -536,7 +538,11 @@ p  { margin: 0 0 1em; color: var(--text); }
   max-width: 960px;
   padding-top: 4px;
   animation: landingIn 0.5s var(--ease) both;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
+.landing .home-author-row { margin-top: auto; }
 @keyframes landingIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -2048,7 +2054,7 @@ body.modal-open { overflow: hidden; }
 .fast-move-title {
   font-family: var(--heading);
   font-weight: 600;
-  font-size: 1.6rem;
+  font-size: 1.15rem;
   margin: 0 0 10px;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -2059,7 +2065,7 @@ body.modal-open { overflow: hidden; }
 .fast-move-letter {
   font-family: var(--heading);
   font-weight: 700;
-  font-size: 2.6rem;
+  font-size: 1.85rem;
   line-height: 1;
   letter-spacing: -0.04em;
   color: var(--fast-move-accent, var(--r-creator));
