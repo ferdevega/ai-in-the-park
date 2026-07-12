@@ -77,6 +77,70 @@
     "coming_soon": true
   },
   {
+    "slug": "cluster-interview-transcripts-into-themes",
+    "title": "Cluster interview transcripts into themes",
+    "stage": "analysis",
+    "type": "creator",
+    "level": "beginner",
+    "coming_soon": true
+  },
+  {
+    "slug": "root-cause-the-performance-gap",
+    "title": "Root-cause the performance gap",
+    "stage": "analysis",
+    "type": "thought-partner",
+    "level": "intermediate",
+    "coming_soon": true
+  },
+  {
+    "slug": "interview-a-persona-before-you-build-one",
+    "title": "Interview a persona before you build one",
+    "stage": "analysis",
+    "type": "panel",
+    "level": "advanced",
+    "coming_soon": true
+  },
+  {
+    "slug": "document-your-strategy",
+    "title": "Document your strategy",
+    "stage": "strategy-curriculum",
+    "type": "creator",
+    "level": "intermediate",
+    "coming_soon": true
+  },
+  {
+    "slug": "design-a-gamified-strategy",
+    "title": "Design a gamified strategy",
+    "stage": "strategy-curriculum",
+    "type": "creator",
+    "level": "advanced",
+    "coming_soon": true
+  },
+  {
+    "slug": "build-a-mood-board-for-your-course",
+    "title": "Build a mood board for your course",
+    "stage": "design",
+    "type": "creator",
+    "level": "beginner",
+    "coming_soon": true
+  },
+  {
+    "slug": "design-the-characters-for-your-course",
+    "title": "Design the characters for your course",
+    "stage": "design",
+    "type": "creator",
+    "level": "intermediate",
+    "coming_soon": true
+  },
+  {
+    "slug": "test-a-branching-scenario-prototype",
+    "title": "Test a branching scenario prototype",
+    "stage": "design",
+    "type": "panel",
+    "level": "advanced",
+    "coming_soon": true
+  },
+  {
     "slug": "draft-your-strategy-pov-with-a-podcast",
     "hidden": true,
     "title": "Synthesize your discovery into a Strategy POV",
