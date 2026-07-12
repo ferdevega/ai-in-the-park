@@ -80,6 +80,12 @@ const routes = [
       'A quick reference for the four-move prompting model used across the AI in the Park playbook: Frame, Ask, Shape, Tune.',
     url: `${SITE_URL}/fast`,
   },
+  {
+    out: 'preview/index.html',
+    title: `Preview — ${SITE_NAME}`,
+    description: 'Alternate home layout preview.',
+    url: `${SITE_URL}/preview`,
+  },
 ];
 
 for (const r of routes) {
