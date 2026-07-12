@@ -4058,9 +4058,11 @@ body.view-stage .layout { grid-template-columns: 1fr; }
 body.view-card-v4 .spine,
 body.view-card-v4 .spine-toggle { display: none !important; }
 body.view-card-v4 .layout { grid-template-columns: 1fr; }
+/* Full-width card page — tighter side gutter so content breathes horizontally */
+body.view-card-v4 .page { padding-left: 28px; padding-right: 28px; }
 
 .card-v4-page {
-  max-width: 1200px;
+  max-width: none;
   margin: 0 auto;
   padding: 8px 0 80px;
 }
@@ -4173,11 +4175,11 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
   max-width: 640px;
 }
 
-/* Two-column body: main + sticky prompt aside */
+/* Two-column body: main + sticky prompt aside (wider so long prompts breathe) */
 .card-v4-page-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) minmax(440px, 520px);
+  gap: 48px;
   align-items: start;
   margin-bottom: 60px;
 }
@@ -4205,7 +4207,10 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
 }
 .card-v4-page-aside-inner .prompt-block { margin: 0; }
 
-/* Related cards */
+/* Related cards — now sits inside the main column below the pro tip */
+.card-v4-page-related {
+  margin-top: 40px;
+}
 .card-v4-page-related-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.72rem;
@@ -4219,16 +4224,16 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
 }
 .card-v4-page-related-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 280px);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
   justify-content: start;
 }
 .card-v4-page-related-grid .card-preview.v4-card {
-  width: 280px;
-  min-height: 240px;
+  width: 100%;
+  min-height: 220px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   .card-v4-page-columns {
     grid-template-columns: 1fr;
     gap: 32px;

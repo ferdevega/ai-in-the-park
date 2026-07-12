@@ -1307,10 +1307,10 @@ function viewCardV4(slug) {
   }
 
   // Tag each major block with data-reveal so it fades in on scroll
-  const reveals = [];
-  reveals.push(frag.querySelector('.card-v4-page-hero'));
-  reveals.push(frag.querySelector('.card-v4-page-columns'));
-  reveals.push(frag.querySelector('.card-v4-page-related'));
+  const reveals = [
+    frag.querySelector('.card-v4-page-hero'),
+    frag.querySelector('.card-v4-page-columns'),
+  ];
   reveals.filter(Boolean).forEach((el, i) => {
     el.setAttribute('data-reveal', '');
     el.style.setProperty('--reveal-delay', `${i * 80}ms`);
