@@ -49,7 +49,7 @@
     <!-- The spine: stage tabs (vertical on desktop, dropdown on mobile) -->
     <aside class="spine">
       <div class="spine-sign" aria-hidden="true">
-        <span class="spine-sign-text">pick a stage</span>
+        <span class="spine-sign-text spine-sign-cta">START HERE!</span>
         <svg class="spine-sign-arrow" viewBox="0 0 50 30" aria-hidden="true">
           <path d="M5 4 C 14 8, 22 14, 32 24" fill="none" stroke="currentColor"
                 stroke-width="1.8" stroke-linecap="round" />
@@ -79,13 +79,6 @@
         <span class="footer-copy">© 2026 Fernando De Vega</span>
         <span class="footer-tag">AI in the Park 🐕‍🦺 · an evergrowing playbook</span>
       </div>
-      <nav class="footer-links" aria-label="Footer">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/fast">FAST</a>
-        <a href="https://www.linkedin.com/in/ferdevega/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
-        <a href="/feed.xml">RSS</a>
-      </nav>
     </div>
   </footer>
 
@@ -102,8 +95,8 @@
           <p>
             This is a playbook for instructional designers, content developers
             and learning managers. Each section contains cards with ways to
-            include AI in your design process. They are not meant to replace
-            you, but to enhance how you work.
+            include AI in your design process. <strong>They are not meant to replace
+            you, but to enhance how you work.</strong>
           </p>
           <p>I will continue to add cards as I try new things.</p>
         </div>
@@ -136,7 +129,7 @@
       </div>
 
       <ul class="home-notes">
-        <li>7 stages of training development, from Analysis to Project Management. Walk them in order, or jump to what you need today.</li>
+        <li>7 stages of training development, from Analysis to Project Management.</li>
         <li>Cards are tagged by level: beginner, intermediate, advanced. Start with beginner.</li>
         <li>Every card has a runnable prompt plus a pro tip with the next-level move.</li>
       </ul>
@@ -327,24 +320,21 @@
   </template>
 
   <template id="tpl-about">
-    <section class="section">
-      <div class="section-meta">about</div>
-      <h1>About</h1>
+    <section class="section about-section">
+      <h1 class="about-h1">About</h1>
 
-      <div class="about-top">
-        <p class="about-body">
-          I'm Fer. Argentinian, living in New York for the last five years. Most days
-          I'm walking around Central Park with my dog Pericles. I've been an
-          instructional designer for 15+ years, across multiple industries via
-          consulting work. I've built things that worked and things that absolutely
-          did not. You'll hear about both here.
-        </p>
+      <figure class="about-photo-wrap">
+        <img class="about-photo-hero" src="/assets/Fer.jpeg" alt="Fer with Pericles" />
+        <figcaption>Pericles and me concocting the best prompts for you and you only.</figcaption>
+      </figure>
 
-        <figure class="about-photo-wrap">
-          <img class="about-photo-hero" src="/assets/Fer.jpeg" alt="Fer with Pericles" />
-          <figcaption>Pericles and me concocting the best prompts for you and you only.</figcaption>
-        </figure>
-      </div>
+      <p class="about-body">
+        I'm Fer. Argentinian, living in New York for the last five years. Most days
+        I'm <span class="gradient-text">walking around Central Park</span> with my dog Pericles. I've been an
+        instructional designer for 15+ years, across multiple industries via
+        consulting work. I've built things that worked and things that absolutely
+        did not. You'll hear about both here.
+      </p>
 
       <h2 class="about-h2">Why I made this</h2>
       <p>

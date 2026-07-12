@@ -337,6 +337,31 @@ p  { margin: 0 0 1em; color: var(--text); }
   flex: 0 0 auto;
   opacity: 0.5;
 }
+/* Animated gradient CTA in the spine sign — "START HERE!" */
+.spine-sign-cta {
+  font-family: var(--heading);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    90deg,
+    var(--r-auditor),
+    var(--r-creator),
+    var(--r-thought-partner),
+    var(--r-creator),
+    var(--r-auditor)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: startHereShimmer 4s linear infinite;
+}
+@keyframes startHereShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
 /* Spine tabs container (separate from the sign so JS can re-render only tabs) */
 .spine-tabs { display: flex; flex-direction: column; gap: 4px; flex: 1; min-height: 0; }
 
@@ -496,7 +521,7 @@ p  { margin: 0 0 1em; color: var(--text); }
    ============================================================ */
 .page {
   position: relative;
-  padding: 36px 48px 80px;
+  padding: 36px 48px 40px;
   min-width: 0; /* allow inner grid to shrink */
 }
 
@@ -2113,21 +2138,18 @@ body.modal-open { overflow: hidden; }
 }
 .about-text { flex: 1; min-width: 0; }
 
-/* About page: photo on right (desktop) / bottom (mobile) */
-.about-top {
-  display: flex;
-  gap: 32px;
-  align-items: flex-start;
-  margin: 1.5rem 0 2rem;
+/* About H1 matches the stage-header h1 size (smaller than global default) */
+.about-h1 {
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  margin: 0 0 1.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
 }
-.about-top .about-body {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
-}
+/* About photo floats right so the intro AND Q&A sections flow around it */
 .about-photo-wrap {
-  flex: 0 0 220px;
-  margin: 0;
+  float: right;
+  width: 220px;
+  margin: 0 0 16px 28px;
   text-align: center;
 }
 .about-photo-hero {
@@ -2145,13 +2167,15 @@ body.modal-open { overflow: hidden; }
   color: var(--text-secondary);
   font-style: italic;
 }
+.about-body {
+  margin: 0 0 1.5rem;
+}
 @media (max-width: 720px) {
-  .about-top { flex-direction: column; gap: 20px; }
   .about-photo-wrap {
-    flex: 0 0 auto;
+    float: none;
     width: 100%;
     max-width: 280px;
-    align-self: center;
+    margin: 0 auto 1.5rem;
   }
 }
 .about-h2 {
@@ -2164,6 +2188,8 @@ body.modal-open { overflow: hidden; }
   line-height: 1.2;
 }
 .about-h2:first-of-type { margin-top: 2.5rem; }
+/* Ensure content after the About sections clears the floated image */
+.about-section::after { content: ''; display: block; clear: both; }
 
 .about-name {
   font-family: var(--heading);
@@ -2236,7 +2262,7 @@ body.modal-open { overflow: hidden; }
 /* ============================================================
    Footer
    ============================================================ */
-.site-footer { border-top: 1px solid var(--glass-border); margin-top: 60px; }
+.site-footer { border-top: 1px solid var(--glass-border); margin-top: 20px; }
 .footer-inner {
   padding: 22px 28px;
   display: flex;
