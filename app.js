@@ -779,7 +779,35 @@ function viewHomeV4() {
     // Cards — bigger v4 treatment
     cards.forEach((c) => scroll.appendChild(renderV4Card(c)));
 
+    // Left/right arrow buttons — visible on hover-capable devices (desktop),
+    // hidden on touch. Click scrolls the shelf by ~one card width.
+    const btnLeft = document.createElement('button');
+    btnLeft.type = 'button';
+    btnLeft.className = 'v4-shelf-arrow v4-shelf-arrow-left';
+    btnLeft.setAttribute('aria-label', 'Scroll left');
+    btnLeft.innerHTML = '<span aria-hidden="true">‹</span>';
+    btnLeft.addEventListener('click', () => scroll.scrollBy({ left: -316, behavior: 'smooth' }));
+
+    const btnRight = document.createElement('button');
+    btnRight.type = 'button';
+    btnRight.className = 'v4-shelf-arrow v4-shelf-arrow-right';
+    btnRight.setAttribute('aria-label', 'Scroll right');
+    btnRight.innerHTML = '<span aria-hidden="true">›</span>';
+    btnRight.addEventListener('click', () => scroll.scrollBy({ left: 316, behavior: 'smooth' }));
+
+    // Update arrow visibility based on scroll position
+    const updateArrows = () => {
+      const atStart = scroll.scrollLeft <= 2;
+      const atEnd = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 2;
+      btnLeft.classList.toggle('is-hidden', atStart);
+      btnRight.classList.toggle('is-hidden', atEnd);
+    };
+    scroll.addEventListener('scroll', updateArrows, { passive: true });
+    setTimeout(updateArrows, 0);
+
     section.appendChild(scroll);
+    section.appendChild(btnLeft);
+    section.appendChild(btnRight);
     return section;
   };
 
