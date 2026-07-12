@@ -1214,16 +1214,19 @@ body.view-preview3 .landing-v4 {
 .v4-shelf-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
 .v4-shelf-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
 
-/* See-all tile — smaller than a card, sits at the end of each stage shelf */
+/* See-all tile — flex-grows to fill remaining shelf width so the row never
+   overflows for the sake of a fixed-size element */
 .v4-see-all {
-  flex: 0 0 160px;
-  width: 160px;
-  min-height: 220px;
+  flex: 1 1 140px;
+  width: 140px;
+  min-width: 120px;
+  max-width: 220px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   background: transparent;
   border: 1px dashed rgba(255, 255, 255, 0.18);
   border-radius: 14px;
@@ -1254,15 +1257,15 @@ body.view-preview3 .landing-v4 {
   .v4-see-all { flex: 0 0 140px; width: 140px; min-height: 200px; }
 }
 
-/* Category tile — same size as cards, solid stage color */
+/* Category tile — thinner than cards (240px) so cards get more space */
 .v4-cat-tile {
   position: sticky;
   left: 0;
   z-index: 2;
-  flex: 0 0 300px;
-  width: 300px;
-  min-height: 220px;
-  padding: 24px 22px 20px;
+  flex: 0 0 240px;
+  width: 240px;
+  min-height: 240px;
+  padding: 22px 20px 18px;
   background: linear-gradient(150deg,
     color-mix(in srgb, var(--cat-color) 88%, black) 0%,
     color-mix(in srgb, var(--cat-color) 65%, black) 100%);
@@ -1310,8 +1313,9 @@ body.view-preview3 .landing-v4 {
   position: relative;
 }
 .v4-shelf-scroll .card-preview.v4-card {
-  flex: 0 0 300px;
-  width: 300px;
+  flex: 0 0 280px;
+  width: 280px;
+  min-height: 240px;
   scroll-snap-align: start;
 }
 /* Diffuse role-color glow along the top edge instead of the 4px band */
@@ -1331,21 +1335,36 @@ body.view-preview3 .landing-v4 {
 .card-preview.v4-card .card-stage-label { display: none; }
 
 .card-preview.v4-card .card-body {
-  padding: 20px 22px 12px;
+  padding: 18px 20px 12px;
+  gap: 10px;
+}
+/* Card header — big role icon + type text at the top */
+.v4-card-header {
+  display: flex;
+  align-items: center;
   gap: 12px;
+  margin-bottom: 4px;
 }
 .v4-card-role-icon {
-  width: 46px;
-  height: 46px;
+  width: 36px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--role-color, var(--r-creator));
-  margin-bottom: 6px;
+  flex: 0 0 auto;
 }
 .v4-card-role-icon svg {
   width: 100%;
   height: 100%;
+}
+.v4-card-type {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--role-color, var(--r-creator)) 78%, white 22%);
 }
 .card-preview.v4-card h3 {
   font-family: var(--heading);
@@ -1367,10 +1386,13 @@ body.view-preview3 .landing-v4 {
   margin: 0;
 }
 .card-preview.v4-card .card-chips {
-  padding: 14px 22px 16px;
+  padding: 12px 20px 14px;
   border-top: 1px solid rgba(255,255,255,0.05);
   margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
 }
+.card-preview.v4-card .card-chips .level-bars { opacity: 0.9; }
 
 /* Hover — lift slightly, brighten border */
 .card-preview.v4-card:hover {
@@ -1391,10 +1413,10 @@ body.view-preview3 .landing-v4 {
 
 @media (max-width: 720px) {
   body.view-preview3 .page { padding: 16px 18px 32px; }
-  .v4-cat-tile,
-  .v4-shelf-scroll .card-preview.v4-card { flex: 0 0 260px; width: 260px; min-height: 200px; }
-  .v4-cat-tile { position: static; }
-  .v4-cat-title { font-size: 1.5rem; }
+  .v4-cat-tile { flex: 0 0 220px; width: 220px; min-height: 220px; position: static; }
+  .v4-shelf-scroll .card-preview.v4-card { flex: 0 0 260px; width: 260px; min-height: 220px; }
+  .v4-cat-title { font-size: 1.4rem; }
+  .v4-see-all { flex: 0 0 130px; width: 130px; min-height: 220px; }
 }
 
 /* =============================================================

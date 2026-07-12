@@ -776,8 +776,8 @@ function viewHomeV4() {
     `;
     scroll.appendChild(tile);
 
-    // Cards — bigger v4 treatment, up to 3
-    cards.forEach((c) => scroll.appendChild(renderV4Card(c)));
+    // Cards — bigger v4 treatment, tinted with the stage color for a cohesive row
+    cards.forEach((c) => scroll.appendChild(renderV4Card(c, { color })));
 
     // See-all tile — link to the full stage page (skipped when there's nothing more)
     if (seeAllHref) {
@@ -795,7 +795,7 @@ function viewHomeV4() {
     return section;
   };
 
-  // Frameworks row — FAST as first card, linking to /fast (no See-all: only 1 card)
+  // Basics row — FAST as the anchor, linking to /fast (no See-all: only 1 card)
   const fastCard = {
     slug: 'fast-framework',
     title: 'FAST — the four moves behind every good prompt',
@@ -807,14 +807,14 @@ function viewHomeV4() {
   shelvesHost.appendChild(
     addShelf(
       {
-        slug: 'frameworks',
-        title: 'Frameworks',
-        summary: 'Meta-tools that apply across every card.',
+        slug: 'basics',
+        title: 'Basics',
+        summary: 'Foundations that apply across every card.',
         color: 'var(--r-thought-partner)',
       },
       [fastCard],
       1,
-      null, // no See-all for Frameworks (single card, no dedicated stage page)
+      null,
     ),
   );
 
@@ -847,23 +847,46 @@ function viewHomeV4() {
   mount(frag);
 }
 
-// Bigger card design for /preview3 — prominent role icon, teaser visible, role-color glow.
-// Uses renderCardPreview under the hood, then augments with a big role icon in the header.
-function renderV4Card(card) {
-  const frag = renderCardPreview(card, { showLevel: false });
+// Bigger card design for /preview3 — big role icon + type at top, level at bottom.
+// Card accent color comes from the stage it belongs to (not the role), so a row of
+// cards reads as a cohesive stage rather than a rainbow of roles.
+function renderV4Card(card, opts = {}) {
+  const frag = renderCardPreview(card, { showLevel: true });
   const anchor = frag.querySelector('a');
   if (!anchor) return frag;
   anchor.classList.add('v4-card');
   if (card.linkOverride) anchor.setAttribute('href', card.linkOverride);
 
-  // Inject a big role icon at the top-left of the card body.
+  // Override the accent to stage color for a cohesive row appearance
+  if (opts.color) anchor.style.setProperty('--role-color', opts.color);
+
+  // Remove the bottom role-label (icon + name) — we're relocating it to the top
+  const existingRoleLabel = anchor.querySelector('.card-chips .role-label');
+  if (existingRoleLabel) existingRoleLabel.remove();
+
+  // Inject a header row: big role icon + type text
   const body = anchor.querySelector('.card-body');
-  if (body && card.type && ROLE_ICONS[card.type]) {
-    const iconWrap = document.createElement('div');
-    iconWrap.className = 'v4-card-role-icon';
-    iconWrap.innerHTML = ROLE_ICONS[card.type];
-    body.insertBefore(iconWrap, body.firstChild);
+  if (body) {
+    const header = document.createElement('div');
+    header.className = 'v4-card-header';
+
+    if (card.type && ROLE_ICONS[card.type]) {
+      const iconWrap = document.createElement('div');
+      iconWrap.className = 'v4-card-role-icon';
+      iconWrap.innerHTML = ROLE_ICONS[card.type];
+      header.appendChild(iconWrap);
+    }
+
+    if (card.type) {
+      const typeLabel = document.createElement('span');
+      typeLabel.className = 'v4-card-type';
+      typeLabel.textContent = card.type.replace('-', ' ');
+      header.appendChild(typeLabel);
+    }
+
+    body.insertBefore(header, body.firstChild);
   }
+
   return frag;
 }
 
