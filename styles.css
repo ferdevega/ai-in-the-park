@@ -4034,18 +4034,20 @@ body.view-stage .layout { grid-template-columns: 1fr; }
 
 .stage-v4-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, 280px);
   gap: 16px;
+  justify-content: start;
 }
-/* Cards on the stage page get equal min-height for tidy rows */
+/* Match home shelf cards: fixed 280px width, 240px min-height */
 .stage-v4-grid .card-preview.v4-card {
-  width: 100%;
-  min-height: 260px;
+  width: 280px;
+  min-height: 240px;
   flex: none;
 }
 
 @media (max-width: 720px) {
   .stage-v4-hero { margin: 12px 0 28px; }
-  .stage-v4-grid { grid-template-columns: 1fr; gap: 14px; }
+  .stage-v4-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .stage-v4-grid .card-preview.v4-card { width: 100%; }
   .stage-v4-groups { gap: 32px; }
 }
