@@ -5,5 +5,8 @@
   "description": "A field notebook of how-to cards for designing training with AI in the loop.",
   "scripts": {
     "build": "node build.js"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.34.0"
   }
 }

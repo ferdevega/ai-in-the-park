@@ -1036,6 +1036,79 @@ p  { margin: 0 0 1em; color: var(--text); }
   max-width: 760px;
   margin-top: 20px;
 }
+
+/* Native subscribe block on the home page — Vercel serverless + Upstash Redis backend */
+.home-subscribe {
+  margin: 32px 0 24px;
+  max-width: 760px;
+  padding: 20px 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+}
+.home-subscribe-title {
+  font-family: var(--heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+.home-subscribe-sub {
+  font-size: 0.88rem;
+  color: #b0b0b0;
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+.home-subscribe-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.home-subscribe-form input[type="email"] {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 10px 14px;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.home-subscribe-form input[type="email"]::placeholder { color: #7a7a7a; }
+.home-subscribe-form input[type="email"]:focus {
+  border-color: var(--r-thought-partner);
+  background: rgba(255, 255, 255, 0.08);
+}
+.home-subscribe-form button {
+  padding: 10px 20px;
+  font-family: var(--heading);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+}
+.home-subscribe-form button:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(139,92,246,0.28);
+}
+.home-subscribe-form button[disabled] { opacity: 0.6; cursor: default; }
+.home-subscribe-msg {
+  margin-top: 10px;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.home-subscribe-msg.is-success { color: #7dd8a8; }
+.home-subscribe-msg.is-error { color: #e28a8a; }
 .home-author-mini {
   display: flex;
   align-items: center;

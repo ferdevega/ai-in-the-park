@@ -1122,5 +1122,57 @@ function initMouseGlow() {
     return;
   }
   initMouseGlow();
+  initSubscribeForm();
   route();
 })();
+
+// ---------- Subscribe form (home page) ----------
+// Delegated so it works after the SPA mounts the home template.
+function initSubscribeForm() {
+  document.addEventListener('submit', async (e) => {
+    const form = e.target.closest('[data-subscribe-form]');
+    if (!form) return;
+    e.preventDefault();
+
+    const input = form.querySelector('input[name="email"]');
+    const button = form.querySelector('button[type="submit"]');
+    const msg = form.parentElement.querySelector('[data-subscribe-msg]');
+    const email = (input.value || '').trim();
+
+    if (!msg || !input || !button) return;
+
+    // Basic client-side format check to avoid a wasted round-trip.
+    const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!looksLikeEmail) {
+      msg.textContent = 'Enter a valid email.';
+      msg.className = 'home-subscribe-msg is-error';
+      input.focus();
+      return;
+    }
+
+    button.disabled = true;
+    const originalLabel = button.textContent;
+    button.textContent = 'Sending…';
+    msg.textContent = '';
+    msg.className = 'home-subscribe-msg';
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      msg.textContent = "Got it. I'll email you when new cards drop.";
+      msg.className = 'home-subscribe-msg is-success';
+      input.value = '';
+    } catch (err) {
+      msg.textContent = err.message || 'Something went wrong. Try again in a bit.';
+      msg.className = 'home-subscribe-msg is-error';
+    } finally {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
+  });
+}
