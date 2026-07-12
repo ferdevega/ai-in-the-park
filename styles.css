@@ -1524,16 +1524,34 @@ p  { margin: 0 0 1em; color: var(--text); }
   display: none;
 }
 
-/* Coming-soon ghost tiles — dimmed, non-clickable, ribbon in the corner */
+/* Coming-soon ghost tiles — flat stone-grey, non-clickable, ribbon in the corner */
 .card-preview.card-preview-coming-soon {
-  opacity: 0.55;
   cursor: default;
   pointer-events: none;
-  filter: grayscale(0.25);
+  background: rgba(120, 113, 108, 0.06);
+  border-color: rgba(160, 155, 148, 0.18);
+  filter: grayscale(1);
+}
+.card-preview.card-preview-coming-soon::before,
+.card-preview.card-preview-coming-soon::after {
+  display: none;
+}
+.card-preview.card-preview-coming-soon h3 {
+  color: #8b8580;
+}
+.card-preview.card-preview-coming-soon .card-preview-tag,
+.card-preview.card-preview-coming-soon .role-label {
+  color: #7a746e;
+  opacity: 0.75;
+}
+.card-preview.card-preview-coming-soon .level-bars > * {
+  background: rgba(160, 155, 148, 0.35) !important;
 }
 .card-preview.card-preview-coming-soon:hover {
   transform: none;
-  border-color: var(--glass-border);
+  border-color: rgba(160, 155, 148, 0.18);
+  background: rgba(120, 113, 108, 0.06);
+  box-shadow: none;
 }
 .card-coming-soon-ribbon {
   position: absolute;
@@ -1545,9 +1563,9 @@ p  { margin: 0 0 1em; color: var(--text); }
   font-size: 0.56rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #cfcfcf;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #a8a29e;
+  background: rgba(120, 113, 108, 0.18);
+  border: 1px solid rgba(160, 155, 148, 0.25);
   padding: 3px 9px;
   border-radius: 999px;
 }

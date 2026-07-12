@@ -143,14 +143,18 @@ function renderCardPreview(card, { showStageLabel = false } = {}) {
     a.setAttribute('href', cardHref(card));
   }
 
-  // Role color becomes the card's primary visual identity.
-  const roleColor = roleColorVar(card.type);
+  // Role color becomes the card's primary visual identity — but ghost tiles stay grey.
+  const roleColor = card.coming_soon ? null : roleColorVar(card.type);
   if (roleColor) a.style.setProperty('--role-color', roleColor);
 
-  // Band color is driven by the card's role (the AI move).
+  // Band color is driven by the card's role (the AI move). Ghost tiles get a muted stone band.
   const stage = primaryStageOf(card);
   const band = $('[data-band]', frag);
-  band.setAttribute('style', roleColor ? `background: ${roleColor};` : bandStyleForStage(stage));
+  if (card.coming_soon) {
+    band.setAttribute('style', 'background: rgba(160, 155, 148, 0.35);');
+  } else {
+    band.setAttribute('style', roleColor ? `background: ${roleColor};` : bandStyleForStage(stage));
+  }
 
   if (showStageLabel && stage) {
     const label = $('[data-stage-label]', frag);
@@ -560,6 +564,10 @@ function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
     const level = order.includes(c.level) ? c.level : 'beginner';
     groups[level].push(c);
   });
+  // Within each level group, coming-soon ghost tiles always sit at the end.
+  for (const level of order) {
+    groups[level].sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+  }
 
   order.forEach((level) => {
     const groupCards = groups[level];
