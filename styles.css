@@ -3926,3 +3926,126 @@ body.view-home .spine-toggle { display: none !important; }
   .card-grid { grid-template-columns: 1fr 1fr; }
   .home-cta { width: 100%; justify-content: center; }
 }
+
+/* ============================================================
+   Stage page — v4 layout (matches new home)
+   ============================================================ */
+body.view-stage .spine,
+body.view-stage .spine-toggle { display: none !important; }
+body.view-stage .layout { grid-template-columns: 1fr; }
+
+.stage-v4 {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8px 0 60px;
+}
+
+.stage-v4-hero {
+  max-width: 820px;
+  margin: 20px 0 36px;
+}
+.stage-v4-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: #9a9a9a;
+  text-decoration: none;
+  margin-bottom: 22px;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+.stage-v4-back:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+.stage-v4-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.stage-v4-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--r-creator));
+  flex: 0 0 auto;
+  box-shadow: 0 0 12px var(--dot-color, var(--r-creator));
+}
+.stage-v4-hero h1 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+.stage-v4-summary {
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: #c0c0c0;
+  margin: 0;
+  max-width: 720px;
+}
+.stage-v4-editorial {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #a8a8a8;
+  margin: 12px 0 0;
+  max-width: 720px;
+}
+
+.stage-v4-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.stage-v4-group-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.stage-v4-group-label {
+  font-family: var(--heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+}
+.stage-v4-group-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #8a8a8a;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+.stage-v4-group-hint {
+  font-size: 0.88rem;
+  color: #999;
+  margin: -8px 0 14px;
+}
+
+.stage-v4-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+/* Cards on the stage page get equal min-height for tidy rows */
+.stage-v4-grid .card-preview.v4-card {
+  width: 100%;
+  min-height: 260px;
+  flex: none;
+}
+
+@media (max-width: 720px) {
+  .stage-v4-hero { margin: 12px 0 28px; }
+  .stage-v4-grid { grid-template-columns: 1fr; gap: 14px; }
+  .stage-v4-groups { gap: 32px; }
+}
