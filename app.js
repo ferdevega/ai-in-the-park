@@ -520,14 +520,11 @@ function viewStage(slug) {
 
   const groupsHost = $('[data-stage-groups]', frag);
   const order = ['beginner', 'intermediate', 'advanced'];
-  const realCards = cards.filter((c) => !c.coming_soon);
-  const comingSoon = cards.filter((c) => c.coming_soon);
 
-  const buildGroup = (label, groupCards, opts = {}) => {
+  const buildGroup = (label, groupCards) => {
     if (groupCards.length === 0) return;
     const section = document.createElement('section');
     section.className = 'stage-v4-group';
-    if (opts.coming) section.classList.add('stage-v4-group-coming');
 
     const header = document.createElement('div');
     header.className = 'stage-v4-group-header';
@@ -540,13 +537,6 @@ function viewStage(slug) {
     header.append(labelEl, countEl);
     section.appendChild(header);
 
-    if (opts.hint) {
-      const hint = document.createElement('p');
-      hint.className = 'stage-v4-group-hint';
-      hint.textContent = opts.hint;
-      section.appendChild(hint);
-    }
-
     const grid = document.createElement('div');
     grid.className = 'stage-v4-grid';
     groupCards.forEach((c) => grid.appendChild(renderV4Card(c, { color: stageColor })));
@@ -556,16 +546,12 @@ function viewStage(slug) {
   };
 
   order.forEach((level) => {
-    const inLevel = realCards.filter((c) => (c.level || 'beginner') === level);
+    const inLevel = cards
+      .filter((c) => (c.level || 'beginner') === level)
+      // Real cards first, coming-soon tiles sit at the tail of each level
+      .sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
     if (inLevel.length > 0) buildGroup(level, inLevel);
   });
-
-  if (comingSoon.length > 0) {
-    buildGroup('Coming next', comingSoon, {
-      coming: true,
-      hint: 'Subscribe up top to get pinged when these drop.',
-    });
-  }
 
   mount(frag);
 }
