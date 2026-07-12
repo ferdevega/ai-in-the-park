@@ -1649,6 +1649,23 @@ p  { margin: 0 0 1em; color: var(--text); }
   animation: backdropIn 0.22s var(--ease) both;
 }
 @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalCardZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(14px);
+    filter: blur(4px);
+  }
+  60% { filter: blur(0); }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .modal-card { animation: none; }
+  .modal-backdrop { animation: none; }
+}
 
 .modal-card {
   position: relative;
@@ -1661,6 +1678,8 @@ p  { margin: 0 0 1em; color: var(--text); }
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
+  animation: modalCardZoom 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
+  transform-origin: center 42%;
   animation: modalIn 0.28s var(--ease) both;
 }
 @keyframes modalIn {
@@ -1934,6 +1953,29 @@ body.modal-open { overflow: hidden; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+/* Hero H1 gradient text: shimmering sweep across the color band on load.
+   Fires once when the home hero mounts (SPA remounts trigger it again). */
+.landing h1 .gradient-text {
+  background: linear-gradient(
+    90deg,
+    var(--r-auditor) 0%,
+    var(--r-creator) 22%,
+    #ffffff 42%,
+    var(--r-thought-partner) 62%,
+    var(--r-creator) 82%,
+    var(--r-auditor) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 50%;
+  animation: heroShimmer 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards;
+}
+@keyframes heroShimmer {
+  from { background-position: 100% 50%; }
+  to   { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing h1 .gradient-text { animation: none; background-position: 20% 50%; }
 }
 .card-section .prose p { margin: 0 0 0.8em; }
 .card-section .prose p:last-child { margin-bottom: 0; }
