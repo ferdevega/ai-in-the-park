@@ -1583,8 +1583,13 @@ function route() {
   let bgPath = '/';
 
   if (parts.length === 0) {
-    bgRenderer = viewHome;
+    // New homepage — the Netflix-style layout that used to live at /preview3
+    bgRenderer = viewHomeV4;
     bgPath = '/';
+  } else if (parts[0] === 'classic') {
+    // Backup/legacy home preserved for reference
+    bgRenderer = viewHome;
+    bgPath = '/classic';
   } else if (parts[0] === 'about') {
     bgRenderer = viewAbout;
     bgPath = '/about';

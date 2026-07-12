@@ -104,6 +104,12 @@ const routes = [
     description: 'Collapsible folders layout preview.',
     url: `${SITE_URL}/preview4`,
   },
+  {
+    out: 'classic/index.html',
+    title: `Classic layout — ${SITE_NAME}`,
+    description: 'Original homepage kept for reference.',
+    url: `${SITE_URL}/classic`,
+  },
 ];
 
 for (const r of routes) {
