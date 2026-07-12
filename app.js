@@ -756,7 +756,7 @@ function viewHomeV4() {
   const frag = tpl('tpl-home-v4');
   const shelvesHost = $('[data-v4-shelves]', frag);
 
-  const addShelf = (stage, cards, cardCount) => {
+  const addShelf = (stage, cards, cardCount, seeAllHref) => {
     const section = document.createElement('section');
     section.className = 'v4-shelf';
     section.setAttribute('data-v4-shelf', '');
@@ -776,42 +776,26 @@ function viewHomeV4() {
     `;
     scroll.appendChild(tile);
 
-    // Cards — bigger v4 treatment
+    // Cards — bigger v4 treatment, up to 3
     cards.forEach((c) => scroll.appendChild(renderV4Card(c)));
 
-    // Left/right arrow buttons — visible on hover-capable devices (desktop),
-    // hidden on touch. Click scrolls the shelf by ~one card width.
-    const btnLeft = document.createElement('button');
-    btnLeft.type = 'button';
-    btnLeft.className = 'v4-shelf-arrow v4-shelf-arrow-left';
-    btnLeft.setAttribute('aria-label', 'Scroll left');
-    btnLeft.innerHTML = '<span aria-hidden="true">‹</span>';
-    btnLeft.addEventListener('click', () => scroll.scrollBy({ left: -316, behavior: 'smooth' }));
-
-    const btnRight = document.createElement('button');
-    btnRight.type = 'button';
-    btnRight.className = 'v4-shelf-arrow v4-shelf-arrow-right';
-    btnRight.setAttribute('aria-label', 'Scroll right');
-    btnRight.innerHTML = '<span aria-hidden="true">›</span>';
-    btnRight.addEventListener('click', () => scroll.scrollBy({ left: 316, behavior: 'smooth' }));
-
-    // Update arrow visibility based on scroll position
-    const updateArrows = () => {
-      const atStart = scroll.scrollLeft <= 2;
-      const atEnd = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 2;
-      btnLeft.classList.toggle('is-hidden', atStart);
-      btnRight.classList.toggle('is-hidden', atEnd);
-    };
-    scroll.addEventListener('scroll', updateArrows, { passive: true });
-    setTimeout(updateArrows, 0);
+    // See-all tile — link to the full stage page (skipped when there's nothing more)
+    if (seeAllHref) {
+      const seeAll = document.createElement('a');
+      seeAll.className = 'v4-see-all';
+      seeAll.href = seeAllHref;
+      seeAll.innerHTML = `
+        <span class="v4-see-all-arrow" aria-hidden="true">→</span>
+        <span class="v4-see-all-label">See all</span>
+      `;
+      scroll.appendChild(seeAll);
+    }
 
     section.appendChild(scroll);
-    section.appendChild(btnLeft);
-    section.appendChild(btnRight);
     return section;
   };
 
-  // Frameworks row — FAST as first card, linking to /fast
+  // Frameworks row — FAST as first card, linking to /fast (no See-all: only 1 card)
   const fastCard = {
     slug: 'fast-framework',
     title: 'FAST — the four moves behind every good prompt',
@@ -830,19 +814,32 @@ function viewHomeV4() {
       },
       [fastCard],
       1,
+      null, // no See-all for Frameworks (single card, no dedicated stage page)
     ),
   );
 
-  // Stage rows — cards sorted with coming-soon last
+  // Stage rows — top 3 real cards per stage (featured first, then latest), then See-all
   state.stages.forEach((stage) => {
     const inStage = state.cards.filter((c) => {
       const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
       return refs.includes(stage.slug);
     });
     if (inStage.length === 0) return;
-    inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
-    const realCount = inStage.filter((c) => !c.coming_soon).length;
-    shelvesHost.appendChild(addShelf(stage, inStage, realCount));
+
+    const realCards = inStage.filter((c) => !c.coming_soon);
+    if (realCards.length === 0) return;
+
+    // Sort: featured cards first, then most recent
+    const sorted = realCards.slice().sort((a, b) => {
+      const feat = (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+      if (feat !== 0) return feat;
+      return (b.added || '').localeCompare(a.added || '');
+    });
+    const topThree = sorted.slice(0, 3);
+
+    shelvesHost.appendChild(
+      addShelf(stage, topThree, realCards.length, `/stages/${stage.slug}`),
+    );
   });
 
   wireWizardOpener();
