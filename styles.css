@@ -1524,49 +1524,49 @@ p  { margin: 0 0 1em; color: var(--text); }
   display: none;
 }
 
-/* Coming-soon ghost tiles — flat stone-grey, non-clickable, ribbon in the corner */
+/* Coming-soon ghost tiles — dashed outline, stone-grey palette, no role color, no interactive glow */
 .card-preview.card-preview-coming-soon {
   cursor: default;
   pointer-events: none;
-  background: rgba(120, 113, 108, 0.06);
-  border-color: rgba(160, 155, 148, 0.18);
+  background: transparent;
+  border: 1px dashed rgba(160, 155, 148, 0.4);
   filter: grayscale(1);
 }
 .card-preview.card-preview-coming-soon::before,
 .card-preview.card-preview-coming-soon::after {
   display: none;
 }
-.card-preview.card-preview-coming-soon h3 {
-  color: #8b8580;
+.card-preview.card-preview-coming-soon .card-band {
+  background: transparent !important;
 }
-.card-preview.card-preview-coming-soon .card-preview-tag,
-.card-preview.card-preview-coming-soon .role-label {
+.card-preview.card-preview-coming-soon h3 {
   color: #7a746e;
   opacity: 0.75;
 }
+.card-preview.card-preview-coming-soon .card-preview-tag {
+  color: #6d6862;
+  opacity: 0.7;
+}
 .card-preview.card-preview-coming-soon .level-bars > * {
-  background: rgba(160, 155, 148, 0.35) !important;
+  background: rgba(160, 155, 148, 0.28) !important;
 }
 .card-preview.card-preview-coming-soon:hover {
   transform: none;
-  border-color: rgba(160, 155, 148, 0.18);
-  background: rgba(120, 113, 108, 0.06);
+  border-color: rgba(160, 155, 148, 0.4);
+  background: transparent;
   box-shadow: none;
 }
-.card-coming-soon-ribbon {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 3;
+/* "Coming soon" tag sits in the same footer slot as the role label on real cards */
+.card-coming-soon-label {
   font-family: 'Inter', sans-serif;
+  font-size: 0.66rem;
   font-weight: 600;
-  font-size: 0.56rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #a8a29e;
-  background: rgba(120, 113, 108, 0.18);
-  border: 1px solid rgba(160, 155, 148, 0.25);
-  padding: 3px 9px;
+  padding: 3px 10px;
+  background: rgba(120, 113, 108, 0.15);
+  border: 1px solid rgba(160, 155, 148, 0.22);
   border-radius: 999px;
 }
 

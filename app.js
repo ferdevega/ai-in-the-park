@@ -135,10 +135,6 @@ function renderCardPreview(card, { showStageLabel = false, showLevel = true } = 
     a.setAttribute('href', '#');
     a.classList.add('disabled', 'card-preview-coming-soon');
     a.setAttribute('aria-disabled', 'true');
-    const ribbon = document.createElement('span');
-    ribbon.className = 'card-coming-soon-ribbon';
-    ribbon.textContent = 'Coming soon';
-    a.appendChild(ribbon);
   } else {
     a.setAttribute('href', cardHref(card));
   }
@@ -184,10 +180,18 @@ function renderCardPreview(card, { showStageLabel = false, showLevel = true } = 
   }
 
   // Role label — geometric icon + name in the chips footer.
-  const label = roleLabelHtmlForType(card.type);
-  if (label) {
-    const chips = $('.card-chips', frag);
+  // For coming-soon cards, replace the role label with a "Coming soon" tag in the same slot.
+  const chips = $('.card-chips', frag);
+  if (card.coming_soon) {
     if (chips) {
+      const tag = document.createElement('span');
+      tag.className = 'role-label card-coming-soon-label';
+      tag.textContent = 'Coming soon';
+      chips.insertBefore(tag, chips.firstChild);
+    }
+  } else {
+    const label = roleLabelHtmlForType(card.type);
+    if (label && chips) {
       const tag = document.createElement('span');
       tag.className = 'role-label';
       if (roleColor) tag.style.setProperty('--role-color', roleColor);
