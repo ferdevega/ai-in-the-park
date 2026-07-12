@@ -4051,3 +4051,126 @@ body.view-stage .layout { grid-template-columns: 1fr; }
   .stage-v4-grid .card-preview.v4-card { width: 100%; }
   .stage-v4-groups { gap: 32px; }
 }
+
+/* ============================================================
+   Card modal — v4 detail sheet (Netflix-style overlay)
+   Prototype: currently gated to one card in openModal()
+   ============================================================ */
+.modal-card--v4 {
+  max-width: 960px;
+  width: 92vw;
+  padding: 0;
+}
+.modal-card--v4 .card-header { display: none; }
+
+.card-v4-modal-hero {
+  position: relative;
+  padding: 34px 44px 26px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--stage-color) 24%, transparent) 0%,
+    transparent 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.card-v4-modal-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--stage-color);
+}
+.card-v4-modal-hero-icon {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stage-color);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid color-mix(in oklab, var(--stage-color) 45%, transparent);
+}
+.card-v4-modal-hero-icon svg { width: 46px; height: 46px; }
+.card-v4-modal-hero-text { flex: 1 1 auto; min-width: 0; }
+.card-v4-modal-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stage-color);
+  margin: 0 0 10px;
+}
+.card-v4-modal-title {
+  font-family: var(--heading);
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin: 0 0 12px;
+}
+.card-v4-modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.card-v4-modal-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b8b8b8;
+}
+
+/* Every body child (except the hero) picks up matching side padding */
+.modal-card--v4 #modal-body > *:not(.card-v4-modal-hero):not(.card-header) {
+  padding-left: 44px;
+  padding-right: 44px;
+}
+.modal-card--v4 #modal-body > .card-v4-modal-hero + * {
+  padding-top: 28px;
+}
+.modal-card--v4 .related { padding-bottom: 40px; margin-top: 24px; }
+
+.modal-card--v4 .card-v4-modal-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 14px;
+  justify-content: start;
+}
+.modal-card--v4 .card-v4-modal-related-grid .card-preview.v4-card {
+  width: 240px;
+  min-height: 220px;
+}
+
+.modal-card--v4 .modal-close {
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 720px) {
+  .modal-card--v4 {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  .card-v4-modal-hero { padding: 22px 20px 20px; gap: 16px; }
+  .card-v4-modal-hero-icon { width: 56px; height: 56px; border-radius: 14px; }
+  .card-v4-modal-hero-icon svg { width: 32px; height: 32px; }
+  .card-v4-modal-title { margin-bottom: 10px; }
+  .modal-card--v4 #modal-body > *:not(.card-v4-modal-hero):not(.card-header) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

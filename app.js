@@ -1487,6 +1487,78 @@ function openModal(slug) {
     body.appendChild(frag);
   }
 
+  // ---- v4 modal prototype (one card only for now) ----
+  const modalCardEl = modal.querySelector('.modal-card');
+  if (modalCardEl) modalCardEl.classList.remove('modal-card--v4');
+  if (card && !card.coming_soon && slug === 'build-your-curriculum' && modalCardEl) {
+    modalCardEl.classList.add('modal-card--v4');
+
+    const stages = cardStages(card);
+    const primaryStage = stages[0];
+    const stageColor = primaryStage ? stageColorVar(primaryStage) : 'var(--r-creator)';
+    const type = cardTypes(card)[0];
+    const iconSVG = ROLE_ICONS[type] || '';
+    const typeText = roleLabelTextForType(type) || '';
+
+    const hero = document.createElement('div');
+    hero.className = 'card-v4-modal-hero';
+    hero.style.setProperty('--stage-color', stageColor);
+
+    const iconBox = document.createElement('div');
+    iconBox.className = 'card-v4-modal-hero-icon';
+    iconBox.innerHTML = iconSVG;
+
+    const textCol = document.createElement('div');
+    textCol.className = 'card-v4-modal-hero-text';
+
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'card-v4-modal-eyebrow';
+    const parts = [];
+    if (primaryStage) parts.push(primaryStage.title);
+    if (typeText) parts.push(typeText);
+    eyebrow.textContent = parts.join(' · ');
+
+    const heroTitle = document.createElement('h1');
+    heroTitle.className = 'card-v4-modal-title';
+    heroTitle.textContent = card.title;
+
+    const metaRow = document.createElement('div');
+    metaRow.className = 'card-v4-modal-meta';
+    const levelWrap = document.createElement('span');
+    levelWrap.className = 'card-v4-modal-level';
+    const bars = document.createElement('span');
+    bars.className = 'level-bars';
+    renderLevelBars(bars, card.level);
+    const levelTextEl = document.createElement('span');
+    levelTextEl.textContent = levelLabel(card.level);
+    levelWrap.append(bars, levelTextEl);
+    metaRow.appendChild(levelWrap);
+
+    textCol.append(eyebrow, heroTitle, metaRow);
+    hero.append(iconBox, textCol);
+
+    // Hide the default header — the v4 hero replaces it
+    const oldHeader = body.querySelector('.card-header');
+    if (oldHeader) oldHeader.hidden = true;
+
+    body.insertBefore(hero, body.firstChild);
+
+    // Swap related grid to v4 cards so they match the modal chrome
+    const relatedGridEl = body.querySelector('[data-related-grid]');
+    if (relatedGridEl) {
+      const rel = (card.related || []).map(cardBySlug).filter(Boolean);
+      if (rel.length) {
+        relatedGridEl.innerHTML = '';
+        relatedGridEl.classList.add('card-v4-modal-related-grid');
+        rel.forEach((c) => {
+          const cs = cardStages(c);
+          const col = cs[0] ? stageColorVar(cs[0]) : stageColor;
+          relatedGridEl.appendChild(renderV4Card(c, { color: col }));
+        });
+      }
+    }
+  }
+
   modal.hidden = false;
   document.body.classList.add('modal-open');
   state.modalSlug = slug;
