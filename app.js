@@ -1210,9 +1210,323 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
+}
+
+// ---------- Full-page card view (v4 prototype) ----------
+function viewCardV4(slug) {
+  const card = cardBySlug(slug);
+  if (!card) return viewNotFound();
+  state.view = 'card-v4';
+
+  const frag = tpl('tpl-card-v4-page');
+  const stages = cardStages(card);
+  const primaryStage = stages[0];
+  const stageColor = primaryStage ? stageColorVar(primaryStage) : 'var(--r-creator)';
+  const type = cardTypes(card)[0];
+  const iconSVG = ROLE_ICONS[type] || '';
+  const typeText = roleLabelTextForType(type) || '';
+
+  const article = frag.querySelector('.card-v4-page');
+  if (article) article.style.setProperty('--stage-color', stageColor);
+
+  // Back link — points to the primary stage if we know it, else home
+  const backLink = frag.querySelector('[data-back-link]');
+  if (backLink) {
+    if (primaryStage) {
+      backLink.setAttribute('href', `/stages/${primaryStage.slug}`);
+      backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${primaryStage.title}`;
+    } else {
+      backLink.setAttribute('href', '/');
+    }
+  }
+
+  // Hero
+  const iconBox = frag.querySelector('[data-hero-icon]');
+  if (iconBox) iconBox.innerHTML = iconSVG;
+
+  const eyebrow = frag.querySelector('[data-eyebrow]');
+  if (eyebrow) {
+    const parts = [];
+    if (primaryStage) parts.push(primaryStage.title);
+    if (typeText) parts.push(typeText);
+    eyebrow.textContent = parts.join(' · ');
+  }
+
+  const titleEl = frag.querySelector('[data-title]');
+  if (titleEl) titleEl.textContent = card.title;
+
+  const metaEl = frag.querySelector('[data-meta]');
+  if (metaEl) {
+    const levelWrap = document.createElement('span');
+    levelWrap.className = 'card-v4-page-level';
+    const bars = document.createElement('span');
+    bars.className = 'level-bars';
+    renderLevelBars(bars, card.level);
+    const levelTextEl = document.createElement('span');
+    levelTextEl.textContent = levelLabel(card.level);
+    levelWrap.append(bars, levelTextEl);
+    metaEl.appendChild(levelWrap);
+  }
+
+  const teaserEl = frag.querySelector('[data-teaser]');
+  if (teaserEl) {
+    if (card.teaser) teaserEl.textContent = card.teaser;
+    else teaserEl.remove();
+  }
+
+  // Body sections (main column) + prompt (aside) + tip (below body)
+  const bodyHost = frag.querySelector('[data-card-body]');
+  const promptHost = frag.querySelector('[data-card-prompt]');
+  const tipHost = frag.querySelector('[data-card-tip]');
+  appendCardSections(card, { bodyHost, promptHost, tipHost });
+
+  // If no prompt, collapse the aside so main takes full width
+  if (promptHost && promptHost.childElementCount === 0) {
+    const aside = frag.querySelector('.card-v4-page-aside');
+    if (aside) aside.remove();
+    const columns = frag.querySelector('.card-v4-page-columns');
+    if (columns) columns.classList.add('is-single-column');
+  }
+
+  // Related cards (v4 style)
+  const related = (card.related || []).map(cardBySlug).filter(Boolean);
+  if (related.length) {
+    const relatedWrap = frag.querySelector('[data-related]');
+    const relatedGrid = frag.querySelector('[data-related-grid]');
+    if (relatedWrap && relatedGrid) {
+      relatedWrap.hidden = false;
+      related.forEach((c, i) => {
+        const cs = cardStages(c);
+        const col = cs[0] ? stageColorVar(cs[0]) : stageColor;
+        relatedGrid.appendChild(renderV4Card(c, { color: col }));
+      });
+    }
+  }
+
+  // Tag each major block with data-reveal so it fades in on scroll
+  const reveals = [];
+  reveals.push(frag.querySelector('.card-v4-page-hero'));
+  reveals.push(frag.querySelector('.card-v4-page-columns'));
+  reveals.push(frag.querySelector('.card-v4-page-related'));
+  reveals.filter(Boolean).forEach((el, i) => {
+    el.setAttribute('data-reveal', '');
+    el.style.setProperty('--reveal-delay', `${i * 80}ms`);
+  });
+
+  mount(frag);
+  wireRevealAnimation(document.querySelector('.card-v4-page'));
+
+  // Tab title
+  if (!state.savedTitle) state.savedTitle = document.title;
+  document.title = `${card.title} · AI in the Park`;
+}
+
+function wireRevealAnimation(root) {
+  if (!root || !('IntersectionObserver' in window)) return;
+  const targets = root.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  targets.forEach((t) => io.observe(t));
+}
+
+// ---------- Card sections (shared between modal + full-page card view) ----------
+// Renders intro / why / how-AI-helps / AI-wont / steps into bodyHost,
+// prompt block into promptHost, and pro tip into tipHost.
+function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
+  const renderSection = (emoji, title, contentHTML, options = {}) => {
+    if (!contentHTML || !bodyHost) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'card-section' + (options.extraClass ? ` ${options.extraClass}` : '');
+    if (title) {
+      const h = document.createElement('h3');
+      h.className = 'card-section-heading';
+      if (emoji) {
+        const e = document.createElement('span');
+        e.className = 'card-section-heading-emoji';
+        e.setAttribute('aria-hidden', 'true');
+        e.textContent = emoji;
+        h.appendChild(e);
+      }
+      h.appendChild(document.createTextNode(title));
+      wrap.appendChild(h);
+    }
+    const body = document.createElement('div');
+    body.className = 'prose';
+    body.innerHTML = contentHTML;
+    wrap.appendChild(body);
+    bodyHost.appendChild(wrap);
+  };
+
+  if (bodyHost) {
+    if (card.intro) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section card-section-intro prose';
+      wrap.innerHTML = card.intro;
+      bodyHost.appendChild(wrap);
+    } else if (card.body) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section prose';
+      wrap.innerHTML = card.body;
+      bodyHost.appendChild(wrap);
+    }
+
+    renderSection('🎯', 'Why this matters', card.why_matters);
+
+    if (card.how_ai_helps && card.ai_wont) {
+      const row = document.createElement('div');
+      row.className = 'card-row-2col';
+      const mkMini = (emoji, title, content) => {
+        const w = document.createElement('div');
+        w.className = 'card-section card-mini';
+        const h = document.createElement('h3');
+        h.className = 'card-section-heading';
+        const e = document.createElement('span');
+        e.className = 'card-section-heading-emoji';
+        e.setAttribute('aria-hidden', 'true');
+        e.textContent = emoji;
+        h.appendChild(e);
+        h.appendChild(document.createTextNode(title));
+        const body = document.createElement('div');
+        body.className = 'prose';
+        body.innerHTML = content;
+        w.append(h, body);
+        return w;
+      };
+      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps));
+      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont));
+      bodyHost.appendChild(row);
+    } else {
+      renderSection('🤖', 'How AI can help', card.how_ai_helps);
+      renderSection('⚠️', "What AI won't do", card.ai_wont);
+    }
+
+    if (Array.isArray(card.steps) && card.steps.length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'card-section';
+      const h = document.createElement('h3');
+      h.className = 'card-section-heading';
+      const e = document.createElement('span');
+      e.className = 'card-section-heading-emoji';
+      e.setAttribute('aria-hidden', 'true');
+      e.textContent = '⚙️';
+      h.appendChild(e);
+      h.appendChild(document.createTextNode('How to run it'));
+      wrap.appendChild(h);
+      const ol = document.createElement('ol');
+      ol.className = 'card-section-steps';
+      card.steps.forEach((step) => {
+        const li = document.createElement('li');
+        li.innerHTML = step;
+        ol.appendChild(li);
+      });
+      wrap.appendChild(ol);
+      bodyHost.appendChild(wrap);
+    }
+  }
+
+  if (promptHost) {
+    if (card.prompt_fast) {
+      const disclaimer = document.createElement('p');
+      disclaimer.className = 'prompt-fast-disclaimer';
+      disclaimer.innerHTML = 'This prompt follows the <a href="/fast">FAST</a> model: Frame · Ask · Shape · Tune.';
+      promptHost.appendChild(disclaimer);
+
+      const block = document.createElement('div');
+      block.className = 'prompt-block';
+      const inner = document.createElement('div');
+      inner.className = 'prompt-fast-block';
+
+      const header = document.createElement('div');
+      header.className = 'prompt-fast-header';
+
+      const order = ['frame', 'ask', 'shape', 'tune'];
+      const cleanParts = [];
+      order.forEach((key) => {
+        const content = card.prompt_fast[key];
+        if (!content) return;
+        const section = document.createElement('div');
+        section.className = `prompt-fast-section fast-${key}`;
+        const label = document.createElement('span');
+        label.className = 'prompt-fast-label';
+        label.textContent = key;
+        const body = document.createElement('div');
+        body.className = 'prompt-fast-content';
+        body.textContent = content;
+        section.append(label, body);
+        inner.appendChild(section);
+        cleanParts.push(content);
+      });
+
+      const cleanPrompt = cleanParts.join('\n\n');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy prompt';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(cleanPrompt);
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => (btn.textContent = orig), 1500);
+        } catch {}
+      });
+      header.appendChild(btn);
+      inner.insertBefore(header, inner.firstChild);
+      block.appendChild(inner);
+      promptHost.appendChild(block);
+    } else if (cardTypes(card).includes('prompt') && card.prompt_body) {
+      const block = document.createElement('div');
+      block.className = 'prompt-block';
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
+      code.textContent = card.prompt_body;
+      pre.appendChild(code);
+      block.appendChild(pre);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy prompt';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(card.prompt_body);
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => (btn.textContent = orig), 1500);
+        } catch {}
+      });
+      block.appendChild(btn);
+      promptHost.appendChild(block);
+    }
+  }
+
+  if (tipHost && card.pro_tip) {
+    const wrap = document.createElement('aside');
+    wrap.className = 'card-pro-tip';
+    const photo = document.createElement('img');
+    photo.className = 'card-pro-tip-photo';
+    photo.src = '/assets/avatar.jpg';
+    photo.alt = 'Fernando De Vega';
+    const bubble = document.createElement('div');
+    bubble.className = 'card-pro-tip-bubble';
+    const label = document.createElement('span');
+    label.className = 'card-pro-tip-label';
+    label.textContent = card.tip_label || 'Pro tip';
+    bubble.appendChild(label);
+    const body = document.createElement('div');
+    body.innerHTML = `<p>${card.pro_tip}</p>`;
+    bubble.appendChild(body);
+    wrap.append(photo, bubble);
+    tipHost.appendChild(wrap);
+  }
 }
 
 // ---------- Modal ----------
@@ -1273,206 +1587,10 @@ function openModal(slug) {
       if (i < stages.length - 1) stagesEl.appendChild(document.createTextNode(', '));
     });
 
-    // Structured card body — each section has an emoji + name heading, consistent across cards.
     const bodyHost = $('[data-card-body]', frag);
-
-    const renderSection = (emoji, title, contentHTML, options = {}) => {
-      if (!contentHTML) return;
-      const wrap = document.createElement('div');
-      wrap.className = 'card-section' + (options.extraClass ? ` ${options.extraClass}` : '');
-      if (title) {
-        const h = document.createElement('h3');
-        h.className = 'card-section-heading';
-        if (emoji) {
-          const e = document.createElement('span');
-          e.className = 'card-section-heading-emoji';
-          e.setAttribute('aria-hidden', 'true');
-          e.textContent = emoji;
-          h.appendChild(e);
-        }
-        h.appendChild(document.createTextNode(title));
-        wrap.appendChild(h);
-      }
-      const body = document.createElement('div');
-      body.className = 'prose';
-      body.innerHTML = contentHTML;
-      wrap.appendChild(body);
-      bodyHost.appendChild(wrap);
-    };
-
-    // Intro — no heading, just the narrative opener
-    if (card.intro) {
-      const wrap = document.createElement('div');
-      wrap.className = 'card-section card-section-intro prose';
-      wrap.innerHTML = card.intro;
-      bodyHost.appendChild(wrap);
-    } else if (card.body) {
-      // Legacy: single body field still supported
-      const wrap = document.createElement('div');
-      wrap.className = 'card-section prose';
-      wrap.innerHTML = card.body;
-      bodyHost.appendChild(wrap);
-    }
-
-    renderSection('🎯', 'Why this matters', card.why_matters);
-
-    // How AI can help + What AI won't do — rendered as a two-column row of
-    // mini-cards so they read as paired tradeoffs rather than stacked prose.
-    // Falls back to single full-width section if only one field is populated.
-    if (card.how_ai_helps && card.ai_wont) {
-      const row = document.createElement('div');
-      row.className = 'card-row-2col';
-      const mkMini = (emoji, title, content) => {
-        const w = document.createElement('div');
-        w.className = 'card-section card-mini';
-        const h = document.createElement('h3');
-        h.className = 'card-section-heading';
-        const e = document.createElement('span');
-        e.className = 'card-section-heading-emoji';
-        e.setAttribute('aria-hidden', 'true');
-        e.textContent = emoji;
-        h.appendChild(e);
-        h.appendChild(document.createTextNode(title));
-        const body = document.createElement('div');
-        body.className = 'prose';
-        body.innerHTML = content;
-        w.append(h, body);
-        return w;
-      };
-      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps));
-      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont));
-      bodyHost.appendChild(row);
-    } else {
-      renderSection('🤖', 'How AI can help', card.how_ai_helps);
-      renderSection('⚠️', "What AI won't do", card.ai_wont);
-    }
-
-    // How to run it — numbered steps with emerald circle markers
-    if (Array.isArray(card.steps) && card.steps.length) {
-      const wrap = document.createElement('div');
-      wrap.className = 'card-section';
-      const h = document.createElement('h3');
-      h.className = 'card-section-heading';
-      const e = document.createElement('span');
-      e.className = 'card-section-heading-emoji';
-      e.setAttribute('aria-hidden', 'true');
-      e.textContent = '⚙️';
-      h.appendChild(e);
-      h.appendChild(document.createTextNode('How to run it'));
-      wrap.appendChild(h);
-      const ol = document.createElement('ol');
-      ol.className = 'card-section-steps';
-      card.steps.forEach((step) => {
-        const li = document.createElement('li');
-        li.innerHTML = step;
-        ol.appendChild(li);
-      });
-      wrap.appendChild(ol);
-      bodyHost.appendChild(wrap);
-    }
-
-    // Prompt: either prompt_fast (preferred, labeled FAST sections) or legacy prompt_body
-    if (card.prompt_fast) {
-      const host = $('[data-card-prompt]', frag);
-
-      // FAST disclaimer note — small italic above the prompt block
-      const disclaimer = document.createElement('p');
-      disclaimer.className = 'prompt-fast-disclaimer';
-      disclaimer.innerHTML = 'This prompt follows the <a href="/fast">FAST</a> model: Frame · Ask · Shape · Tune.';
-      host.appendChild(disclaimer);
-
-      const block = document.createElement('div');
-      block.className = 'prompt-block';
-
-      const inner = document.createElement('div');
-      inner.className = 'prompt-fast-block';
-
-      // Copy button sits in a header row at the top of the prompt block.
-      const header = document.createElement('div');
-      header.className = 'prompt-fast-header';
-
-      const order = ['frame', 'ask', 'shape', 'tune'];
-      const cleanParts = [];
-      order.forEach((key) => {
-        const content = card.prompt_fast[key];
-        if (!content) return;
-        const section = document.createElement('div');
-        section.className = `prompt-fast-section fast-${key}`;
-        const label = document.createElement('span');
-        label.className = 'prompt-fast-label';
-        label.textContent = key;
-        const body = document.createElement('div');
-        body.className = 'prompt-fast-content';
-        body.textContent = content;
-        section.append(label, body);
-        inner.appendChild(section);
-        cleanParts.push(content);
-      });
-
-      // Copy strips the section labels — pastes a clean, runnable prompt
-      const cleanPrompt = cleanParts.join('\n\n');
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'copy-btn';
-      btn.textContent = 'Copy prompt';
-      btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(cleanPrompt);
-          const orig = btn.textContent;
-          btn.textContent = 'Copied!';
-          setTimeout(() => (btn.textContent = orig), 1500);
-        } catch {}
-      });
-      header.appendChild(btn);
-      inner.insertBefore(header, inner.firstChild);
-      block.appendChild(inner);
-      host.appendChild(block);
-    } else if (cardTypes(card).includes('prompt') && card.prompt_body) {
-      const host = $('[data-card-prompt]', frag);
-      const block = document.createElement('div');
-      block.className = 'prompt-block';
-      const pre = document.createElement('pre');
-      const code = document.createElement('code');
-      code.textContent = card.prompt_body;
-      pre.appendChild(code);
-      block.appendChild(pre);
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'copy-btn';
-      btn.textContent = 'Copy prompt';
-      btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(card.prompt_body);
-          const orig = btn.textContent;
-          btn.textContent = 'Copied!';
-          setTimeout(() => (btn.textContent = orig), 1500);
-        } catch {}
-      });
-      block.appendChild(btn);
-      host.appendChild(block);
-    }
-
-    // Pro tip: Fer in a speech bubble at the end of the card
-    if (card.pro_tip) {
-      const tipHost = $('[data-card-tip]', frag);
-      const wrap = document.createElement('aside');
-      wrap.className = 'card-pro-tip';
-      const photo = document.createElement('img');
-      photo.className = 'card-pro-tip-photo';
-      photo.src = '/assets/avatar.jpg';
-      photo.alt = 'Fernando De Vega';
-      const bubble = document.createElement('div');
-      bubble.className = 'card-pro-tip-bubble';
-      const label = document.createElement('span');
-      label.className = 'card-pro-tip-label';
-      label.textContent = card.tip_label || 'Pro tip';
-      bubble.appendChild(label);
-      const body = document.createElement('div');
-      body.innerHTML = `<p>${card.pro_tip}</p>`;
-      bubble.appendChild(body);
-      wrap.append(photo, bubble);
-      tipHost.appendChild(wrap);
-    }
+    const promptHost = $('[data-card-prompt]', frag);
+    const tipHost = $('[data-card-tip]', frag);
+    appendCardSections(card, { bodyHost, promptHost, tipHost });
 
     // Share + Copy link buttons — always shown on cards
     // Share row (Copy link + Share on LinkedIn) intentionally hidden for V1.
@@ -1681,9 +1799,15 @@ function route() {
     bgRenderer = viewCardsIndex;
     bgPath = '/cards';
   } else if (parts[0] === 'cards' && parts[1]) {
-    bgRenderer = viewHome;
-    bgPath = state.lastBgPath || '/';
-    modalSlug = parts[1];
+    // Full-page card view prototype — currently gated to one slug
+    if (parts[1] === 'build-your-curriculum') {
+      bgRenderer = () => viewCardV4(parts[1]);
+      bgPath = `/cards/${parts[1]}`;
+    } else {
+      bgRenderer = viewHome;
+      bgPath = state.lastBgPath || '/';
+      modalSlug = parts[1];
+    }
   } else if (parts[0] === 'stages' && parts[1]) {
     bgRenderer = () => viewStage(parts[1]);
     bgPath = `/stages/${parts[1]}`;

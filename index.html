@@ -410,6 +410,39 @@
     </section>
   </template>
 
+  <template id="tpl-card-v4-page">
+    <article class="card-v4-page">
+      <a class="card-v4-page-back" href="/" data-back-link>
+        <span aria-hidden="true">←</span> Back to the library
+      </a>
+
+      <header class="card-v4-page-hero" data-reveal data-reveal-order="0">
+        <div class="card-v4-page-hero-icon" data-hero-icon></div>
+        <div class="card-v4-page-hero-text">
+          <div class="card-v4-page-eyebrow" data-eyebrow></div>
+          <h1 class="card-v4-page-title" data-title></h1>
+          <div class="card-v4-page-meta" data-meta></div>
+          <p class="card-v4-page-teaser" data-teaser></p>
+        </div>
+      </header>
+
+      <div class="card-v4-page-columns">
+        <div class="card-v4-page-main">
+          <div data-card-body></div>
+          <div data-card-tip></div>
+        </div>
+        <aside class="card-v4-page-aside">
+          <div class="card-v4-page-aside-inner" data-card-prompt></div>
+        </aside>
+      </div>
+
+      <section class="card-v4-page-related" data-related hidden>
+        <div class="card-v4-page-related-label">Related cards</div>
+        <div class="card-v4-page-related-grid" data-related-grid></div>
+      </section>
+    </article>
+  </template>
+
   <template id="tpl-card">
     <div class="card-header" data-card-header>
       <div class="card-header-text">
