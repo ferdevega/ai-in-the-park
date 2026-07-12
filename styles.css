@@ -538,11 +538,7 @@ p  { margin: 0 0 1em; color: var(--text); }
   max-width: 960px;
   padding-top: 4px;
   animation: landingIn 0.5s var(--ease) both;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
-.landing .home-author-row { margin-top: auto; }
 @keyframes landingIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
