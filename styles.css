@@ -1678,8 +1678,10 @@ p  { margin: 0 0 1em; color: var(--text); }
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  animation: modalCardZoom 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
   transform-origin: center 42%;
+}
+.modal-card.modal-opening {
+  animation: modalCardZoom 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
   animation: modalIn 0.28s var(--ease) both;
 }
 @keyframes modalIn {
@@ -1955,9 +1957,11 @@ body.modal-open { overflow: hidden; }
   -webkit-text-fill-color: transparent;
 }
 /* Hero H1 gradient text: shimmering sweep across the color band on load.
-   Fires once when the home hero mounts (SPA remounts trigger it again). */
+   Fires once when the home hero mounts (SPA remounts trigger it again).
+   NOTE: background-clip and text-fill-color must be re-declared because
+   using the "background" shorthand resets background-clip to border-box. */
 .landing h1 .gradient-text {
-  background: linear-gradient(
+  background-image: linear-gradient(
     90deg,
     var(--r-auditor) 0%,
     var(--r-creator) 22%,
@@ -1968,6 +1972,9 @@ body.modal-open { overflow: hidden; }
   );
   background-size: 250% 100%;
   background-position: 100% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation: heroShimmer 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards;
 }
 @keyframes heroShimmer {

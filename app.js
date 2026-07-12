@@ -950,6 +950,14 @@ function openModal(slug) {
   if (modalCard) modalCard.scrollTop = 0;
   modal.scrollTop = 0;
 
+  // Re-trigger the zoom-in animation on every open by toggling the class.
+  if (modalCard) {
+    modalCard.classList.remove('modal-opening');
+    // Force a reflow so removing + re-adding the class actually restarts the animation.
+    void modalCard.offsetWidth;
+    modalCard.classList.add('modal-opening');
+  }
+
   // Sync browser tab title to the open card so the original card's title
   // doesn't stick around in the tab when a second card is opened.
   if (!state.savedTitle) state.savedTitle = document.title;
