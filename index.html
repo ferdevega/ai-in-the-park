@@ -170,22 +170,23 @@
   <template id="tpl-home-v3">
     <section class="landing landing-v3">
       <div class="v2-banner">
-        <strong>Preview 2</strong> — filter home. <a href="/">Current</a> · <a href="/preview">Preview 1 (shelves)</a>
+        <strong>Preview 2</strong> — library home. <a href="/">Current</a> · <a href="/preview">Preview 1 (shelves)</a>
       </div>
 
-      <div class="v3-hero">
+      <div class="v3-hero v3-hero-refresh">
         <span class="eyebrow">The notebook</span>
         <h1>Ideas, prompts, and moves for instructional designers using <span class="gradient-text">AI</span>.</h1>
-        <p class="v2-lede">
-          A growing collection. Not a methodology. Some are frameworks, some are prompts, some are things I've been thinking about while walking Pericles around Central Park. Take what's useful.
-        </p>
+        <p class="v3-hero-line">[PLACEHOLDER — Fer's honest opener. e.g. "12 ideas so far. I add them as I try new things. Take what's useful."]</p>
+        <div class="v3-hero-actions">
+          <button type="button" class="v3-ask-btn" data-wizard-open>
+            Not sure where to start? Ask me <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
 
-      <section class="v3-filter">
-        <div class="v3-filter-question">Where are you? What's your level?</div>
-        <div class="v3-chip-row" data-v3-stage-chips></div>
-        <div class="v3-chip-row v3-chip-row-levels" data-v3-level-chips></div>
-        <div class="v3-status" data-v3-status hidden></div>
+      <section class="v3-featured" data-v3-featured hidden>
+        <div class="v3-featured-badge">Featured</div>
+        <div class="v3-featured-body" data-v3-featured-body></div>
       </section>
 
       <section class="v2-featured">
@@ -195,7 +196,7 @@
         <a class="v2-featured-cta" href="/fast">Read the primer <span aria-hidden="true">→</span></a>
       </section>
 
-      <section class="v3-grid-wrap" data-v3-grid></section>
+      <section class="v3-library" data-v3-library></section>
 
       <section class="home-subscribe v2-subscribe">
         <p class="home-subscribe-title">Get notified when new cards drop.</p>
@@ -207,6 +208,19 @@
       </section>
     </section>
   </template>
+
+  <!-- Wizard dialog — opt-in "Ask me" flow. Chat-style masked filter. -->
+  <dialog id="wizard-dialog" class="wizard-dialog" aria-labelledby="wizard-title">
+    <button type="button" class="subscribe-dialog-close" data-wizard-close aria-label="Close">×</button>
+    <div class="wizard-header">
+      <img class="wizard-avatar" src="/assets/avatar.jpg" alt="" aria-hidden="true" />
+      <div>
+        <div class="wizard-title" id="wizard-title">Ask me</div>
+        <div class="wizard-sub">[PLACEHOLDER — 1-line intro from Fer]</div>
+      </div>
+    </div>
+    <div class="wizard-thread" data-wizard-thread></div>
+  </dialog>
 
   <template id="tpl-home-v2">
     <section class="landing landing-v2">

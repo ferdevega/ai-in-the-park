@@ -947,6 +947,260 @@ body.view-preview2 .landing-v3 {
 @media (max-width: 640px) {
   body.view-preview2 .page { padding: 16px 18px 24px; }
 }
+
+/* Hero refresh — with the "Ask me" opt-in button */
+.v3-hero-refresh { margin: 8px 0 32px; max-width: 920px; }
+.v3-hero-line {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #c8c8c8;
+  margin: 0 0 20px;
+  max-width: 780px;
+}
+.v3-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.v3-ask-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.12));
+  border: 1px solid rgba(139,92,246,0.35);
+  color: var(--text);
+  border-radius: 999px;
+  font-family: var(--heading);
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-spring), border-color 0.2s ease, background 0.2s ease;
+}
+.v3-ask-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(139,92,246,0.65);
+  background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(59,130,246,0.18));
+}
+
+/* Featured card slot — one card, bigger visual treatment */
+.v3-featured {
+  position: relative;
+  margin: 0 0 36px;
+  padding: 22px 22px 18px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.04));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+}
+.v3-featured[hidden] { display: none; }
+.v3-featured-badge {
+  font-family: var(--heading);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b8a5f5;
+  margin-bottom: 12px;
+}
+.v3-featured-body { }
+/* The card inside the featured block gets stretched */
+.v3-featured-body .card-preview {
+  min-height: 200px;
+}
+.v3-featured-body .card-preview h3 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+/* Library section headers — editorial voice per stage */
+.v3-lib-section { margin: 0 0 44px; }
+.v3-lib-header { margin: 0 0 18px; }
+.v3-lib-header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+}
+.v3-lib-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--stage-color, var(--text-dim));
+  flex: 0 0 auto;
+}
+.v3-lib-title {
+  font-family: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.v3-lib-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #8a8a8a;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+.v3-lib-editorial {
+  font-size: 0.95rem;
+  color: #a8a8a8;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 780px;
+  font-style: italic;
+}
+.v3-lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Wizard dialog — chat-style opt-in flow */
+.wizard-dialog {
+  padding: 0;
+  background: #0e0e0e;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: var(--text);
+  max-width: 520px;
+  width: calc(100% - 32px);
+  max-height: 82vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.wizard-dialog::backdrop {
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.wizard-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.wizard-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.wizard-title {
+  font-family: var(--heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.wizard-sub {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 2px;
+}
+.wizard-thread {
+  padding: 18px 20px 20px;
+  overflow-y: auto;
+  max-height: calc(82vh - 76px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wizard-msg {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 85%;
+  animation: wizardMsgIn 0.24s ease-out;
+}
+@keyframes wizardMsgIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wizard-msg-fer {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  align-self: flex-start;
+  border-top-left-radius: 4px;
+}
+.wizard-msg-user {
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  color: #fff;
+  align-self: flex-end;
+  border-top-right-radius: 4px;
+}
+.wizard-typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 12px 16px;
+  align-items: center;
+}
+.wizard-typing span {
+  width: 6px;
+  height: 6px;
+  background: #b0b0b0;
+  border-radius: 50%;
+  animation: wizardDot 1.2s ease-in-out infinite;
+}
+.wizard-typing span:nth-child(2) { animation-delay: 0.15s; }
+.wizard-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes wizardDot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+.wizard-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.wizard-option {
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  animation: wizardMsgIn 0.24s ease-out;
+}
+.wizard-option:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.28);
+}
+.wizard-option-quiet { border-color: rgba(255,255,255,0.08); color: #b0b0b0; }
+.wizard-option-cta {
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  border-color: transparent;
+  color: #fff !important;
+  text-align: center;
+}
+.wizard-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.wizard-cards .card-preview {
+  min-height: auto;
+  width: 100%;
+}
+.wizard-endpoint-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+@media (max-width: 640px) {
+  .v3-featured-body .card-preview h3 { font-size: 1.2rem; }
+  .v3-lib-grid { grid-template-columns: 1fr; }
+}
 @keyframes landingIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }

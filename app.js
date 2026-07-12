@@ -656,164 +656,245 @@ function viewRecent() {
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
 
-// Preview 2: library-as-home with interactive filter + memory (B + C).
-// Filter state is stored in localStorage so returning visitors see their last pick.
-const V3_FILTER_KEY = 'aitp_v3_filter';
-
-function loadV3Filter() {
-  try {
-    const raw = localStorage.getItem(V3_FILTER_KEY);
-    if (!raw) return { stage: null, level: null };
-    const parsed = JSON.parse(raw);
-    return { stage: parsed.stage || null, level: parsed.level || null };
-  } catch { return { stage: null, level: null }; }
-}
-function saveV3Filter(state) {
-  try { localStorage.setItem(V3_FILTER_KEY, JSON.stringify(state)); } catch {}
-}
+// Preview 2: library-as-home. Cards visible immediately, editorial section
+// headers per stage, one featured card up top, opt-in "Ask me" wizard modal.
+// No spine, no filter chips — the library IS the interface.
 
 function viewHomeV3() {
   state.view = 'preview2';
   renderSpine(null);
   const frag = tpl('tpl-home-v3');
 
-  const filter = loadV3Filter();
-  const stageChipsHost = $('[data-v3-stage-chips]', frag);
-  const levelChipsHost = $('[data-v3-level-chips]', frag);
-  const gridHost = $('[data-v3-grid]', frag);
-  const statusHost = $('[data-v3-status]', frag);
-
-  const LEVELS = ['beginner', 'intermediate', 'advanced'];
-
-  function stageLabel(slug) {
-    const s = stageBySlug(slug);
-    return s ? s.title : slug;
-  }
-
-  function renderChips() {
-    // Stage chips
-    stageChipsHost.innerHTML = '';
-    state.stages.forEach((s) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'v3-chip' + (filter.stage === s.slug ? ' is-active' : '');
-      btn.setAttribute('data-stage', s.slug);
-      btn.textContent = s.title;
-      btn.style.setProperty('--chip-color', stageColorVar(s));
-      stageChipsHost.appendChild(btn);
-    });
-    // Level chips
-    levelChipsHost.innerHTML = '';
-    LEVELS.forEach((lv) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'v3-chip v3-chip-level' + (filter.level === lv ? ' is-active' : '');
-      btn.setAttribute('data-level', lv);
-      btn.textContent = lv;
-      levelChipsHost.appendChild(btn);
-    });
-  }
-
-  function renderStatus() {
-    if (!statusHost) return;
-    if (!filter.stage && !filter.level) {
-      statusHost.textContent = '';
-      statusHost.hidden = true;
-      return;
+  // Featured card: any card marked { featured: true }, else fall back to latest.
+  const featuredHost = $('[data-v3-featured]', frag);
+  const featuredBody = $('[data-v3-featured-body]', frag);
+  if (featuredHost && featuredBody) {
+    const featured =
+      state.cards.find((c) => c.featured && !c.coming_soon) ||
+      state.cards
+        .filter((c) => !c.coming_soon)
+        .slice()
+        .sort((a, b) => (b.added || '').localeCompare(a.added || ''))[0];
+    if (featured) {
+      featuredBody.appendChild(renderCardPreview(featured));
+      featuredHost.hidden = false;
     }
-    statusHost.hidden = false;
-    const parts = [];
-    if (filter.stage) parts.push(stageLabel(filter.stage));
-    if (filter.level) parts.push(filter.level.charAt(0).toUpperCase() + filter.level.slice(1));
-    statusHost.innerHTML = `Showing: <strong>${parts.join(' · ')}</strong> <button type="button" class="v3-clear" data-v3-clear>Clear filters</button>`;
   }
 
-  function matchingCards() {
-    return state.cards.filter((c) => {
-      if (filter.stage) {
+  // Library: cards grouped by stage, editorial header per group.
+  const libraryHost = $('[data-v3-library]', frag);
+  if (libraryHost) {
+    state.stages.forEach((stage) => {
+      const inStage = state.cards.filter((c) => {
         const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
-        if (!refs.includes(filter.stage)) return false;
-      }
-      if (filter.level && c.level !== filter.level) return false;
-      return true;
+        return refs.includes(stage.slug);
+      });
+      if (inStage.length === 0) return;
+      inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+
+      const realCount = inStage.filter((c) => !c.coming_soon).length;
+
+      const section = document.createElement('section');
+      section.className = 'v3-lib-section';
+      section.style.setProperty('--stage-color', stageColorVar(stage));
+
+      const header = document.createElement('header');
+      header.className = 'v3-lib-header';
+      header.innerHTML = `
+        <div class="v3-lib-header-top">
+          <span class="v3-lib-dot"></span>
+          <h2 class="v3-lib-title">${stage.title}</h2>
+          <span class="v3-lib-count">${realCount} ${realCount === 1 ? 'card' : 'cards'}</span>
+        </div>
+        <p class="v3-lib-editorial">[PLACEHOLDER — Fer's 1-line editorial framing for ${stage.title}.]</p>
+      `;
+      section.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'card-grid v3-lib-grid';
+      inStage.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: false })));
+      section.appendChild(grid);
+
+      libraryHost.appendChild(section);
     });
   }
 
-  function renderGrid() {
-    gridHost.innerHTML = '';
-    const cards = matchingCards();
-    if (cards.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = 'No cards match this combination yet. Try clearing a filter.';
-      gridHost.appendChild(empty);
-      return;
-    }
-    if (!filter.stage && !filter.level) {
-      // No filter: group by stage with headers, coming-soon last within each group
-      state.stages.forEach((stage) => {
-        const inStage = cards.filter((c) => {
-          const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
-          return refs.includes(stage.slug);
-        });
-        if (inStage.length === 0) return;
-        inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+  // Wizard: opt-in "Ask me" chat modal. Content is placeholder — the branching
+  // tree lives in wizardTree below. Fer edits later.
+  wireWizardOpener();
 
-        const header = document.createElement('div');
-        header.className = 'v3-group-header';
-        header.style.setProperty('--stage-color', stageColorVar(stage));
-        header.innerHTML = `<span class="v3-group-dot"></span><span class="v3-group-title">${stage.title}</span>`;
-        gridHost.appendChild(header);
+  mount(frag);
+}
 
-        const grid = document.createElement('div');
-        grid.className = 'card-grid v3-inner-grid';
-        inStage.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: false })));
-        gridHost.appendChild(grid);
-      });
-    } else {
-      // Filter applied: flat grid, still sort coming-soon last
-      cards.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
-      const grid = document.createElement('div');
-      grid.className = 'card-grid v3-inner-grid';
-      cards.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: !filter.level })));
-      gridHost.appendChild(grid);
-    }
+// ---------- Ask-me wizard ----------
+// Placeholder branching tree. Real content authored later.
+const wizardTree = {
+  start: {
+    prompt: '[PLACEHOLDER — Opening question. e.g. "Where are you today?"]',
+    options: [
+      { label: '[Option A — e.g. Starting a project]', next: 'starting' },
+      { label: '[Option B — e.g. In the middle of design]', next: 'designing' },
+      { label: '[Option C — e.g. Building content]', next: 'building' },
+      { label: '[Option D — Just poking around]', next: 'poking' },
+    ],
+  },
+  starting: {
+    prompt: '[PLACEHOLDER — Follow-up on the starting branch.]',
+    options: [
+      { label: '[Sub-option A — Talking to stakeholders]', next: 'ep_stakeholders' },
+      { label: '[Sub-option B — Just got a request]', next: 'ep_request' },
+    ],
+  },
+  designing: {
+    prompt: '[PLACEHOLDER — Placeholder response for the design branch.]',
+    cards: ['build-a-learner-persona', 'choose-the-right-modality'],
+  },
+  building: {
+    prompt: '[PLACEHOLDER — Placeholder response for the build branch.]',
+    cards: ['topic-to-module-outline', 'build-knowledge-checks-at-the-right-cognitive-level'],
+  },
+  poking: {
+    prompt: '[PLACEHOLDER — Placeholder for the browser. Probably send them to FAST.]',
+    cards: ['audit-module-against-style-guide'],
+    ctaLink: { href: '/fast', label: 'Read the FAST primer →' },
+  },
+  ep_stakeholders: {
+    prompt: '[PLACEHOLDER — Response for stakeholders sub-branch.]',
+    cards: ['prep-for-a-needs-assessment-call', 'build-your-stakeholder-map'],
+  },
+  ep_request: {
+    prompt: '[PLACEHOLDER — Response for received-a-request sub-branch.]',
+    cards: ['diagnose-what-the-last-course-got-wrong'],
+  },
+};
+
+function wireWizardOpener() {
+  const dialog = document.getElementById('wizard-dialog');
+  if (!dialog || dialog.dataset.wired === '1') return;
+  dialog.dataset.wired = '1';
+
+  const thread = dialog.querySelector('[data-wizard-thread]');
+
+  function typingBubble() {
+    const el = document.createElement('div');
+    el.className = 'wizard-msg wizard-msg-fer wizard-typing';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    return el;
   }
 
-  function apply() {
-    renderChips();
-    renderStatus();
-    renderGrid();
+  function ferBubble(text) {
+    const el = document.createElement('div');
+    el.className = 'wizard-msg wizard-msg-fer';
+    el.textContent = text;
+    return el;
   }
 
-  // Chip clicks toggle filter dimensions (click same chip again to clear that dimension)
-  frag.addEventListener('click', (e) => {
-    const stageBtn = e.target.closest('[data-stage]');
-    if (stageBtn) {
-      const v = stageBtn.getAttribute('data-stage');
-      filter.stage = filter.stage === v ? null : v;
-      saveV3Filter(filter);
-      apply();
-      return;
+  function userBubble(text) {
+    const el = document.createElement('div');
+    el.className = 'wizard-msg wizard-msg-user';
+    el.textContent = text;
+    return el;
+  }
+
+  function optionsBlock(options, onPick) {
+    const wrap = document.createElement('div');
+    wrap.className = 'wizard-options';
+    options.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'wizard-option';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', () => onPick(opt));
+      wrap.appendChild(btn);
+    });
+    return wrap;
+  }
+
+  function cardsBlock(cardSlugs) {
+    const wrap = document.createElement('div');
+    wrap.className = 'wizard-cards';
+    cardSlugs.forEach((slug) => {
+      const card = cardBySlug(slug);
+      if (!card) return;
+      wrap.appendChild(renderCardPreview(card));
+    });
+    return wrap;
+  }
+
+  function endpointActions(node) {
+    const wrap = document.createElement('div');
+    wrap.className = 'wizard-endpoint-actions';
+    const restart = document.createElement('button');
+    restart.type = 'button';
+    restart.className = 'wizard-option wizard-option-quiet';
+    restart.textContent = 'Ask something else';
+    restart.addEventListener('click', () => restartFlow());
+    wrap.appendChild(restart);
+
+    if (node.ctaLink) {
+      const link = document.createElement('a');
+      link.href = node.ctaLink.href;
+      link.className = 'wizard-option wizard-option-cta';
+      link.textContent = node.ctaLink.label;
+      link.addEventListener('click', () => dialog.close());
+      wrap.appendChild(link);
     }
-    const levelBtn = e.target.closest('[data-level]');
-    if (levelBtn) {
-      const v = levelBtn.getAttribute('data-level');
-      filter.level = filter.level === v ? null : v;
-      saveV3Filter(filter);
-      apply();
-      return;
-    }
-    if (e.target.closest('[data-v3-clear]')) {
-      filter.stage = null;
-      filter.level = null;
-      saveV3Filter(filter);
-      apply();
+    return wrap;
+  }
+
+  function scrollToBottom() {
+    dialog.scrollTop = dialog.scrollHeight;
+    thread.scrollTop = thread.scrollHeight;
+  }
+
+  function renderNode(nodeId) {
+    const node = wizardTree[nodeId];
+    if (!node) return;
+
+    const typing = typingBubble();
+    thread.appendChild(typing);
+    scrollToBottom();
+
+    setTimeout(() => {
+      typing.remove();
+      thread.appendChild(ferBubble(node.prompt));
+      scrollToBottom();
+
+      setTimeout(() => {
+        if (node.options) {
+          thread.appendChild(optionsBlock(node.options, (opt) => {
+            thread.appendChild(userBubble(opt.label));
+            renderNode(opt.next);
+          }));
+        } else if (node.cards) {
+          thread.appendChild(cardsBlock(node.cards));
+          thread.appendChild(endpointActions(node));
+        }
+        scrollToBottom();
+      }, 220);
+    }, 620);
+  }
+
+  function restartFlow() {
+    thread.innerHTML = '';
+    renderNode('start');
+  }
+
+  // Open/close wiring
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-wizard-open]')) {
+      e.preventDefault();
+      restartFlow();
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    } else if (e.target.closest('[data-wizard-close]')) {
+      e.preventDefault();
+      dialog.close();
     }
   });
-
-  apply();
-  mount(frag);
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
 }
 
 // Preview: alternate "notebook" home layout — Netflix-style shelves.
