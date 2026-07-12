@@ -88,9 +88,6 @@
     <section class="landing">
       <div class="home-hero">
         <h1>Welcome to my library of use cases for <span class="gradient-text">AI and learning</span>!</h1>
-      </div>
-
-      <div class="home-how-row">
         <div class="home-intro-text">
           <p>
             This is a playbook for instructional designers, content developers
@@ -100,39 +97,31 @@
           </p>
           <p>I will continue to add cards as I try new things.</p>
         </div>
-
-        <div class="how-it-works">
-          <ol class="how-steps">
-            <li>
-              <span class="how-step-num">1</span>
-              <div>
-                <div class="how-step-title">Pick a stage</div>
-                <div class="how-step-body">Based on where you are in your project.</div>
-              </div>
-            </li>
-            <li>
-              <span class="how-step-num">2</span>
-              <div>
-                <div class="how-step-title">Open a card</div>
-                <div class="how-step-body">Story, what AI does well, what it doesn't, the prompt.</div>
-              </div>
-            </li>
-            <li>
-              <span class="how-step-num">3</span>
-              <div>
-                <div class="how-step-title">Laugh at my jokes (mandatory)</div>
-                <div class="how-step-body">Then take my prompts. Every one of them is yours.</div>
-              </div>
-            </li>
-          </ol>
-        </div>
       </div>
 
-      <ul class="home-notes">
-        <li>7 stages of training development, from Analysis to Project Management.</li>
-        <li>Cards are tagged by level: beginner, intermediate, advanced. Start with beginner.</li>
-        <li>Every card has a runnable prompt plus a pro tip with the next-level move.</li>
-      </ul>
+      <ol class="home-steps-row">
+        <li>
+          <span class="how-step-num">1</span>
+          <div>
+            <div class="how-step-title">Pick a stage</div>
+            <div class="how-step-body">Based on where you are in your project.</div>
+          </div>
+        </li>
+        <li>
+          <span class="how-step-num">2</span>
+          <div>
+            <div class="how-step-title">Open a card</div>
+            <div class="how-step-body">Story, what AI does well, what it doesn't, the prompt.</div>
+          </div>
+        </li>
+        <li>
+          <span class="how-step-num">3</span>
+          <div>
+            <div class="how-step-title">Laugh at my jokes (mandatory)</div>
+            <div class="how-step-body">Then take my prompts. Every one of them is yours.</div>
+          </div>
+        </li>
+      </ol>
 
       <div class="home-stages-list" aria-label="Open a stage">
         <div class="home-stages-list-label">Open a stage</div>
@@ -186,14 +175,14 @@
       <div class="filter-bar" data-filter-bar></div>
       <div class="card-grid-grouped" data-card-grid-grouped></div>
 
-      <details class="card-types-reference">
+      <details class="card-types-reference" data-card-types-reference>
         <summary>What do the card types mean?</summary>
-        <ul class="fast-chip-defs">
-          <li><span class="chip creator">creator</span> AI drafts something concrete for you: an outline, a persona, a set of knowledge checks.</li>
-          <li><span class="chip thought-partner">thought partner</span> AI asks you questions and pushes back before you commit to a decision.</li>
-          <li><span class="chip auditor">auditor</span> AI reviews existing work and flags issues: style-guide violations, cognitive-level mismatches, gaps in a past course.</li>
-          <li><span class="chip panel">panel</span> AI roleplays multiple personas so you can pressure-test your draft as a virtual focus group.</li>
-          <li><span class="chip tool">tool</span> A specific AI product or feature this card teaches you to use.</li>
+        <ul class="fast-chip-defs" data-card-types-list>
+          <li data-card-type="creator"><span class="chip creator">creator</span> AI drafts something concrete for you: an outline, a persona, a set of knowledge checks.</li>
+          <li data-card-type="thought-partner"><span class="chip thought-partner">thought partner</span> AI asks you questions and pushes back before you commit to a decision.</li>
+          <li data-card-type="auditor"><span class="chip auditor">auditor</span> AI reviews existing work and flags issues: style-guide violations, cognitive-level mismatches, gaps in a past course.</li>
+          <li data-card-type="panel"><span class="chip panel">panel</span> AI roleplays multiple personas so you can pressure-test your draft as a virtual focus group.</li>
+          <li data-card-type="tool"><span class="chip tool">tool</span> A specific AI product or feature this card teaches you to use.</li>
         </ul>
       </details>
     </section>
@@ -255,15 +244,14 @@
       <h1 class="fast-h1">The "perfect prompt" doesn't exist.</h1>
 
       <p>
-        You'll see a lot of posts online that talk about the "perfect prompt." Forget those. You don't need that. What you need is a "good enough prompt" that focuses exactly on what YOU need.
+        You'll see a lot of posts online that talk about the "perfect prompt." Forget those. You don't need that. What you need is a "good enough prompt" that focuses exactly on what <span class="gradient-text">YOU</span> need.
       </p>
 
       <p>Here's a framework I put together that you can use while prompting.</p>
 
       <ol class="fast-moves">
         <li class="fast-move">
-          <div class="fast-move-letter">F</div>
-          <h3 class="fast-move-title">Frame</h3>
+          <h3 class="fast-move-title"><span class="fast-move-letter">F</span>rame</h3>
           <p class="fast-move-def">Set the role and the situation. What role is AI playing? What's the context?</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -271,8 +259,7 @@
           </div>
         </li>
         <li class="fast-move">
-          <div class="fast-move-letter">A</div>
-          <h3 class="fast-move-title">Ask</h3>
+          <h3 class="fast-move-title"><span class="fast-move-letter">A</span>sk</h3>
           <p class="fast-move-def">The actual request. A single sentence with one action verb.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -280,8 +267,7 @@
           </div>
         </li>
         <li class="fast-move">
-          <div class="fast-move-letter">S</div>
-          <h3 class="fast-move-title">Shape</h3>
+          <h3 class="fast-move-title"><span class="fast-move-letter">S</span>hape</h3>
           <p class="fast-move-def">Constraints, format, scope. The more you constrain, the better the output. Strong Shape sections always include explicit Don'ts.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>
@@ -289,8 +275,7 @@
           </div>
         </li>
         <li class="fast-move">
-          <div class="fast-move-letter">T</div>
-          <h3 class="fast-move-title">Tune</h3>
+          <h3 class="fast-move-title"><span class="fast-move-letter">T</span>une</h3>
           <p class="fast-move-def">Tells AI to push back, flag assumptions, or disagree with you.</p>
           <div class="fast-move-example">
             <span class="fast-move-tag">Example</span>

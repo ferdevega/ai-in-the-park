@@ -506,6 +506,24 @@ function viewStage(slug) {
   const groupedGrid = $('[data-card-grid-grouped]', frag);
   const countNode = makeCountNode();
 
+  // Card-types reference: hide any type not present in this stage's cards.
+  // If nothing is left, hide the whole details element.
+  const typesRef = $('[data-card-types-reference]', frag);
+  const typesList = $('[data-card-types-list]', frag);
+  if (typesRef && typesList) {
+    const typesInStage = new Set(availableTypes);
+    let visibleCount = 0;
+    typesList.querySelectorAll('[data-card-type]').forEach((li) => {
+      const t = li.getAttribute('data-card-type');
+      if (typesInStage.has(t)) {
+        visibleCount++;
+      } else {
+        li.remove();
+      }
+    });
+    if (visibleCount === 0) typesRef.remove();
+  }
+
   const update = () => renderGroupedCardGrid(groupedGrid, applyFilters(cards), { countTarget: countNode });
   search.addEventListener('input', () => { state.filters.query = search.value; update(); });
   sort.addEventListener('change', () => { state.filters.sort = sort.value; update(); });
