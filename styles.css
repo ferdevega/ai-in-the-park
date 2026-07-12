@@ -2374,22 +2374,24 @@ body.view-home .spine-toggle { display: none !important; }
     gap: 12px;
     width: 100%;
     padding: 12px 18px;
-    background: #b8d4e4; /* slightly lighter sky than the topbar */
+    background: rgba(255,255,255,0.04);
     border: none;
-    border-bottom: 1px solid rgba(26,37,32,0.18);
+    border-bottom: 1px solid var(--glass-border);
     font-family: 'Inter', sans-serif;
-    color: var(--ink);
+    color: var(--text);
     cursor: pointer;
     text-align: left;
     font-size: 0.95rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
-  .spine-toggle:hover { background: #c4dcea; }
+  .spine-toggle:hover { background: rgba(255,255,255,0.08); }
   .spine-toggle-swatch {
     width: 14px; height: 14px;
     border-radius: 50%;
-    background: var(--toggle-color, var(--ink-3));
+    background: var(--toggle-color, #666);
     flex: 0 0 auto;
-    box-shadow: 0 0 0 2px var(--paper);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.08);
   }
   .spine-toggle-text { flex: 1; display: flex; flex-direction: column; line-height: 1.15; }
   .spine-toggle-label {
@@ -2404,11 +2406,11 @@ body.view-home .spine-toggle { display: none !important; }
     font-size: 0.62rem;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: var(--text-muted);
+    color: #999;
     margin-top: 2px;
   }
   .spine-toggle-arrow {
-    color: var(--text-muted);
+    color: #999;
     transition: transform 0.2s var(--ease-smooth);
   }
   .spine-toggle[aria-expanded="true"] .spine-toggle-arrow {
