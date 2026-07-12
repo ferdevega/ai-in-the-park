@@ -864,6 +864,15 @@ function renderV4Card(card, opts = {}) {
   const existingRoleLabel = anchor.querySelector('.card-chips .role-label');
   if (existingRoleLabel) existingRoleLabel.remove();
 
+  // Add a level text label next to the level bars (beginner / intermediate / advanced)
+  const chips = anchor.querySelector('.card-chips');
+  if (chips && card.level) {
+    const levelText = document.createElement('span');
+    levelText.className = 'v4-card-level-text';
+    levelText.textContent = card.level;
+    chips.insertBefore(levelText, chips.firstChild);
+  }
+
   // Inject a header row: big role icon + type text
   const body = anchor.querySelector('.card-body');
   if (body) {
