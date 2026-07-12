@@ -145,7 +145,8 @@ p  { margin: 0 0 1em; color: var(--text); }
   min-height: var(--topbar-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 44px;
   padding: 8px 24px;
   background: rgba(5,5,5,0.7);
   backdrop-filter: blur(16px);
