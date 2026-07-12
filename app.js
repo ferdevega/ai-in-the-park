@@ -656,6 +656,166 @@ function viewRecent() {
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
 
+// Preview 2: library-as-home with interactive filter + memory (B + C).
+// Filter state is stored in localStorage so returning visitors see their last pick.
+const V3_FILTER_KEY = 'aitp_v3_filter';
+
+function loadV3Filter() {
+  try {
+    const raw = localStorage.getItem(V3_FILTER_KEY);
+    if (!raw) return { stage: null, level: null };
+    const parsed = JSON.parse(raw);
+    return { stage: parsed.stage || null, level: parsed.level || null };
+  } catch { return { stage: null, level: null }; }
+}
+function saveV3Filter(state) {
+  try { localStorage.setItem(V3_FILTER_KEY, JSON.stringify(state)); } catch {}
+}
+
+function viewHomeV3() {
+  state.view = 'preview2';
+  renderSpine(null);
+  const frag = tpl('tpl-home-v3');
+
+  const filter = loadV3Filter();
+  const stageChipsHost = $('[data-v3-stage-chips]', frag);
+  const levelChipsHost = $('[data-v3-level-chips]', frag);
+  const gridHost = $('[data-v3-grid]', frag);
+  const statusHost = $('[data-v3-status]', frag);
+
+  const LEVELS = ['beginner', 'intermediate', 'advanced'];
+
+  function stageLabel(slug) {
+    const s = stageBySlug(slug);
+    return s ? s.title : slug;
+  }
+
+  function renderChips() {
+    // Stage chips
+    stageChipsHost.innerHTML = '';
+    state.stages.forEach((s) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'v3-chip' + (filter.stage === s.slug ? ' is-active' : '');
+      btn.setAttribute('data-stage', s.slug);
+      btn.textContent = s.title;
+      btn.style.setProperty('--chip-color', stageColorVar(s));
+      stageChipsHost.appendChild(btn);
+    });
+    // Level chips
+    levelChipsHost.innerHTML = '';
+    LEVELS.forEach((lv) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'v3-chip v3-chip-level' + (filter.level === lv ? ' is-active' : '');
+      btn.setAttribute('data-level', lv);
+      btn.textContent = lv;
+      levelChipsHost.appendChild(btn);
+    });
+  }
+
+  function renderStatus() {
+    if (!statusHost) return;
+    if (!filter.stage && !filter.level) {
+      statusHost.textContent = '';
+      statusHost.hidden = true;
+      return;
+    }
+    statusHost.hidden = false;
+    const parts = [];
+    if (filter.stage) parts.push(stageLabel(filter.stage));
+    if (filter.level) parts.push(filter.level.charAt(0).toUpperCase() + filter.level.slice(1));
+    statusHost.innerHTML = `Showing: <strong>${parts.join(' · ')}</strong> <button type="button" class="v3-clear" data-v3-clear>Clear filters</button>`;
+  }
+
+  function matchingCards() {
+    return state.cards.filter((c) => {
+      if (filter.stage) {
+        const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
+        if (!refs.includes(filter.stage)) return false;
+      }
+      if (filter.level && c.level !== filter.level) return false;
+      return true;
+    });
+  }
+
+  function renderGrid() {
+    gridHost.innerHTML = '';
+    const cards = matchingCards();
+    if (cards.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'No cards match this combination yet. Try clearing a filter.';
+      gridHost.appendChild(empty);
+      return;
+    }
+    if (!filter.stage && !filter.level) {
+      // No filter: group by stage with headers, coming-soon last within each group
+      state.stages.forEach((stage) => {
+        const inStage = cards.filter((c) => {
+          const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
+          return refs.includes(stage.slug);
+        });
+        if (inStage.length === 0) return;
+        inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+
+        const header = document.createElement('div');
+        header.className = 'v3-group-header';
+        header.style.setProperty('--stage-color', stageColorVar(stage));
+        header.innerHTML = `<span class="v3-group-dot"></span><span class="v3-group-title">${stage.title}</span>`;
+        gridHost.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className = 'card-grid v3-inner-grid';
+        inStage.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: false })));
+        gridHost.appendChild(grid);
+      });
+    } else {
+      // Filter applied: flat grid, still sort coming-soon last
+      cards.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+      const grid = document.createElement('div');
+      grid.className = 'card-grid v3-inner-grid';
+      cards.forEach((c) => grid.appendChild(renderCardPreview(c, { showLevel: !filter.level })));
+      gridHost.appendChild(grid);
+    }
+  }
+
+  function apply() {
+    renderChips();
+    renderStatus();
+    renderGrid();
+  }
+
+  // Chip clicks toggle filter dimensions (click same chip again to clear that dimension)
+  frag.addEventListener('click', (e) => {
+    const stageBtn = e.target.closest('[data-stage]');
+    if (stageBtn) {
+      const v = stageBtn.getAttribute('data-stage');
+      filter.stage = filter.stage === v ? null : v;
+      saveV3Filter(filter);
+      apply();
+      return;
+    }
+    const levelBtn = e.target.closest('[data-level]');
+    if (levelBtn) {
+      const v = levelBtn.getAttribute('data-level');
+      filter.level = filter.level === v ? null : v;
+      saveV3Filter(filter);
+      apply();
+      return;
+    }
+    if (e.target.closest('[data-v3-clear]')) {
+      filter.stage = null;
+      filter.level = null;
+      saveV3Filter(filter);
+      apply();
+    }
+  });
+
+  apply();
+  mount(frag);
+}
+
 // Preview: alternate "notebook" home layout — Netflix-style shelves.
 // Lives at /preview so we can compare against the current home before committing.
 function viewHomeV2() {
@@ -1075,6 +1235,9 @@ function route() {
   } else if (parts[0] === 'preview') {
     bgRenderer = viewHomeV2;
     bgPath = '/preview';
+  } else if (parts[0] === 'preview2') {
+    bgRenderer = viewHomeV3;
+    bgPath = '/preview2';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
     bgPath = '/recent';

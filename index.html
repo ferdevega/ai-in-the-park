@@ -167,6 +167,47 @@
     </section>
   </template>
 
+  <template id="tpl-home-v3">
+    <section class="landing landing-v3">
+      <div class="v2-banner">
+        <strong>Preview 2</strong> — filter home. <a href="/">Current</a> · <a href="/preview">Preview 1 (shelves)</a>
+      </div>
+
+      <div class="v3-hero">
+        <span class="eyebrow">The notebook</span>
+        <h1>Ideas, prompts, and moves for instructional designers using <span class="gradient-text">AI</span>.</h1>
+        <p class="v2-lede">
+          A growing collection. Not a methodology. Some are frameworks, some are prompts, some are things I've been thinking about while walking Pericles around Central Park. Take what's useful.
+        </p>
+      </div>
+
+      <section class="v3-filter">
+        <div class="v3-filter-question">Where are you? What's your level?</div>
+        <div class="v3-chip-row" data-v3-stage-chips></div>
+        <div class="v3-chip-row v3-chip-row-levels" data-v3-level-chips></div>
+        <div class="v3-status" data-v3-status hidden></div>
+      </section>
+
+      <section class="v2-featured">
+        <div class="v2-featured-tag">The framework</div>
+        <h2 class="v2-featured-title">FAST — the four moves behind every good prompt</h2>
+        <p class="v2-featured-body">Frame · Ask · Shape · Tune. If you use one thing from this notebook, this is it.</p>
+        <a class="v2-featured-cta" href="/fast">Read the primer <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="v3-grid-wrap" data-v3-grid></section>
+
+      <section class="home-subscribe v2-subscribe">
+        <p class="home-subscribe-title">Get notified when new cards drop.</p>
+        <form class="home-subscribe-form" data-subscribe-form novalidate>
+          <input type="email" name="email" placeholder="you@work.com" autocomplete="email" required aria-label="Your email" />
+          <button type="submit">Notify me</button>
+        </form>
+        <div class="home-subscribe-msg" data-subscribe-msg aria-live="polite"></div>
+      </section>
+    </section>
+  </template>
+
   <template id="tpl-home-v2">
     <section class="landing landing-v2">
       <div class="v2-banner">

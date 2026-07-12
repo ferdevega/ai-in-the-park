@@ -86,6 +86,12 @@ const routes = [
     description: 'Alternate home layout preview.',
     url: `${SITE_URL}/preview`,
   },
+  {
+    out: 'preview2/index.html',
+    title: `Preview 2 — ${SITE_NAME}`,
+    description: 'Interactive filter home layout preview.',
+    url: `${SITE_URL}/preview2`,
+  },
 ];
 
 for (const r of routes) {
