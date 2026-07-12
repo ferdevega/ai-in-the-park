@@ -979,43 +979,67 @@ body.view-preview2 .landing-v3 {
   background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(59,130,246,0.18));
 }
 
-/* Featured card slot — one card, bigger visual treatment */
-.v3-featured {
-  position: relative;
-  margin: 0 0 36px;
-  padding: 22px 22px 18px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.04));
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
+/* Slim FAST callout — visible framework anchor without hogging vertical space */
+.v3-fast-slim {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 20px;
+  margin: 0 0 28px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.09), rgba(59,130,246,0.06));
+  border: 1px solid rgba(139,92,246,0.28);
+  border-radius: 12px;
+  flex-wrap: wrap;
 }
-.v3-featured[hidden] { display: none; }
-.v3-featured-badge {
+.v3-fast-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.v3-fast-tag {
   font-family: var(--heading);
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #b8a5f5;
-  margin-bottom: 12px;
+  white-space: nowrap;
 }
-.v3-featured-body { }
-/* The card inside the featured block gets stretched */
-.v3-featured-body .card-preview {
-  min-height: 200px;
+.v3-fast-title {
+  font-family: var(--heading);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
-.v3-featured-body .card-preview h3 {
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
+.v3-fast-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  color: #fff !important;
+  border-radius: 999px;
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring);
 }
+.v3-fast-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,92,246,0.28); }
 
-/* Library section headers — editorial voice per stage */
-.v3-lib-section { margin: 0 0 44px; }
-.v3-lib-header { margin: 0 0 18px; }
+/* Library section headers — Netflix-row style, inline, not boxed */
+.v3-lib-section { margin: 0 0 32px; }
+.v3-lib-header { margin: 0 0 14px; }
 .v3-lib-header-top {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 .v3-lib-dot {
   width: 10px;
@@ -1026,7 +1050,7 @@ body.view-preview2 .landing-v3 {
 }
 .v3-lib-title {
   font-family: var(--heading);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--text);
   letter-spacing: -0.015em;
@@ -1034,7 +1058,7 @@ body.view-preview2 .landing-v3 {
 }
 .v3-lib-count {
   font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: #8a8a8a;
   letter-spacing: 0.06em;
@@ -1042,17 +1066,55 @@ body.view-preview2 .landing-v3 {
   margin-left: auto;
 }
 .v3-lib-editorial {
-  font-size: 0.95rem;
-  color: #a8a8a8;
-  line-height: 1.55;
+  font-size: 0.92rem;
+  color: #a0a0a0;
+  line-height: 1.5;
   margin: 0;
   max-width: 780px;
   font-style: italic;
 }
 .v3-lib-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+/* Bigger card treatment inside the /preview2 library — Netflix "wall" vibe.
+   Cards get more padding, larger title, and their teaser is visible. */
+body.view-preview2 .v3-lib-grid .card-preview {
+  min-height: 200px;
+}
+body.view-preview2 .v3-lib-grid .card-preview .card-band {
+  height: 5px;
+}
+body.view-preview2 .v3-lib-grid .card-preview .card-body {
+  padding: 26px 22px 16px;
+}
+body.view-preview2 .v3-lib-grid .card-preview h3 {
+  font-size: 1.35rem;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.015em;
+}
+/* Bring teasers back in v3 previews — the "why this card" hook */
+body.view-preview2 .v3-lib-grid .card-preview .teaser {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #b0b0b0;
+  margin: 0;
+}
+body.view-preview2 .v3-lib-grid .card-preview .card-chips {
+  padding: 14px 22px 16px;
+}
+body.view-preview2 .v3-lib-grid .card-preview:hover .card-band {
+  height: 6px;
+}
+body.view-preview2 .v3-lib-grid .card-preview-coming-soon .teaser {
+  display: none;
 }
 
 /* Wizard dialog — chat-style opt-in flow */

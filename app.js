@@ -665,23 +665,8 @@ function viewHomeV3() {
   renderSpine(null);
   const frag = tpl('tpl-home-v3');
 
-  // Featured card: any card marked { featured: true }, else fall back to latest.
-  const featuredHost = $('[data-v3-featured]', frag);
-  const featuredBody = $('[data-v3-featured-body]', frag);
-  if (featuredHost && featuredBody) {
-    const featured =
-      state.cards.find((c) => c.featured && !c.coming_soon) ||
-      state.cards
-        .filter((c) => !c.coming_soon)
-        .slice()
-        .sort((a, b) => (b.added || '').localeCompare(a.added || ''))[0];
-    if (featured) {
-      featuredBody.appendChild(renderCardPreview(featured));
-      featuredHost.hidden = false;
-    }
-  }
-
   // Library: cards grouped by stage, editorial header per group.
+  // FAST sits above as a slim callout — no separate featured card section.
   const libraryHost = $('[data-v3-library]', frag);
   if (libraryHost) {
     state.stages.forEach((stage) => {
