@@ -286,7 +286,8 @@ p  { margin: 0 0 1em; color: var(--text); }
   font-family: var(--heading);
   font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none !important;
   cursor: pointer;
   transition: transform 0.25s var(--ease-spring), box-shadow 0.25s var(--ease-spring);
@@ -551,10 +552,13 @@ p  { margin: 0 0 1em; color: var(--text); }
 
 /* Disabled tab — empty stage, not yet stocked. Text stays fully readable. */
 .spine-tab.disabled {
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: pointer;
   background: transparent;
   border-style: dashed;
+}
+.spine-tab.disabled:hover {
+  background: rgba(255,255,255,0.04);
+  transform: none;
 }
 .spine-tab.disabled::before {
   background: transparent;
@@ -1526,11 +1530,14 @@ p  { margin: 0 0 1em; color: var(--text); }
 
 /* Coming-soon ghost tiles — dashed outline, stone-grey palette, no role color, no interactive glow */
 .card-preview.card-preview-coming-soon {
-  cursor: default;
-  pointer-events: none;
+  cursor: pointer;
   background: transparent;
   border: 1px dashed rgba(160, 155, 148, 0.4);
   filter: grayscale(1);
+}
+.card-preview.card-preview-coming-soon:hover {
+  border-color: rgba(200, 195, 188, 0.55);
+  background: rgba(255, 255, 255, 0.02);
 }
 .card-preview.card-preview-coming-soon::before,
 .card-preview.card-preview-coming-soon::after {
@@ -1552,8 +1559,6 @@ p  { margin: 0 0 1em; color: var(--text); }
 }
 .card-preview.card-preview-coming-soon:hover {
   transform: none;
-  border-color: rgba(160, 155, 148, 0.4);
-  background: transparent;
   box-shadow: none;
 }
 /* "Coming soon" tag sits in the same footer slot as the role label on real cards */
@@ -2706,7 +2711,6 @@ body.view-home .spine-toggle { display: none !important; }
   }
   .spine-tab.active .spine-tab-num { color: var(--tab-color); }
   .spine-tab.disabled {
-    pointer-events: none;
     background: transparent;
     border-style: dashed;
   }

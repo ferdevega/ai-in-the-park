@@ -130,11 +130,13 @@ function renderCardPreview(card, { showStageLabel = false, showLevel = true } = 
   const frag = tpl('tpl-card-preview');
   const a = $('a', frag);
 
-  // "Coming soon" cards preview as dimmed, non-clickable ghost tiles.
+  // "Coming soon" cards preview as dimmed ghost tiles; clicking opens the subscribe dialog.
   if (card.coming_soon) {
     a.setAttribute('href', '#');
     a.classList.add('disabled', 'card-preview-coming-soon');
     a.setAttribute('aria-disabled', 'true');
+    a.setAttribute('data-subscribe-open', '');
+    a.setAttribute('title', 'Subscribe to get notified when this card drops');
   } else {
     a.setAttribute('href', cardHref(card));
   }
@@ -332,8 +334,12 @@ function renderSpine(activeSlug = null) {
       a.setAttribute('href', stageHref(stage));
       if (activeSlug === stage.slug) a.classList.add('active');
     } else {
+      // Empty stages open the subscribe dialog on click instead of navigating.
+      a.setAttribute('href', '#');
       a.classList.add('disabled');
       a.setAttribute('aria-disabled', 'true');
+      a.setAttribute('data-subscribe-open', '');
+      a.setAttribute('title', 'Subscribe to get notified when this stage drops');
       $('[data-soon]', frag).hidden = false;
     }
     $('[data-order]', frag).textContent = stage.order;
