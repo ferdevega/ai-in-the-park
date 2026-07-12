@@ -167,6 +167,77 @@
     </section>
   </template>
 
+  <template id="tpl-home-v2">
+    <section class="landing landing-v2">
+      <div class="v2-banner">
+        <strong>Preview mode</strong> — alternate home layout. <a href="/">Back to current home →</a>
+      </div>
+
+      <div class="v2-hero">
+        <span class="eyebrow">The notebook</span>
+        <h1>Ideas, prompts, and moves for instructional designers using <span class="gradient-text">AI</span>.</h1>
+        <p class="v2-lede">
+          A growing collection. Not a methodology. Some are frameworks, some are prompts, some are things I've been thinking about while walking my dog Pericles around Central Park. Take what's useful.
+        </p>
+      </div>
+
+      <section class="v2-featured">
+        <div class="v2-featured-tag">The framework</div>
+        <h2 class="v2-featured-title">FAST — the four moves behind every good prompt</h2>
+        <p class="v2-featured-body">Frame · Ask · Shape · Tune. If you use one thing from this notebook, this is it.</p>
+        <a class="v2-featured-cta" href="/fast">Read the primer <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="v2-shelf">
+        <div class="v2-shelf-header">
+          <h2 class="v2-shelf-title">Recent additions</h2>
+        </div>
+        <div class="v2-shelf-scroll" data-v2-recent></div>
+      </section>
+
+      <section class="v2-shelf">
+        <div class="v2-shelf-header">
+          <h2 class="v2-shelf-title">Analysis &amp; discovery</h2>
+          <a class="v2-shelf-link" href="/stages/analysis">See all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="v2-shelf-scroll" data-v2-stage="analysis"></div>
+      </section>
+
+      <section class="v2-shelf">
+        <div class="v2-shelf-header">
+          <h2 class="v2-shelf-title">Strategy &amp; curriculum</h2>
+          <a class="v2-shelf-link" href="/stages/strategy-curriculum">See all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="v2-shelf-scroll" data-v2-stage="strategy-curriculum"></div>
+      </section>
+
+      <section class="v2-shelf">
+        <div class="v2-shelf-header">
+          <h2 class="v2-shelf-title">Design</h2>
+          <a class="v2-shelf-link" href="/stages/design">See all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="v2-shelf-scroll" data-v2-stage="design"></div>
+      </section>
+
+      <section class="v2-shelf">
+        <div class="v2-shelf-header">
+          <h2 class="v2-shelf-title">Development</h2>
+          <a class="v2-shelf-link" href="/stages/development">See all <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="v2-shelf-scroll" data-v2-stage="development"></div>
+      </section>
+
+      <section class="home-subscribe v2-subscribe">
+        <p class="home-subscribe-title">Get notified when new cards drop.</p>
+        <form class="home-subscribe-form" data-subscribe-form novalidate>
+          <input type="email" name="email" placeholder="you@work.com" autocomplete="email" required aria-label="Your email" />
+          <button type="submit">Notify me</button>
+        </form>
+        <div class="home-subscribe-msg" data-subscribe-msg aria-live="polite"></div>
+      </section>
+    </section>
+  </template>
+
   <template id="tpl-stage-panel">
     <section class="section section-stage">
       <div class="stage-header-grid">

@@ -670,6 +670,144 @@ p  { margin: 0 0 1em; color: var(--text); }
   padding-top: 4px;
   animation: landingIn 0.5s var(--ease) both;
 }
+
+/* =============================================================
+   Home V2 — preview layout at /preview
+   Netflix-style shelves + featured framework + notebook framing
+   ============================================================= */
+.landing-v2 {
+  max-width: 1200px;
+  padding-top: 4px;
+}
+.v2-banner {
+  padding: 8px 14px;
+  margin: 0 0 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #b0b0b0;
+}
+.v2-banner strong { color: var(--text); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.72rem; margin-right: 8px; }
+.v2-banner a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+
+.v2-hero { margin: 8px 0 32px; max-width: 900px; }
+.v2-hero h1 {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  margin: 8px 0 16px;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.v2-lede {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #c8c8c8;
+  margin: 0;
+  max-width: 780px;
+}
+
+/* Featured pinned framework block */
+.v2-featured {
+  position: relative;
+  padding: 26px 28px 26px;
+  margin: 0 0 40px;
+  max-width: 900px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.09), rgba(59,130,246,0.06));
+  border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 14px;
+}
+.v2-featured-tag {
+  font-family: var(--heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b8a5f5;
+  margin-bottom: 8px;
+}
+.v2-featured-title {
+  font-family: var(--heading);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+.v2-featured-body {
+  font-size: 0.98rem;
+  color: #cccccc;
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+.v2-featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
+  color: #fff !important;
+  border-radius: 999px;
+  font-family: var(--heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none !important;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring);
+}
+.v2-featured-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,92,246,0.3); }
+
+/* Shelves — horizontal card carousels */
+.v2-shelf { margin: 0 0 36px; }
+.v2-shelf-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 14px;
+  padding-right: 8px;
+}
+.v2-shelf-title {
+  font-family: var(--heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin: 0;
+}
+.v2-shelf-link {
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  color: #9a9a9a;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.v2-shelf-link:hover { color: var(--text); text-decoration: none; }
+.v2-shelf-scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 4px 12px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.v2-shelf-scroll::-webkit-scrollbar { height: 6px; }
+.v2-shelf-scroll::-webkit-scrollbar-track { background: transparent; }
+.v2-shelf-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+.v2-shelf-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+.v2-shelf-scroll > .card-preview {
+  flex: 0 0 300px;
+  width: 300px;
+  scroll-snap-align: start;
+}
+
+.v2-subscribe { margin-top: 12px; }
+
+@media (max-width: 640px) {
+  .v2-shelf-scroll > .card-preview { flex: 0 0 260px; width: 260px; }
+  .v2-featured { padding: 20px 20px 20px; }
+  .v2-featured-title { font-size: 1.3rem; }
+}
 @keyframes landingIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }

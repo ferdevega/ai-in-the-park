@@ -655,6 +655,39 @@ function viewRecent() {
 
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
+
+// Preview: alternate "notebook" home layout — Netflix-style shelves.
+// Lives at /preview so we can compare against the current home before committing.
+function viewHomeV2() {
+  state.view = 'preview';
+  renderSpine(null);
+  const frag = tpl('tpl-home-v2');
+
+  // Recent additions — most recent 6, excluding coming-soon
+  const recentHost = $('[data-v2-recent]', frag);
+  if (recentHost) {
+    const recent = state.cards
+      .filter((c) => !c.coming_soon)
+      .slice()
+      .sort((a, b) => (b.added || '').localeCompare(a.added || ''))
+      .slice(0, 6);
+    recent.forEach((c) => recentHost.appendChild(renderCardPreview(c)));
+  }
+
+  // Per-stage shelves — real cards first, coming-soon at the end
+  frag.querySelectorAll('[data-v2-stage]').forEach((host) => {
+    const slug = host.getAttribute('data-v2-stage');
+    const inStage = state.cards.filter((c) => {
+      const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
+      return refs.includes(slug);
+    });
+    inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+    inStage.forEach((c) => host.appendChild(renderCardPreview(c)));
+  });
+
+  mount(frag);
+}
+
 function viewNotFound() { state.view = 'notfound'; renderSpine(null); mount(tpl('tpl-not-found')); }
 
 function mount(frag) {
@@ -1039,6 +1072,9 @@ function route() {
   } else if (parts[0] === 'fast') {
     bgRenderer = viewFast;
     bgPath = '/fast';
+  } else if (parts[0] === 'preview') {
+    bgRenderer = viewHomeV2;
+    bgPath = '/preview';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
     bgPath = '/recent';
