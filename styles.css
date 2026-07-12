@@ -298,6 +298,66 @@ p  { margin: 0 0 1em; color: var(--text); }
   box-shadow: 0 8px 24px rgba(139,92,246,0.3);
 }
 
+/* Hamburger menu toggle — hidden on desktop, visible on mobile */
+.topbar-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.topbar-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Mobile: hide nav links by default, show as dropdown when hamburger is toggled */
+@media (max-width: 640px) {
+  .topbar {
+    gap: 12px;
+    padding: 8px 16px;
+  }
+  .topbar-menu-toggle { display: inline-flex; }
+  .topbar-links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 16px;
+    left: auto;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(15, 15, 15, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 180px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    z-index: 60;
+  }
+  .topbar-links.open { display: flex; }
+  .topbar-links a {
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: block;
+    text-decoration: none;
+  }
+  .topbar-links a:hover { background: rgba(255, 255, 255, 0.06); }
+  .topbar-cta { padding: 8px 14px; letter-spacing: 0.06em; }
+  /* Push GET UPDATES to the far right so brand + hamburger + CTA line up cleanly */
+  .brand { flex: 1; min-width: 0; }
+}
+
 /* Outlined "Get updates" button in the topbar — opens the subscribe dialog */
 .topbar-subscribe {
   display: inline-flex;

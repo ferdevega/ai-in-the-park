@@ -1088,6 +1088,29 @@ document.addEventListener('click', (e) => {
     if (state.modalSlug) closeModal();
     return;
   }
+  // Mobile: hamburger toggle for the topbar links dropdown
+  if (e.target.closest('[data-topbar-toggle]')) {
+    e.preventDefault();
+    const menu = document.querySelector('[data-topbar-menu]');
+    const toggle = document.querySelector('[data-topbar-toggle]');
+    if (menu) {
+      const opening = !menu.classList.contains('open');
+      menu.classList.toggle('open', opening);
+      if (toggle) toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+    return;
+  }
+  // Close the topbar menu when clicking a link inside it or anywhere outside
+  const openMenu = document.querySelector('[data-topbar-menu].open');
+  if (openMenu) {
+    const insideMenu = e.target.closest('[data-topbar-menu]');
+    const onToggle = e.target.closest('[data-topbar-toggle]');
+    if (!onToggle && (!insideMenu || e.target.closest('[data-topbar-menu] a'))) {
+      openMenu.classList.remove('open');
+      const toggle = document.querySelector('[data-topbar-toggle]');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    }
+  }
   if (e.target.closest('[data-spine-toggle]')) {
     const open = document.querySelector('.spine').classList.contains('open');
     setSpineOpen(!open);
