@@ -656,6 +656,98 @@ function viewRecent() {
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
 
+// Preview 4: Collapsible folder layout. Each stage is a folder with a header
+// that expands/collapses to reveal a grid of cards. Vertical-only scroll.
+function viewHomeV5() {
+  state.view = 'preview4';
+  renderSpine(null);
+  const frag = tpl('tpl-home-v5');
+  const foldersHost = $('[data-v5-folders]', frag);
+
+  const addFolder = (stage, cards, cardCount) => {
+    const folder = document.createElement('section');
+    folder.className = 'v5-folder is-open';
+    folder.setAttribute('data-v5-folder', '');
+    const color = stage.color || stageColorVar(stage);
+    folder.style.setProperty('--folder-color', color);
+
+    const header = document.createElement('button');
+    header.type = 'button';
+    header.className = 'v5-folder-header';
+    header.setAttribute('aria-expanded', 'true');
+    header.innerHTML = `
+      <span class="v5-folder-dot"></span>
+      <span class="v5-folder-title">${stage.title}</span>
+      <span class="v5-folder-count">${cardCount} ${cardCount === 1 ? 'card' : 'cards'}</span>
+      <span class="v5-folder-chevron" aria-hidden="true">▾</span>
+    `;
+    folder.appendChild(header);
+
+    const content = document.createElement('div');
+    content.className = 'v5-folder-content';
+
+    const editorial = document.createElement('p');
+    editorial.className = 'v5-folder-editorial';
+    editorial.textContent = `[PLACEHOLDER — Fer's 1-line editorial framing for ${stage.title}.]`;
+    content.appendChild(editorial);
+
+    const grid = document.createElement('div');
+    grid.className = 'v5-folder-grid';
+    cards.forEach((c) => grid.appendChild(renderV4Card(c)));
+    content.appendChild(grid);
+
+    folder.appendChild(content);
+    return folder;
+  };
+
+  // Frameworks — FAST as first card
+  const fastCard = {
+    slug: 'fast-framework',
+    title: 'FAST — the four moves behind every good prompt',
+    teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+    type: 'tool',
+    level: 'beginner',
+    linkOverride: '/fast',
+  };
+  foldersHost.appendChild(
+    addFolder(
+      {
+        slug: 'frameworks',
+        title: 'Frameworks',
+        summary: 'Meta-tools that apply across every card.',
+        color: 'var(--r-thought-partner)',
+      },
+      [fastCard],
+      1,
+    ),
+  );
+
+  // Stage folders
+  state.stages.forEach((stage) => {
+    const inStage = state.cards.filter((c) => {
+      const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
+      return refs.includes(stage.slug);
+    });
+    if (inStage.length === 0) return;
+    inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+    const realCount = inStage.filter((c) => !c.coming_soon).length;
+    foldersHost.appendChild(addFolder(stage, inStage, realCount));
+  });
+
+  // Toggle handler — click folder header to expand/collapse
+  foldersHost.addEventListener('click', (e) => {
+    const header = e.target.closest('.v5-folder-header');
+    if (!header) return;
+    const folder = header.closest('.v5-folder');
+    const wasOpen = folder.classList.contains('is-open');
+    folder.classList.toggle('is-open', !wasOpen);
+    header.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+  });
+
+  wireWizardOpener();
+  mount(frag);
+}
+
 // Preview 3: Netflix-style layout. Category tile as first item in each shelf,
 // horizontal-scroll rows of big cards, sticky category tile on desktop.
 function viewHomeV4() {
@@ -1067,7 +1159,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -1451,6 +1543,9 @@ function route() {
   } else if (parts[0] === 'preview3') {
     bgRenderer = viewHomeV4;
     bgPath = '/preview3';
+  } else if (parts[0] === 'preview4') {
+    bgRenderer = viewHomeV5;
+    bgPath = '/preview4';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
     bgPath = '/recent';

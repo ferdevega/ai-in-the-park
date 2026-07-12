@@ -98,6 +98,12 @@ const routes = [
     description: 'Netflix-style shelves layout preview.',
     url: `${SITE_URL}/preview3`,
   },
+  {
+    out: 'preview4/index.html',
+    title: `Preview 4 — ${SITE_NAME}`,
+    description: 'Collapsible folders layout preview.',
+    url: `${SITE_URL}/preview4`,
+  },
 ];
 
 for (const r of routes) {
