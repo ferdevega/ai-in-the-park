@@ -1104,33 +1104,41 @@ p  { margin: 0 0 1em; color: var(--text); }
   margin-top: 20px;
 }
 
-/* Native subscribe block on the home page — Vercel serverless + Upstash Redis backend */
+/* Native subscribe row on the home page — inline, no box, no visual competition with author row */
 .home-subscribe {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
   margin: 24px 0 20px;
-  max-width: 620px;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 12px;
+  max-width: 780px;
+  padding: 0;
+  background: none;
+  border: none;
 }
 .home-subscribe-title {
-  font-family: var(--heading);
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin: 0 0 10px;
-  color: var(--text);
+  font-family: var(--body);
+  font-size: 0.92rem;
+  color: #b8b8b8;
+  margin: 0;
+  white-space: nowrap;
+}
+.home-subscribe-title::after {
+  content: '→';
+  margin-left: 10px;
+  color: #6f6f6f;
 }
 .home-subscribe-form {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex: 0 1 auto;
 }
 .home-subscribe-form input[type="email"] {
-  flex: 1 1 220px;
+  flex: 0 1 240px;
   min-width: 0;
-  padding: 10px 14px;
+  padding: 8px 14px;
   font-family: var(--body);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
@@ -1144,10 +1152,10 @@ p  { margin: 0 0 1em; color: var(--text); }
   background: rgba(255, 255, 255, 0.08);
 }
 .home-subscribe-form button {
-  padding: 10px 20px;
+  padding: 8px 18px;
   font-family: var(--heading);
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   letter-spacing: 0.01em;
   background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner));
   color: #fff;
@@ -1163,13 +1171,21 @@ p  { margin: 0 0 1em; color: var(--text); }
 }
 .home-subscribe-form button[disabled] { opacity: 0.6; cursor: default; }
 .home-subscribe-msg {
-  margin-top: 10px;
+  flex-basis: 100%;
   min-height: 1.2em;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   line-height: 1.4;
+  margin-top: 2px;
 }
+.home-subscribe-msg:empty { min-height: 0; margin-top: 0; }
 .home-subscribe-msg.is-success { color: #7dd8a8; }
 .home-subscribe-msg.is-error { color: #e28a8a; }
+.subscribe-dialog .home-subscribe-msg { flex-basis: auto; }
+
+@media (max-width: 640px) {
+  .home-subscribe-title { white-space: normal; }
+  .home-subscribe-form { flex: 1 1 100%; }
+}
 .home-author-mini {
   display: flex;
   align-items: center;
