@@ -801,6 +801,10 @@ function openModal(slug) {
       const inner = document.createElement('div');
       inner.className = 'prompt-fast-block';
 
+      // Copy button sits in a header row at the top of the prompt block.
+      const header = document.createElement('div');
+      header.className = 'prompt-fast-header';
+
       const order = ['frame', 'ask', 'shape', 'tune'];
       const cleanParts = [];
       order.forEach((key) => {
@@ -818,7 +822,6 @@ function openModal(slug) {
         inner.appendChild(section);
         cleanParts.push(content);
       });
-      block.appendChild(inner);
 
       // Copy strips the section labels — pastes a clean, runnable prompt
       const cleanPrompt = cleanParts.join('\n\n');
@@ -834,7 +837,9 @@ function openModal(slug) {
           setTimeout(() => (btn.textContent = orig), 1500);
         } catch {}
       });
-      block.appendChild(btn);
+      header.appendChild(btn);
+      inner.insertBefore(header, inner.firstChild);
+      block.appendChild(inner);
       host.appendChild(block);
     } else if (cardTypes(card).includes('prompt') && card.prompt_body) {
       const host = $('[data-card-prompt]', frag);
@@ -884,8 +889,8 @@ function openModal(slug) {
     }
 
     // Share + Copy link buttons — always shown on cards
-    const shareHost = $('[data-card-share]', frag);
-    if (shareHost) shareHost.appendChild(buildShareRow(card));
+    // Share row (Copy link + Share on LinkedIn) intentionally hidden for V1.
+    // Kept the helper for future re-enable.
 
     const related = (card.related || []).map(cardBySlug).filter(Boolean);
     if (related.length) {
