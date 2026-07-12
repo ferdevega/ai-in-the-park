@@ -32,6 +32,7 @@
     <nav class="topbar-links">
       <a href="/" data-home-link>Home</a>
       <a href="/about">About</a>
+      <button type="button" class="topbar-subscribe" data-subscribe-open>Get updates</button>
       <a href="/fast" class="topbar-cta">New to AI? Click here</a>
     </nav>
   </header>
@@ -58,6 +59,17 @@
     <!-- The page area: home landing, stage section, all-cards, recent, about -->
     <main id="view" class="page"></main>
   </div>
+
+  <!-- Subscribe dialog — opened from the topbar button on any page -->
+  <dialog id="subscribe-dialog" class="subscribe-dialog" aria-labelledby="subscribe-dialog-title">
+    <button type="button" class="subscribe-dialog-close" data-subscribe-close aria-label="Close">×</button>
+    <h3 class="subscribe-dialog-title" id="subscribe-dialog-title">Get notified when new cards drop.</h3>
+    <form class="home-subscribe-form" data-subscribe-form novalidate>
+      <input type="email" name="email" placeholder="you@work.com" autocomplete="email" required aria-label="Your email" />
+      <button type="submit">Notify me</button>
+    </form>
+    <div class="home-subscribe-msg" data-subscribe-msg aria-live="polite"></div>
+  </dialog>
 
   <!-- Card detail modal (backdrop blurs the page behind, spine stays visible) -->
   <div id="modal" class="modal" hidden>
@@ -119,8 +131,7 @@
       </ol>
 
       <section class="home-subscribe">
-        <h3 class="home-subscribe-title">Get notified when new cards drop</h3>
-        <p class="home-subscribe-sub">No newsletter. Just a quick email when there's something new.</p>
+        <p class="home-subscribe-title">Get notified when new cards drop.</p>
         <form class="home-subscribe-form" data-subscribe-form novalidate>
           <input type="email" name="email" placeholder="you@work.com" autocomplete="email" required aria-label="Your email" />
           <button type="submit">Notify me</button>

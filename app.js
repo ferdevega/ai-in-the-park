@@ -1126,7 +1126,7 @@ function initMouseGlow() {
   route();
 })();
 
-// ---------- Subscribe form (home page) ----------
+// ---------- Subscribe form (home page + topbar dialog) ----------
 // Delegated so it works after the SPA mounts the home template.
 function initSubscribeForm() {
   document.addEventListener('submit', async (e) => {
@@ -1167,6 +1167,12 @@ function initSubscribeForm() {
       msg.textContent = "Got it. I'll email you when new cards drop.";
       msg.className = 'home-subscribe-msg is-success';
       input.value = '';
+
+      // If this form is inside the dialog, auto-close after a beat.
+      const dialog = form.closest('dialog.subscribe-dialog');
+      if (dialog) {
+        setTimeout(() => { try { dialog.close(); } catch {} }, 1400);
+      }
     } catch (err) {
       msg.textContent = err.message || 'Something went wrong. Try again in a bit.';
       msg.className = 'home-subscribe-msg is-error';
@@ -1175,4 +1181,28 @@ function initSubscribeForm() {
       button.textContent = originalLabel;
     }
   });
+
+  // Open/close for the subscribe dialog opened from the topbar button.
+  const dialog = document.getElementById('subscribe-dialog');
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-subscribe-open]')) {
+      e.preventDefault();
+      if (!dialog) return;
+      // Reset any stale success/error message from a previous open.
+      const msg = dialog.querySelector('[data-subscribe-msg]');
+      if (msg) { msg.textContent = ''; msg.className = 'home-subscribe-msg'; }
+      dialog.showModal();
+      const input = dialog.querySelector('input[name="email"]');
+      if (input) setTimeout(() => input.focus(), 10);
+    } else if (e.target.closest('[data-subscribe-close]')) {
+      e.preventDefault();
+      if (dialog) dialog.close();
+    }
+  });
+  // Close when clicking the backdrop outside the dialog content.
+  if (dialog) {
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  }
 }
