@@ -908,7 +908,7 @@ function openModal(slug) {
   // Sync browser tab title to the open card so the original card's title
   // doesn't stick around in the tab when a second card is opened.
   if (!state.savedTitle) state.savedTitle = document.title;
-  document.title = `${card.title} · AI in the Park 🐕‍🦺`;
+  document.title = `${card.title} · AI in the Park`;
 }
 
 function buildShareRow(card) {
