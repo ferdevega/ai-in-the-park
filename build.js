@@ -92,6 +92,12 @@ const routes = [
     description: 'Interactive filter home layout preview.',
     url: `${SITE_URL}/preview2`,
   },
+  {
+    out: 'preview3/index.html',
+    title: `Preview 3 — ${SITE_NAME}`,
+    description: 'Netflix-style shelves layout preview.',
+    url: `${SITE_URL}/preview3`,
+  },
 ];
 
 for (const r of routes) {

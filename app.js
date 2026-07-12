@@ -656,6 +656,114 @@ function viewRecent() {
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
 
+// Preview 3: Netflix-style layout. Category tile as first item in each shelf,
+// horizontal-scroll rows of big cards, sticky category tile on desktop.
+function viewHomeV4() {
+  state.view = 'preview3';
+  renderSpine(null);
+  const frag = tpl('tpl-home-v4');
+  const shelvesHost = $('[data-v4-shelves]', frag);
+
+  const addShelf = (stage, cards, cardCount) => {
+    const section = document.createElement('section');
+    section.className = 'v4-shelf';
+    section.setAttribute('data-v4-shelf', '');
+
+    const scroll = document.createElement('div');
+    scroll.className = 'v4-shelf-scroll';
+
+    // Category tile — same size as cards, solid stage color
+    const tile = document.createElement('div');
+    tile.className = 'v4-cat-tile';
+    const color = stage.color || stageColorVar(stage);
+    tile.style.setProperty('--cat-color', color);
+    tile.innerHTML = `
+      <h2 class="v4-cat-title">${stage.title}</h2>
+      <p class="v4-cat-desc">${stage.summary || ''}</p>
+      <div class="v4-cat-count">${cardCount} ${cardCount === 1 ? 'card' : 'cards'}</div>
+    `;
+    scroll.appendChild(tile);
+
+    // Cards — bigger v4 treatment
+    cards.forEach((c) => scroll.appendChild(renderV4Card(c)));
+
+    section.appendChild(scroll);
+    return section;
+  };
+
+  // Frameworks row — FAST as first card, linking to /fast
+  const fastCard = {
+    slug: 'fast-framework',
+    title: 'FAST — the four moves behind every good prompt',
+    teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+    type: 'tool',
+    level: 'beginner',
+    linkOverride: '/fast',
+  };
+  shelvesHost.appendChild(
+    addShelf(
+      {
+        slug: 'frameworks',
+        title: 'Frameworks',
+        summary: 'Meta-tools that apply across every card.',
+        color: 'var(--r-thought-partner)',
+      },
+      [fastCard],
+      1,
+    ),
+  );
+
+  // Stage rows — cards sorted with coming-soon last
+  state.stages.forEach((stage) => {
+    const inStage = state.cards.filter((c) => {
+      const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
+      return refs.includes(stage.slug);
+    });
+    if (inStage.length === 0) return;
+    inStage.sort((a, b) => Number(!!a.coming_soon) - Number(!!b.coming_soon));
+    const realCount = inStage.filter((c) => !c.coming_soon).length;
+    shelvesHost.appendChild(addShelf(stage, inStage, realCount));
+  });
+
+  wireWizardOpener();
+  wireV4ScrollAnimation(shelvesHost);
+  mount(frag);
+}
+
+// Bigger card design for /preview3 — prominent role icon, teaser visible, role-color glow.
+// Uses renderCardPreview under the hood, then augments with a big role icon in the header.
+function renderV4Card(card) {
+  const frag = renderCardPreview(card, { showLevel: false });
+  const anchor = frag.querySelector('a');
+  if (!anchor) return frag;
+  anchor.classList.add('v4-card');
+  if (card.linkOverride) anchor.setAttribute('href', card.linkOverride);
+
+  // Inject a big role icon at the top-left of the card body.
+  const body = anchor.querySelector('.card-body');
+  if (body && card.type && ROLE_ICONS[card.type]) {
+    const iconWrap = document.createElement('div');
+    iconWrap.className = 'v4-card-role-icon';
+    iconWrap.innerHTML = ROLE_ICONS[card.type];
+    body.insertBefore(iconWrap, body.firstChild);
+  }
+  return frag;
+}
+
+function wireV4ScrollAnimation(root) {
+  if (!('IntersectionObserver' in window)) return;
+  const shelves = root.querySelectorAll('[data-v4-shelf]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+  shelves.forEach((s) => io.observe(s));
+}
+
 // Preview 2: library-as-home. Cards visible immediately, editorial section
 // headers per stage, one featured card up top, opt-in "Ask me" wizard modal.
 // No spine, no filter chips — the library IS the interface.
@@ -959,7 +1067,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -1340,6 +1448,9 @@ function route() {
   } else if (parts[0] === 'preview2') {
     bgRenderer = viewHomeV3;
     bgPath = '/preview2';
+  } else if (parts[0] === 'preview3') {
+    bgRenderer = viewHomeV4;
+    bgPath = '/preview3';
   } else if (parts[0] === 'recent') {
     bgRenderer = viewRecent;
     bgPath = '/recent';

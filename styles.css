@@ -1138,6 +1138,192 @@ body.view-preview2 .v3-lib-grid .card-preview-coming-soon .teaser {
   display: none;
 }
 
+/* =============================================================
+   Preview 3 — Netflix-style shelves with category tile + big cards
+   ============================================================= */
+body.view-preview3 .spine { display: none; }
+body.view-preview3 .spine-toggle { display: none !important; }
+body.view-preview3 .layout { grid-template-columns: 1fr; }
+body.view-preview3 .page { padding: 24px 40px 40px; }
+body.view-preview3 .landing-v4 {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.v4-shelves { display: flex; flex-direction: column; gap: 44px; margin: 20px 0 40px; }
+
+/* Shelf — the wrapper for one horizontal row */
+.v4-shelf {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
+}
+.v4-shelf.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .v4-shelf { opacity: 1; transform: none; transition: none; }
+}
+
+/* The horizontal-scrolling flex row of category tile + cards */
+.v4-shelf-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 6px 4px 18px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.v4-shelf-scroll::-webkit-scrollbar { height: 8px; }
+.v4-shelf-scroll::-webkit-scrollbar-track { background: transparent; }
+.v4-shelf-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+.v4-shelf-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+/* Category tile — same size as cards, solid stage color */
+.v4-cat-tile {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex: 0 0 300px;
+  width: 300px;
+  min-height: 220px;
+  padding: 24px 22px 20px;
+  background: linear-gradient(150deg,
+    color-mix(in srgb, var(--cat-color) 88%, black) 0%,
+    color-mix(in srgb, var(--cat-color) 65%, black) 100%);
+  border-radius: 14px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+.v4-cat-title {
+  font-family: var(--heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0 0 12px;
+  color: #fff;
+}
+.v4-cat-desc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.88;
+  color: #fff;
+}
+.v4-cat-count {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+/* Bigger v4 card — prominent role icon, teaser visible, role-color glow */
+.v4-shelf-scroll .card-preview,
+.v4-shelf-scroll .card-preview.v4-card {
+  flex: 0 0 300px;
+  width: 300px;
+  min-height: 220px;
+  scroll-snap-align: start;
+  background: var(--surface-solid);
+  border: 1px solid color-mix(in srgb, var(--role-color, var(--glass-border)) 24%, var(--glass-border));
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+/* Diffuse role-color glow along the top edge instead of the 4px band */
+.v4-shelf-scroll .card-preview::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 60px;
+  background: radial-gradient(ellipse at 50% -30%, color-mix(in srgb, var(--role-color, var(--r-creator)) 55%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 0;
+}
+.v4-shelf-scroll .card-preview .card-band {
+  display: none;
+}
+.v4-shelf-scroll .card-preview .card-stage-label { display: none; }
+
+.v4-shelf-scroll .card-preview .card-body {
+  padding: 20px 22px 12px;
+  gap: 12px;
+}
+.v4-card-role-icon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--role-color, var(--r-creator));
+  margin-bottom: 6px;
+}
+.v4-card-role-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.v4-shelf-scroll .card-preview h3 {
+  font-family: var(--heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin: 0;
+}
+.v4-shelf-scroll .card-preview .teaser {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #a8a8a8;
+  margin: 0;
+}
+.v4-shelf-scroll .card-preview .card-chips {
+  padding: 14px 22px 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: auto;
+}
+
+/* Hover — lift slightly, brighten border */
+.v4-shelf-scroll .card-preview:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--role-color, var(--r-creator)) 55%, var(--glass-border));
+  background: #161616;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* Coming-soon in v4 keeps the dashed treatment */
+.v4-shelf-scroll .card-preview-coming-soon {
+  border-style: dashed;
+  filter: grayscale(1);
+}
+.v4-shelf-scroll .card-preview-coming-soon::after { display: none; }
+.v4-shelf-scroll .card-preview-coming-soon .v4-card-role-icon { color: #7a746e; }
+.v4-shelf-scroll .card-preview-coming-soon .teaser { display: none; }
+
+@media (max-width: 720px) {
+  body.view-preview3 .page { padding: 16px 18px 32px; }
+  .v4-cat-tile,
+  .v4-shelf-scroll .card-preview { flex: 0 0 260px; width: 260px; min-height: 200px; }
+  .v4-cat-tile { position: static; }
+  .v4-cat-title { font-size: 1.5rem; }
+}
+
 /* Wizard dialog — chat-style opt-in flow */
 .wizard-dialog {
   padding: 0;
