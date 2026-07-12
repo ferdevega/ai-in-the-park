@@ -1524,6 +1524,34 @@ p  { margin: 0 0 1em; color: var(--text); }
   display: none;
 }
 
+/* Coming-soon ghost tiles — dimmed, non-clickable, ribbon in the corner */
+.card-preview.card-preview-coming-soon {
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+  filter: grayscale(0.25);
+}
+.card-preview.card-preview-coming-soon:hover {
+  transform: none;
+  border-color: var(--glass-border);
+}
+.card-coming-soon-ribbon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #cfcfcf;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
 .card-chips {
   padding: 10px 16px 14px;
   border-top: 1px solid var(--glass-border);

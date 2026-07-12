@@ -53,6 +53,30 @@
     "pro_tip": "Treat the first draft as the structure, not the content. Once names, objectives, and durations land, share it for stakeholder sign-off before you build anything else."
   },
   {
+    "slug": "create-a-video-in-5-min",
+    "title": "Create a video in 5 min",
+    "stage": "development",
+    "type": "tool",
+    "level": "beginner",
+    "coming_soon": true
+  },
+  {
+    "slug": "create-a-job-aid-from-a-full-module",
+    "title": "Create a job aid from a full module",
+    "stage": "development",
+    "type": "creator",
+    "level": "intermediate",
+    "coming_soon": true
+  },
+  {
+    "slug": "rewrite-content-for-a-different-audience-segment",
+    "title": "Rewrite content for a different audience segment",
+    "stage": "development",
+    "type": "creator",
+    "level": "intermediate",
+    "coming_soon": true
+  },
+  {
     "slug": "draft-your-strategy-pov-with-a-podcast",
     "hidden": true,
     "title": "Synthesize your discovery into a Strategy POV",

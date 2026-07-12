@@ -129,7 +129,19 @@ const stageHref = (stage) => `/stages/${stage.slug}`;
 function renderCardPreview(card, { showStageLabel = false } = {}) {
   const frag = tpl('tpl-card-preview');
   const a = $('a', frag);
-  a.setAttribute('href', cardHref(card));
+
+  // "Coming soon" cards preview as dimmed, non-clickable ghost tiles.
+  if (card.coming_soon) {
+    a.setAttribute('href', '#');
+    a.classList.add('disabled', 'card-preview-coming-soon');
+    a.setAttribute('aria-disabled', 'true');
+    const ribbon = document.createElement('span');
+    ribbon.className = 'card-coming-soon-ribbon';
+    ribbon.textContent = 'Coming soon';
+    a.appendChild(ribbon);
+  } else {
+    a.setAttribute('href', cardHref(card));
+  }
 
   // Role color becomes the card's primary visual identity.
   const roleColor = roleColorVar(card.type);
@@ -593,9 +605,11 @@ function viewCardsIndex() {
   state.filters.sort = 'stage';
   sort.value = 'stage';
 
-  const tags = Array.from(new Set(state.cards.flatMap((c) => c.tags || []))).sort();
-  const availableTypes = Array.from(new Set(state.cards.flatMap((c) => c.type)));
-  const update = () => renderCardGrid(grid, applyFilters(state.cards), { countTarget: countNode, showStageLabel: true });
+  // The /cards index shows only real cards, no "coming soon" ghost tiles.
+  const realCards = state.cards.filter((c) => !c.coming_soon);
+  const tags = Array.from(new Set(realCards.flatMap((c) => c.tags || []))).sort();
+  const availableTypes = Array.from(new Set(realCards.flatMap((c) => c.type)));
+  const update = () => renderCardGrid(grid, applyFilters(realCards), { countTarget: countNode, showStageLabel: true });
   search.addEventListener('input', () => { state.filters.query = search.value; update(); });
   sort.addEventListener('change', () => { state.filters.sort = sort.value; update(); });
   renderFilterBar(filterBar, { availableTypes, tags, onChange: update, countNode });
@@ -608,7 +622,10 @@ function viewRecent() {
   renderSpine(null);
   const frag = tpl('tpl-recent');
   const grid = $('[data-card-grid]', frag);
-  const sorted = state.cards.slice().sort((a, b) => (b.added || '').localeCompare(a.added || ''));
+  const sorted = state.cards
+    .filter((c) => !c.coming_soon)
+    .slice()
+    .sort((a, b) => (b.added || '').localeCompare(a.added || ''));
   renderCardGrid(grid, sorted, { showStageLabel: true });
   mount(frag);
 }
@@ -636,8 +653,8 @@ function openModal(slug) {
   const body = $('#modal-body');
   body.innerHTML = '';
 
-  if (!card) {
-    body.innerHTML = '<h1>Not found</h1><p>That card slug does not exist.</p>';
+  if (!card || card.coming_soon) {
+    body.innerHTML = '<h1>Not found</h1><p>That card does not exist yet.</p>';
   } else {
     const frag = tpl('tpl-card');
 
