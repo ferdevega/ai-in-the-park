@@ -2000,15 +2000,9 @@ function route() {
     bgRenderer = viewCardsIndex;
     bgPath = '/cards';
   } else if (parts[0] === 'cards' && parts[1]) {
-    // Full-page card view prototype — currently gated to one slug
-    if (parts[1] === 'build-your-curriculum') {
-      bgRenderer = () => viewCardV4(parts[1]);
-      bgPath = `/cards/${parts[1]}`;
-    } else {
-      bgRenderer = viewHome;
-      bgPath = state.lastBgPath || '/';
-      modalSlug = parts[1];
-    }
+    // Full-page card view — v4 detail page for every card
+    bgRenderer = () => viewCardV4(parts[1]);
+    bgPath = `/cards/${parts[1]}`;
   } else if (parts[0] === 'design-test' && ['a','b','c'].includes(parts[1])) {
     bgRenderer = () => viewDesignTest('build-your-curriculum', parts[1]);
     bgPath = `/design-test/${parts[1]}`;
