@@ -110,6 +110,24 @@ const routes = [
     description: 'Original homepage kept for reference.',
     url: `${SITE_URL}/classic`,
   },
+  {
+    out: 'design-test/a/index.html',
+    title: `Design A · Callouts — ${SITE_NAME}`,
+    description: 'Card page design test — Notion-style callouts.',
+    url: `${SITE_URL}/design-test/a`,
+  },
+  {
+    out: 'design-test/b/index.html',
+    title: `Design B · Journal — ${SITE_NAME}`,
+    description: 'Card page design test — field-notes journal.',
+    url: `${SITE_URL}/design-test/b`,
+  },
+  {
+    out: 'design-test/c/index.html',
+    title: `Design C · Docs — ${SITE_NAME}`,
+    description: 'Card page design test — docs-site layout.',
+    url: `${SITE_URL}/design-test/c`,
+  },
 ];
 
 for (const r of routes) {

@@ -4236,6 +4236,430 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
 }
 
 /* ============================================================
+   Design test pages — A (Callouts) / B (Journal) / C (Docs)
+   Three variants of the same card page, at /design-test/[a|b|c]
+   ============================================================ */
+body.view-design-a .spine, body.view-design-a .spine-toggle,
+body.view-design-b .spine, body.view-design-b .spine-toggle,
+body.view-design-c .spine, body.view-design-c .spine-toggle { display: none !important; }
+body.view-design-a .layout, body.view-design-b .layout, body.view-design-c .layout { grid-template-columns: 1fr; }
+
+/* Shared skeleton */
+.design-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 8px 0 80px;
+  position: relative;
+}
+.design-page-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0 24px;
+  flex-wrap: wrap;
+}
+.design-page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #9a9a9a;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+.design-page-back:hover { color: var(--text); text-decoration: none; }
+
+.design-page-switcher {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.design-page-switcher a {
+  padding: 6px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #a8a8a8;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.design-page-switcher a:hover { color: var(--text); }
+.design-page-switcher a.is-active {
+  background: color-mix(in oklab, var(--stage-color, #fff) 20%, rgba(255,255,255,0.08));
+  color: var(--text);
+}
+
+/* Shared editorial header */
+.design-page-hero {
+  padding: 4px 0 24px;
+  margin: 0 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.design-page-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stage-color);
+  margin: 0 0 14px;
+}
+.design-page-eyebrow-icon {
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--stage-color);
+}
+.design-page-eyebrow-icon svg { width: 100%; height: 100%; }
+.design-page-title {
+  font-family: var(--heading);
+  font-size: clamp(2rem, 3.6vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+  margin: 0 0 14px;
+}
+.design-page-meta {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+}
+.design-page-level {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #b8b8b8;
+}
+.design-page-teaser {
+  font-size: 1.1rem; line-height: 1.5; color: #c8c8c8;
+  margin: 0; max-width: 720px; font-style: italic;
+}
+
+.design-page-body-wrap { position: relative; }
+.design-page-flow {
+  display: flex; flex-direction: column; gap: 36px;
+  margin-bottom: 60px;
+}
+.design-page-flow > * { min-width: 0; }
+
+/* Prompt section: shared shell — each design overrides */
+.design-page-prompt-section { position: relative; }
+.design-page-prompt-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--stage-color); margin: 0 0 14px;
+}
+
+/* Related grid (shared) */
+.design-page-related-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #8a8a8a;
+  margin: 0 0 18px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.design-page-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.design-page-related-grid .card-preview.v4-card {
+  width: 100%; min-height: 200px;
+}
+
+/* Design-C TOC is off by default; only design-c enables it */
+.design-c-toc { display: none; }
+
+/* ============================================================
+   Design A — Notion callouts
+   ============================================================ */
+.design-a [data-section] {
+  border-left: 3px solid;
+  border-radius: 12px;
+  padding: 18px 22px 4px;
+  background: rgba(255,255,255,0.02);
+}
+.design-a [data-section="intro"] {
+  border-left-color: #a78bfa;
+  background: color-mix(in oklab, #a78bfa 6%, transparent);
+}
+.design-a [data-section="why"] {
+  border-left-color: #fbbf24;
+  background: color-mix(in oklab, #fbbf24 7%, transparent);
+}
+.design-a [data-section="how"] {
+  border-left-color: #10b981;
+  background: color-mix(in oklab, #10b981 7%, transparent);
+}
+.design-a [data-section="wont"] {
+  border-left-color: #f87171;
+  background: color-mix(in oklab, #f87171 7%, transparent);
+}
+.design-a [data-section="steps"] {
+  border-left-color: #60a5fa;
+  background: color-mix(in oklab, #60a5fa 7%, transparent);
+}
+/* Paired how/won't as side-by-side callouts */
+.design-a .card-row-2col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.design-a .card-row-2col > * { margin: 0; }
+
+/* Prompt: SINGLE box, no double-wrap. Neutralize inner .prompt-block frame. */
+.design-a .design-page-prompt-section {
+  padding: 20px 22px 4px;
+  border-left: 3px solid var(--stage-color);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--stage-color) 7%, rgba(255,255,255,0.02));
+}
+.design-a .design-page-prompt-section .prompt-block {
+  background: transparent; border: none; padding: 0; margin: 0;
+}
+.design-a .design-page-prompt-section .prompt-fast-block {
+  background: transparent; border: none; padding: 0;
+}
+
+@media (max-width: 640px) {
+  .design-a .card-row-2col { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Design B — Field-notes journal
+   ============================================================ */
+.design-b .design-page-hero {
+  border-bottom: none;
+  padding-bottom: 12px;
+}
+.design-b .design-page-title {
+  font-family: 'Fraunces', var(--heading);
+  font-weight: 500;
+  font-style: italic;
+}
+/* Squiggle divider between sections (SVG data URI) */
+.design-b .design-page-flow > * {
+  padding-bottom: 28px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M 0 6 Q 25 0, 50 6 T 100 6 T 150 6 T 200 6' fill='none' stroke='%23c8b490' stroke-width='1.5' stroke-linecap='round' opacity='0.4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: 100% 12px;
+}
+.design-b .design-page-flow > *:last-child {
+  background-image: none;
+  padding-bottom: 0;
+}
+/* Cream-tint text on dark bg to feel notebook-y */
+.design-b .card-section .prose { color: #e6dcc8; }
+.design-b .card-section-heading {
+  font-family: 'Fraunces', var(--heading);
+  font-weight: 500; font-style: italic;
+  color: #f0e6d0;
+}
+.design-b .card-section-heading-emoji { opacity: 0.7; }
+
+/* Pro tip as a Post-it note */
+.design-b .card-pro-tip {
+  background: #fde68a;
+  border: none;
+  transform: rotate(-1deg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.2);
+  padding: 20px 22px;
+  border-radius: 4px;
+}
+.design-b .card-pro-tip-bubble { color: #422b0a; }
+.design-b .card-pro-tip-bubble p { color: #422b0a; }
+.design-b .card-pro-tip-label { color: #7c5711; }
+
+/* Prompt: flat, monospaced, single-frame */
+.design-b .design-page-prompt-section {
+  padding: 22px 24px;
+  border-radius: 4px;
+  background: #f5efe1;
+  color: #2b2a26;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transform: rotate(0.4deg);
+}
+.design-b .design-page-prompt-label { color: #7c5711; }
+.design-b .design-page-prompt-section .prompt-block,
+.design-b .design-page-prompt-section .prompt-fast-block {
+  background: transparent; border: none; padding: 0; margin: 0;
+  color: #2b2a26;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+}
+.design-b .design-page-prompt-section .prompt-fast-section {
+  border-left-color: rgba(0,0,0,0.35);
+}
+.design-b .design-page-prompt-section .prompt-fast-label { color: #7c5711; }
+.design-b .design-page-prompt-section .prompt-fast-content { color: #2b2a26; }
+.design-b .design-page-prompt-section .prompt-fast-disclaimer { color: #6b5528; }
+.design-b .design-page-prompt-section .copy-btn {
+  background: #2b2a26; color: #f5efe1; border-color: #2b2a26;
+}
+
+/* ============================================================
+   Design C — Stripe/Vercel docs
+   ============================================================ */
+.design-c .design-page-body-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 40px;
+}
+.design-c .design-c-toc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+.design-c-toc-item {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: #8a8a8a;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.design-c-toc-item:hover { color: var(--text); text-decoration: none; }
+.design-c-toc-item.is-active { color: var(--stage-color); }
+.design-c-toc-item.is-active .design-c-toc-dot {
+  background: var(--stage-color);
+  transform: scale(1.3);
+}
+.design-c-toc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: transform 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+/* Numbered section headings — CSS counters replace emoji */
+.design-c .design-page-flow { counter-reset: design-c-section; }
+.design-c [data-section] { counter-increment: design-c-section; }
+.design-c .card-section-heading-emoji { display: none; }
+.design-c .card-section-heading {
+  font-family: 'Inter', var(--heading);
+  font-size: 0.9rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text);
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 14px;
+}
+.design-c [data-section] .card-section-heading::before {
+  content: counter(design-c-section, decimal-leading-zero) "  —  ";
+  color: #6a6a6a;
+  font-weight: 400;
+}
+.design-c [data-section="intro"] { counter-increment: none; }
+.design-c [data-section="intro"] .card-section-heading::before { content: none; }
+
+/* Paired how/won't as a compare table */
+.design-c .card-row-2col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.design-c .card-row-2col > * {
+  margin: 0; padding: 20px;
+  background: rgba(255,255,255,0.015);
+}
+.design-c .card-row-2col > *:first-child {
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Steps: big circles + vertical connector */
+.design-c .card-section-steps { position: relative; padding-left: 0; list-style: none; }
+.design-c .card-section-steps li {
+  position: relative;
+  padding-left: 52px;
+  padding-bottom: 20px;
+  counter-increment: step-c;
+}
+.design-c .card-section-steps { counter-reset: step-c; }
+.design-c .card-section-steps li::before {
+  content: counter(step-c);
+  position: absolute;
+  left: 0; top: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--stage-color) 20%, rgba(255,255,255,0.05));
+  color: var(--stage-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.design-c .card-section-steps li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px; top: 32px;
+  width: 2px; height: calc(100% - 32px);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Prompt: dark code-block, single frame, filename-style label bar */
+.design-c .design-page-prompt-section {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0e0e10;
+}
+.design-c .design-page-prompt-label {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 18px;
+  margin: 0;
+  font-family: ui-monospace, 'JetBrains Mono', Menlo, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: #8a8a8a;
+}
+.design-c .design-page-prompt-label::before {
+  content: '# ';
+  color: var(--stage-color);
+}
+.design-c .design-page-prompt-section > div[data-card-prompt] { padding: 18px; }
+.design-c .design-page-prompt-section .prompt-block,
+.design-c .design-page-prompt-section .prompt-fast-block {
+  background: transparent; border: none; padding: 0; margin: 0;
+}
+.design-c .design-page-prompt-section .copy-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text);
+}
+.design-c .design-page-prompt-section .prompt-fast-disclaimer {
+  color: #7a7a7a; font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.78rem; margin: 0 0 14px;
+}
+
+@media (max-width: 1100px) {
+  .design-c .design-page-body-wrap { grid-template-columns: 1fr; }
+  .design-c .design-c-toc { display: none; }
+}
+@media (max-width: 640px) {
+  .design-c .card-row-2col { grid-template-columns: 1fr; }
+  .design-c .card-row-2col > *:first-child {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+}
+
+/* ============================================================
    Card modal — v4 detail sheet (Netflix-style overlay)
    Prototype: currently gated to one card in openModal()
    ============================================================ */

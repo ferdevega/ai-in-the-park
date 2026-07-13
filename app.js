@@ -1210,9 +1210,187 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
+}
+
+// ---------- Design test pages (three variants of the same card) ----------
+function viewDesignTest(slug, designKey) {
+  const card = cardBySlug(slug);
+  if (!card) return viewNotFound();
+  state.view = `design-${designKey}`;
+
+  const frag = tpl('tpl-design-test');
+  const article = frag.querySelector('.design-page');
+  const stages = cardStages(card);
+  const primaryStage = stages[0];
+  const stageColor = primaryStage ? stageColorVar(primaryStage) : 'var(--r-creator)';
+  if (article) {
+    article.classList.add(`design-${designKey}`);
+    article.style.setProperty('--stage-color', stageColor);
+  }
+
+  // Design switcher chip
+  const switcher = frag.querySelector('[data-design-switcher]');
+  if (switcher) {
+    ['a', 'b', 'c'].forEach((k) => {
+      const link = switcher.querySelector(`[data-key="${k}"]`);
+      if (link && k === designKey) link.classList.add('is-active');
+    });
+  }
+  const type = cardTypes(card)[0];
+  const iconSVG = ROLE_ICONS[type] || '';
+  const typeText = roleLabelTextForType(type) || '';
+
+  // Back link
+  const backLink = frag.querySelector('[data-back-link]');
+  if (backLink && primaryStage) {
+    backLink.setAttribute('href', `/stages/${primaryStage.slug}`);
+    backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${primaryStage.title}`;
+  }
+
+  // Hero: eyebrow (icon + stage · role), title, meta, teaser
+  const eyebrow = frag.querySelector('[data-eyebrow]');
+  if (eyebrow) {
+    if (iconSVG) {
+      const inlineIcon = document.createElement('span');
+      inlineIcon.className = 'design-page-eyebrow-icon';
+      inlineIcon.innerHTML = iconSVG;
+      eyebrow.appendChild(inlineIcon);
+    }
+    const label = document.createElement('span');
+    const parts = [];
+    if (primaryStage) parts.push(primaryStage.title);
+    if (typeText) parts.push(typeText);
+    label.textContent = parts.join(' · ');
+    eyebrow.appendChild(label);
+  }
+  const titleEl = frag.querySelector('[data-title]');
+  if (titleEl) titleEl.textContent = card.title;
+  const metaEl = frag.querySelector('[data-meta]');
+  if (metaEl) {
+    const levelWrap = document.createElement('span');
+    levelWrap.className = 'design-page-level';
+    const bars = document.createElement('span');
+    bars.className = 'level-bars';
+    renderLevelBars(bars, card.level);
+    const levelTextEl = document.createElement('span');
+    levelTextEl.textContent = levelLabel(card.level);
+    levelWrap.append(bars, levelTextEl);
+    metaEl.appendChild(levelWrap);
+  }
+  const teaserEl = frag.querySelector('[data-teaser]');
+  if (teaserEl) {
+    if (card.teaser) teaserEl.textContent = card.teaser;
+    else teaserEl.remove();
+  }
+
+  // Sections
+  const bodyHost = frag.querySelector('[data-card-body]');
+  const promptHost = frag.querySelector('[data-card-prompt]');
+  const tipHost = frag.querySelector('[data-card-tip]');
+  appendCardSections(card, { bodyHost, promptHost, tipHost });
+
+  // Show prompt section only if there's a prompt
+  const promptSection = frag.querySelector('[data-prompt-section]');
+  if (promptSection && promptHost && promptHost.childElementCount > 0) {
+    promptSection.hidden = false;
+  }
+
+  // Related cards
+  const related = (card.related || []).map(cardBySlug).filter(Boolean);
+  if (related.length) {
+    const relatedWrap = frag.querySelector('[data-related]');
+    const relatedGrid = frag.querySelector('[data-related-grid]');
+    if (relatedWrap && relatedGrid) {
+      relatedWrap.hidden = false;
+      related.forEach((c) => {
+        const cs = cardStages(c);
+        const col = cs[0] ? stageColorVar(cs[0]) : stageColor;
+        relatedGrid.appendChild(renderV4Card(c, { color: col }));
+      });
+    }
+  }
+
+  // Design C: build sticky right-side TOC and wire scroll-spy
+  if (designKey === 'c') {
+    const flow = frag.querySelector('.design-page-flow');
+    const toc = frag.querySelector('[data-design-c-toc]');
+    if (toc && flow) {
+      const items = [
+        { key: 'intro', label: 'Intro' },
+        { key: 'why', label: 'Why it matters' },
+        { key: 'how', label: 'How AI helps' },
+        { key: 'wont', label: "AI won't" },
+        { key: 'steps', label: 'How to run it' },
+        { key: 'prompt', label: 'The prompt' },
+        { key: 'tip', label: 'Pro tip' },
+      ];
+      items.forEach((it) => {
+        const dot = document.createElement('a');
+        dot.className = 'design-c-toc-item';
+        dot.setAttribute('data-target', it.key);
+        dot.innerHTML = `<span class="design-c-toc-dot"></span><span class="design-c-toc-label">${it.label}</span>`;
+        toc.appendChild(dot);
+      });
+    }
+  }
+
+  // Reveals
+  const reveals = [
+    frag.querySelector('.design-page-hero'),
+    ...frag.querySelectorAll('.design-page-flow > *'),
+  ].filter(Boolean);
+  reveals.forEach((el, i) => {
+    el.setAttribute('data-reveal', '');
+    el.style.setProperty('--reveal-delay', `${Math.min(i, 4) * 60}ms`);
+  });
+
+  mount(frag);
+  wireRevealAnimation(document.querySelector('.design-page'));
+
+  if (designKey === 'c') {
+    wireDesignCScrollSpy();
+  }
+
+  if (!state.savedTitle) state.savedTitle = document.title;
+  document.title = `${card.title} · Design ${designKey.toUpperCase()} · AI in the Park`;
+}
+
+function wireDesignCScrollSpy() {
+  const items = document.querySelectorAll('.design-c-toc-item');
+  const flow = document.querySelector('.design-c .design-page-flow');
+  if (!items.length || !flow) return;
+
+  const map = new Map();
+  items.forEach((it) => {
+    const key = it.getAttribute('data-target');
+    // Match direct data-section, plus prompt-section and card-pro-tip
+    let target = null;
+    if (key === 'prompt') target = flow.querySelector('[data-prompt-section]');
+    else if (key === 'tip') target = flow.querySelector('.card-pro-tip');
+    else target = flow.querySelector(`[data-section="${key}"]`);
+    if (target) map.set(target, it);
+
+    it.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      const dot = map.get(e.target);
+      if (!dot) return;
+      if (e.isIntersecting) {
+        items.forEach((i) => i.classList.remove('is-active'));
+        dot.classList.add('is-active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+
+  map.forEach((_, el) => io.observe(el));
 }
 
 // ---------- Full-page card view (v4 prototype) ----------
@@ -1352,6 +1530,7 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
     if (!contentHTML || !bodyHost) return;
     const wrap = document.createElement('div');
     wrap.className = 'card-section' + (options.extraClass ? ` ${options.extraClass}` : '');
+    if (options.sectionKey) wrap.setAttribute('data-section', options.sectionKey);
     if (title) {
       const h = document.createElement('h3');
       h.className = 'card-section-heading';
@@ -1376,23 +1555,26 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
     if (card.intro) {
       const wrap = document.createElement('div');
       wrap.className = 'card-section card-section-intro prose';
+      wrap.setAttribute('data-section', 'intro');
       wrap.innerHTML = card.intro;
       bodyHost.appendChild(wrap);
     } else if (card.body) {
       const wrap = document.createElement('div');
       wrap.className = 'card-section prose';
+      wrap.setAttribute('data-section', 'intro');
       wrap.innerHTML = card.body;
       bodyHost.appendChild(wrap);
     }
 
-    renderSection('🎯', 'Why this matters', card.why_matters);
+    renderSection('🎯', 'Why this matters', card.why_matters, { sectionKey: 'why' });
 
     if (card.how_ai_helps && card.ai_wont) {
       const row = document.createElement('div');
       row.className = 'card-row-2col';
-      const mkMini = (emoji, title, content) => {
+      const mkMini = (emoji, title, content, sectionKey) => {
         const w = document.createElement('div');
         w.className = 'card-section card-mini';
+        w.setAttribute('data-section', sectionKey);
         const h = document.createElement('h3');
         h.className = 'card-section-heading';
         const e = document.createElement('span');
@@ -1407,17 +1589,18 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
         w.append(h, body);
         return w;
       };
-      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps));
-      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont));
+      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps, 'how'));
+      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont, 'wont'));
       bodyHost.appendChild(row);
     } else {
-      renderSection('🤖', 'How AI can help', card.how_ai_helps);
-      renderSection('⚠️', "What AI won't do", card.ai_wont);
+      renderSection('🤖', 'How AI can help', card.how_ai_helps, { sectionKey: 'how' });
+      renderSection('⚠️', "What AI won't do", card.ai_wont, { sectionKey: 'wont' });
     }
 
     if (Array.isArray(card.steps) && card.steps.length) {
       const wrap = document.createElement('div');
       wrap.className = 'card-section';
+      wrap.setAttribute('data-section', 'steps');
       const h = document.createElement('h3');
       h.className = 'card-section-heading';
       const e = document.createElement('span');
@@ -1814,6 +1997,9 @@ function route() {
       bgPath = state.lastBgPath || '/';
       modalSlug = parts[1];
     }
+  } else if (parts[0] === 'design-test' && ['a','b','c'].includes(parts[1])) {
+    bgRenderer = () => viewDesignTest('build-your-curriculum', parts[1]);
+    bgPath = `/design-test/${parts[1]}`;
   } else if (parts[0] === 'stages' && parts[1]) {
     bgRenderer = () => viewStage(parts[1]);
     bgPath = `/stages/${parts[1]}`;

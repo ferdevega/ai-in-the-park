@@ -410,6 +410,44 @@
     </section>
   </template>
 
+  <template id="tpl-design-test">
+    <article class="design-page">
+      <div class="design-page-toolbar">
+        <a class="design-page-back" href="/" data-back-link>
+          <span aria-hidden="true">←</span> Back to the library
+        </a>
+        <nav class="design-page-switcher" data-design-switcher aria-label="Design variants">
+          <a href="/design-test/a" data-key="a">A · Callouts</a>
+          <a href="/design-test/b" data-key="b">B · Journal</a>
+          <a href="/design-test/c" data-key="c">C · Docs</a>
+        </nav>
+      </div>
+
+      <header class="design-page-hero">
+        <div class="design-page-eyebrow" data-eyebrow></div>
+        <h1 class="design-page-title" data-title></h1>
+        <div class="design-page-meta" data-meta></div>
+        <p class="design-page-teaser" data-teaser></p>
+      </header>
+
+      <div class="design-page-body-wrap">
+        <nav class="design-c-toc" data-design-c-toc aria-label="Sections"></nav>
+        <div class="design-page-flow">
+          <div data-card-body></div>
+          <section class="design-page-prompt-section" data-prompt-section hidden>
+            <div class="design-page-prompt-label">The prompt</div>
+            <div data-card-prompt></div>
+          </section>
+          <div data-card-tip></div>
+          <section class="design-page-related" data-related hidden>
+            <div class="design-page-related-label">Related cards</div>
+            <div class="design-page-related-grid" data-related-grid></div>
+          </section>
+        </div>
+      </div>
+    </article>
+  </template>
+
   <template id="tpl-card-v4-page">
     <article class="card-v4-page">
       <a class="card-v4-page-back" href="/" data-back-link>
