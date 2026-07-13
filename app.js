@@ -869,16 +869,16 @@ function viewHomeV4() {
         addShelf(stage, topThree, realCards.length, `/stages/${stage.slug}`),
       );
     } else {
-      // Empty stage — synthesize a couple of coming-soon tiles so the shelf still shows
-      const placeholders = [1, 2, 3].map((i) => ({
-        slug: `coming-soon-${stage.slug}-${i}`,
+      // Empty stage — one coming-soon placeholder tile so the shelf still shows
+      const placeholder = {
+        slug: `coming-soon-${stage.slug}`,
         title: 'Coming soon',
         teaser: '',
         coming_soon: true,
         stage: stage.slug,
         level: 'beginner',
-      }));
-      shelvesHost.appendChild(addShelf(stage, placeholders, 0, null));
+      };
+      shelvesHost.appendChild(addShelf(stage, [placeholder], 0, null));
     }
   });
 
