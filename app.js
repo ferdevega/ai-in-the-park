@@ -1243,16 +1243,24 @@ function viewCardV4(slug) {
     }
   }
 
-  // Hero
+  // Hero — inline icon + eyebrow text (editorial header, not banner)
   const iconBox = frag.querySelector('[data-hero-icon]');
-  if (iconBox) iconBox.innerHTML = iconSVG;
+  if (iconBox) iconBox.remove();
 
   const eyebrow = frag.querySelector('[data-eyebrow]');
   if (eyebrow) {
+    if (iconSVG) {
+      const inlineIcon = document.createElement('span');
+      inlineIcon.className = 'card-v4-page-eyebrow-icon';
+      inlineIcon.innerHTML = iconSVG;
+      eyebrow.appendChild(inlineIcon);
+    }
+    const label = document.createElement('span');
     const parts = [];
     if (primaryStage) parts.push(primaryStage.title);
     if (typeText) parts.push(typeText);
-    eyebrow.textContent = parts.join(' · ');
+    label.textContent = parts.join(' · ');
+    eyebrow.appendChild(label);
   }
 
   const titleEl = frag.querySelector('[data-title]');
