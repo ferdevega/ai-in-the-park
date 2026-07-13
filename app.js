@@ -823,28 +823,36 @@ function viewHomeV4() {
     ),
   );
 
-  // Stage rows — top 3 real cards per stage (featured first, then latest), then See-all
+  // Stage rows — every stage gets a shelf; empty stages show a coming-soon placeholder
+  const levelOrder = { beginner: 0, intermediate: 1, advanced: 2 };
   state.stages.forEach((stage) => {
     const inStage = state.cards.filter((c) => {
       const refs = Array.isArray(c.stage) ? c.stage : [c.stage];
       return refs.includes(stage.slug);
     });
-    if (inStage.length === 0) return;
-
     const realCards = inStage.filter((c) => !c.coming_soon);
-    if (realCards.length === 0) return;
 
-    // Sort: featured cards first, then most recent
-    const sorted = realCards.slice().sort((a, b) => {
-      const feat = (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-      if (feat !== 0) return feat;
-      return (b.added || '').localeCompare(a.added || '');
-    });
-    const topThree = sorted.slice(0, 3);
-
-    shelvesHost.appendChild(
-      addShelf(stage, topThree, realCards.length, `/stages/${stage.slug}`),
-    );
+    if (realCards.length > 0) {
+      // Sort by level: beginner → intermediate → advanced
+      const sorted = realCards.slice().sort((a, b) => {
+        return (levelOrder[a.level] ?? 3) - (levelOrder[b.level] ?? 3);
+      });
+      const topThree = sorted.slice(0, 3);
+      shelvesHost.appendChild(
+        addShelf(stage, topThree, realCards.length, `/stages/${stage.slug}`),
+      );
+    } else {
+      // Empty stage — synthesize a couple of coming-soon tiles so the shelf still shows
+      const placeholders = [1, 2, 3].map((i) => ({
+        slug: `coming-soon-${stage.slug}-${i}`,
+        title: 'Coming soon',
+        teaser: '',
+        coming_soon: true,
+        stage: stage.slug,
+        level: 'beginner',
+      }));
+      shelvesHost.appendChild(addShelf(stage, placeholders, 0, null));
+    }
   });
 
   wireWizardOpener();
@@ -869,13 +877,22 @@ function renderV4Card(card, opts = {}) {
   const existingRoleLabel = anchor.querySelector('.card-chips .role-label');
   if (existingRoleLabel) existingRoleLabel.remove();
 
-  // Add a level text label next to the level bars (beginner / intermediate / advanced)
+  // Add a level text label next to the level bars (beginner / intermediate / advanced),
+  // or a "Coming soon" badge if this is a placeholder tile
   const chips = anchor.querySelector('.card-chips');
-  if (chips && card.level) {
-    const levelText = document.createElement('span');
-    levelText.className = 'v4-card-level-text';
-    levelText.textContent = card.level;
-    chips.insertBefore(levelText, chips.firstChild);
+  if (chips) {
+    if (card.coming_soon) {
+      chips.innerHTML = '';
+      const badge = document.createElement('span');
+      badge.className = 'v4-card-coming-soon';
+      badge.textContent = 'Coming soon';
+      chips.appendChild(badge);
+    } else if (card.level) {
+      const levelText = document.createElement('span');
+      levelText.className = 'v4-card-level-text';
+      levelText.textContent = card.level;
+      chips.insertBefore(levelText, chips.firstChild);
+    }
   }
 
   // Inject a header row: big role icon + type text

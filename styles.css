@@ -1422,6 +1422,17 @@ body.view-preview3 .page { padding-top: 12px; padding-bottom: 24px; }
   text-transform: uppercase;
   color: #9a9a9a;
 }
+.v4-card-coming-soon {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a8a09a;
+  padding: 4px 10px;
+  border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 999px;
+}
 
 /* Hover — lift slightly, brighten border */
 .card-preview.v4-card:hover {
