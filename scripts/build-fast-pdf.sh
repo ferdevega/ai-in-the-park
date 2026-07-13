@@ -6,7 +6,7 @@ set -e
 
 CHROME="${CHROME:-/c/Program Files/Google/Chrome/Application/chrome.exe}"
 URL="${URL:-https://ai-in-the-park.vercel.app/downloads/fast}"
-OUT="public/downloads/fast.pdf"
+OUT="downloads/fast.pdf"
 
 mkdir -p "$(dirname "$OUT")"
 
