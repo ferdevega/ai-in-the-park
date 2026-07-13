@@ -111,6 +111,12 @@ const routes = [
     url: `${SITE_URL}/classic`,
   },
   {
+    out: 'downloads/fast/index.html',
+    title: `FAST — a prompting model for designing training with AI`,
+    description: 'A short guide to the FAST model — Frame, Ask, Shape, Tune.',
+    url: `${SITE_URL}/downloads/fast`,
+  },
+  {
     out: 'design-test/a/index.html',
     title: `Design A · Callouts — ${SITE_NAME}`,
     description: 'Card page design test — Notion-style callouts.',

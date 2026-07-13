@@ -616,6 +616,176 @@
     </div>
   </template>
 
+  <template id="tpl-download-fast">
+    <article class="doc-fast">
+      <a class="doc-fast-back" href="/"><span aria-hidden="true">←</span> Back to the library</a>
+
+      <div class="doc-fast-paper">
+        <!-- Cover -->
+        <section class="doc-fast-cover doc-fast-page">
+          <div class="doc-fast-eyebrow">A short guide · AI in the Park</div>
+          <h1 class="doc-fast-title">FAST</h1>
+          <p class="doc-fast-subtitle">A prompting model for designing training with AI.</p>
+          <p class="doc-fast-byline">By Fernando De Vega</p>
+        </section>
+
+        <!-- 1. Why this exists -->
+        <section class="doc-fast-section doc-fast-page">
+          <div class="doc-fast-section-num">01</div>
+          <h2 class="doc-fast-h2">Why this exists</h2>
+
+          <p>Search "the perfect ChatGPT prompt" and you'll find hundreds of libraries selling you the one true incantation. Most of them are put together by people who've never actually built training. They read impressively. They produce generic output.</p>
+
+          <p>There is no perfect prompt. What works is a good-enough prompt that focuses exactly on what you need — and knowing how to fix it when it doesn't. FAST is what I use.</p>
+
+          <p>Frame, Ask, Shape, Tune. Every prompt in every card in this playbook uses them. Skip any one and the output gets worse in a specific way. This guide walks through each, with the mistakes I see people make.</p>
+
+          <p>We'll build one full prompt as we go.</p>
+        </section>
+
+        <!-- 2. The four -->
+        <section class="doc-fast-section doc-fast-page">
+          <div class="doc-fast-section-num">02</div>
+          <h2 class="doc-fast-h2">Frame, Ask, Shape, Tune</h2>
+          <p class="doc-fast-lede">The task we're going to prompt for, section by section: a two-day workshop outline for internal L&amp;D teams learning to write better learning objectives.</p>
+
+          <!-- Frame -->
+          <div class="doc-fast-move" data-letter="F">
+            <div class="doc-fast-move-head">
+              <span class="doc-fast-move-letter">F</span>
+              <div>
+                <h3 class="doc-fast-move-name">Frame</h3>
+                <p class="doc-fast-move-tag">Set the role and the situation.</p>
+              </div>
+            </div>
+            <p>Tell AI who it's being and where it's working. Not "you are an expert" — that word means nothing to the model. Give it a real role with real constraints. Framing is what stops AI from defaulting to marketing voice.</p>
+            <blockquote class="doc-fast-quote">You are a senior instructional designer with 10+ years of experience coaching internal L&amp;D teams. You care about parallel structure across modules, Bloom-verb precision, and defensible seat-time estimates.</blockquote>
+            <div class="doc-fast-mistake">
+              <span class="doc-fast-mistake-label">Common mistake</span>
+              <p>Framing that's too general ("you are an expert educator") or too flattering ("you are the best in the world at..."). Both push the model toward that generic authority voice that reads like a LinkedIn post.</p>
+            </div>
+          </div>
+
+          <!-- Ask -->
+          <div class="doc-fast-move" data-letter="A">
+            <div class="doc-fast-move-head">
+              <span class="doc-fast-move-letter">A</span>
+              <div>
+                <h3 class="doc-fast-move-name">Ask</h3>
+                <p class="doc-fast-move-tag">The actual request.</p>
+              </div>
+            </div>
+            <p>One sentence. One action verb. If your Ask needs a semicolon, it's two Asks. Split them.</p>
+            <blockquote class="doc-fast-quote">Draft the module-by-module outline for the two-day workshop described below.</blockquote>
+            <div class="doc-fast-mistake">
+              <span class="doc-fast-mistake-label">Common mistake</span>
+              <p>Stacking Asks. "Draft the outline AND write the objectives AND suggest activities." Do those in three separate prompts. You'll get better output on each and you'll actually be able to iterate on them.</p>
+            </div>
+          </div>
+
+          <!-- Shape -->
+          <div class="doc-fast-move" data-letter="S">
+            <div class="doc-fast-move-head">
+              <span class="doc-fast-move-letter">S</span>
+              <div>
+                <h3 class="doc-fast-move-name">Shape</h3>
+                <p class="doc-fast-move-tag">Constraints, format, scope, Don'ts.</p>
+              </div>
+            </div>
+            <p>Most of your prompt should live here, and this is where most people cheap out. The more you constrain, the better the output. The model doesn't know your taste. Shape is where you show it.</p>
+            <p>Always include Don'ts. Explicit ones. AI pads by default — you have to remove it.</p>
+            <blockquote class="doc-fast-quote">Format each module as: name, one learning outcome using an Apply-or-higher Bloom verb, a 2-sentence description, and estimated minutes. 6 to 9 modules total, split roughly evenly across the two days. Don't include ice-breakers, energizers, or reflection segments. Don't invent tools or job aids I haven't mentioned.</blockquote>
+            <div class="doc-fast-mistake">
+              <span class="doc-fast-mistake-label">Common mistake</span>
+              <p>Skipping the Don'ts. The output looks fine until you notice it padded the outline with three "team reflection" segments nobody asked for.</p>
+            </div>
+          </div>
+
+          <!-- Tune -->
+          <div class="doc-fast-move" data-letter="T">
+            <div class="doc-fast-move-head">
+              <span class="doc-fast-move-letter">T</span>
+              <div>
+                <h3 class="doc-fast-move-name">Tune</h3>
+                <p class="doc-fast-move-tag">Tell AI to push back.</p>
+              </div>
+            </div>
+            <p>Ask it to state its assumptions, flag ambiguity, and ask you clarifying questions before generating. This is the move most people skip, and it's why so many AI outputs look confident and wrong. Without Tune, the model treats your prompt as complete even when it isn't.</p>
+            <blockquote class="doc-fast-quote">Before drafting, state any assumptions you're making about the audience's baseline familiarity with Bloom's taxonomy, and ask up to three clarifying questions if anything about scope is unclear.</blockquote>
+            <div class="doc-fast-mistake">
+              <span class="doc-fast-mistake-label">Common mistake</span>
+              <p>Treating the first output as final. Tune is what makes it a conversation instead of a one-shot generation.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Put it together -->
+        <section class="doc-fast-section doc-fast-page">
+          <div class="doc-fast-section-num">03</div>
+          <h2 class="doc-fast-h2">Put it together</h2>
+          <p>Frame + Ask + Shape + Tune, in that order, plus the specifics of the task at the end:</p>
+          <div class="doc-fast-full-prompt">
+            <p><span class="doc-fast-part">Frame ·</span> You are a senior instructional designer with 10+ years of experience coaching internal L&amp;D teams. You care about parallel structure across modules, Bloom-verb precision, and defensible seat-time estimates.</p>
+            <p><span class="doc-fast-part">Ask ·</span> Draft the module-by-module outline for the two-day workshop described below.</p>
+            <p><span class="doc-fast-part">Shape ·</span> Format each module as: name, one learning outcome using an Apply-or-higher Bloom verb, a 2-sentence description, and estimated minutes. 6 to 9 modules total, split roughly evenly across the two days. Don't include ice-breakers, energizers, or reflection segments. Don't invent tools or job aids I haven't mentioned.</p>
+            <p><span class="doc-fast-part">Tune ·</span> Before drafting, state any assumptions about the audience's baseline familiarity with Bloom's taxonomy, and ask up to three clarifying questions if anything about scope is unclear.</p>
+            <hr class="doc-fast-full-prompt-rule" />
+            <p>The audience is 12–15 L&amp;D professionals with 2–5 years of experience. Half write objectives for compliance courses, half for leadership programs. The workshop is in-person, one facilitator, one room.</p>
+          </div>
+          <p class="doc-fast-caption">The Ask is the shortest section. Frame, Shape, and Tune around it do most of the work. That's the right ratio.</p>
+        </section>
+
+        <!-- 4. How you know it's working -->
+        <section class="doc-fast-section doc-fast-page">
+          <div class="doc-fast-section-num">04</div>
+          <h2 class="doc-fast-h2">How you know it's working</h2>
+          <ul class="doc-fast-checklist">
+            <li>The output includes your specific constraints, not the generic version of the task.</li>
+            <li>AI asks you a question before generating (that's Tune firing).</li>
+            <li>A stakeholder reads the output as your draft, not "AI slop."</li>
+            <li>You spend more time on the prompt than editing the output.</li>
+          </ul>
+          <p>When the output is confidently wrong, generic, or padded — one of the four is missing or weak. Trace it back.</p>
+        </section>
+
+        <!-- 5. Reference -->
+        <section class="doc-fast-section doc-fast-page doc-fast-reference">
+          <div class="doc-fast-section-num">05</div>
+          <h2 class="doc-fast-h2">The reference</h2>
+          <p class="doc-fast-lede">Pull-out cheat sheet. Screenshot this.</p>
+          <div class="doc-fast-grid">
+            <div class="doc-fast-grid-cell">
+              <div class="doc-fast-grid-letter">F</div>
+              <div class="doc-fast-grid-name">Frame</div>
+              <div class="doc-fast-grid-body">Role + situation. Not "expert." Real constraints.</div>
+            </div>
+            <div class="doc-fast-grid-cell">
+              <div class="doc-fast-grid-letter">A</div>
+              <div class="doc-fast-grid-name">Ask</div>
+              <div class="doc-fast-grid-body">One sentence. One verb. One request.</div>
+            </div>
+            <div class="doc-fast-grid-cell">
+              <div class="doc-fast-grid-letter">S</div>
+              <div class="doc-fast-grid-name">Shape</div>
+              <div class="doc-fast-grid-body">Format + scope + Don'ts. Longest section of the prompt.</div>
+            </div>
+            <div class="doc-fast-grid-cell">
+              <div class="doc-fast-grid-letter">T</div>
+              <div class="doc-fast-grid-name">Tune</div>
+              <div class="doc-fast-grid-body">Push back. Ask questions. Flag assumptions.</div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="doc-fast-footer">
+          <span>AI in the Park</span>
+          <span>·</span>
+          <span>ai-in-the-park.vercel.app</span>
+        </footer>
+      </div>
+    </article>
+  </template>
+
   <template id="tpl-stage-empty">
     <section class="section section-empty">
       <h1 data-empty-title></h1>

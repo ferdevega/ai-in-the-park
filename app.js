@@ -660,6 +660,7 @@ function viewRecent() {
 
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); wireRevealAnimation(document.querySelector('.about-section')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast'));  wireRevealAnimation(document.querySelector('.fast-page')); }
+function viewDownloadFast() { state.view = 'download-fast'; renderSpine(null); mount(tpl('tpl-download-fast')); }
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
 // that expands/collapses to reveal a grid of cards. Vertical-only scroll.
@@ -1311,7 +1312,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c', 'view-download-fast');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -2090,6 +2091,9 @@ function route() {
   } else if (parts[0] === 'fast') {
     bgRenderer = viewFast;
     bgPath = '/fast';
+  } else if (parts[0] === 'downloads' && parts[1] === 'fast') {
+    bgRenderer = viewDownloadFast;
+    bgPath = '/downloads/fast';
   } else if (parts[0] === 'preview') {
     bgRenderer = viewHomeV2;
     bgPath = '/preview';
