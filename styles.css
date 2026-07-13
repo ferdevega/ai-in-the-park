@@ -4734,56 +4734,57 @@ body.view-download-fast .page { padding: 24px 16px 60px; background: #16171b; }
     transparent 4px 8px);
 }
 
-/* 10-second check */
+/* 10-second check — compact 4-column strip so it fits on page 1 */
 .doc-fast-check {
-  padding-top: 26px;
-  padding-bottom: 20px;
+  padding-top: 22px;
+  padding-bottom: 4px;
+  border-top: 2px solid var(--paper-ink);
+  margin-top: 8px;
 }
-.doc-fast-check-head { margin-bottom: 18px; }
+.doc-fast-check-head { margin-bottom: 14px; }
 .doc-fast-check-eyebrow { color: var(--paper-tune); }
 .doc-fast-check-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 22px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 .doc-fast-check-list li {
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 12px;
-  align-items: start;
-  padding: 12px 14px;
+  display: block;
+  padding: 10px 12px;
   border: 1px solid var(--paper-rule);
-  border-left: 3px solid var(--paper-tune);
+  border-top: 3px solid var(--paper-tune);
   border-radius: 4px;
   background: #fdfaf1;
 }
 .doc-fast-check-num {
+  display: block;
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   line-height: 1;
   color: var(--paper-tune);
   letter-spacing: -0.02em;
+  margin-bottom: 6px;
 }
 .doc-fast-check-q {
-  font-size: 0.92rem;
-  line-height: 1.4;
+  font-size: 0.82rem;
+  line-height: 1.35;
   color: var(--paper-ink);
   margin-bottom: 4px;
 }
 .doc-fast-check-note {
-  font-size: 0.78rem;
-  line-height: 1.4;
+  font-size: 0.72rem;
+  line-height: 1.35;
   color: var(--paper-muted);
 }
 .doc-fast-check-outro {
-  margin: 18px 0 0;
+  margin: 12px 0 0;
   font-family: 'Fraunces', Georgia, serif;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--paper-ink);
   text-align: center;
 }
