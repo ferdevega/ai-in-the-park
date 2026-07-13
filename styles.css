@@ -1497,10 +1497,10 @@ body.view-preview3 .page { padding-top: 12px; padding-bottom: 24px; }
   }
   .v4-shelf-mheader-seeall:hover { text-decoration: none; }
 
-  /* Cards get bigger (~82% viewport) so one full card + peek of next is visible */
+  /* Keep the desktop card size on mobile — no need to inflate */
   .v4-shelf-scroll .card-preview.v4-card {
-    flex: 0 0 82vw;
-    width: 82vw;
+    flex: 0 0 260px;
+    width: 260px;
     min-height: 220px;
     scroll-snap-align: start;
   }
@@ -1511,8 +1511,8 @@ body.view-preview3 .page { padding-top: 12px; padding-bottom: 24px; }
 
   /* Compact see-all tile at the tail */
   .v4-see-all {
-    flex: 0 0 40vw;
-    width: 40vw;
+    flex: 0 0 140px;
+    width: 140px;
     min-height: 220px;
     scroll-snap-align: start;
   }
