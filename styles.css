@@ -4374,7 +4374,7 @@ body.view-download-fast .page { padding: 24px 16px 60px; background: #16171b; }
   line-height: 1.6;
   color: #c8c4bb;
   margin: 0 0 14px;
-  max-width: 560px;
+  max-width: none;
 }
 .doc-fast-highlight {
   background: linear-gradient(120deg, #a78bfa 0%, #60a5fa 50%, #34d399 100%);
@@ -4393,23 +4393,29 @@ body.view-download-fast .page { padding: 24px 16px 60px; background: #16171b; }
   text-transform: uppercase;
 }
 
-/* Signature block — labeled 5-icon strip on the right side of the dark header */
+/* Signature block — 5 icons stacked over the site link, top-right of dark header */
 .doc-fast-signature-block {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 14px;
   padding-bottom: 6px;
 }
-.doc-fast-signature-label {
+.doc-fast-link {
   font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #9a968d;
-  text-align: right;
-  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: #a78bfa;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.4);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.doc-fast-link:hover {
+  color: #c4b5fd;
+  border-bottom-color: rgba(167, 139, 250, 0.9);
+  text-decoration: none;
 }
 .doc-fast-signature {
   display: flex;
@@ -4452,27 +4458,23 @@ body.view-download-fast .page { padding: 24px 16px 60px; background: #16171b; }
 .doc-fast-quad[data-move="tune"]  { --qc: var(--paper-tune); }
 
 .doc-fast-quad-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
   margin-bottom: 10px;
-}
-.doc-fast-quad-letter {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 700;
-  font-size: 3rem;
-  line-height: 1;
-  color: var(--qc);
-  letter-spacing: -0.04em;
-  flex: 0 0 auto;
 }
 .doc-fast-quad-name {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 1.9rem;
+  line-height: 1;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--paper-ink);
+}
+/* Big colored initial — the F/A/S/T is the first letter of the word, aligned with it */
+.doc-fast-quad-letter {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  color: var(--qc);
+  letter-spacing: -0.03em;
 }
 .doc-fast-quad-tag {
   font-size: 0.82rem;
