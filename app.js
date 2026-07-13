@@ -1468,17 +1468,36 @@ function viewCardV4(slug) {
     promptSection.hidden = false;
   }
 
-  // Related cards (v4 style)
+  // Related — as a compact list of lines (not cards), inside the frame
   const related = (card.related || []).map(cardBySlug).filter(Boolean);
   if (related.length) {
     const relatedWrap = frag.querySelector('[data-related]');
-    const relatedGrid = frag.querySelector('[data-related-grid]');
-    if (relatedWrap && relatedGrid) {
+    const relatedList = frag.querySelector('[data-related-list]');
+    if (relatedWrap && relatedList) {
       relatedWrap.hidden = false;
-      related.forEach((c, i) => {
+      related.forEach((c) => {
         const cs = cardStages(c);
         const col = cs[0] ? stageColorVar(cs[0]) : stageColor;
-        relatedGrid.appendChild(renderV4Card(c, { color: col }));
+        const relType = cardTypes(c)[0];
+        const relIcon = ROLE_ICONS[relType] || '';
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = cardHref(c);
+        a.className = 'card-detail-related-line';
+        a.style.setProperty('--role-color', col);
+        a.innerHTML = `
+          <span class="card-detail-related-icon">${relIcon}</span>
+          <span class="card-detail-related-title"></span>
+          <span class="card-detail-related-meta"></span>
+          <span class="card-detail-related-arrow" aria-hidden="true">→</span>
+        `;
+        a.querySelector('.card-detail-related-title').textContent = c.title;
+        const meta = [];
+        if (cs[0]) meta.push(cs[0].title);
+        if (c.level) meta.push(levelLabel(c.level));
+        a.querySelector('.card-detail-related-meta').textContent = meta.join(' · ');
+        li.appendChild(a);
+        relatedList.appendChild(li);
       });
     }
   }
