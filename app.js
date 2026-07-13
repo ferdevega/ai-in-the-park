@@ -521,10 +521,14 @@ function viewStage(slug) {
   const groupsHost = $('[data-stage-groups]', frag);
   const order = ['beginner', 'intermediate', 'advanced'];
 
+  let groupIndex = 0;
   const buildGroup = (label, groupCards) => {
     if (groupCards.length === 0) return;
     const section = document.createElement('section');
     section.className = 'stage-v4-group';
+    section.setAttribute('data-reveal', '');
+    section.style.setProperty('--reveal-delay', `${Math.min(groupIndex, 3) * 80}ms`);
+    groupIndex++;
 
     const header = document.createElement('div');
     header.className = 'stage-v4-group-header';
@@ -553,7 +557,14 @@ function viewStage(slug) {
     if (inLevel.length > 0) buildGroup(level, inLevel);
   });
 
+  // Give the stage hero a reveal too so it glides in on load
+  const heroEl = frag.querySelector('.stage-v4-hero');
+  if (heroEl) {
+    heroEl.setAttribute('data-reveal', '');
+  }
+
   mount(frag);
+  wireRevealAnimation(document.querySelector('.stage-v4'));
 }
 
 // Renders cards grouped into Beginner / Intermediate / Advanced sections.
@@ -647,8 +658,8 @@ function viewRecent() {
   mount(frag);
 }
 
-function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); }
-function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast')); }
+function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); wireRevealAnimation(document.querySelector('.about-section')); }
+function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast'));  wireRevealAnimation(document.querySelector('.fast-page')); }
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
 // that expands/collapses to reveal a grid of cards. Vertical-only scroll.

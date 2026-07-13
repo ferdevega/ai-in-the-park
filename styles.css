@@ -1150,9 +1150,9 @@ body.view-preview3 .landing-v4 {
   margin: 0 auto;
 }
 
-/* Left-aligned hero — title, subtitle, subscribe stack in the top-left */
+/* Left-aligned hero — tightened so the second shelf peeks into view on first load */
 .v4-hero-strip {
-  margin: 20px 0 40px;
+  margin: 8px 0 20px;
   max-width: 820px;
 }
 .v4-hero-h1 {
@@ -1172,7 +1172,7 @@ body.view-preview3 .landing-v4 {
 
 /* Subscribe inside the hero — left-aligned */
 .v4-hero-subscribe {
-  margin: 22px 0 0;
+  margin: 14px 0 0;
   max-width: 560px;
   padding: 0;
   background: transparent;
@@ -1198,7 +1198,7 @@ body.view-preview3 .landing-v4 {
   .v4-hero-line { font-size: 0.95rem; }
 }
 
-.v4-shelves { display: flex; flex-direction: column; gap: 44px; margin: 8px 0 40px; }
+.v4-shelves { display: flex; flex-direction: column; gap: 32px; margin: 0 0 40px; }
 
 /* Shelf — the wrapper for one horizontal row */
 .v4-shelf {
@@ -4160,6 +4160,45 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
   margin: 0;
   max-width: 720px;
   font-style: italic;
+}
+
+/* ============================================================
+   Content card — shared frame for About / FAST / other meta pages.
+   Mirrors the card-detail-frame DNA (border, top-glow, rounded, padded)
+   but uses a signature purple accent instead of a stage color.
+   ============================================================ */
+.content-card {
+  --accent: #a78bfa;
+  position: relative;
+  background: var(--surface-solid);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--glass-border));
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 40px 48px 36px;
+  margin: 20px auto 60px;
+  max-width: 900px;
+}
+.content-card::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 240px;
+  background: radial-gradient(ellipse at 50% -40%,
+    color-mix(in srgb, var(--accent) 50%, transparent) 0%,
+    transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+.content-card > * { position: relative; z-index: 1; }
+.content-card-fast { --accent: var(--r-creator); max-width: 980px; }
+.content-card-about { --accent: var(--r-thought-partner); }
+
+/* Neutralize the .fast-page / .about-section max-width so the card frame controls it */
+.fast-page.content-card { max-width: 980px; }
+
+@media (max-width: 720px) {
+  .content-card { padding: 28px 22px 26px; border-radius: 16px; margin: 12px auto 40px; }
 }
 
 /* ============================================================
