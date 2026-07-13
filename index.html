@@ -621,15 +621,18 @@
       <a class="doc-fast-back" href="/"><span aria-hidden="true">←</span> Back to the library</a>
 
       <div class="doc-fast-paper">
-        <!-- Header band -->
+        <!-- Dark header band with gradient FAST word-mark -->
         <header class="doc-fast-header">
           <div class="doc-fast-header-text">
-            <h1 class="doc-fast-title">FAST</h1>
+            <h1 class="doc-fast-title"><span class="doc-fast-title-gradient">FAST</span></h1>
             <p class="doc-fast-tagline"><em>A simple formula for prompting.</em></p>
             <p class="doc-fast-intro">You'll see a lot of posts online that talk about the "perfect prompt." Forget those. You don't need that. What you need is a "good enough prompt" that focuses exactly on what <span class="doc-fast-highlight">YOU</span> need. Here's a framework I put together that you can use while prompting.</p>
             <p class="doc-fast-byline">By Fernando De Vega · AI in the Park</p>
           </div>
-          <div class="doc-fast-signature" data-doc-signature aria-hidden="true"></div>
+          <div class="doc-fast-signature-block">
+            <span class="doc-fast-signature-label">The five moves<br />seen in every card ↓</span>
+            <div class="doc-fast-signature" data-doc-signature aria-hidden="true"></div>
+          </div>
         </header>
 
         <!-- 4-quadrant grid — the heart of the doc -->
@@ -724,7 +727,7 @@
         </div>
 
         <!-- Bottom band — how you know it's working -->
-        <footer class="doc-fast-footer-band">
+        <section class="doc-fast-footer-band">
           <div class="doc-fast-footer-title">You'll know it's working when…</div>
           <ul class="doc-fast-checks">
             <li>The output has your specific constraints, not the generic version.</li>
@@ -732,8 +735,93 @@
             <li>A stakeholder reads the output as your draft.</li>
             <li>You spend more time on the prompt than editing.</li>
           </ul>
-          <div class="doc-fast-site">AI in the Park · ai-in-the-park.vercel.app</div>
-        </footer>
+        </section>
+
+        <!-- Sign-off — photo + bio + park farewell -->
+        <section class="doc-fast-signoff">
+          <img class="doc-fast-signoff-photo" src="/assets/Fer.jpeg" alt="Fernando De Vega" />
+          <div class="doc-fast-signoff-text">
+            <p class="doc-fast-signoff-bio">
+              I'm <strong>Fer</strong>. Argentinian, living in New York for the last five years, walking around Central Park with my dog Pericles most mornings. I've been an instructional designer for 15+ years. I've built things that worked and things that absolutely did not.
+            </p>
+            <p class="doc-fast-signoff-farewell">See you in the park.</p>
+            <p class="doc-fast-signoff-site">AI in the Park · ai-in-the-park.vercel.app</p>
+          </div>
+        </section>
+
+        <!-- ============ PAGE 2 ============ -->
+        <div class="doc-fast-pagebreak"></div>
+
+        <!-- Master template — printable fill-in card -->
+        <section class="doc-fast-template">
+          <div class="doc-fast-template-head">
+            <div class="doc-fast-template-eyebrow">Fill-in template</div>
+            <h2 class="doc-fast-template-title">Your next prompt</h2>
+            <p class="doc-fast-template-sub">Print this. Pin it. Fill it in before you paste anything into AI.</p>
+          </div>
+
+          <div class="doc-fast-template-card">
+            <div class="doc-fast-template-row" data-move="frame">
+              <div class="doc-fast-template-label"><span class="doc-fast-template-letter">F</span> Frame — role and situation</div>
+              <div class="doc-fast-template-lines"><span></span><span></span></div>
+            </div>
+            <div class="doc-fast-template-row" data-move="ask">
+              <div class="doc-fast-template-label"><span class="doc-fast-template-letter">A</span> Ask — one sentence, one verb</div>
+              <div class="doc-fast-template-lines"><span></span></div>
+            </div>
+            <div class="doc-fast-template-row" data-move="shape">
+              <div class="doc-fast-template-label"><span class="doc-fast-template-letter">S</span> Shape — constraints, format, Don'ts</div>
+              <div class="doc-fast-template-lines"><span></span><span></span><span></span></div>
+            </div>
+            <div class="doc-fast-template-row" data-move="tune">
+              <div class="doc-fast-template-label"><span class="doc-fast-template-letter">T</span> Tune — push back</div>
+              <div class="doc-fast-template-lines"><span></span><span></span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10-second check -->
+        <section class="doc-fast-check">
+          <div class="doc-fast-check-head">
+            <div class="doc-fast-check-eyebrow">Before you hit send</div>
+            <h2 class="doc-fast-check-title">The 10-second check</h2>
+          </div>
+          <ol class="doc-fast-check-list">
+            <li>
+              <span class="doc-fast-check-num">01</span>
+              <div>
+                <div class="doc-fast-check-q">Did I <strong>frame</strong> with a real role?</div>
+                <div class="doc-fast-check-note">Not "you are an expert." A real role with real constraints.</div>
+              </div>
+            </li>
+            <li>
+              <span class="doc-fast-check-num">02</span>
+              <div>
+                <div class="doc-fast-check-q">Is my <strong>ask</strong> one sentence with one verb?</div>
+                <div class="doc-fast-check-note">If it needs a semicolon or an "AND," split it into two prompts.</div>
+              </div>
+            </li>
+            <li>
+              <span class="doc-fast-check-num">03</span>
+              <div>
+                <div class="doc-fast-check-q">Did I include explicit <strong>Don'ts</strong>?</div>
+                <div class="doc-fast-check-note">AI pads by default. Name the filler you don't want.</div>
+              </div>
+            </li>
+            <li>
+              <span class="doc-fast-check-num">04</span>
+              <div>
+                <div class="doc-fast-check-q">Did I tell it to <strong>push back</strong> before generating?</div>
+                <div class="doc-fast-check-note">State assumptions. Ask questions. The move most people skip.</div>
+              </div>
+            </li>
+          </ol>
+          <p class="doc-fast-check-outro">If any answer is no — fix that move first, before hitting send.</p>
+        </section>
+
+        <div class="doc-fast-page2-footer">
+          AI in the Park · ai-in-the-park.vercel.app
+        </div>
       </div>
     </article>
   </template>
