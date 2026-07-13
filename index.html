@@ -426,18 +426,17 @@
         </div>
       </header>
 
-      <div class="card-v4-page-columns">
-        <div class="card-v4-page-main">
-          <div data-card-body></div>
-          <div data-card-tip></div>
-          <section class="card-v4-page-related" data-related hidden>
-            <div class="card-v4-page-related-label">Related cards</div>
-            <div class="card-v4-page-related-grid" data-related-grid></div>
-          </section>
-        </div>
-        <aside class="card-v4-page-aside">
-          <div class="card-v4-page-aside-inner" data-card-prompt></div>
-        </aside>
+      <div class="card-v4-page-flow">
+        <div data-card-body></div>
+        <section class="card-v4-page-prompt-section" data-prompt-section hidden>
+          <div class="card-v4-page-prompt-label">The prompt</div>
+          <div data-card-prompt></div>
+        </section>
+        <div data-card-tip></div>
+        <section class="card-v4-page-related" data-related hidden>
+          <div class="card-v4-page-related-label">Related cards</div>
+          <div class="card-v4-page-related-grid" data-related-grid></div>
+        </section>
       </div>
     </article>
   </template>

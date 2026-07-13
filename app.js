@@ -1285,18 +1285,16 @@ function viewCardV4(slug) {
     else teaserEl.remove();
   }
 
-  // Body sections (main column) + prompt (aside) + tip (below body)
+  // Single-column flow — body, then prompt section (if any), then pro tip
   const bodyHost = frag.querySelector('[data-card-body]');
   const promptHost = frag.querySelector('[data-card-prompt]');
   const tipHost = frag.querySelector('[data-card-tip]');
   appendCardSections(card, { bodyHost, promptHost, tipHost });
 
-  // If no prompt, collapse the aside so main takes full width
-  if (promptHost && promptHost.childElementCount === 0) {
-    const aside = frag.querySelector('.card-v4-page-aside');
-    if (aside) aside.remove();
-    const columns = frag.querySelector('.card-v4-page-columns');
-    if (columns) columns.classList.add('is-single-column');
+  // Show the prompt section wrapper only if the card actually has a prompt
+  const promptSection = frag.querySelector('[data-prompt-section]');
+  if (promptSection && promptHost && promptHost.childElementCount > 0) {
+    promptSection.hidden = false;
   }
 
   // Related cards (v4 style)
@@ -1317,11 +1315,11 @@ function viewCardV4(slug) {
   // Tag each major block with data-reveal so it fades in on scroll
   const reveals = [
     frag.querySelector('.card-v4-page-hero'),
-    frag.querySelector('.card-v4-page-columns'),
-  ];
-  reveals.filter(Boolean).forEach((el, i) => {
+    ...frag.querySelectorAll('.card-v4-page-flow > *'),
+  ].filter(Boolean);
+  reveals.forEach((el, i) => {
     el.setAttribute('data-reveal', '');
-    el.style.setProperty('--reveal-delay', `${i * 80}ms`);
+    el.style.setProperty('--reveal-delay', `${Math.min(i, 4) * 60}ms`);
   });
 
   mount(frag);
