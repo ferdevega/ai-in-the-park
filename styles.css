@@ -1451,12 +1451,71 @@ body.view-preview3 .page { padding-top: 12px; padding-bottom: 24px; }
 .card-preview.v4-card.card-preview-coming-soon .v4-card-role-icon { color: #7a746e; }
 .card-preview.v4-card.card-preview-coming-soon .teaser { display: none; }
 
+/* Mobile-only shelf header — hidden on desktop */
+.v4-shelf-mheader { display: none; }
+
 @media (max-width: 720px) {
   body.view-preview3 .page { padding: 16px 18px 32px; }
-  .v4-cat-tile { flex: 0 0 220px; width: 220px; min-height: 220px; position: static; }
-  .v4-shelf-scroll .card-preview.v4-card { flex: 0 0 260px; width: 260px; min-height: 220px; }
-  .v4-cat-title { font-size: 1.4rem; }
-  .v4-see-all { flex: 0 0 130px; width: 130px; min-height: 220px; }
+
+  /* Kill the big category tile on mobile — replaced by a header row above the cards */
+  .v4-cat-tile { display: none; }
+
+  /* Show the mobile shelf header (title + count + see all) above the horizontal scroll */
+  .v4-shelf-mheader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 2px 10px;
+    border-bottom: 1px solid color-mix(in srgb, var(--shelf-color, #888) 30%, rgba(255,255,255,0.08));
+    margin-bottom: 12px;
+  }
+  .v4-shelf-mheader-title {
+    font-family: var(--heading);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--text);
+  }
+  .v4-shelf-mheader-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9a9a9a;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .v4-shelf-mheader-seeall {
+    color: var(--shelf-color, var(--text));
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .v4-shelf-mheader-seeall:hover { text-decoration: none; }
+
+  /* Cards get bigger (~82% viewport) so one full card + peek of next is visible */
+  .v4-shelf-scroll .card-preview.v4-card {
+    flex: 0 0 82vw;
+    width: 82vw;
+    min-height: 220px;
+    scroll-snap-align: start;
+  }
+  .v4-shelf-scroll {
+    scroll-snap-type: x mandatory;
+    padding-left: 0;
+  }
+
+  /* Compact see-all tile at the tail */
+  .v4-see-all {
+    flex: 0 0 40vw;
+    width: 40vw;
+    min-height: 220px;
+    scroll-snap-align: start;
+  }
 }
 
 /* =============================================================

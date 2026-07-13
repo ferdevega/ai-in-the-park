@@ -766,13 +766,40 @@ function viewHomeV4() {
     section.className = 'v4-shelf';
     section.setAttribute('data-v4-shelf', '');
 
+    const color = stage.color || stageColorVar(stage);
+    section.style.setProperty('--shelf-color', color);
+
+    // Mobile-only header (hidden on desktop). Title + count + See all link.
+    const mHeader = document.createElement('div');
+    mHeader.className = 'v4-shelf-mheader';
+    const mTitle = document.createElement('h2');
+    mTitle.className = 'v4-shelf-mheader-title';
+    mTitle.textContent = stage.title;
+    mHeader.appendChild(mTitle);
+    const mMeta = document.createElement('div');
+    mMeta.className = 'v4-shelf-mheader-meta';
+    const countText = cardCount === 0
+      ? 'Coming soon'
+      : `${cardCount} ${cardCount === 1 ? 'card' : 'cards'}`;
+    const countEl = document.createElement('span');
+    countEl.textContent = countText;
+    mMeta.appendChild(countEl);
+    if (seeAllHref) {
+      const seeAll = document.createElement('a');
+      seeAll.className = 'v4-shelf-mheader-seeall';
+      seeAll.href = seeAllHref;
+      seeAll.innerHTML = 'See all <span aria-hidden="true">→</span>';
+      mMeta.appendChild(seeAll);
+    }
+    mHeader.appendChild(mMeta);
+    section.appendChild(mHeader);
+
     const scroll = document.createElement('div');
     scroll.className = 'v4-shelf-scroll';
 
     // Category tile — same size as cards, solid stage color
     const tile = document.createElement('div');
     tile.className = 'v4-cat-tile';
-    const color = stage.color || stageColorVar(stage);
     tile.style.setProperty('--cat-color', color);
     tile.innerHTML = `
       <h2 class="v4-cat-title">${stage.title}</h2>
