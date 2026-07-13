@@ -456,24 +456,29 @@
 
       <div class="card-detail-frame">
         <header class="card-detail-header">
-          <div class="card-detail-role-icon" data-hero-icon></div>
-          <span class="card-detail-role-type" data-role-type></span>
+          <div class="card-detail-header-role">
+            <div class="card-detail-role-icon" data-hero-icon></div>
+            <span class="card-detail-role-type" data-role-type></span>
+          </div>
+          <div class="card-detail-header-info">
+            <div class="card-detail-stage-tag" data-stage-tag></div>
+            <h1 class="card-detail-title" data-title></h1>
+            <p class="card-detail-teaser" data-teaser></p>
+          </div>
         </header>
 
-        <div class="card-detail-hero">
-          <div class="card-detail-stage-tag" data-stage-tag></div>
-          <h1 class="card-detail-title" data-title></h1>
-          <p class="card-detail-teaser" data-teaser></p>
+        <div class="card-detail-body-columns">
+          <div class="card-detail-main">
+            <div data-card-body></div>
+            <div class="card-detail-tip" data-card-tip></div>
+          </div>
+          <aside class="card-detail-aside">
+            <section class="card-detail-prompt-wrap" data-prompt-section hidden>
+              <div class="card-detail-prompt-label">The prompt</div>
+              <div data-card-prompt></div>
+            </section>
+          </aside>
         </div>
-
-        <div class="card-detail-body" data-card-body></div>
-
-        <section class="card-detail-prompt-wrap" data-prompt-section hidden>
-          <div class="card-detail-prompt-label">The prompt</div>
-          <div data-card-prompt></div>
-        </section>
-
-        <div class="card-detail-tip" data-card-tip></div>
 
         <footer class="card-detail-footer">
           <span class="level-bars" data-level-bars></span>

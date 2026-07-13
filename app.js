@@ -1454,6 +1454,14 @@ function viewCardV4(slug) {
   const tipHost = frag.querySelector('[data-card-tip]');
   appendCardSections(card, { bodyHost, promptHost, tipHost });
 
+  // Move any inline figure (gif) to the top of the intro so text wraps around it
+  const intro = bodyHost && bodyHost.querySelector('[data-section="intro"]');
+  if (intro) {
+    intro.querySelectorAll('figure, .inline-gif-wrap').forEach((fig) => {
+      intro.insertBefore(fig, intro.firstChild);
+    });
+  }
+
   // Show the prompt section wrapper only if the card actually has a prompt
   const promptSection = frag.querySelector('[data-prompt-section]');
   if (promptSection && promptHost && promptHost.childElementCount > 0) {
