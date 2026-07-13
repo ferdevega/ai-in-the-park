@@ -4162,14 +4162,151 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
   font-style: italic;
 }
 
-/* Single-column vertical flow */
-.card-v4-page-flow {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  margin-bottom: 60px;
+/* ============================================================
+   Card page — the whole detail is one BIG CARD.
+   Mirrors home shelf card DNA: same border, same top glow,
+   same header (role-icon + type), same footer (level bars).
+   ============================================================ */
+.card-detail-frame {
+  position: relative;
+  background: var(--surface-solid);
+  border: 1px solid color-mix(in srgb, var(--stage-color, var(--r-creator)) 24%, var(--glass-border));
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 40px 48px 32px;
+  margin: 0 0 40px;
 }
-.card-v4-page-flow > * { min-width: 0; }
+/* Diffuse stage-color glow along the top edge — matches home cards but bigger */
+.card-detail-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 240px;
+  background: radial-gradient(ellipse at 50% -40%,
+    color-mix(in srgb, var(--stage-color, var(--r-creator)) 55%, transparent) 0%,
+    transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+.card-detail-frame > * { position: relative; z-index: 1; }
+
+/* Header row — role icon + type text (same as home card, larger) */
+.card-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.card-detail-role-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--stage-color);
+  flex: 0 0 auto;
+}
+.card-detail-role-icon svg { width: 100%; height: 100%; }
+.card-detail-role-type {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--stage-color) 78%, white 22%);
+}
+
+/* Hero — stage tag, title, teaser */
+.card-detail-hero {
+  margin-bottom: 32px;
+}
+.card-detail-stage-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+  margin-bottom: 10px;
+}
+.card-detail-title {
+  font-family: var(--heading);
+  font-size: clamp(2rem, 3.6vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+  margin: 0 0 14px;
+  color: var(--text);
+}
+.card-detail-teaser {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #c8c8c8;
+  margin: 0;
+  font-style: italic;
+  max-width: 720px;
+}
+
+/* Body — sections flow, subtle hairline dividers between them (inside one card) */
+.card-detail-body {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.card-detail-body > * {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.card-detail-body > *:last-child { border-bottom: none; padding-bottom: 8px; }
+.card-detail-body > *:first-child { padding-top: 4px; }
+/* Pull the intro (which often has an emoji/gif inline) to full available width */
+.card-detail-body [data-section="intro"] { max-width: 720px; }
+
+/* Prompt — inside the same card frame, its own subtle inner surface */
+.card-detail-prompt-wrap {
+  margin: 24px 0 0;
+  padding: 22px 26px;
+  background: color-mix(in oklab, var(--stage-color) 8%, rgba(255,255,255,0.02));
+  border: 1px solid color-mix(in oklab, var(--stage-color) 22%, rgba(255,255,255,0.06));
+  border-radius: 14px;
+}
+.card-detail-prompt-wrap .prompt-block,
+.card-detail-prompt-wrap .prompt-fast-block {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.card-detail-prompt-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--stage-color);
+  margin: 0 0 14px;
+}
+
+.card-detail-tip { margin-top: 24px; }
+.card-detail-tip:empty { display: none; }
+
+/* Footer — level bars + text, matches home shelf card footer */
+.card-detail-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+@media (max-width: 720px) {
+  .card-detail-frame { padding: 28px 22px 24px; border-radius: 16px; }
+  .card-detail-role-icon { width: 44px; height: 44px; }
+  .card-detail-prompt-wrap { padding: 18px 18px; }
+}
 
 /* Prompt section — big, framed, hero-of-the-page feel (Cookwell's "Method" energy) */
 .card-v4-page-prompt-section {

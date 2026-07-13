@@ -1408,7 +1408,9 @@ function viewCardV4(slug) {
   const typeText = roleLabelTextForType(type) || '';
 
   const article = frag.querySelector('.card-v4-page');
+  const frame = frag.querySelector('.card-detail-frame');
   if (article) article.style.setProperty('--stage-color', stageColor);
+  if (frame) frame.style.setProperty('--stage-color', stageColor);
 
   // Back link — points to the primary stage if we know it, else home
   const backLink = frag.querySelector('[data-back-link]');
@@ -1421,47 +1423,30 @@ function viewCardV4(slug) {
     }
   }
 
-  // Hero — inline icon + eyebrow text (editorial header, not banner)
+  // Card header — role icon + role-type text (same DNA as home shelf card)
   const iconBox = frag.querySelector('[data-hero-icon]');
-  if (iconBox) iconBox.remove();
+  if (iconBox) iconBox.innerHTML = iconSVG;
+  const roleTypeEl = frag.querySelector('[data-role-type]');
+  if (roleTypeEl) roleTypeEl.textContent = typeText;
 
-  const eyebrow = frag.querySelector('[data-eyebrow]');
-  if (eyebrow) {
-    if (iconSVG) {
-      const inlineIcon = document.createElement('span');
-      inlineIcon.className = 'card-v4-page-eyebrow-icon';
-      inlineIcon.innerHTML = iconSVG;
-      eyebrow.appendChild(inlineIcon);
-    }
-    const label = document.createElement('span');
-    const parts = [];
-    if (primaryStage) parts.push(primaryStage.title);
-    if (typeText) parts.push(typeText);
-    label.textContent = parts.join(' · ');
-    eyebrow.appendChild(label);
-  }
+  // Hero: stage tag, title, teaser
+  const stageTagEl = frag.querySelector('[data-stage-tag]');
+  if (stageTagEl && primaryStage) stageTagEl.textContent = primaryStage.title;
 
   const titleEl = frag.querySelector('[data-title]');
   if (titleEl) titleEl.textContent = card.title;
-
-  const metaEl = frag.querySelector('[data-meta]');
-  if (metaEl) {
-    const levelWrap = document.createElement('span');
-    levelWrap.className = 'card-v4-page-level';
-    const bars = document.createElement('span');
-    bars.className = 'level-bars';
-    renderLevelBars(bars, card.level);
-    const levelTextEl = document.createElement('span');
-    levelTextEl.textContent = levelLabel(card.level);
-    levelWrap.append(bars, levelTextEl);
-    metaEl.appendChild(levelWrap);
-  }
 
   const teaserEl = frag.querySelector('[data-teaser]');
   if (teaserEl) {
     if (card.teaser) teaserEl.textContent = card.teaser;
     else teaserEl.remove();
   }
+
+  // Footer level bars + text (mirrors home shelf card footer)
+  const levelBarsEl = frag.querySelector('[data-level-bars]');
+  if (levelBarsEl) renderLevelBars(levelBarsEl, card.level);
+  const levelTextEl2 = frag.querySelector('[data-level-text]');
+  if (levelTextEl2) levelTextEl2.textContent = levelLabel(card.level);
 
   // Single-column flow — body, then prompt section (if any), then pro tip
   const bodyHost = frag.querySelector('[data-card-body]');
@@ -1490,14 +1475,14 @@ function viewCardV4(slug) {
     }
   }
 
-  // Tag each major block with data-reveal so it fades in on scroll
+  // Reveal the card frame, then the related section
   const reveals = [
-    frag.querySelector('.card-v4-page-hero'),
-    ...frag.querySelectorAll('.card-v4-page-flow > *'),
+    frag.querySelector('.card-detail-frame'),
+    frag.querySelector('.card-v4-page-related'),
   ].filter(Boolean);
   reveals.forEach((el, i) => {
     el.setAttribute('data-reveal', '');
-    el.style.setProperty('--reveal-delay', `${Math.min(i, 4) * 60}ms`);
+    el.style.setProperty('--reveal-delay', `${i * 120}ms`);
   });
 
   mount(frag);
