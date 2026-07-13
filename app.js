@@ -660,7 +660,22 @@ function viewRecent() {
 
 function viewAbout()    { state.view = 'about';    renderSpine(null); mount(tpl('tpl-about')); wireRevealAnimation(document.querySelector('.about-section')); }
 function viewFast()     { state.view = 'fast';     renderSpine(null); mount(tpl('tpl-fast'));  wireRevealAnimation(document.querySelector('.fast-page')); }
-function viewDownloadFast() { state.view = 'download-fast'; renderSpine(null); mount(tpl('tpl-download-fast')); }
+function viewDownloadFast() {
+  state.view = 'download-fast';
+  renderSpine(null);
+  mount(tpl('tpl-download-fast'));
+  // Populate the 5-icon signature strip in the header (static, no shuffle)
+  const sig = document.querySelector('[data-doc-signature]');
+  if (sig) {
+    ['creator', 'thought-partner', 'auditor', 'tool', 'panel'].forEach((k) => {
+      const el = document.createElement('span');
+      el.className = 'doc-fast-sig-icon';
+      el.setAttribute('data-role', k);
+      el.innerHTML = ROLE_ICONS[k] || '';
+      sig.appendChild(el);
+    });
+  }
+}
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
 // that expands/collapses to reveal a grid of cards. Vertical-only scroll.
