@@ -3395,8 +3395,15 @@ body.modal-open { overflow: hidden; }
   margin: 0 0 36px;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
+  /* Force all four F-A-S-T moves to sit on one row on desktop */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 820px) {
+  .fast-moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .fast-moves { grid-template-columns: 1fr; }
 }
 .fast-move {
   position: relative;
@@ -4202,13 +4209,35 @@ body.view-fast .layout { grid-template-columns: 1fr; }
 }
 .content-card > * { position: relative; z-index: 1; }
 .content-card-fast { --accent: var(--r-creator); max-width: 980px; }
-.content-card-about { --accent: var(--r-thought-partner); }
+.content-card-about { --accent: var(--r-thought-partner); max-width: 980px; }
 
 /* Neutralize the .fast-page / .about-section max-width so the card frame controls it */
 .fast-page.content-card { max-width: 980px; }
 
+/* Wrap that holds the back link above the card */
+.content-card-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.content-card-wrap .content-card { margin-top: 0; }
+.content-card-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #9a9a9a;
+  text-decoration: none;
+  margin: 20px 0 20px;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+.content-card-back:hover { color: var(--text); text-decoration: none; }
+
 @media (max-width: 720px) {
   .content-card { padding: 28px 22px 26px; border-radius: 16px; margin: 12px auto 40px; }
+  .content-card-wrap { padding: 0 16px; }
 }
 
 /* ============================================================
