@@ -1539,7 +1539,9 @@ function viewCardV4(slug) {
 
 function wireRevealAnimation(root) {
   if (!root || !('IntersectionObserver' in window)) return;
-  const targets = root.querySelectorAll('[data-reveal]');
+  const targets = Array.from(root.querySelectorAll('[data-reveal]'));
+  // Include root itself if it carries data-reveal (querySelectorAll skips the root)
+  if (root.hasAttribute && root.hasAttribute('data-reveal')) targets.push(root);
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
