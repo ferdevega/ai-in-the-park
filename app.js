@@ -885,6 +885,52 @@ function viewHomeV4() {
   wireWizardOpener();
   wireV4ScrollAnimation(shelvesHost);
   mount(frag);
+  wireHeroSignature();
+}
+
+// Populates the top-right signature strip with the 5 role icons and
+// shuffles their positions every ~2.8s using a FLIP animation.
+function wireHeroSignature() {
+  const host = document.querySelector('[data-hero-signature]');
+  if (!host) return;
+  host.innerHTML = '';
+  const keys = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
+  keys.forEach((k) => {
+    const el = document.createElement('span');
+    el.className = 'v4-hero-signature-item';
+    el.setAttribute('data-role', k);
+    el.innerHTML = ROLE_ICONS[k] || '';
+    host.appendChild(el);
+  });
+
+  const id = setInterval(() => {
+    if (!host.isConnected) {
+      clearInterval(id);
+      return;
+    }
+    const items = Array.from(host.children);
+    if (items.length < 2) return;
+    // Record current positions before reordering
+    const positions = new Map(items.map((el) => [el, el.getBoundingClientRect().left]));
+    // Shuffle DOM order — Fisher-Yates
+    const shuffled = items.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    shuffled.forEach((el) => host.appendChild(el));
+    // FLIP: apply inverse transform, then transition to zero
+    items.forEach((el) => {
+      const newLeft = el.getBoundingClientRect().left;
+      const delta = positions.get(el) - newLeft;
+      el.style.transition = 'none';
+      el.style.transform = `translateX(${delta}px)`;
+      requestAnimationFrame(() => {
+        el.style.transition = 'transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1)';
+        el.style.transform = 'translateX(0)';
+      });
+    });
+  }, 2800);
 }
 
 // Bigger card design for /preview3 — big role icon + type at top, level at bottom.
