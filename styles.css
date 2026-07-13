@@ -4269,6 +4269,9 @@ body.view-card-v4 .layout { grid-template-columns: 1fr; }
   gap: 48px;
   align-items: start;
 }
+.card-detail-body-columns.is-single-column {
+  grid-template-columns: minmax(0, 1fr);
+}
 .card-detail-main { min-width: 0; }
 .card-detail-main [data-card-body] > * {
   padding: 22px 0;

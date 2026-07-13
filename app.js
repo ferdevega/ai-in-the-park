@@ -1466,6 +1466,12 @@ function viewCardV4(slug) {
   const promptSection = frag.querySelector('[data-prompt-section]');
   if (promptSection && promptHost && promptHost.childElementCount > 0) {
     promptSection.hidden = false;
+  } else {
+    // No prompt: drop the whole aside and let the main column fill the width
+    const aside = frag.querySelector('.card-detail-aside');
+    if (aside) aside.remove();
+    const cols = frag.querySelector('.card-detail-body-columns');
+    if (cols) cols.classList.add('is-single-column');
   }
 
   // Related — as a compact list of lines (not cards), inside the frame
