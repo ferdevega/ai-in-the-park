@@ -1571,9 +1571,13 @@ function viewCardV4(slug) {
   const tipHost = frag.querySelector('[data-card-tip]');
   appendCardSections(card, { bodyHost, promptHost, tipHost });
 
-  // Move any inline figure (gif) to the top of the intro so text wraps around it
+  // Newspaper wrap only makes sense on desktop — on mobile the gif is a full-width
+  // block and belongs in its natural position (between the paragraphs), not before
+  // the first paragraph where it now floats above everything.
   const intro = bodyHost && bodyHost.querySelector('[data-section="intro"]');
-  if (intro) {
+  const isDesktop = typeof window !== 'undefined' &&
+    window.matchMedia && window.matchMedia('(min-width: 721px)').matches;
+  if (intro && isDesktop) {
     intro.querySelectorAll('figure, .inline-gif-wrap').forEach((fig) => {
       intro.insertBefore(fig, intro.firstChild);
     });
