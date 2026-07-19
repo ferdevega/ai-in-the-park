@@ -130,7 +130,7 @@ p  { margin: 0 0 1em; color: var(--text); }
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  background: linear-gradient(90deg, var(--r-auditor) 0%, var(--r-creator) 28%, var(--r-thought-partner) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2507,7 +2507,7 @@ body.view-preview4 .landing-v5 {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  background: linear-gradient(90deg, var(--r-auditor) 0%, var(--r-creator) 28%, var(--r-thought-partner) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3157,7 +3157,7 @@ body.modal-open { overflow: hidden; }
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner));
+  background: linear-gradient(90deg, var(--r-auditor) 0%, var(--r-creator) 28%, var(--r-thought-partner) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
