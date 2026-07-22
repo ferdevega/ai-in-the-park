@@ -724,8 +724,8 @@ function viewHomeV5() {
   // Frameworks — FAST as first card
   const fastCard = {
     slug: 'fast-framework',
-    title: 'FAST — the four moves behind every good prompt',
-    teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+    title: 'The “perfect prompt” doesn’t exist.',
+    teaser: 'A framework you can use while prompting.',
     type: 'tool',
     level: 'beginner',
     linkOverride: '/fast',
@@ -846,8 +846,8 @@ function viewHomeV4() {
   // Basics row — FAST as the anchor, linking to /fast (no See-all: only 1 card)
   const fastCard = {
     slug: 'fast-framework',
-    title: 'FAST — the four moves behind every good prompt',
-    teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+    title: 'The “perfect prompt” doesn’t exist.',
+    teaser: 'A framework you can use while prompting.',
     type: 'tool',
     level: 'beginner',
     linkOverride: '/fast',
@@ -1060,8 +1060,8 @@ function viewHomeV3() {
     // FAST rendered as a card, but click goes to /fast (not a modal).
     const fastCard = {
       slug: 'fast-framework',
-      title: 'FAST — the four moves behind every good prompt',
-      teaser: 'Frame · Ask · Shape · Tune. The mental model behind every card in this notebook.',
+      title: 'The “perfect prompt” doesn’t exist.',
+      teaser: 'A framework you can use while prompting.',
       type: 'tool',
       level: 'beginner',
       stage: 'frameworks',
