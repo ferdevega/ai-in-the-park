@@ -4,6 +4,8 @@ A field notebook of how-to cards for instructional designers using AI in the loo
 
 Live at **[ai-in-the-park.vercel.app](https://ai-in-the-park.vercel.app)** — until we buy a domain.
 
+**Status:** Launched 2026-07-29, first announced on LinkedIn. Now in distribution (see [Roadmap](#roadmap--open-items)) and growing the card library.
+
 ---
 
 ## Table of contents
@@ -223,7 +225,7 @@ When body prose refers to another card, don't drop an inline link. Say "listed b
 Only cross-link cards that are direct input/output dependencies. Default to fewer `related` entries per card, not more.
 
 ### The gradient-text highlight
-Every card body should have one word or short phrase wrapped in `<span class="gradient-text">`. The CSS renders it in caps with a rainbow-out-of-space gradient. It's the site's typographic signature. Pick the phrase that's the emotional core of the card.
+Every card body should have one word or short phrase wrapped in `<span class="gradient-text">`. The CSS renders it in caps with the "color out of space" gradient — currently pink → purple → cyan (`--r-auditor` → `--r-creator` → `--r-thought-partner`), with the purple stop pulled in to ~28% so the pink reads as a slim accent rather than a full third of the sweep. The same gradient drives `.eyebrow` and `.section-meta`, so keep those three in sync. It's the site's typographic signature — pick the phrase that's the emotional core of the card.
 
 ### Steps content
 No paste-only step. "Paste the prompt and run" is filler — either fold that into the previous step or skip it. Steps are for judgment moves, not mechanical ones.
@@ -269,7 +271,9 @@ The site's signature visual is a row of the 5 role icons (Creator △, Thought-p
 
 ## The FAST download
 
-The `/downloads/fast` route renders a printable one-page infographic version of the FAST framework. This is the site's first lead-magnet — planned to be delivered to subscribers on signup.
+The `/downloads/fast` route renders a printable one-page (cream "paper" palette) version of the FAST framework, and `scripts/build-fast-pdf.sh` turns it into `downloads/fast.pdf`.
+
+> **Direction note (2026-07):** next to the dark, neon site, the cream PDF underwhelms. The lead-magnet is pivoting toward **dark, site-matching share assets** (a PNG infographic + a scrolling video walkthrough) and, as the *real* magnet, a **prompt pack** — not this PDF. The cream one-pager + PDF pipeline below still work and are documented, but are deprioritized. See [Roadmap](#roadmap--open-items).
 
 **Anatomy of the doc:**
 - **Dark header band** at the top with big `FAST` gradient word-mark, italic tagline, full intro paragraph, byline, permalink to the site, 5-icon signature (colored)
@@ -298,7 +302,13 @@ Under the hood this runs Chrome headless against the deployed URL and prints to 
 py -c "from PIL import Image; im=Image.open('assets/Fer.jpeg'); im.thumbnail((400,400)); im.save('assets/Fer-small.jpeg', 'JPEG', quality=82, optimize=True)"
 ```
 
-**PPTX/DOCX drafts:** for iterating layout in Word or PowerPoint, there are two Python scripts in `scratchpad/` (gitignored) that generate `downloads/fast.pptx` and `downloads/fast-content.docx`. Both output files are also gitignored — they're local drafts, not source of truth. The web page is the source; PPTX/DOCX exist only as design sandboxes.
+**PPTX / infographic / launch drafts (in `scratchpad/`, all gitignored):**
+- `build-fast-pptx.py` — regenerates `downloads/fast.pptx` as a **dark, site-matching deck** (4 slides: hero with the F/A/S/T colored word-mark + 5 role icons, the 2×2 quadrants, the 10-second check, signoff). This replaced an earlier cream/"paper" PPTX that read as washed-out and off-brand. It sets Fraunces/Inter — installing those fonts locally makes it match the site exactly. Redraws the 5 role icons from `ROLE_ICONS` with Pillow.
+- `fast-infographic/` — a **tall dark PNG infographic** (HTML → Chrome-headless → PNG) mirroring the live-site look; built as a share/social asset.
+- `launch-gif/record.js` — scripted **video walkthrough** of the live site (puppeteer-core drives Chrome, ffmpeg-static encodes MP4 + GIF). Freezes the icon-shuffle and ends on a real card. Used for the launch post.
+- An older `fast-content.docx` Word sandbox may also exist.
+
+The web page remains the source of truth; everything here is a design/marketing sandbox, and the rendered outputs are not committed.
 
 ---
 
@@ -306,14 +316,16 @@ py -c "from PIL import Image; im=Image.open('assets/Fer.jpeg'); im.thumbnail((40
 
 `api/subscribe.js` is a Vercel serverless function. On POST with `{ email }`:
 1. Validates the email shape.
-2. Stores it in Upstash Redis via `@upstash/redis` (using `SADD` to a set keyed by day).
+2. `SADD`s the lowercased email to a single Redis set named `subscribers` (dedupe is automatic), and `HSETNX`s a first-seen timestamp into a `subscriber_first_seen` hash.
 3. Returns `{ ok: true }` on success.
 
-**Env vars** (set in Vercel dashboard, not committed):
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
+**Env vars** (set in Vercel dashboard, not committed) — the code accepts either the Upstash or the Vercel-KV naming:
+- `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`
+- or `KV_REST_API_URL` / `KV_REST_API_TOKEN`
 
 For local dev of the endpoint, drop those into a `.env` at the repo root and run via `vercel dev`. For most work you won't touch this file.
+
+**Checking who subscribed:** Vercel dashboard → the project → **Storage** tab → open the connected Upstash Redis store → **Data Browser** → the `subscribers` set (member count = total). Or via REST: `curl "$UPSTASH_REDIS_REST_URL/smembers/subscribers" -H "Authorization: Bearer $UPSTASH_REDIS_REST_TOKEN"` (use `/scard/subscribers` for just the count).
 
 **Planned next step:** on successful subscribe, respond with the FAST PDF download URL and have the modal show a "Get the FAST guide →" button. See [Roadmap](#roadmap--open-items).
 
@@ -388,21 +400,30 @@ Auto-deploys to Vercel on every push to `main`. Typical deploy time: 30–90 sec
 
 ## Roadmap & open items
 
-Tracked here so a fresh session (or a fresh laptop) can catch up.
+Tracked here so a fresh session (or a fresh laptop) can catch up. **The site launched 2026-07-29**, first announced on LinkedIn.
 
-**Pre-launch:**
-- [ ] Second Basics card. Concept locked in as "Accelerate, don't replace" — a mindset card about when to use vs. not use AI. Draft exists in chat history; needs a `mindset` type added to `type` enum, an icon in `ROLE_ICONS`, and the Basics shelf wired to pull from `data/cards.json` (currently synthesized inline in `viewHomeV4`).
-- [ ] Deliver FAST PDF on subscribe. Extend `api/subscribe.js` success response with `{ ok: true, download: "/downloads/fast.pdf" }`; update the subscribe modal to render a "Get the FAST guide →" button on success.
+**Done recently:**
+- [x] FAST page intro now uses typographic curly quotes.
+- [x] "Color out of space" gradient — pink recessed (purple stop at 28%) across `.gradient-text` / `.eyebrow` / `.section-meta`.
+- [x] Home FAST tile retitled to **"The "perfect prompt" doesn't exist."** with subtitle **"A framework you can use while prompting."** — it's the `fastCard` object in `app.js` (~3 renderers: home v4, classic, cards index).
+- [x] Rebuilt the FAST **PPTX** as a dark, site-matching deck (see [The FAST download](#the-fast-download)).
+- [x] Produced launch **share assets** — a dark PNG infographic and a scrolling **video walkthrough** of the live site (hero → shelves → a real card). Generators in `scratchpad/`; rendered files not committed.
+
+**Now / next:**
+- [ ] **Lead magnet → prompt pack.** Decision: the FAST infographic is a top-of-funnel *share* asset, not the thing people trade an email for. The real magnet is a **prompt pack** — ~12 ID tasks written in FAST structure and the playbook voice, organized by the 7 stages. Later, graduate the hero magnet to an **interactive FAST prompt builder** (a new vanilla-JS route: fill Frame/Ask/Shape/Tune → copyable prompt). This supersedes the old "second lead magnet / prompt starters" idea.
+- [ ] **Deliver the magnet on subscribe.** Extend `api/subscribe.js` success response (e.g. `{ ok: true, download: "…" }`) and update the subscribe modal to show a "Get the … →" button on success. (Originally scoped to the FAST PDF; retarget to whatever the magnet becomes.)
+- [ ] **Launch distribution.** LinkedIn done. Value-first posts (lead with the FAST framework or a real card; link as a footnote) to: r/instructionaldesign + adjacent subs, the big Facebook ID / e-learning groups, Show HN, Product Hunt, and ID/L&D community Slacks/Discords. Repurpose the infographic (image posts) and the video (LinkedIn/X).
+- [ ] **Second Basics card.** "Accelerate, don't replace" — a mindset card about when to use vs. not use AI. Needs a `mindset` type in the `type` enum, an icon in `ROLE_ICONS`, and the Basics shelf wired to pull from `data/cards.json` (currently synthesized inline in `viewHomeV4`).
 
 **Post-launch:**
-- [ ] More Design-stage cards (currently only 2; feels thin).
-- [ ] Play with view-transitions animation for card-open (currently the modal is retired; card page routes push new history).
-- [ ] Consider a custom domain (see the chat archive for the audience-side reasoning).
+- [ ] More Design-stage cards (feels thin).
+- [ ] Play with view-transitions animation for card-open (modal is retired; card routes push history).
+- [ ] Consider a custom domain.
 
 **Deferred:**
 - [ ] Cross-linking pass. Once ~15 cards exist, audit `related` fields for connective tissue.
-- [ ] Second lead magnet (probably a "prompt starters library" or a "recipe card" set) — a bigger download than FAST.
-- [ ] Emailed delivery via Resend (currently subscribe just stores the address; no follow-up).
+- [ ] Emailed delivery via Resend (subscribe currently just stores the address; no follow-up).
+- [ ] **Spanish edition — shelved.** Explored and parked. If revisited: do **not** hardcode a second-language fork. Use data-layer i18n — locale fields on cards (`title_es`, …) or a parallel `cards.es.json`, a central strings dictionary for the UI chrome, `/es/` routes emitted by `build.js`, and `hreflang`/`lang` tags. The gating cost is re-authoring ~7,600 words *in voice* (machine translation = slop), not the plumbing.
 
 ---
 
