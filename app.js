@@ -1051,7 +1051,6 @@ function wireNavigator() {
   const scenariosEl = field.querySelector('[data-nav-scenarios]');
   const sceneEl = field.querySelector('[data-nav-scene]');
   const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
-  const browseEl = document.querySelector('[data-nav-browse-list]');
   const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
   const scenarios = state.scenarios || [];
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1109,13 +1108,23 @@ function wireNavigator() {
     if (typeof entry === 'string') return cardBySlug(entry) || null;
     return { slug: entry.slug || entry.link, title: entry.title, teaser: entry.teaser || '', type: entry.type || 'tool', level: entry.level || 'beginner', linkOverride: entry.link };
   }
-  function renderEpisode(entry, enabler) {
+  function renderEpisode(entry) {
     const card = episodeCard(entry);
     if (!card) return null;
-    const frag = renderV4Card(card, {});
-    const a = frag.querySelector('a');
-    if (a && enabler) a.classList.add('is-enabler');
-    return frag;
+    return renderV4Card(card, {});
+  }
+  // Enablers render as a compact chip (not a full card) so they don't add height.
+  function enablerChip(entry) {
+    const c = typeof entry === 'string' ? cardBySlug(entry) : null;
+    const title = c ? c.title : entry.title;
+    const type = c ? c.type : (entry.type || 'tool');
+    const href = c ? cardHref(c) : (entry.link || '#');
+    const a = document.createElement('a');
+    a.className = 'nav-enabler-chip';
+    a.href = href;
+    a.style.setProperty('--rc', roleColorVar(type) || 'var(--text-dim)');
+    a.innerHTML = `<span class="nav-enabler-ic">${ROLE_ICONS[type] || ''}</span><span>${title}</span>`;
+    return a;
   }
 
   // ----- home: the shows -----
@@ -1149,27 +1158,36 @@ function wireNavigator() {
     if (sc.enablers && sc.enablers.length) {
       const pre = document.createElement('div');
       pre.className = 'nav-prelude';
-      pre.innerHTML = '<div class="nav-prelude-label">Set up first</div>';
+      pre.innerHTML = '<span class="nav-prelude-label">Set up first</span>';
       const row = document.createElement('div');
-      row.className = 'nav-eps';
-      sc.enablers.forEach((e) => { const tl = renderEpisode(e, true); if (tl) row.appendChild(tl); });
+      row.className = 'nav-enabler-chips';
+      sc.enablers.forEach((e) => { const tl = enablerChip(e); if (tl) row.appendChild(tl); });
       pre.appendChild(row);
       body.appendChild(pre);
     }
 
-    (sc.moments || []).forEach((m, i) => {
-      const sec = document.createElement('div');
-      sec.className = 'nav-moment';
+    // Moments render as columns (phases left→right) so a show uses the width
+    // instead of sprawling vertically. "byStage" shows generate their columns
+    // from the stages (this is the whole-library browse).
+    const moments = sc.byStage
+      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).filter((c) => !c.coming_soon).map((c) => c.slug) }))
+      : (sc.moments || []);
+    const cols = document.createElement('div');
+    cols.className = 'nav-moments';
+    moments.forEach((m, i) => {
+      const col = document.createElement('div');
+      col.className = 'nav-moment';
       const lbl = document.createElement('div');
       lbl.className = 'nav-moment-label';
-      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
-      sec.appendChild(lbl);
-      const row = document.createElement('div');
-      row.className = 'nav-eps';
-      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) row.appendChild(tl); });
-      sec.appendChild(row);
-      body.appendChild(sec);
+      lbl.innerHTML = sc.byStage ? m.label : `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
+      col.appendChild(lbl);
+      const cards = document.createElement('div');
+      cards.className = 'nav-moment-cards';
+      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+      col.appendChild(cards);
+      cols.appendChild(col);
     });
+    body.appendChild(cols);
 
     const rel = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
     if (rel.length) {
@@ -1201,21 +1219,6 @@ function wireNavigator() {
     const up = e.target.closest('.nav-upnext-box');
     if (up) { const sc = scenarios.find((s) => s.slug === up.dataset.sc); if (sc) openShow(sc); }
   });
-
-  // ----- browse by stage (below the hero) -----
-  if (browseEl) {
-    state.stages.forEach((stage) => {
-      const has = stageHasCards(stage.slug);
-      const n = cardsForStage(stage.slug).filter((c) => !c.coming_soon).length;
-      const a = document.createElement('a');
-      a.className = 'nav-browse-item' + (has ? '' : ' is-empty');
-      a.href = has ? stageHref(stage) : '#';
-      if (!has) a.setAttribute('aria-disabled', 'true');
-      a.style.setProperty('--stage-color', stageColorVar(stage));
-      a.innerHTML = `<span class="nav-browse-dot"></span><span class="nav-browse-name">${stage.title}</span><span class="nav-browse-count">${has ? n : 'soon'}</span>`;
-      browseEl.appendChild(a);
-    });
-  }
 }
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header

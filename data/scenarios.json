@@ -55,5 +55,14 @@
       { "label": "Check against it", "cards": ["audit-module-against-style-guide"] },
       { "label": "Test with humans", "cards": ["run-a-focus-group-on-your-draft"] }
     ]
+  },
+  {
+    "slug": "everything",
+    "title": "Show me everything",
+    "situation": "Not sure where to start? The whole playbook, by stage.",
+    "byStage": true,
+    "enablers": [],
+    "related": [],
+    "moments": []
   }
 ]
