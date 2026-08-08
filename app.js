@@ -17,6 +17,7 @@ const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'panel', 'tool'];
 const state = {
   stages: [],
   cards: [],
+  scenarios: [],
   filters: { types: new Set(), tags: new Set(), query: '', sort: 'default' },
   view: null,        // 'home' | 'stage:<slug>' | 'cards' | 'recent' | 'about' | 'notfound'
   modalSlug: null,
@@ -32,6 +33,14 @@ async function loadData() {
   state.stages = await stagesRes.json();
   state.cards = (await cardsRes.json()).filter((c) => !c.hidden);
   state.stages.sort((a, b) => a.order - b.order);
+
+  // Scenarios power the /navigator route; failure here shouldn't break the app.
+  try {
+    const scRes = await fetch('/data/scenarios.json');
+    if (scRes.ok) state.scenarios = await scRes.json();
+  } catch (e) {
+    state.scenarios = [];
+  }
 }
 
 // ---------- DOM helpers ----------
@@ -677,6 +686,631 @@ function viewDownloadFast() {
   }
 }
 
+// ---------- Agent builder ----------
+// Interactive tool: five fields (role/job/workflow/knowledge/guardrails) assemble
+// into a paste-ready instructions block, with per-tool setup steps. Extends FAST
+// to something that persists — a single prompt is just a one-step agent.
+function viewAgentBuilder() {
+  state.view = 'agent-builder';
+  renderSpine(null);
+  mount(tpl('tpl-agent-builder'));
+  wireAgentBuilder();
+  wireRevealAnimation(document.querySelector('.agent-builder'));
+}
+
+function wireAgentBuilder() {
+  const root = document.querySelector('[data-agent-builder]');
+  if (!root) return;
+  const form = root.querySelector('[data-agent-form]');
+  const outEl = root.querySelector('[data-agent-output]');
+  const copyBtn = root.querySelector('[data-agent-copy]');
+  if (!form || !outEl) return;
+
+  // Seed with a worked ID example so the page demonstrates itself on load.
+  const defaults = {
+    role: "a senior instructional designer who's obsessive about clear, measurable learning objectives",
+    job: 'Turn my raw SME interview notes into a module-by-module course outline.',
+    workflow: [
+      "Ask me for the SME notes and the target audience if I haven't given them.",
+      'Draft 4 to 6 modules, each with one outcome written using a Bloom-level verb.',
+      'Flag anything in the notes that reads like a wrong or missing objective.',
+      'Return the outline as a table, then wait for my edits before expanding it.',
+    ].join('\n'),
+    knowledge: 'my style guide, the competency framework, and two past course outlines',
+    guardrails:
+      "Always use Bloom-level verbs. Never invent statistics or cite sources you can't see. Ask before assuming the audience's seniority.",
+  };
+
+  const fields = {};
+  form.querySelectorAll('[data-field]').forEach((el) => {
+    const key = el.getAttribute('data-field');
+    fields[key] = el;
+    if (defaults[key]) el.value = defaults[key];
+  });
+
+  const val = (k) => (fields[k] ? fields[k].value.trim() : '');
+
+  function buildInstructions() {
+    const role = val('role') || '[describe the role]';
+    const job = val('job') || '[describe the job]';
+    const workflowLines = val('workflow')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
+    const guardrails = val('guardrails');
+    const knowledge = val('knowledge');
+
+    const lines = [];
+    lines.push('# Role');
+    lines.push(`You are ${role}.`);
+    lines.push('');
+    lines.push('# Your job');
+    lines.push(job);
+    if (workflowLines.length) {
+      lines.push('');
+      lines.push('# How you work');
+      workflowLines.forEach((l, i) => lines.push(`${i + 1}. ${l}`));
+    }
+    if (guardrails) {
+      lines.push('');
+      lines.push('# Always / never');
+      lines.push(guardrails);
+    }
+    if (knowledge) {
+      lines.push('');
+      lines.push('# Source material');
+      lines.push(
+        `Treat the attached materials as your source of truth (${knowledge}). If an answer isn't in them, say so instead of guessing.`,
+      );
+    }
+    return lines.join('\n');
+  }
+
+  let current = '';
+  function render() {
+    current = buildInstructions();
+    outEl.textContent = current;
+    const kb = val('knowledge') || 'your source material';
+    root.querySelectorAll('[data-kb-echo]').forEach((el) => {
+      el.textContent = kb;
+    });
+  }
+
+  form.addEventListener('input', render);
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(current);
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => (copyBtn.textContent = orig), 1500);
+      } catch {}
+    });
+  }
+
+  render();
+}
+
+// ---------- Map (constellation of cards, grouped by stage) ----------
+// Standalone /map route: every card is a star, positioned in its primary stage's
+// cluster along a snaking trail through the 7 stages. Edges are the real `related`
+// links. Situation chips filter the map down to one stage. Illustrative layout;
+// real card-to-card sequencing is authored via `related`.
+function viewMap() {
+  state.view = 'map';
+  renderSpine(null);
+  mount(tpl('tpl-map'));
+  wireMap();
+}
+
+// Situation → stage. Plain-language entry points for the disoriented.
+const MAP_SITUATIONS = [
+  { label: 'A vague request just landed on me', stage: 'analysis' },
+  { label: 'I’m staring at a blank doc', stage: 'strategy-curriculum' },
+  { label: 'I need to make it stick', stage: 'design' },
+  { label: 'I’ve got content, but it’s a mess', stage: 'development' },
+];
+
+function wireMap() {
+  const svg = document.querySelector('[data-map-svg]');
+  if (!svg) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (t, a) => {
+    const e = document.createElementNS(NS, t);
+    for (const k in a) e.setAttribute(k, a[k]);
+    return e;
+  };
+  const W = 1200, H = 640;
+
+  // Snake of cluster centers, one per stage in order (fractions of the viewBox).
+  const CFRAC = [
+    [0.11, 0.30], [0.32, 0.19], [0.52, 0.29], [0.74, 0.33],
+    [0.79, 0.72], [0.53, 0.80], [0.25, 0.74],
+  ];
+  const stages = state.stages.slice().sort((a, b) => a.order - b.order);
+
+  // Group real cards by primary stage (no coming-soon, no duplicates across stages).
+  const groups = {};
+  state.cards.filter((c) => !c.coming_soon).forEach((c) => {
+    const ps = primaryStageOf(c);
+    if (!ps) return;
+    (groups[ps.slug] = groups[ps.slug] || []).push(c);
+  });
+
+  // Assign every node an (x, y): cluster center + a ring of its stage's cards.
+  const nodes = {};
+  const centers = {};
+  stages.forEach((stage, i) => {
+    const f = CFRAC[i] || [0.5, 0.5];
+    const cx = f[0] * W, cy = f[1] * H;
+    centers[stage.slug] = { x: cx, y: cy, stage };
+    const cards = groups[stage.slug] || [];
+    if (cards.length === 0) {
+      nodes['__soon_' + stage.slug] = { x: cx, y: cy, stage, soon: true, title: stage.title };
+      return;
+    }
+    const R = cards.length === 1 ? 0 : Math.min(88, 38 + cards.length * 9);
+    const start = -Math.PI / 2;
+    cards.forEach((c, j) => {
+      const ang = start + j * ((Math.PI * 2) / cards.length);
+      nodes[c.slug] = {
+        x: cx + R * Math.cos(ang),
+        y: cy + R * Math.sin(ang),
+        stage, card: c, title: c.title,
+      };
+    });
+  });
+
+  // Defs: the site's signature gradient for edges.
+  const defs = mk('defs', {});
+  const grad = mk('linearGradient', { id: 'map-grad', x1: '0', y1: '0', x2: '1', y2: '1' });
+  [['0%', 'var(--r-auditor)'], ['50%', 'var(--r-creator)'], ['100%', 'var(--r-thought-partner)']]
+    .forEach(([o, c]) => {
+      const s = mk('stop', { offset: o });
+      s.style.stopColor = c;
+      grad.appendChild(s);
+    });
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+
+  // Faint trail spine through the stage centers, in process order.
+  let d = '';
+  stages.forEach((s, i) => {
+    const c = centers[s.slug];
+    d += (i === 0 ? 'M' : ' L') + c.x + ' ' + c.y;
+  });
+  svg.appendChild(mk('path', {
+    d, fill: 'none', stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 1, 'stroke-dasharray': '3 6',
+  }));
+
+  // Stage headers.
+  const hdrEls = {};
+  stages.forEach((s) => {
+    const c = centers[s.slug];
+    const t = mk('text', {
+      class: 'map-shdr', 'data-stage': s.slug, x: c.x, y: c.y - 70, 'text-anchor': 'middle',
+    });
+    t.style.fill = stageColorVar(s);
+    t.textContent = (s.abbr || s.title).toUpperCase();
+    hdrEls[s.slug] = t;
+    svg.appendChild(t);
+  });
+
+  // Edges from real `related` links (deduped).
+  const edgeEls = {};
+  const seen = {};
+  state.cards.forEach((c) => {
+    if (!nodes[c.slug]) return;
+    (c.related || []).forEach((r) => {
+      if (!nodes[r]) return;
+      const key = [c.slug, r].sort().join('>');
+      if (seen[key]) return;
+      seen[key] = 1;
+      const A = nodes[c.slug], B = nodes[r], mx = (A.x + B.x) / 2;
+      const p = mk('path', {
+        d: `M${A.x} ${A.y} C ${mx} ${A.y} ${mx} ${B.y} ${B.x} ${B.y}`, class: 'map-edge',
+      });
+      edgeEls[key] = { el: p, a: c.slug, b: r };
+      svg.appendChild(p);
+    });
+  });
+
+  // Nodes.
+  const nodeEls = {};
+  Object.keys(nodes).forEach((id) => {
+    const n = nodes[id];
+    const col = n.soon ? '#5a5a5a' : (roleColorVar(n.card.type) || 'var(--text-dim)');
+    const g = mk('g', { class: 'map-node' + (n.soon ? ' is-soon' : ''), 'data-id': id });
+    const halo = mk('circle', { class: 'map-halo', cx: n.x, cy: n.y, r: 15 });
+    halo.style.fill = col;
+    g.appendChild(halo);
+    g.appendChild(mk('circle', { class: 'map-ping', cx: n.x, cy: n.y, r: 9 }));
+    const dot = mk('circle', {
+      cx: n.x, cy: n.y, r: n.soon ? 5 : 7,
+      'stroke-width': n.soon ? 1 : 0.5, 'stroke-dasharray': n.soon ? '2 2' : '0',
+    });
+    dot.style.fill = n.soon ? '#0e0e0e' : col;
+    dot.style.stroke = col;
+    g.appendChild(dot);
+    if (!n.soon) {
+      const sp = mk('circle', { cx: n.x - 2, cy: n.y - 2, r: 1.5, fill: '#fff', opacity: 0.85 });
+      g.appendChild(sp);
+    }
+    const anchor = n.x > 1050 ? 'end' : (n.x < 150 ? 'start' : 'middle');
+    const lbl = mk('text', { class: 'map-lbl', x: n.x, y: n.y + 20, 'text-anchor': anchor });
+    lbl.textContent = (n.soon ? 'soon · ' : '') + n.title;
+    g.appendChild(lbl);
+    nodeEls[id] = g;
+    svg.appendChild(g);
+  });
+
+  // Legend.
+  const legend = document.querySelector('[data-map-legend]');
+  if (legend) {
+    [['creator', 'Creator'], ['thought-partner', 'Thought-partner'], ['auditor', 'Auditor'],
+     ['panel', 'Panel'], ['tool', 'Tool']].forEach(([k, name]) => {
+      const item = document.createElement('span');
+      item.className = 'map-legend-item';
+      const dot = document.createElement('span');
+      dot.className = 'map-legend-dot';
+      dot.style.background = roleColorVar(k);
+      item.append(dot, document.createTextNode(name));
+      legend.appendChild(item);
+    });
+  }
+
+  const readEl = document.querySelector('[data-map-read]');
+  const setRead = (html) => { if (readEl) readEl.innerHTML = html; };
+
+  function clearAll() {
+    svg.classList.remove('is-filter');
+    Object.values(nodeEls).forEach((g) => g.classList.remove('on', 'pin'));
+    Object.values(edgeEls).forEach((e) => e.el.classList.remove('on'));
+    Object.values(hdrEls).forEach((t) => t.classList.remove('on'));
+  }
+  function filterToStage(slug) {
+    clearAll();
+    svg.classList.add('is-filter');
+    const stage = stageBySlug(slug);
+    if (hdrEls[slug]) hdrEls[slug].classList.add('on');
+    const ids = Object.keys(nodes).filter((id) => nodes[id].stage && nodes[id].stage.slug === slug);
+    ids.forEach((id) => nodeEls[id].classList.add('on'));
+    // Light edges that live entirely within the lit stage.
+    Object.values(edgeEls).forEach((e) => {
+      if (ids.includes(e.a) && ids.includes(e.b)) e.el.classList.add('on');
+    });
+    const realIds = ids.filter((id) => !nodes[id].soon);
+    if (realIds.length) nodeEls[realIds[0]].classList.add('pin');
+    else if (ids.length) nodeEls[ids[0]].classList.add('pin');
+    const n = realIds.length;
+    setRead(`<span class="map-read-em">Start in ${stage ? stage.title : slug}</span> · ${n} ${n === 1 ? 'card' : 'cards'} here. Tap a star to open it.`);
+  }
+
+  // Chips.
+  const chips = document.querySelector('[data-map-chips]');
+  if (chips) {
+    MAP_SITUATIONS.forEach((s) => {
+      if (!stageBySlug(s.stage)) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'map-chip';
+      b.textContent = s.label;
+      b.dataset.stage = s.stage;
+      chips.appendChild(b);
+    });
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'map-chip map-chip-reset';
+    reset.textContent = '↺ Whole map';
+    reset.dataset.reset = '1';
+    chips.appendChild(reset);
+
+    chips.addEventListener('click', (e) => {
+      const b = e.target.closest('.map-chip');
+      if (!b) return;
+      Array.from(chips.children).forEach((c) => c.classList.toggle('on', c === b && !b.dataset.reset));
+      if (b.dataset.reset) {
+        clearAll();
+        setRead('The whole playbook. Star color = the AI’s role · the trail runs Analysis → Project management.');
+      } else {
+        filterToStage(b.dataset.stage);
+      }
+    });
+  }
+
+  // Node clicks → open the card (or a readout for coming-soon).
+  svg.addEventListener('click', (e) => {
+    const g = e.target.closest('.map-node');
+    if (!g) return;
+    const n = nodes[g.dataset.id];
+    if (!n || n.soon) {
+      if (n) setRead(`<span class="map-read-em">${n.title}</span> · coming soon`);
+      return;
+    }
+    navigate(cardHref(n.card));
+  });
+}
+
+// ---------- Navigator (starfield → bloom) ----------
+// /navigator: every card is a star drifting in a constant, autonomous field.
+// Pick a situation (blooms into its prerequisite path from data/scenarios.json)
+// or a role filter, and the matching cards rise to the front and bloom into
+// cards while the rest hang back. Nothing navigates — lenses filter in place.
+function viewNavigator() {
+  state.view = 'navigator';
+  renderSpine(null);
+  mount(tpl('tpl-navigator'));
+  wireNavigator();
+}
+
+function wireNavigator() {
+  const field = document.querySelector('[data-nav-field]');
+  if (!field) return;
+  const cv = field.querySelector('[data-nav-bg]');
+  const edges = field.querySelector('[data-nav-edges]');
+  const cardsL = field.querySelector('[data-nav-cards]');
+  const chooserEl = field.querySelector('[data-nav-chooser]');
+  const scenariosEl = field.querySelector('[data-nav-scenarios]');
+  const readEl = field.querySelector('[data-nav-readout]');
+  const exitEl = field.querySelector('[data-nav-exit]');
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
+
+  const live = state.cards.filter((c) => !c.coming_soon);
+  const soon = state.cards.filter((c) => c.coming_soon).slice(0, 8);
+  const scenarios = state.scenarios || [];
+
+  // Star list: live cards (bright, bloom into cards) + a few dim "soon" stars.
+  // Stable golden-angle scatter, each with a slow autonomous velocity.
+  const items = live.map((c) => ({ slug: c.slug, card: c, soon: false }))
+    .concat(soon.map((c) => ({ slug: 'soon-' + c.slug, card: c, soon: true })));
+  const N = Math.max(items.length, 1);
+  const stars = items.map((it, i) => {
+    const frac = (i + 0.5) / N;
+    const rr = Math.sqrt(frac) * 0.46;
+    const th = i * 2.39996;
+    let bx = 0.5 + rr * Math.cos(th);
+    let by = 0.5 + rr * Math.sin(th) * 0.82;
+    bx = Math.max(0.07, Math.min(0.93, bx));
+    by = Math.max(0.12, Math.min(0.9, by));
+    const ang = i * 1.7, spd = 0.00006 + (i % 3) * 0.00003;
+    return Object.assign(it, { bx, by, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd });
+  });
+
+  let W = 0, H = 0, focusMode = false, reapply = null;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const ctx = cv.getContext('2d');
+  function measure() {
+    const r = field.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    edges.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  }
+  measure();
+
+  // DOM stars: a glowing dot always, plus a glass card face revealed on bloom.
+  const els = {};
+  stars.forEach((s) => {
+    const el = document.createElement('div');
+    el.className = 'nav-star' + (s.soon ? ' is-soon' : '');
+    el.dataset.slug = s.slug;
+    el.style.setProperty('--rc', s.soon ? '#4a4a55' : (roleColorVar(s.card.type) || 'var(--text-dim)'));
+    const dot = document.createElement('div');
+    dot.className = 'nav-star-dot';
+    el.appendChild(dot);
+    if (!s.soon) {
+      const face = document.createElement('div');
+      face.className = 'nav-star-face';
+      face.innerHTML = `<div class="nav-star-top"><span class="nav-star-role">${RNAME[s.card.type] || ''}</span>${ROLE_ICONS[s.card.type] || ''}</div><div class="nav-star-ttl">${s.card.title}</div>`;
+      el.appendChild(face);
+    }
+    cardsL.appendChild(el);
+    els[s.slug] = el;
+  });
+
+  // Ambient canvas: parallax star layers + drifting nebula, always in motion.
+  const layers = [{ n: 70, f: .12, s: [.4, .9], a: [.14, .38] }, { n: 44, f: .4, s: [.7, 1.4], a: [.28, .58] }, { n: 16, f: .9, s: [1.4, 2.4], a: [.5, .95] }];
+  const amb = [];
+  layers.forEach((L) => { for (let i = 0; i < L.n; i++) { const ang = Math.random() * 6.28, spd = 0.00006 + L.f * 0.00032; amb.push({ x: Math.random(), y: Math.random(), r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), a: L.a[0] + Math.random() * (L.a[1] - L.a[0]), tw: Math.random() * 6.28, sp: .2 + Math.random() * .5, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd }); } });
+  const neb = [{ x: .28, y: .3, c: '139,92,246' }, { x: .72, y: .34, c: '6,182,212' }, { x: .5, y: .82, c: '255,111,216' }];
+
+  let t = 0;
+  const onResize = () => { measure(); if (focusMode && reapply) reapply(); else placeDrift(); };
+  window.addEventListener('resize', onResize);
+
+  function placeDrift() {
+    stars.forEach((s) => { const el = els[s.slug]; el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px'; });
+  }
+
+  function frame() {
+    if (!cv.isConnected) { window.removeEventListener('resize', onResize); return; }
+    t++;
+    ctx.clearRect(0, 0, W, H);
+    neb.forEach((nb, i) => {
+      const ox = Math.sin(t * .002 + i) * 26, oy = Math.cos(t * .0016 + i) * 20;
+      const g = ctx.createRadialGradient(nb.x * W + ox, nb.y * H + oy, 0, nb.x * W + ox, nb.y * H + oy, W * .42);
+      g.addColorStop(0, `rgba(${nb.c},.10)`); g.addColorStop(1, `rgba(${nb.c},0)`);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    });
+    ctx.globalCompositeOperation = 'lighter';
+    amb.forEach((s) => {
+      if (!reduce) { s.x += s.vx; s.y += s.vy; if (s.x < -.06) s.x = 1.06; if (s.x > 1.06) s.x = -.06; if (s.y < -.06) s.y = 1.06; if (s.y > 1.06) s.y = -.06; }
+      const px = s.x * W + Math.sin(t * .0008 * s.sp + s.tw) * 4, py = s.y * H + Math.cos(t * .0007 * s.sp + s.tw) * 4;
+      const tw = .6 + .4 * Math.sin(t * .03 * s.sp + s.tw), a = s.a * (reduce ? .85 : tw);
+      if (s.r > 1.2) { const gg = ctx.createRadialGradient(px, py, 0, px, py, s.r * 5); gg.addColorStop(0, `rgba(220,225,255,${a})`); gg.addColorStop(1, 'rgba(220,225,255,0)'); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(px, py, s.r * 5, 0, 6.28); ctx.fill(); }
+      ctx.fillStyle = `rgba(235,238,255,${a})`; ctx.beginPath(); ctx.arc(px, py, s.r, 0, 6.28); ctx.fill();
+    });
+    ctx.globalCompositeOperation = 'source-over';
+    if (!focusMode && !reduce) {
+      stars.forEach((s) => {
+        s.bx += s.vx; s.by += s.vy;
+        if (s.bx < -.04) s.bx = 1.04; if (s.bx > 1.04) s.bx = -.04;
+        if (s.by < -.04) s.by = 1.04; if (s.by > 1.04) s.by = -.04;
+        const el = els[s.slug]; el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
+      });
+    }
+    requestAnimationFrame(frame);
+  }
+  placeDrift();
+  requestAnimationFrame(frame);
+
+  // Edges (scenario prerequisite paths), drawn with a self-drawing animation.
+  const edgeStore = [];
+  function clearEdges() { while (edges.lastChild) edges.removeChild(edges.lastChild); edgeStore.length = 0; }
+  function drawPath(pairs, pos, horizontal) {
+    clearEdges();
+    const defs = document.createElementNS(NS, 'defs');
+    const grad = document.createElementNS(NS, 'linearGradient');
+    grad.setAttribute('id', 'nav-grad'); grad.setAttribute('x1', '0'); grad.setAttribute('x2', '1');
+    [['0%', '#ff6fd8'], ['50%', '#a78bff'], ['100%', '#22d3ee']].forEach(([o, c]) => { const st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); grad.appendChild(st); });
+    defs.appendChild(grad); edges.appendChild(defs);
+    // Half sizes read from the actual rendered cards so edges meet the boxes.
+    const hw = (s) => (els[s] ? els[s].offsetWidth / 2 : 94);
+    const hh = (s) => (els[s] ? els[s].offsetHeight / 2 : 33);
+    pairs.forEach(([a, b]) => {
+      const A = pos[a], B = pos[b]; if (!A || !B) return;
+      const p = document.createElementNS(NS, 'path');
+      // Square elbow — across for horizontal flow, down for vertical.
+      if (horizontal) {
+        const sx = A.x + hw(a), ex = B.x - hw(b), mx = (sx + ex) / 2;
+        p.setAttribute('d', `M${sx} ${A.y} H${mx} V${B.y} H${ex}`);
+      } else {
+        const sy = A.y + hh(a), ey = B.y - hh(b), my = (sy + ey) / 2;
+        p.setAttribute('d', `M${A.x} ${sy} V${my} H${B.x} V${ey}`);
+      }
+      p.setAttribute('class', 'nav-edge');
+      p.dataset.a = a; p.dataset.b = b;
+      edges.appendChild(p);
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+      p.getBoundingClientRect(); p.style.strokeDashoffset = 0;
+      edgeStore.push(p);
+    });
+  }
+
+  function enterFocus() {
+    focusMode = true;
+    field.classList.add('is-focused');
+    if (chooserEl) chooserEl.style.display = 'none';
+    exitEl.hidden = false;
+    stars.forEach((s) => els[s.slug].classList.add('is-controlled'));
+  }
+  function positionsScenario(sc) {
+    const ns = sc.nodes.map((n) => ({ slug: n.card, requires: (n.requires || []).filter((r) => !!els[r]), card: cardBySlug(n.card) }))
+      .filter((n) => n.card && els[n.slug] && !n.card.coming_soon);
+    const bySlug = {}; ns.forEach((n) => (bySlug[n.slug] = n));
+    const dc = {};
+    function depth(s, seen) { if (dc[s] != null) return dc[s]; const n = bySlug[s]; if (!n || n.requires.length === 0) return dc[s] = 0; seen = seen || {}; if (seen[s]) return 0; seen[s] = 1; const d = 1 + Math.max(...n.requires.map((r) => depth(r, seen))); return dc[s] = d; }
+    ns.forEach((n) => (n.depth = depth(n.slug)));
+    const maxD = Math.max(0, ...ns.map((n) => n.depth));
+    const tiers = {}; ns.forEach((n) => { (tiers[n.depth] = tiers[n.depth] || []).push(n); });
+    const maxTier = Math.max(1, ...Object.values(tiers).map((t) => t.length));
+    // Wide viewports flow left→right (columns); narrow ones stack top→bottom (rows).
+    const horizontal = W >= 900;
+    const pos = {};
+    if (horizontal) {
+      const usableW = Math.max(W - 192, 300);
+      const colW = maxD > 0 ? Math.min(300, usableW / maxD) : 0;
+      const startX = (W - maxD * colW) / 2;   // center the whole tree
+      const cyc = (150 + (H - 70)) / 2;
+      Object.keys(tiers).forEach((d) => {
+        const tier = tiers[d], k = tier.length, sp = Math.min(140, (H * 0.6) / Math.max(k, 1));
+        tier.forEach((n, i) => { pos[n.slug] = { x: maxD > 0 ? startX + Number(d) * colW : W / 2, y: cyc + (i - (k - 1) / 2) * sp }; });
+      });
+    } else {
+      const topStart = W < 600 ? 178 : 138, botPad = 58, usableH = Math.max(H - topStart - botPad, 240);
+      const rowGap = maxD > 0 ? Math.min(150, usableH / maxD) : 0;
+      const startY = topStart + Math.max(0, (usableH - maxD * rowGap) / 2);   // center vertically
+      const colGap = Math.min(230, (W * 0.86) / maxTier);
+      Object.keys(tiers).forEach((d) => {
+        const tier = tiers[d], k = tier.length;
+        tier.forEach((n, i) => { pos[n.slug] = { x: W / 2 + (i - (k - 1) / 2) * colGap, y: maxD > 0 ? startY + Number(d) * rowGap : H * 0.5 }; });
+      });
+    }
+    const pairs = [];
+    ns.forEach((n) => n.requires.forEach((r) => pairs.push([r, n.slug])));
+    return { pos, pairs, subset: ns.map((n) => n.slug), horizontal };
+  }
+  function applyLens(res, label) {
+    enterFocus();
+    const set = new Set(res.subset);
+    stars.forEach((s) => {
+      const el = els[s.slug];
+      el.classList.remove('is-bloom', 'is-recede');
+      if (set.has(s.slug)) {
+        const p = res.pos[s.slug];
+        el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
+        el.classList.add('is-bloom');
+      } else {
+        el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
+        el.classList.add('is-recede');
+      }
+    });
+    setTimeout(() => drawPath(res.pairs, res.pos, res.horizontal), 120);
+    readEl.innerHTML = label;
+  }
+  function focusScenario(sc) {
+    const res = positionsScenario(sc);
+    applyLens(res, `<span class="nav-read-em">${res.subset.length} cards</span> for “${sc.title}.” Click one to open it.`);
+    reapply = () => focusScenario(sc);
+  }
+  function exitFocus() {
+    field.classList.remove('is-focused');
+    if (chooserEl) chooserEl.style.display = '';
+    reapply = null;
+    clearEdges();
+    stars.forEach((s) => {
+      const el = els[s.slug];
+      el.classList.remove('is-bloom', 'is-recede');
+      el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
+    });
+    setTimeout(() => {
+      stars.forEach((s) => els[s.slug].classList.remove('is-controlled'));
+      focusMode = false;
+      exitEl.hidden = true;
+    }, 900);
+    readEl.textContent = '';
+  }
+
+  // Scenario chooser: three big journey boxes floating in the centre of the field.
+  scenarios.forEach((sc) => {
+    const dots = sc.nodes.map((n) => {
+      const c = cardBySlug(n.card);
+      const col = c ? (roleColorVar(c.type) || 'var(--text-dim)') : 'var(--text-dim)';
+      return `<span class="nav-sc-dot" style="background:${col}"></span>`;
+    }).join('');
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'nav-sc-box'; b.dataset.sc = sc.slug;
+    b.innerHTML = `
+      <div class="nav-sc-title">${sc.title}</div>
+      <div class="nav-sc-blurb">${sc.situation || ''}</div>
+      <div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${sc.nodes.length} cards</span></div>`;
+    scenariosEl.appendChild(b);
+  });
+  scenariosEl.addEventListener('click', (e) => {
+    const b = e.target.closest('.nav-sc-box'); if (!b) return;
+    const sc = scenarios.find((s) => s.slug === b.dataset.sc);
+    if (sc) focusScenario(sc);
+  });
+  exitEl.addEventListener('click', exitFocus);
+
+  // Click a star → open its card. Hover a bloomed card → light its connections.
+  cardsL.addEventListener('click', (e) => {
+    const el = e.target.closest('.nav-star'); if (!el) return;
+    const s = stars.find((x) => x.slug === el.dataset.slug);
+    if (!s || s.soon) return;
+    navigate(cardHref(s.card));
+  });
+  cardsL.addEventListener('mouseover', (e) => {
+    const el = e.target.closest('.nav-star'); if (!el) return;
+    const slug = el.dataset.slug;
+    edgeStore.forEach((p) => p.classList.toggle('hot', p.dataset.a === slug || p.dataset.b === slug));
+  });
+  cardsL.addEventListener('mouseout', () => { edgeStore.forEach((p) => p.classList.remove('hot')); });
+}
+
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
 // that expands/collapses to reveal a grid of cards. Vertical-only scroll.
 function viewHomeV5() {
@@ -843,7 +1477,8 @@ function viewHomeV4() {
     return section;
   };
 
-  // Basics row — FAST as the anchor, linking to /fast (no See-all: only 1 card)
+  // Basics row — FAST as the anchor, then the Agent Builder tool. Both link out
+  // to their own pages (linkOverride) rather than opening a card detail.
   const fastCard = {
     slug: 'fast-framework',
     title: 'The “perfect prompt” doesn’t exist.',
@@ -852,6 +1487,15 @@ function viewHomeV4() {
     level: 'beginner',
     linkOverride: '/fast',
   };
+  const agentBuilderCard = {
+    slug: 'agent-builder',
+    title: 'Build an agent, not just a prompt.',
+    teaser: 'Five answers become a paste-ready setup for Claude, a Custom GPT, or Copilot.',
+    type: 'tool',
+    level: 'beginner',
+    linkOverride: '/agent-builder',
+  };
+  const basicsCards = [fastCard, agentBuilderCard];
   shelvesHost.appendChild(
     addShelf(
       {
@@ -860,8 +1504,8 @@ function viewHomeV4() {
         summary: 'Foundations that apply across every card.',
         color: 'var(--r-thought-partner)',
       },
-      [fastCard],
-      1,
+      basicsCards,
+      basicsCards.length,
       null,
     ),
   );
@@ -1327,7 +1971,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c', 'view-download-fast');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-agent-builder', 'view-map', 'view-navigator', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c', 'view-download-fast');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -2110,6 +2754,15 @@ function route() {
   } else if (parts[0] === 'fast') {
     bgRenderer = viewFast;
     bgPath = '/fast';
+  } else if (parts[0] === 'agent-builder') {
+    bgRenderer = viewAgentBuilder;
+    bgPath = '/agent-builder';
+  } else if (parts[0] === 'map') {
+    bgRenderer = viewMap;
+    bgPath = '/map';
+  } else if (parts[0] === 'navigator') {
+    bgRenderer = viewNavigator;
+    bgPath = '/navigator';
   } else if (parts[0] === 'downloads' && parts[1] === 'fast') {
     bgRenderer = viewDownloadFast;
     bgPath = '/downloads/fast';

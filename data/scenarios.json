@@ -1,0 +1,43 @@
+[
+  {
+    "slug": "build-a-curriculum",
+    "title": "Build a curriculum",
+    "situation": "Plan the program — from discovery to a structured curriculum.",
+    "nodes": [
+      { "card": "set-up-your-ai-workspace", "requires": [] },
+      { "card": "prep-for-a-needs-assessment-call", "requires": ["set-up-your-ai-workspace"] },
+      { "card": "diagnose-what-the-last-course-got-wrong", "requires": ["prep-for-a-needs-assessment-call"] },
+      { "card": "build-your-stakeholder-map", "requires": ["prep-for-a-needs-assessment-call"] },
+      { "card": "build-a-learner-persona", "requires": ["build-your-stakeholder-map"] },
+      { "card": "build-your-curriculum", "requires": ["build-a-learner-persona"] },
+      { "card": "choose-the-right-modality", "requires": ["build-your-curriculum"] }
+    ]
+  },
+  {
+    "slug": "build-a-course",
+    "title": "Build a course",
+    "situation": "Make the content — outline, checks, and review, end to end.",
+    "nodes": [
+      { "card": "set-up-your-ai-workspace", "requires": [] },
+      { "card": "build-style-guide-for-your-project", "requires": ["set-up-your-ai-workspace"] },
+      { "card": "build-a-learner-persona", "requires": ["set-up-your-ai-workspace"] },
+      { "card": "topic-to-module-outline", "requires": ["build-a-learner-persona"] },
+      { "card": "choose-the-right-modality", "requires": ["topic-to-module-outline"] },
+      { "card": "build-knowledge-checks-at-the-right-cognitive-level", "requires": ["topic-to-module-outline"] },
+      { "card": "audit-module-against-style-guide", "requires": ["topic-to-module-outline", "build-style-guide-for-your-project"] },
+      { "card": "run-a-focus-group-on-your-draft", "requires": ["build-knowledge-checks-at-the-right-cognitive-level"] }
+    ]
+  },
+  {
+    "slug": "qa-a-course",
+    "title": "QA a course",
+    "situation": "Review a draft — diagnose, audit against your standard, and test with learners.",
+    "nodes": [
+      { "card": "diagnose-what-the-last-course-got-wrong", "requires": [] },
+      { "card": "build-a-learner-persona", "requires": ["diagnose-what-the-last-course-got-wrong"] },
+      { "card": "build-style-guide-for-your-project", "requires": ["diagnose-what-the-last-course-got-wrong"] },
+      { "card": "audit-module-against-style-guide", "requires": ["build-style-guide-for-your-project"] },
+      { "card": "run-a-focus-group-on-your-draft", "requires": ["audit-module-against-style-guide", "build-a-learner-persona"] }
+    ]
+  }
+]

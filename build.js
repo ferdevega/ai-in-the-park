@@ -81,6 +81,27 @@ const routes = [
     url: `${SITE_URL}/fast`,
   },
   {
+    out: 'navigator/index.html',
+    title: `Navigator — ${SITE_NAME}`,
+    description:
+      'New to AI in the loop? Pick the situation you’re in and the navigator lays out the exact path of cards to follow.',
+    url: `${SITE_URL}/navigator`,
+  },
+  {
+    out: 'map/index.html',
+    title: `The map — ${SITE_NAME}`,
+    description:
+      'The whole playbook as a constellation: every card as a star, grouped by stage. New here? Start from what’s on your plate.',
+    url: `${SITE_URL}/map`,
+  },
+  {
+    out: 'agent-builder/index.html',
+    title: `Build an agent — ${SITE_NAME}`,
+    description:
+      'A quick builder that turns five answers into paste-ready agent instructions for Claude, a Custom GPT, or Microsoft Copilot.',
+    url: `${SITE_URL}/agent-builder`,
+  },
+  {
     out: 'preview/index.html',
     title: `Preview — ${SITE_NAME}`,
     description: 'Alternate home layout preview.',
@@ -204,6 +225,9 @@ const sitemapUrls = [
   '/recent',
   '/about',
   '/fast',
+  '/navigator',
+  '/map',
+  '/agent-builder',
   ...stages.map((s) => `/stages/${s.slug}`),
   ...cards.map((c) => `/cards/${c.slug}`),
 ];

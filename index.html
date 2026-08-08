@@ -31,6 +31,7 @@
     </a>
     <nav class="topbar-links" data-topbar-menu>
       <a href="/" data-home-link>Home</a>
+      <a href="/navigator">Navigator</a>
       <a href="/about">About</a>
     </nav>
     <button type="button" class="topbar-menu-toggle" data-topbar-toggle aria-label="Toggle menu" aria-expanded="false">
@@ -569,6 +570,131 @@
       </div>
 
       </section>
+    </div>
+  </template>
+
+  <template id="tpl-agent-builder">
+    <div class="content-card-wrap content-card-wrap-agent">
+      <a class="content-card-back" href="/"><span aria-hidden="true">←</span> Back to the library</a>
+      <section class="agent-builder content-card content-card-agent" data-reveal>
+        <h1 class="agent-builder-h1">Build an agent</h1>
+        <p class="agent-builder-lede">An agent is just a prompt that <span class="gradient-text">stuck around</span> — a role, a job, and the context to do it, saved once instead of re-typed every morning. It's <a href="/fast">FAST</a>, stretched to something that persists.</p>
+        <p class="agent-builder-sub">Answer the five questions. You'll get paste-ready instructions on the right, plus the exact setup steps for your tool.</p>
+
+        <div class="agent-builder-grid" data-agent-builder>
+          <!-- Left column: the five fields -->
+          <form class="agent-builder-form" data-agent-form novalidate>
+            <label class="agent-field">
+              <span class="agent-field-label">1 · Role</span>
+              <span class="agent-field-hint">Who is this agent? Give it a point of view, not just a job title.</span>
+              <textarea data-field="role" rows="2" placeholder="a senior instructional designer who…"></textarea>
+            </label>
+            <label class="agent-field">
+              <span class="agent-field-label">2 · Job</span>
+              <span class="agent-field-hint">The one job you're hiring it for.</span>
+              <textarea data-field="job" rows="2" placeholder="Turn my raw SME notes into a module outline."></textarea>
+            </label>
+            <label class="agent-field">
+              <span class="agent-field-label">3 · How it works</span>
+              <span class="agent-field-hint">Walk it through your steps — one per line.</span>
+              <textarea data-field="workflow" rows="5" placeholder="Ask me for the audience if I didn't give it.&#10;Draft 4 to 6 modules with Bloom-level outcomes.&#10;Return a table, then wait for my edits."></textarea>
+            </label>
+            <label class="agent-field">
+              <span class="agent-field-label">4 · Knowledge</span>
+              <span class="agent-field-hint">What should it always have on hand?</span>
+              <textarea data-field="knowledge" rows="2" placeholder="my style guide, the competency framework…"></textarea>
+            </label>
+            <label class="agent-field">
+              <span class="agent-field-label">5 · Guardrails</span>
+              <span class="agent-field-hint">What must it always — or never — do?</span>
+              <textarea data-field="guardrails" rows="3" placeholder="Always use Bloom-level verbs. Never invent statistics."></textarea>
+            </label>
+          </form>
+
+          <!-- Right column: the assembled output -->
+          <div class="agent-builder-output">
+            <div class="agent-builder-instructions">
+              <div class="agent-builder-instructions-head">
+                <span class="agent-builder-instructions-title">Your agent's instructions</span>
+                <button type="button" class="copy-btn" data-agent-copy>Copy</button>
+              </div>
+              <pre class="agent-builder-code" data-agent-output></pre>
+            </div>
+
+            <div class="agent-builder-setup">
+              <h2 class="agent-builder-setup-title">Now set it up in your tool</h2>
+              <div class="tool-tabs" data-tool-tabs>
+                <div class="tool-tabs-nav" role="tablist">
+                  <button type="button" class="tool-tab-btn active" data-tab="claude" role="tab">Claude Project</button>
+                  <button type="button" class="tool-tab-btn" data-tab="gpt" role="tab">Custom GPT</button>
+                  <button type="button" class="tool-tab-btn" data-tab="copilot" role="tab">Microsoft Copilot</button>
+                </div>
+                <div class="tool-tab-panel active" data-panel="claude">
+                  <ol class="agent-setup-steps">
+                    <li>At <strong>claude.ai</strong>, create a new <strong>Project</strong>.</li>
+                    <li>Open <em>Set custom instructions</em> and paste the instructions from the left.</li>
+                    <li>Add <span data-kb-echo>your source material</span> under <em>Project knowledge</em> — upload files or paste text.</li>
+                    <li>Start a chat inside the Project. It now carries all of the above on every run.</li>
+                  </ol>
+                </div>
+                <div class="tool-tab-panel" data-panel="gpt">
+                  <ol class="agent-setup-steps">
+                    <li>At <strong>chatgpt.com</strong>, open <em>Explore GPTs → Create</em>.</li>
+                    <li>In the <em>Configure</em> tab, paste the instructions into <em>Instructions</em>.</li>
+                    <li>Upload <span data-kb-echo>your source material</span> under <em>Knowledge</em>.</li>
+                    <li>Save. Leave visibility on <em>Only me</em> unless you mean to share it.</li>
+                  </ol>
+                </div>
+                <div class="tool-tab-panel" data-panel="copilot">
+                  <ol class="agent-setup-steps">
+                    <li>In Copilot, choose <em>Create agent</em> — via Copilot Studio, or the Agents panel in Microsoft&nbsp;365 Copilot (availability depends on your license).</li>
+                    <li>Paste the instructions into the agent's <em>instructions</em> field.</li>
+                    <li>Add <span data-kb-echo>your source material</span> as <em>knowledge sources</em> — SharePoint, files, or pasted text.</li>
+                    <li>Publish it to yourself, then pin it in the Copilot side panel.</li>
+                  </ol>
+                </div>
+              </div>
+              <p class="agent-builder-foot">Same instructions, three tools. Paste the block on the left into whichever one you use.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <template id="tpl-navigator">
+    <div class="navigator-page">
+      <section class="nav-field" data-nav-field>
+        <canvas class="nav-bg" data-nav-bg></canvas>
+        <div class="nav-grain" aria-hidden="true"></div>
+        <div class="nav-vignette" aria-hidden="true"></div>
+        <svg class="nav-edges" data-nav-edges preserveAspectRatio="none"></svg>
+        <div class="nav-cards" data-nav-cards></div>
+        <div class="nav-ui">
+          <div class="nav-chooser" data-nav-chooser>
+            <div class="nav-eyebrow">The playbook · choose your journey</div>
+            <h1 class="nav-question">What are you working on?</h1>
+            <div class="nav-scenarios" data-nav-scenarios></div>
+          </div>
+          <button type="button" class="nav-exit" data-nav-exit hidden><span aria-hidden="true">←</span> Back to the stars</button>
+        </div>
+        <div class="nav-readout" data-nav-readout></div>
+      </section>
+    </div>
+  </template>
+
+  <template id="tpl-map">
+    <div class="map-page">
+      <div class="map-head">
+        <div class="map-eyebrow">The playbook, mapped</div>
+        <h1 class="map-title">New here? What’s on your plate?</h1>
+        <div class="map-chips" data-map-chips></div>
+        <div class="map-read" data-map-read>Tap a situation to light your corner of the map — or hover the stars to explore.</div>
+      </div>
+      <div class="map-canvas">
+        <svg data-map-svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" width="100%" role="img" aria-label="A constellation map of the playbook cards, grouped by stage"></svg>
+      </div>
+      <div class="map-legend" data-map-legend></div>
     </div>
   </template>
 
