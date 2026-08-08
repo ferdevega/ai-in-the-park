@@ -31,7 +31,7 @@
     </a>
     <nav class="topbar-links" data-topbar-menu>
       <a href="/" data-home-link>Home</a>
-      <a href="/navigator">Navigator</a>
+      <a href="/library">Library</a>
       <a href="/about">About</a>
     </nav>
     <button type="button" class="topbar-menu-toggle" data-topbar-toggle aria-label="Toggle menu" aria-expanded="false">
@@ -668,17 +668,23 @@
         <canvas class="nav-bg" data-nav-bg></canvas>
         <div class="nav-grain" aria-hidden="true"></div>
         <div class="nav-vignette" aria-hidden="true"></div>
-        <svg class="nav-edges" data-nav-edges preserveAspectRatio="none"></svg>
-        <div class="nav-cards" data-nav-cards></div>
         <div class="nav-ui">
           <div class="nav-chooser" data-nav-chooser>
             <div class="nav-eyebrow">The playbook · choose your journey</div>
             <h1 class="nav-question">What are you working on?</h1>
             <div class="nav-scenarios" data-nav-scenarios></div>
           </div>
-          <button type="button" class="nav-exit" data-nav-exit hidden><span aria-hidden="true">←</span> Back to the stars</button>
+          <div class="nav-scene" data-nav-scene hidden>
+            <button type="button" class="nav-exit" data-nav-exit><span aria-hidden="true">←</span> Back to the stars</button>
+            <div class="nav-scene-body" data-nav-scene-body></div>
+          </div>
         </div>
-        <div class="nav-readout" data-nav-readout></div>
+      </section>
+      <section class="nav-browse">
+        <div class="nav-browse-inner">
+          <h2 class="nav-browse-h">Browse by stage</h2>
+          <div class="nav-browse-list" data-nav-browse-list></div>
+        </div>
       </section>
     </div>
   </template>

@@ -1,43 +1,59 @@
 [
   {
+    "slug": "start-with-ai",
+    "title": "Start with AI",
+    "situation": "New to this? Get the basics in place, once.",
+    "enablers": [],
+    "related": ["kick-off-a-new-project"],
+    "moments": [
+      { "label": "Learn", "cards": [{ "title": "The FAST prompting model", "type": "tool", "link": "/fast" }] },
+      { "label": "Set up", "cards": ["set-up-your-ai-workspace"] }
+    ]
+  },
+  {
+    "slug": "kick-off-a-new-project",
+    "title": "Kick off a new project",
+    "situation": "A request landed. Work out what's needed — and who for — before you build.",
+    "enablers": ["set-up-your-ai-workspace"],
+    "related": ["build-a-curriculum"],
+    "moments": [
+      { "label": "Prepare", "cards": ["prep-for-a-needs-assessment-call", "build-your-stakeholder-map"] },
+      { "label": "Diagnose", "cards": ["diagnose-what-the-last-course-got-wrong"] },
+      { "label": "Design", "cards": ["build-a-learner-persona", "build-style-guide-for-your-project"] }
+    ]
+  },
+  {
     "slug": "build-a-curriculum",
     "title": "Build a curriculum",
-    "situation": "Plan the program — from discovery to a structured curriculum.",
-    "nodes": [
-      { "card": "set-up-your-ai-workspace", "requires": [] },
-      { "card": "prep-for-a-needs-assessment-call", "requires": ["set-up-your-ai-workspace"] },
-      { "card": "diagnose-what-the-last-course-got-wrong", "requires": ["prep-for-a-needs-assessment-call"] },
-      { "card": "build-your-stakeholder-map", "requires": ["prep-for-a-needs-assessment-call"] },
-      { "card": "build-a-learner-persona", "requires": ["build-your-stakeholder-map"] },
-      { "card": "build-your-curriculum", "requires": ["build-a-learner-persona"] },
-      { "card": "choose-the-right-modality", "requires": ["build-your-curriculum"] }
+    "situation": "Shape the whole program — structure and how it's delivered.",
+    "enablers": ["set-up-your-ai-workspace"],
+    "related": ["build-a-course"],
+    "moments": [
+      { "label": "Structure", "cards": ["build-your-curriculum"] },
+      { "label": "Deliver", "cards": ["choose-the-right-modality"] }
     ]
   },
   {
     "slug": "build-a-course",
     "title": "Build a course",
-    "situation": "Make the content — outline, checks, and review, end to end.",
-    "nodes": [
-      { "card": "set-up-your-ai-workspace", "requires": [] },
-      { "card": "build-style-guide-for-your-project", "requires": ["set-up-your-ai-workspace"] },
-      { "card": "build-a-learner-persona", "requires": ["set-up-your-ai-workspace"] },
-      { "card": "topic-to-module-outline", "requires": ["build-a-learner-persona"] },
-      { "card": "choose-the-right-modality", "requires": ["topic-to-module-outline"] },
-      { "card": "build-knowledge-checks-at-the-right-cognitive-level", "requires": ["topic-to-module-outline"] },
-      { "card": "audit-module-against-style-guide", "requires": ["topic-to-module-outline", "build-style-guide-for-your-project"] },
-      { "card": "run-a-focus-group-on-your-draft", "requires": ["build-knowledge-checks-at-the-right-cognitive-level"] }
+    "situation": "Turn a topic into a real, built module.",
+    "enablers": ["set-up-your-ai-workspace", "build-style-guide-for-your-project"],
+    "related": ["set-up-quality-standards"],
+    "moments": [
+      { "label": "Draft", "cards": ["topic-to-module-outline"] },
+      { "label": "Assess", "cards": ["build-knowledge-checks-at-the-right-cognitive-level"] }
     ]
   },
   {
-    "slug": "qa-a-course",
-    "title": "QA a course",
-    "situation": "Review a draft — diagnose, audit against your standard, and test with learners.",
-    "nodes": [
-      { "card": "diagnose-what-the-last-course-got-wrong", "requires": [] },
-      { "card": "build-a-learner-persona", "requires": ["diagnose-what-the-last-course-got-wrong"] },
-      { "card": "build-style-guide-for-your-project", "requires": ["diagnose-what-the-last-course-got-wrong"] },
-      { "card": "audit-module-against-style-guide", "requires": ["build-style-guide-for-your-project"] },
-      { "card": "run-a-focus-group-on-your-draft", "requires": ["audit-module-against-style-guide", "build-a-learner-persona"] }
+    "slug": "set-up-quality-standards",
+    "title": "Set up quality standards and checks",
+    "situation": "Decide what “good” means, then hold your content to it.",
+    "enablers": ["set-up-your-ai-workspace"],
+    "related": ["build-a-course"],
+    "moments": [
+      { "label": "Set the standard", "cards": ["build-style-guide-for-your-project"] },
+      { "label": "Check against it", "cards": ["audit-module-against-style-guide"] },
+      { "label": "Test with humans", "cards": ["run-a-focus-group-on-your-draft"] }
     ]
   }
 ]

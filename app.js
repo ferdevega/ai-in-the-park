@@ -1032,11 +1032,10 @@ function wireMap() {
   });
 }
 
-// ---------- Navigator (starfield → bloom) ----------
-// /navigator: every card is a star drifting in a constant, autonomous field.
-// Pick a situation (blooms into its prerequisite path from data/scenarios.json)
-// or a role filter, and the matching cards rise to the front and bloom into
-// cards while the rest hang back. Nothing navigates — lenses filter in place.
+// ---------- Navigator (home: shows over a star-field) ----------
+// The homepage. An ambient star-field with the "shows" (scenarios) as big
+// boxes; pick one and it opens to its episodes (cards) grouped by moment, with
+// an enabler prelude and an "up next" strip. Data: data/scenarios.json.
 function viewNavigator() {
   state.view = 'navigator';
   renderSpine(null);
@@ -1048,82 +1047,32 @@ function wireNavigator() {
   const field = document.querySelector('[data-nav-field]');
   if (!field) return;
   const cv = field.querySelector('[data-nav-bg]');
-  const edges = field.querySelector('[data-nav-edges]');
-  const cardsL = field.querySelector('[data-nav-cards]');
   const chooserEl = field.querySelector('[data-nav-chooser]');
   const scenariosEl = field.querySelector('[data-nav-scenarios]');
-  const readEl = field.querySelector('[data-nav-readout]');
-  const exitEl = field.querySelector('[data-nav-exit]');
-  const NS = 'http://www.w3.org/2000/svg';
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sceneEl = field.querySelector('[data-nav-scene]');
+  const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
+  const browseEl = document.querySelector('[data-nav-browse-list]');
   const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
-
-  const live = state.cards.filter((c) => !c.coming_soon);
-  const soon = state.cards.filter((c) => c.coming_soon).slice(0, 8);
   const scenarios = state.scenarios || [];
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Star list: live cards (bright, bloom into cards) + a few dim "soon" stars.
-  // Stable golden-angle scatter, each with a slow autonomous velocity.
-  const items = live.map((c) => ({ slug: c.slug, card: c, soon: false }))
-    .concat(soon.map((c) => ({ slug: 'soon-' + c.slug, card: c, soon: true })));
-  const N = Math.max(items.length, 1);
-  const stars = items.map((it, i) => {
-    const frac = (i + 0.5) / N;
-    const rr = Math.sqrt(frac) * 0.46;
-    const th = i * 2.39996;
-    let bx = 0.5 + rr * Math.cos(th);
-    let by = 0.5 + rr * Math.sin(th) * 0.82;
-    bx = Math.max(0.07, Math.min(0.93, bx));
-    by = Math.max(0.12, Math.min(0.9, by));
-    const ang = i * 1.7, spd = 0.00006 + (i % 3) * 0.00003;
-    return Object.assign(it, { bx, by, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd });
-  });
-
-  let W = 0, H = 0, focusMode = false, reapply = null;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // ----- ambient star-field canvas -----
   const ctx = cv.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
   function measure() {
     const r = field.getBoundingClientRect();
     W = r.width; H = r.height;
     cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    edges.setAttribute('viewBox', `0 0 ${W} ${H}`);
   }
   measure();
-
-  // DOM stars: a glowing dot always, plus a glass card face revealed on bloom.
-  const els = {};
-  stars.forEach((s) => {
-    const el = document.createElement('div');
-    el.className = 'nav-star' + (s.soon ? ' is-soon' : '');
-    el.dataset.slug = s.slug;
-    el.style.setProperty('--rc', s.soon ? '#4a4a55' : (roleColorVar(s.card.type) || 'var(--text-dim)'));
-    const dot = document.createElement('div');
-    dot.className = 'nav-star-dot';
-    el.appendChild(dot);
-    if (!s.soon) {
-      const face = document.createElement('div');
-      face.className = 'nav-star-face';
-      face.innerHTML = `<div class="nav-star-top"><span class="nav-star-role">${RNAME[s.card.type] || ''}</span>${ROLE_ICONS[s.card.type] || ''}</div><div class="nav-star-ttl">${s.card.title}</div>`;
-      el.appendChild(face);
-    }
-    cardsL.appendChild(el);
-    els[s.slug] = el;
-  });
-
-  // Ambient canvas: parallax star layers + drifting nebula, always in motion.
-  const layers = [{ n: 70, f: .12, s: [.4, .9], a: [.14, .38] }, { n: 44, f: .4, s: [.7, 1.4], a: [.28, .58] }, { n: 16, f: .9, s: [1.4, 2.4], a: [.5, .95] }];
-  const amb = [];
-  layers.forEach((L) => { for (let i = 0; i < L.n; i++) { const ang = Math.random() * 6.28, spd = 0.00006 + L.f * 0.00032; amb.push({ x: Math.random(), y: Math.random(), r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), a: L.a[0] + Math.random() * (L.a[1] - L.a[0]), tw: Math.random() * 6.28, sp: .2 + Math.random() * .5, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd }); } });
-  const neb = [{ x: .28, y: .3, c: '139,92,246' }, { x: .72, y: .34, c: '6,182,212' }, { x: .5, y: .82, c: '255,111,216' }];
-
-  let t = 0;
-  const onResize = () => { measure(); if (focusMode && reapply) reapply(); else placeDrift(); };
+  const onResize = () => measure();
   window.addEventListener('resize', onResize);
-
-  function placeDrift() {
-    stars.forEach((s) => { const el = els[s.slug]; el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px'; });
-  }
-
+  const layers = [{ n: 70, s: [.4, .9], a: [.14, .38] }, { n: 42, s: [.7, 1.4], a: [.28, .58] }, { n: 16, s: [1.4, 2.4], a: [.5, .95] }];
+  const stars = [];
+  layers.forEach((L) => { for (let i = 0; i < L.n; i++) { const ang = Math.random() * 6.28, spd = 0.00006 + Math.random() * 0.0003; stars.push({ x: Math.random(), y: Math.random(), r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), a: L.a[0] + Math.random() * (L.a[1] - L.a[0]), tw: Math.random() * 6.28, sp: .2 + Math.random() * .5, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd }); } });
+  const neb = [{ x: .28, y: .3, c: '139,92,246' }, { x: .72, y: .34, c: '6,182,212' }, { x: .5, y: .82, c: '255,111,216' }];
+  let t = 0;
   function frame() {
     if (!cv.isConnected) { window.removeEventListener('resize', onResize); return; }
     t++;
@@ -1135,180 +1084,141 @@ function wireNavigator() {
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     });
     ctx.globalCompositeOperation = 'lighter';
-    amb.forEach((s) => {
+    stars.forEach((s) => {
       if (!reduce) { s.x += s.vx; s.y += s.vy; if (s.x < -.06) s.x = 1.06; if (s.x > 1.06) s.x = -.06; if (s.y < -.06) s.y = 1.06; if (s.y > 1.06) s.y = -.06; }
       const px = s.x * W + Math.sin(t * .0008 * s.sp + s.tw) * 4, py = s.y * H + Math.cos(t * .0007 * s.sp + s.tw) * 4;
-      const tw = .6 + .4 * Math.sin(t * .03 * s.sp + s.tw), a = s.a * (reduce ? .85 : tw);
+      const a = s.a * (reduce ? .85 : .6 + .4 * Math.sin(t * .03 * s.sp + s.tw));
       if (s.r > 1.2) { const gg = ctx.createRadialGradient(px, py, 0, px, py, s.r * 5); gg.addColorStop(0, `rgba(220,225,255,${a})`); gg.addColorStop(1, 'rgba(220,225,255,0)'); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(px, py, s.r * 5, 0, 6.28); ctx.fill(); }
       ctx.fillStyle = `rgba(235,238,255,${a})`; ctx.beginPath(); ctx.arc(px, py, s.r, 0, 6.28); ctx.fill();
     });
     ctx.globalCompositeOperation = 'source-over';
-    if (!focusMode && !reduce) {
-      stars.forEach((s) => {
-        s.bx += s.vx; s.by += s.vy;
-        if (s.bx < -.04) s.bx = 1.04; if (s.bx > 1.04) s.bx = -.04;
-        if (s.by < -.04) s.by = 1.04; if (s.by > 1.04) s.by = -.04;
-        const el = els[s.slug]; el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
-      });
-    }
     requestAnimationFrame(frame);
   }
-  placeDrift();
   requestAnimationFrame(frame);
 
-  // Edges (scenario prerequisite paths), drawn with a self-drawing animation.
-  const edgeStore = [];
-  function clearEdges() { while (edges.lastChild) edges.removeChild(edges.lastChild); edgeStore.length = 0; }
-  function drawPath(pairs, pos, horizontal) {
-    clearEdges();
-    const defs = document.createElementNS(NS, 'defs');
-    const grad = document.createElementNS(NS, 'linearGradient');
-    grad.setAttribute('id', 'nav-grad'); grad.setAttribute('x1', '0'); grad.setAttribute('x2', '1');
-    [['0%', '#ff6fd8'], ['50%', '#a78bff'], ['100%', '#22d3ee']].forEach(([o, c]) => { const st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); grad.appendChild(st); });
-    defs.appendChild(grad); edges.appendChild(defs);
-    // Half sizes read from the actual rendered cards so edges meet the boxes.
-    const hw = (s) => (els[s] ? els[s].offsetWidth / 2 : 94);
-    const hh = (s) => (els[s] ? els[s].offsetHeight / 2 : 33);
-    pairs.forEach(([a, b]) => {
-      const A = pos[a], B = pos[b]; if (!A || !B) return;
-      const p = document.createElementNS(NS, 'path');
-      // Square elbow — across for horizontal flow, down for vertical.
-      if (horizontal) {
-        const sx = A.x + hw(a), ex = B.x - hw(b), mx = (sx + ex) / 2;
-        p.setAttribute('d', `M${sx} ${A.y} H${mx} V${B.y} H${ex}`);
-      } else {
-        const sy = A.y + hh(a), ey = B.y - hh(b), my = (sy + ey) / 2;
-        p.setAttribute('d', `M${A.x} ${sy} V${my} H${B.x} V${ey}`);
-      }
-      p.setAttribute('class', 'nav-edge');
-      p.dataset.a = a; p.dataset.b = b;
-      edges.appendChild(p);
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
-      p.getBoundingClientRect(); p.style.strokeDashoffset = 0;
-      edgeStore.push(p);
-    });
+  // ----- helpers -----
+  const scenarioCards = (sc) => (sc.moments || []).reduce((acc, m) => acc.concat(m.cards || []), []);
+  function tileColor(entry) {
+    const type = typeof entry === 'string' ? (cardBySlug(entry) || {}).type : entry.type;
+    return roleColorVar(type) || 'var(--text-dim)';
   }
-
-  function enterFocus() {
-    focusMode = true;
-    field.classList.add('is-focused');
-    if (chooserEl) chooserEl.style.display = 'none';
-    exitEl.hidden = false;
-    stars.forEach((s) => els[s.slug].classList.add('is-controlled'));
-  }
-  function positionsScenario(sc) {
-    const ns = sc.nodes.map((n) => ({ slug: n.card, requires: (n.requires || []).filter((r) => !!els[r]), card: cardBySlug(n.card) }))
-      .filter((n) => n.card && els[n.slug] && !n.card.coming_soon);
-    const bySlug = {}; ns.forEach((n) => (bySlug[n.slug] = n));
-    const dc = {};
-    function depth(s, seen) { if (dc[s] != null) return dc[s]; const n = bySlug[s]; if (!n || n.requires.length === 0) return dc[s] = 0; seen = seen || {}; if (seen[s]) return 0; seen[s] = 1; const d = 1 + Math.max(...n.requires.map((r) => depth(r, seen))); return dc[s] = d; }
-    ns.forEach((n) => (n.depth = depth(n.slug)));
-    const maxD = Math.max(0, ...ns.map((n) => n.depth));
-    const tiers = {}; ns.forEach((n) => { (tiers[n.depth] = tiers[n.depth] || []).push(n); });
-    const maxTier = Math.max(1, ...Object.values(tiers).map((t) => t.length));
-    // Wide viewports flow left→right (columns); narrow ones stack top→bottom (rows).
-    const horizontal = W >= 900;
-    const pos = {};
-    if (horizontal) {
-      const usableW = Math.max(W - 192, 300);
-      const colW = maxD > 0 ? Math.min(300, usableW / maxD) : 0;
-      const startX = (W - maxD * colW) / 2;   // center the whole tree
-      const cyc = (150 + (H - 70)) / 2;
-      Object.keys(tiers).forEach((d) => {
-        const tier = tiers[d], k = tier.length, sp = Math.min(140, (H * 0.6) / Math.max(k, 1));
-        tier.forEach((n, i) => { pos[n.slug] = { x: maxD > 0 ? startX + Number(d) * colW : W / 2, y: cyc + (i - (k - 1) / 2) * sp }; });
-      });
+  function navTile(entry, enabler) {
+    let title, type, href;
+    if (typeof entry === 'string') {
+      const c = cardBySlug(entry);
+      if (!c) return null;
+      title = c.title; type = c.type; href = cardHref(c);
     } else {
-      const topStart = W < 600 ? 178 : 138, botPad = 58, usableH = Math.max(H - topStart - botPad, 240);
-      const rowGap = maxD > 0 ? Math.min(150, usableH / maxD) : 0;
-      const startY = topStart + Math.max(0, (usableH - maxD * rowGap) / 2);   // center vertically
-      const colGap = Math.min(230, (W * 0.86) / maxTier);
-      Object.keys(tiers).forEach((d) => {
-        const tier = tiers[d], k = tier.length;
-        tier.forEach((n, i) => { pos[n.slug] = { x: W / 2 + (i - (k - 1) / 2) * colGap, y: maxD > 0 ? startY + Number(d) * rowGap : H * 0.5 }; });
-      });
+      title = entry.title; type = entry.type || 'tool'; href = entry.link || '#';
     }
-    const pairs = [];
-    ns.forEach((n) => n.requires.forEach((r) => pairs.push([r, n.slug])));
-    return { pos, pairs, subset: ns.map((n) => n.slug), horizontal };
-  }
-  function applyLens(res, label) {
-    enterFocus();
-    const set = new Set(res.subset);
-    stars.forEach((s) => {
-      const el = els[s.slug];
-      el.classList.remove('is-bloom', 'is-recede');
-      if (set.has(s.slug)) {
-        const p = res.pos[s.slug];
-        el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
-        el.classList.add('is-bloom');
-      } else {
-        el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
-        el.classList.add('is-recede');
-      }
-    });
-    setTimeout(() => drawPath(res.pairs, res.pos, res.horizontal), 120);
-    readEl.innerHTML = label;
-  }
-  function focusScenario(sc) {
-    const res = positionsScenario(sc);
-    applyLens(res, `<span class="nav-read-em">${res.subset.length} cards</span> for “${sc.title}.” Click one to open it.`);
-    reapply = () => focusScenario(sc);
-  }
-  function exitFocus() {
-    field.classList.remove('is-focused');
-    if (chooserEl) chooserEl.style.display = '';
-    reapply = null;
-    clearEdges();
-    stars.forEach((s) => {
-      const el = els[s.slug];
-      el.classList.remove('is-bloom', 'is-recede');
-      el.style.left = (s.bx * W).toFixed(1) + 'px'; el.style.top = (s.by * H).toFixed(1) + 'px';
-    });
-    setTimeout(() => {
-      stars.forEach((s) => els[s.slug].classList.remove('is-controlled'));
-      focusMode = false;
-      exitEl.hidden = true;
-    }, 900);
-    readEl.textContent = '';
+    const a = document.createElement('a');
+    a.className = 'nav-tile' + (enabler ? ' is-enabler' : '');
+    a.href = href;
+    a.style.setProperty('--rc', roleColorVar(type) || 'var(--text-dim)');
+    a.innerHTML = `<span class="nav-tile-role">${RNAME[type] || type || ''}</span><span class="nav-tile-ttl">${title}</span>`;
+    return a;
   }
 
-  // Scenario chooser: three big journey boxes floating in the centre of the field.
+  // ----- home: the shows -----
   scenarios.forEach((sc) => {
-    const dots = sc.nodes.map((n) => {
-      const c = cardBySlug(n.card);
-      const col = c ? (roleColorVar(c.type) || 'var(--text-dim)') : 'var(--text-dim)';
-      return `<span class="nav-sc-dot" style="background:${col}"></span>`;
-    }).join('');
+    const cards = scenarioCards(sc);
+    const dots = cards.map((c) => `<span class="nav-sc-dot" style="background:${tileColor(c)}"></span>`).join('');
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'nav-sc-box'; b.dataset.sc = sc.slug;
     b.innerHTML = `
       <div class="nav-sc-title">${sc.title}</div>
       <div class="nav-sc-blurb">${sc.situation || ''}</div>
-      <div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${sc.nodes.length} cards</span></div>`;
+      <div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
     scenariosEl.appendChild(b);
   });
   scenariosEl.addEventListener('click', (e) => {
     const b = e.target.closest('.nav-sc-box'); if (!b) return;
     const sc = scenarios.find((s) => s.slug === b.dataset.sc);
-    if (sc) focusScenario(sc);
+    if (sc) openShow(sc);
   });
-  exitEl.addEventListener('click', exitFocus);
 
-  // Click a star → open its card. Hover a bloomed card → light its connections.
-  cardsL.addEventListener('click', (e) => {
-    const el = e.target.closest('.nav-star'); if (!el) return;
-    const s = stars.find((x) => x.slug === el.dataset.slug);
-    if (!s || s.soon) return;
-    navigate(cardHref(s.card));
+  // ----- a show: episodes grouped by moment -----
+  function openShow(sc) {
+    chooserEl.style.display = 'none';
+    sceneEl.hidden = false;
+    const body = sceneBodyEl;
+    body.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'nav-scene-head';
+    head.innerHTML = `<h1 class="nav-scene-title">${sc.title}</h1><p class="nav-scene-sit">${sc.situation || ''}</p>`;
+    body.appendChild(head);
+
+    if (sc.enablers && sc.enablers.length) {
+      const pre = document.createElement('div');
+      pre.className = 'nav-prelude';
+      pre.innerHTML = '<div class="nav-prelude-label">Set up first</div>';
+      const row = document.createElement('div');
+      row.className = 'nav-tiles';
+      sc.enablers.forEach((e) => { const tl = navTile(e, true); if (tl) row.appendChild(tl); });
+      pre.appendChild(row);
+      body.appendChild(pre);
+    }
+
+    (sc.moments || []).forEach((m, i) => {
+      const sec = document.createElement('div');
+      sec.className = 'nav-moment';
+      const lbl = document.createElement('div');
+      lbl.className = 'nav-moment-label';
+      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
+      sec.appendChild(lbl);
+      const row = document.createElement('div');
+      row.className = 'nav-tiles';
+      (m.cards || []).forEach((c) => { const tl = navTile(c); if (tl) row.appendChild(tl); });
+      sec.appendChild(row);
+      body.appendChild(sec);
+    });
+
+    const rel = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
+    if (rel.length) {
+      const up = document.createElement('div');
+      up.className = 'nav-upnext';
+      up.innerHTML = '<div class="nav-upnext-label">Up next</div>';
+      const row = document.createElement('div');
+      row.className = 'nav-upnext-row';
+      rel.forEach((r) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'nav-upnext-box'; b.dataset.sc = r.slug;
+        b.innerHTML = `<div class="nav-upnext-t">${r.title}</div><div class="nav-upnext-s">${r.situation || ''}</div>`;
+        row.appendChild(b);
+      });
+      up.appendChild(row);
+      body.appendChild(up);
+    }
+
+    sceneEl.scrollTop = 0;
+  }
+
+  function showChooser() {
+    sceneEl.hidden = true;
+    chooserEl.style.display = '';
+  }
+
+  sceneEl.addEventListener('click', (e) => {
+    if (e.target.closest('[data-nav-exit]')) { showChooser(); return; }
+    const up = e.target.closest('.nav-upnext-box');
+    if (up) { const sc = scenarios.find((s) => s.slug === up.dataset.sc); if (sc) openShow(sc); }
   });
-  cardsL.addEventListener('mouseover', (e) => {
-    const el = e.target.closest('.nav-star'); if (!el) return;
-    const slug = el.dataset.slug;
-    edgeStore.forEach((p) => p.classList.toggle('hot', p.dataset.a === slug || p.dataset.b === slug));
-  });
-  cardsL.addEventListener('mouseout', () => { edgeStore.forEach((p) => p.classList.remove('hot')); });
+
+  // ----- browse by stage (below the hero) -----
+  if (browseEl) {
+    state.stages.forEach((stage) => {
+      const has = stageHasCards(stage.slug);
+      const n = cardsForStage(stage.slug).filter((c) => !c.coming_soon).length;
+      const a = document.createElement('a');
+      a.className = 'nav-browse-item' + (has ? '' : ' is-empty');
+      a.href = has ? stageHref(stage) : '#';
+      if (!has) a.setAttribute('aria-disabled', 'true');
+      a.style.setProperty('--stage-color', stageColorVar(stage));
+      a.innerHTML = `<span class="nav-browse-dot"></span><span class="nav-browse-name">${stage.title}</span><span class="nav-browse-count">${has ? n : 'soon'}</span>`;
+      browseEl.appendChild(a);
+    });
+  }
 }
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
@@ -2741,9 +2651,13 @@ function route() {
   let bgPath = '/';
 
   if (parts.length === 0) {
-    // New homepage — the Netflix-style layout that used to live at /preview3
-    bgRenderer = viewHomeV4;
+    // Homepage is now the navigator (shows over a star-field).
+    bgRenderer = viewNavigator;
     bgPath = '/';
+  } else if (parts[0] === 'library') {
+    // The old stage-shelf home, demoted to the browse-everything library.
+    bgRenderer = viewHomeV4;
+    bgPath = '/library';
   } else if (parts[0] === 'classic') {
     // Backup/legacy home preserved for reference
     bgRenderer = viewHome;

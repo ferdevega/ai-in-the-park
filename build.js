@@ -81,6 +81,12 @@ const routes = [
     url: `${SITE_URL}/fast`,
   },
   {
+    out: 'library/index.html',
+    title: `Library — ${SITE_NAME}`,
+    description: 'Browse the whole playbook by stage — every card, grouped by where it fits in the process.',
+    url: `${SITE_URL}/library`,
+  },
+  {
     out: 'navigator/index.html',
     title: `Navigator — ${SITE_NAME}`,
     description:
@@ -225,6 +231,7 @@ const sitemapUrls = [
   '/recent',
   '/about',
   '/fast',
+  '/library',
   '/navigator',
   '/map',
   '/agent-builder',
