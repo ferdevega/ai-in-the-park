@@ -1102,21 +1102,20 @@ function wireNavigator() {
     const type = typeof entry === 'string' ? (cardBySlug(entry) || {}).type : entry.type;
     return roleColorVar(type) || 'var(--text-dim)';
   }
-  function navTile(entry, enabler) {
-    let title, type, href;
-    if (typeof entry === 'string') {
-      const c = cardBySlug(entry);
-      if (!c) return null;
-      title = c.title; type = c.type; href = cardHref(c);
-    } else {
-      title = entry.title; type = entry.type || 'tool'; href = entry.link || '#';
-    }
-    const a = document.createElement('a');
-    a.className = 'nav-tile' + (enabler ? ' is-enabler' : '');
-    a.href = href;
-    a.style.setProperty('--rc', roleColorVar(type) || 'var(--text-dim)');
-    a.innerHTML = `<span class="nav-tile-role">${RNAME[type] || type || ''}</span><span class="nav-tile-ttl">${title}</span>`;
-    return a;
+  // Episodes render as the real library card (renderV4Card) so the show page
+  // speaks the same visual language as the home/library. Synthetic entries
+  // (e.g. FAST → /fast) become a card-shaped object with a linkOverride.
+  function episodeCard(entry) {
+    if (typeof entry === 'string') return cardBySlug(entry) || null;
+    return { slug: entry.slug || entry.link, title: entry.title, teaser: entry.teaser || '', type: entry.type || 'tool', level: entry.level || 'beginner', linkOverride: entry.link };
+  }
+  function renderEpisode(entry, enabler) {
+    const card = episodeCard(entry);
+    if (!card) return null;
+    const frag = renderV4Card(card, {});
+    const a = frag.querySelector('a');
+    if (a && enabler) a.classList.add('is-enabler');
+    return frag;
   }
 
   // ----- home: the shows -----
@@ -1139,8 +1138,6 @@ function wireNavigator() {
 
   // ----- a show: episodes grouped by moment -----
   function openShow(sc) {
-    chooserEl.style.display = 'none';
-    sceneEl.hidden = false;
     const body = sceneBodyEl;
     body.innerHTML = '';
 
@@ -1154,8 +1151,8 @@ function wireNavigator() {
       pre.className = 'nav-prelude';
       pre.innerHTML = '<div class="nav-prelude-label">Set up first</div>';
       const row = document.createElement('div');
-      row.className = 'nav-tiles';
-      sc.enablers.forEach((e) => { const tl = navTile(e, true); if (tl) row.appendChild(tl); });
+      row.className = 'nav-eps';
+      sc.enablers.forEach((e) => { const tl = renderEpisode(e, true); if (tl) row.appendChild(tl); });
       pre.appendChild(row);
       body.appendChild(pre);
     }
@@ -1168,8 +1165,8 @@ function wireNavigator() {
       lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
       sec.appendChild(lbl);
       const row = document.createElement('div');
-      row.className = 'nav-tiles';
-      (m.cards || []).forEach((c) => { const tl = navTile(c); if (tl) row.appendChild(tl); });
+      row.className = 'nav-eps';
+      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) row.appendChild(tl); });
       sec.appendChild(row);
       body.appendChild(sec);
     });
@@ -1191,12 +1188,12 @@ function wireNavigator() {
       body.appendChild(up);
     }
 
+    field.classList.add('showing-scene');
     sceneEl.scrollTop = 0;
   }
 
   function showChooser() {
-    sceneEl.hidden = true;
-    chooserEl.style.display = '';
+    field.classList.remove('showing-scene');
   }
 
   sceneEl.addEventListener('click', (e) => {
