@@ -14,7 +14,9 @@ const OG_IMAGE = `${SITE_URL}/assets/og-default.svg`;
 const stages = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/stages.json'), 'utf8'))
   .sort((a, b) => a.order - b.order);
 const cards = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/cards.json'), 'utf8'))
-  .filter((c) => !c.hidden);
+  // Skip hidden cards and external/anchor cards (linkOverride → their own route,
+  // e.g. FAST → /fast) — they don't get a generated /cards/<slug> page.
+  .filter((c) => !c.hidden && !c.linkOverride);
 const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 
 const esc = (s) =>

@@ -323,7 +323,7 @@
   {
     "slug": "set-up-your-ai-workspace",
     "title": "Set up your AI workspace",
-    "stage": "design",
+    "stage": "basics",
     "type": "tool",
     "level": "beginner",
     "tags": ["workspace", "claude-projects", "custom-gpt", "gemini-gems"],
@@ -436,13 +436,13 @@
   {"slug":"generate-scenarios-and-examples","title":"Generate realistic scenarios and examples","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"generate-a-voiceover","title":"Generate a voiceover","stage":"development","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"translate-the-module","title":"Translate the module","stage":"development","type":"tool","level":"intermediate","coming_soon":true},
-  {"slug":"know-what-ai-is-good-and-bad-at","title":"Know what AI is good (and bad) at","stage":"design","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"when-not-to-use-ai","title":"When not to use AI","stage":"design","type":"thought-partner","level":"beginner","coming_soon":true},
-  {"slug":"what-is-agentic-ai","title":"What is agentic AI?","stage":"design","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"iterate-dont-one-shot","title":"Iterate, don’t one-shot","stage":"design","type":"thought-partner","level":"beginner","coming_soon":true},
-  {"slug":"build-a-reusable-prompt-library","title":"Build a reusable prompt library","stage":"design","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"pick-the-right-ai-tool","title":"Pick the right AI tool for the job","stage":"design","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"know-what-ai-is-good-and-bad-at","title":"Know what AI is good (and bad) at","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"when-not-to-use-ai","title":"When not to use AI","stage":"basics","type":"thought-partner","level":"beginner","coming_soon":true},
+  {"slug":"what-is-agentic-ai","title":"What is agentic AI?","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"iterate-dont-one-shot","title":"Iterate, don’t one-shot","stage":"basics","type":"thought-partner","level":"beginner","coming_soon":true},
+  {"slug":"build-a-reusable-prompt-library","title":"Build a reusable prompt library","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"pick-the-right-ai-tool","title":"Pick the right AI tool for the job","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"write-a-project-brief","title":"Write a project brief","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
   {"slug":"run-a-kickoff-meeting","title":"Run a kickoff meeting","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
   {"slug":"build-a-budget","title":"Build a budget","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
@@ -457,5 +457,6 @@
   {"slug":"set-up-learner-support","title":"Set up learner support","stage":"plan-execution","type":"creator","level":"beginner","coming_soon":true},
   {"slug":"read-completion-and-engagement-data","title":"Read completion and engagement data","stage":"measurement-improvement","type":"auditor","level":"intermediate","coming_soon":true},
   {"slug":"theme-early-feedback","title":"Theme early feedback","stage":"measurement-improvement","type":"creator","level":"beginner","coming_soon":true},
-  {"slug":"improve-from-the-data","title":"Improve from the data","stage":"measurement-improvement","type":"thought-partner","level":"intermediate","coming_soon":true}
+  {"slug":"improve-from-the-data","title":"Improve from the data","stage":"measurement-improvement","type":"thought-partner","level":"intermediate","coming_soon":true},
+  {"slug":"the-fast-prompting-model","title":"The FAST prompting model","stage":"basics","type":"tool","level":"beginner","teaser":"A four-move model for prompting with AI: Frame, Ask, Shape, Tune.","linkOverride":"/fast"}
 ]

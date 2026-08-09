@@ -51,6 +51,7 @@
   --highlight:    rgba(139,92,246,0.18);
 
   /* Stage colors — desaturated/brightened for dark backgrounds */
+  --s-0: #94a3b8;  /* basics                    — slate       */
   --s-1: #f87171;  /* analysis                  — soft red    */
   --s-2: #fb923c;  /* strategy & curriculum     — soft orange */
   --s-3: #34d399;  /* design                    — green       */

@@ -1,5 +1,12 @@
 [
   {
+    "slug": "basics",
+    "title": "Basics",
+    "abbr": "BA",
+    "order": 0,
+    "summary": "Get set up and learn the fundamentals of working with AI — once."
+  },
+  {
     "slug": "analysis",
     "title": "Analysis & Discovery",
     "abbr": "AN",

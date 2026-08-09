@@ -146,6 +146,9 @@ function renderCardPreview(card, { showStageLabel = false, showLevel = true } = 
     a.setAttribute('aria-disabled', 'true');
     a.setAttribute('data-subscribe-open', '');
     a.setAttribute('title', 'Subscribe to get notified when this card drops');
+  } else if (card.linkOverride) {
+    // External/anchor cards (e.g. FAST → /fast) point at their own page, not a card detail.
+    a.setAttribute('href', card.linkOverride);
   } else {
     a.setAttribute('href', cardHref(card));
   }

@@ -8,7 +8,7 @@
     "related": ["kick-off-a-new-project"],
     "moments": [
       { "label": "Get the mindset", "cards": ["know-what-ai-is-good-and-bad-at", "when-not-to-use-ai", "what-is-agentic-ai"] },
-      { "label": "Learn to prompt", "cards": [{ "title": "The FAST prompting model", "type": "tool", "link": "/fast" }, "iterate-dont-one-shot", "build-a-reusable-prompt-library"] },
+      { "label": "Learn to prompt", "cards": ["the-fast-prompting-model", "iterate-dont-one-shot", "build-a-reusable-prompt-library"] },
       { "label": "Set up your tools", "cards": ["set-up-your-ai-workspace", "pick-the-right-ai-tool", "give-ai-your-context"] }
     ]
   },
