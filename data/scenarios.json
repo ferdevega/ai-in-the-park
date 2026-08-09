@@ -47,9 +47,11 @@
     "previously": ["define-a-learning-strategy"],
     "related": ["set-up-quality-standards"],
     "moments": [
-      { "label": "Draft", "cards": ["topic-to-module-outline", "build-a-mood-board-for-your-course", "design-the-characters-for-your-course"] },
-      { "label": "Build", "cards": ["build-knowledge-checks-at-the-right-cognitive-level", "create-a-video-in-5-min", "create-a-job-aid-from-a-full-module", "test-a-branching-scenario-prototype"] },
-      { "label": "Check", "cards": ["audit-module-against-style-guide", "rewrite-content-for-a-different-audience-segment"] }
+      { "label": "Storyboard it", "cards": ["topic-to-module-outline", "storyboard-the-module"] },
+      { "label": "Art-direct it", "cards": ["build-a-mood-board-for-your-course", "design-the-characters-for-your-course"] },
+      { "label": "Build the content", "cards": ["build-knowledge-checks-at-the-right-cognitive-level", "write-on-screen-content-and-narration", "generate-scenarios-and-examples", "test-a-branching-scenario-prototype"] },
+      { "label": "Produce the media", "cards": ["create-a-video-in-5-min", "create-a-job-aid-from-a-full-module", "generate-a-voiceover"] },
+      { "label": "Localize content", "cards": ["rewrite-content-for-a-different-audience-segment", "translate-the-module"] }
     ]
   },
   {

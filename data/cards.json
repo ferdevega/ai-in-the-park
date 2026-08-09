@@ -430,5 +430,10 @@
   {"slug":"estimate-the-effort","title":"Estimate the effort","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
   {"slug":"set-up-the-project-timeline","title":"Set up the project timeline","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
   {"slug":"line-up-the-resources","title":"Line up the resources","stage":"project-management","type":"thought-partner","level":"intermediate","coming_soon":true},
-  {"slug":"define-the-reporting-strategy","title":"Define the reporting strategy","stage":"project-management","type":"creator","level":"intermediate","coming_soon":true}
+  {"slug":"define-the-reporting-strategy","title":"Define the reporting strategy","stage":"project-management","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"storyboard-the-module","title":"Storyboard the module","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"write-on-screen-content-and-narration","title":"Write the on-screen content and narration","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"generate-scenarios-and-examples","title":"Generate realistic scenarios and examples","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"generate-a-voiceover","title":"Generate a voiceover","stage":"development","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"translate-the-module","title":"Translate the module","stage":"development","type":"tool","level":"intermediate","coming_soon":true}
 ]
