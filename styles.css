@@ -4965,7 +4965,7 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 
 /* Chooser — the shows. Flows in the document (fills ≥1 screen, centered; grows
    and lets the window scroll if the content is taller). */
-.nav-chooser { position: relative; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 40px 20px; transition: opacity .3s var(--ease-smooth); }
+.nav-chooser { position: relative; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 26px 20px 48px; transition: opacity .3s var(--ease-smooth); }
 .nav-field.showing-scene .nav-chooser { display: none; }
 .nav-eyebrow { font-family: var(--heading); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #6a6a76; margin-bottom: 4px; }
 /* Hero — introduces what the page is (learning + AI). */
@@ -4974,13 +4974,14 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-chooser-sig { display: inline-flex; gap: 12px; margin: 0 0 10px; }
 .nav-chooser-sig-ic { display: inline-flex; }
 .nav-chooser-sig-ic svg { width: 16px; height: 16px; }
-.nav-chooser-line { font-size: .92rem; line-height: 1.5; color: var(--text-dim); margin: 0 auto 20px; max-width: 46ch; }
+.nav-chooser-line { font-size: .92rem; line-height: 1.5; color: var(--text-dim); margin: 0 auto 14px; max-width: 46ch; }
 /* Prompt above the boxes — the call to action, smaller than the hero. */
-.nav-question { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; color: #dcdce8; margin: 0 0 14px; }
+.nav-question { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; color: #dcdce8; margin: 0 0 12px; }
 .nav-scenarios { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 728px; }
 
-/* Scroll cue at the foot of the chooser — a readable pill button. */
-.nav-scroll-cue { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 9px;
+/* Scroll cue — a readable pill button that flows below the content (never
+   overlaps it). Centered in the chooser's column. */
+.nav-scroll-cue { display: inline-flex; align-items: center; gap: 9px; margin: 30px auto 4px;
   cursor: pointer; color: #d6d6e2; font-family: var(--body); font-size: 13px; padding: 10px 18px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,.18); background: rgba(20,18,28,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   transition: color .2s, border-color .2s, background .2s, transform .2s var(--ease-spring); }
