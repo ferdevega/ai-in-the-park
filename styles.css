@@ -4920,13 +4920,18 @@ body.view-navigator .layout { grid-template-columns: 1fr; }
 body.view-navigator .page { padding: 0; }
 .navigator-page { width: 100%; }
 
-.nav-field { position: relative; width: 100%; height: calc(100vh - var(--topbar-h)); overflow: hidden; background: #040406; }
-.nav-bg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.nav-grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+/* The field flows in the normal document (the window is the only scroller). The
+   star-field is a fixed backdrop pinned to the viewport, so the cards scroll
+   over one continuous universe — the same page from home into a series. */
+.nav-field { position: relative; width: 100%; min-height: calc(100vh - var(--topbar-h)); background: #040406; }
+.nav-bg { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 0; }
+.nav-grain { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 1; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.nav-vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+.nav-vignette { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 1; pointer-events: none;
   background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.55) 100%); }
-.nav-ui { position: absolute; inset: 0; z-index: 3; }
+.nav-ui { position: relative; z-index: 3; }
+/* Lift the footer above the fixed star-field backdrop on the navigator. */
+body.view-navigator .site-footer { position: relative; z-index: 4; }
 
 /* First-visit welcome — a panel over the star-field that fades into the chooser.
    Scrim masks the chooser behind it until it's dismissed. */
@@ -4947,9 +4952,10 @@ body.view-navigator .page { padding: 0; }
   transition: transform .25s var(--ease-spring), box-shadow .3s; }
 .nav-welcome-cta:hover { transform: translateY(-2px); box-shadow: 0 22px 52px -16px var(--r-creator); }
 
-/* Chooser — the shows */
-.nav-chooser { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 24px 20px; overflow-y: auto; transition: opacity .4s var(--ease-smooth), transform .4s var(--ease-spring); }
-.nav-field.showing-scene .nav-chooser { opacity: 0; transform: scale(.97); pointer-events: none; }
+/* Chooser — the shows. Flows in the document (fills ≥1 screen, centered; grows
+   and lets the window scroll if the content is taller). */
+.nav-chooser { position: relative; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 40px 20px; transition: opacity .3s var(--ease-smooth); }
+.nav-field.showing-scene .nav-chooser { display: none; }
 .nav-eyebrow { font-family: var(--heading); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #6a6a76; margin-bottom: 4px; }
 /* Hero — introduces what the page is (learning + AI). */
 .nav-hero-h1 { font-family: var(--heading); font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 700; line-height: 1.12; color: #eef; margin: 0 0 8px; }
@@ -4973,10 +4979,10 @@ body.view-navigator .page { padding: 0; }
 .nav-sc-dot { width: 7px; height: 7px; border-radius: 50%; opacity: .9; }
 .nav-sc-count { font-family: var(--heading); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
 
-/* Scene — a show's episodes (crossfades in over the chooser) */
-.nav-scene { position: absolute; inset: 0; overflow-y: auto; z-index: 4; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease-smooth); }
-.nav-field.showing-scene .nav-scene { opacity: 1; pointer-events: auto; }
-.nav-exit { position: sticky; top: 16px; margin: 16px 0 0 20px; z-index: 5; display: inline-flex; align-items: center; gap: 7px;
+/* Scene — a show's episodes. Flows in the document; the window scrolls. */
+.nav-scene { display: none; position: relative; min-height: calc(100vh - var(--topbar-h)); }
+.nav-field.showing-scene .nav-scene { display: block; }
+.nav-exit { position: sticky; top: calc(var(--topbar-h) + 12px); margin: 12px 0 0 20px; z-index: 5; display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--body); font-size: 12.5px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
   border: 1px solid rgba(255,255,255,0.12); background: rgba(10,10,14,0.55); color: #c8c8d2; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: color .25s, border-color .25s; }
 .nav-exit:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
@@ -4987,6 +4993,11 @@ body.view-navigator .page { padding: 0; }
 .nav-scene-head { margin: 10px 0 26px; text-align: center; }
 .nav-scene-title { font-family: var(--heading); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; margin: 0 0 6px; }
 .nav-scene-sit { font-size: 1rem; color: var(--text-dim); margin: 0 auto; max-width: 60ch; }
+/* Toggle to hide/show the coming-soon (roadmap) cards. */
+.nav-filter-toggle { margin-top: 16px; font-family: var(--body); font-size: 12.5px; padding: 7px 15px; border-radius: 999px; cursor: pointer; color: #c8c8d2;
+  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); transition: color .2s, border-color .2s, background .2s; }
+.nav-filter-toggle:hover { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.07); }
+.nav-filter-toggle.is-active { color: #fff; border-color: color-mix(in srgb, var(--r-creator) 60%, rgba(255,255,255,.2)); background: color-mix(in srgb, var(--r-creator) 16%, transparent); }
 
 /* Season-arc arrows — slim chevrons pinned to the field's vertical centre that
    jump to the neighbouring shows; the show name unfurls on hover. Hidden when

@@ -1062,7 +1062,8 @@ function wireNavigator() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   let W = 0, H = 0;
   function measure() {
-    const r = field.getBoundingClientRect();
+    // The canvas is a fixed, viewport-sized backdrop, so measure its own box.
+    const r = cv.getBoundingClientRect();
     W = r.width; H = r.height;
     cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
@@ -1163,26 +1164,53 @@ function wireNavigator() {
   }
 
   // ----- a show: episodes grouped into buckets -----
+  const toTop = () => window.scrollTo({ top: 0, behavior: 'auto' });
+
   function openShow(sc) {
     const switching = field.classList.contains('showing-scene');
     if (switching) {
+      // scene → scene (via arrows): quick body crossfade, no chooser involved.
       sceneBodyEl.style.opacity = '0';
-      setTimeout(() => { buildScene(sc); sceneBodyEl.style.opacity = '1'; }, 200);
+      setTimeout(() => { buildScene(sc); sceneBodyEl.style.opacity = '1'; toTop(); }, 200);
     } else {
-      buildScene(sc);
-      sceneBodyEl.style.opacity = '1';
-      field.classList.add('showing-scene');
+      // chooser → scene: fade the chooser out to reveal the star-field, then let
+      // the cards surface from the universe (buildScene animates them in).
+      chooserEl.style.opacity = '0';
+      setTimeout(() => {
+        field.classList.add('showing-scene');
+        buildScene(sc);
+        sceneBodyEl.style.opacity = '1';
+        toTop();
+      }, 300);
     }
     state.navShow = sc.slug;
   }
+
+  const isComingSoonEntry = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
 
   function buildScene(sc) {
     const body = sceneBodyEl;
     body.innerHTML = '';
 
+    // Buckets. "byStage" builds them from the stages (whole-library browse);
+    // coming-soon cards render as ghost tiles either way (the roadmap steps).
+    const moments = sc.byStage
+      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
+      : (sc.moments || []);
+    const hasComingSoon = moments.some((m) => (m.cards || []).some(isComingSoonEntry));
+
     const head = document.createElement('div');
     head.className = 'nav-scene-head';
     head.innerHTML = `<h1 class="nav-scene-title">${sc.title}</h1><p class="nav-scene-sit">${sc.situation || ''}</p>`;
+    // Filter: hide/show the coming-soon roadmap cards (only when there are any).
+    if (hasComingSoon) {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'nav-filter-toggle' + (state.hideComingSoon ? ' is-active' : '');
+      toggle.setAttribute('data-nav-filter', '');
+      toggle.textContent = state.hideComingSoon ? 'Showing available only — show coming soon' : 'Hide coming soon';
+      head.appendChild(toggle);
+    }
     body.appendChild(head);
 
     // "Assumes you've done" — shared prerequisite cards live in their home show
@@ -1198,26 +1226,26 @@ function wireNavigator() {
       body.appendChild(pre);
     }
 
-    // Buckets. "byStage" builds them from the stages (whole-library browse);
-    // coming-soon cards render as ghost tiles either way (the roadmap steps).
-    const moments = sc.byStage
-      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
-      : (sc.moments || []);
-
-    // Centered content that mirrors the homepage: buckets stack down the middle,
-    // each a labelled row of full cards that wraps at 4 across.
+    // Centered content that mirrors the homepage: steps stack down the middle,
+    // each a labelled column of cards. Empty steps (e.g. once coming-soon is
+    // filtered out) drop away, and the numbering stays sequential.
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
-    moments.forEach((m, i) => {
+    let stepNum = 0;
+    moments.forEach((m) => {
+      const entries = (m.cards || []).filter((c) => !(state.hideComingSoon && isComingSoonEntry(c)));
+      const cardEls = entries.map(renderEpisode).filter(Boolean);
+      if (!cardEls.length) return;
+      stepNum += 1;
       const col = document.createElement('div');
       col.className = 'nav-moment';
       const lbl = document.createElement('div');
       lbl.className = 'nav-moment-label';
-      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
+      lbl.innerHTML = `<span class="nav-moment-num">${stepNum}</span>${m.label}`;
       col.appendChild(lbl);
       const cards = document.createElement('div');
       cards.className = 'nav-moment-cards';
-      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+      cardEls.forEach((el) => cards.appendChild(el));
       col.appendChild(cards);
       cols.appendChild(col);
     });
@@ -1235,8 +1263,6 @@ function wireNavigator() {
     const idx = series.findIndex((s) => s.slug === sc.slug);
     setArrow(prevArrowEl, idx > 0 ? series[idx - 1] : null);
     setArrow(nextArrowEl, idx >= 0 && idx < series.length - 1 ? series[idx + 1] : null);
-
-    sceneEl.scrollTop = 0;
   }
 
   function setArrow(el, show) {
@@ -1250,11 +1276,22 @@ function wireNavigator() {
 
   function showChooser() {
     field.classList.remove('showing-scene');
+    // Fade the chooser back in (it was faded out when the scene opened).
+    chooserEl.style.opacity = '0';
+    setTimeout(() => { chooserEl.style.opacity = ''; }, 20);
+    toTop();
     state.navShow = null;
   }
 
   sceneEl.addEventListener('click', (e) => {
     if (e.target.closest('[data-nav-exit]')) { showChooser(); return; }
+    // Filter: hide/show the coming-soon roadmap cards, then re-render the show.
+    if (e.target.closest('[data-nav-filter]')) {
+      state.hideComingSoon = !state.hideComingSoon;
+      const cur = scenarios.find((s) => s.slug === state.navShow);
+      if (cur) buildScene(cur);
+      return;
+    }
     // Season arc: prev/next arrows jump to the neighbouring show.
     const arrow = e.target.closest('[data-nav-prev], [data-nav-next]');
     if (arrow && arrow.dataset.sc) { const sc = scenarios.find((s) => s.slug === arrow.dataset.sc); if (sc) openShow(sc); return; }
