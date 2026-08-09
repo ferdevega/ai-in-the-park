@@ -73,6 +73,21 @@
     ]
   },
   {
+    "slug": "launch-training",
+    "title": "Launch training",
+    "situation": "Ship it, get people in, and see if it landed.",
+    "assumes": ["set-up-your-ai-workspace"],
+    "previously": ["set-up-quality-standards"],
+    "related": [],
+    "moments": [
+      { "label": "Get it launch-ready", "cards": ["package-it-for-your-lms", "test-it-on-the-lms"] },
+      { "label": "Plan the rollout", "cards": ["plan-the-rollout"] },
+      { "label": "Communicate the launch", "cards": ["write-the-launch-comms", "write-a-nudge-sequence"] },
+      { "label": "Go live & support", "cards": ["set-up-learner-support"] },
+      { "label": "Measure & improve", "cards": ["read-completion-and-engagement-data", "theme-early-feedback", "improve-from-the-data"] }
+    ]
+  },
+  {
     "slug": "everything",
     "title": "Show me everything",
     "situation": "Not sure where to start? The whole playbook, by stage.",

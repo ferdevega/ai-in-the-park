@@ -1145,8 +1145,19 @@ function wireNavigator() {
     return a;
   }
 
-  // ----- home: the shows -----
-  scenarios.forEach((sc) => scenariosEl.appendChild(showCardBox(sc, 'nav-sc-box')));
+  // ----- home: the phase shows as a grid, "everything" as a full-width bar -----
+  scenarios.filter((s) => !s.byStage).forEach((sc) => scenariosEl.appendChild(showCardBox(sc, 'nav-sc-box')));
+  const everythingSc = scenarios.find((s) => s.byStage);
+  const everythingEl = field.querySelector('[data-nav-everything]');
+  if (everythingSc && everythingEl) {
+    const bar = document.createElement('button');
+    bar.type = 'button';
+    bar.className = 'nav-everything-bar';
+    bar.dataset.sc = everythingSc.slug;
+    bar.innerHTML = `<span class="nav-everything-text"><span class="nav-everything-title">${everythingSc.title}</span><span class="nav-everything-sub">${everythingSc.situation || ''}</span></span><span class="nav-everything-arrow" aria-hidden="true">→</span>`;
+    bar.addEventListener('click', () => openShow(everythingSc));
+    everythingEl.appendChild(bar);
+  }
   scenariosEl.addEventListener('click', (e) => {
     const b = e.target.closest('.nav-sc-box'); if (!b) return;
     const sc = scenarios.find((s) => s.slug === b.dataset.sc);
