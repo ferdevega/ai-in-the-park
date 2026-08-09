@@ -4167,6 +4167,11 @@ body.view-stage .layout { grid-template-columns: 1fr; }
 body.view-card-v4 .spine,
 body.view-card-v4 .spine-toggle { display: none !important; }
 body.view-card-v4 .layout { grid-template-columns: 1fr; }
+/* Card pages share the navigator's universe: content sits above the fixed
+   star-field backdrop (added by the card template). */
+body.view-card-v4 { background: #040406; }
+body.view-card-v4 .card-v4-page { position: relative; z-index: 1; }
+body.view-card-v4 .site-footer { position: relative; z-index: 1; }
 
 /* Detail-as-a-card layout — wider so the body + prompt aside fit inside the frame */
 .card-v4-page {
@@ -4967,6 +4972,30 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 /* Prompt above the boxes — the call to action, smaller than the hero. */
 .nav-question { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; color: #dcdce8; margin: 0 0 14px; }
 .nav-scenarios { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 728px; }
+
+/* Scroll cue at the foot of the chooser — hints there's more below. */
+.nav-scroll-cue { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
+  background: none; border: 0; cursor: pointer; color: var(--text-muted); font-family: var(--heading); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  transition: color .2s; }
+.nav-scroll-cue:hover { color: #eef; }
+.nav-scroll-cue-chev { font-size: 15px; animation: navCueBob 1.8s ease-in-out infinite; }
+@keyframes navCueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.nav-field.showing-scene .nav-scroll-cue { display: none; }
+
+/* Legend — what the 5 role icons mean. Sits below the chooser (scroll to reach). */
+.nav-legend { position: relative; z-index: 3; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; }
+.nav-field.showing-scene .nav-legend { display: none; }
+.nav-legend-h { font-family: var(--heading); font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 700; color: #eef; margin: 4px 0 8px; }
+.nav-legend-sub { font-size: .95rem; color: var(--text-dim); margin: 0 0 34px; max-width: 48ch; }
+.nav-legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 300px)); gap: 14px; justify-content: center; max-width: 940px; width: 100%; }
+.nav-legend-item { display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 18px 20px; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(30,28,42,.6), rgba(14,13,20,.6)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--rc) 34%, rgba(255,255,255,.1)); box-shadow: 0 16px 40px -20px rgba(0,0,0,.8); }
+.nav-legend-ic { display: inline-flex; color: var(--rc); flex: none; margin-top: 1px; }
+.nav-legend-ic svg { width: 22px; height: 22px; }
+.nav-legend-text { display: flex; flex-direction: column; gap: 3px; }
+.nav-legend-name { font-family: var(--heading); font-size: 1rem; font-weight: 600; color: #f2f0f7; }
+.nav-legend-desc { font-size: .86rem; line-height: 1.5; color: var(--text-dim); }
 .nav-sc-box { text-align: left; cursor: pointer; width: 224px; min-height: 146px; display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; border-radius: 16px; color: var(--text);
   background: linear-gradient(180deg, rgba(30,28,42,.66), rgba(14,13,20,.66)); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
   border: 1px solid rgba(255,255,255,.12); box-shadow: 0 20px 50px -18px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.12);
@@ -4977,6 +5006,10 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-sc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
 .nav-sc-dots { display: inline-flex; gap: 4px; flex-wrap: wrap; max-width: 120px; }
 .nav-sc-dot { width: 7px; height: 7px; border-radius: 50%; opacity: .9; }
+/* One icon per role type the show contains. */
+.nav-sc-icons { display: inline-flex; align-items: center; gap: 9px; }
+.nav-sc-ic { display: inline-flex; }
+.nav-sc-ic svg { width: 15px; height: 15px; }
 .nav-sc-count { font-family: var(--heading); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
 
 /* Scene — a show's episodes. Flows in the document; the window scrolls. */
@@ -5037,16 +5070,17 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-moment-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; }
 .nav-moment-cards .card-preview.v4-card { width: 224px; height: 204px; min-height: 0; flex: none; overflow: hidden;
   animation: navCardIn .55s var(--ease-spring) both; animation-delay: var(--nav-in-delay, 0ms); }
-/* Coming-soon (roadmap) cards are shorter — no role category, just title + badge. */
-.nav-moment-cards .card-preview.v4-card.card-preview-coming-soon { height: 116px; }
-.nav-moment-cards .card-preview.card-preview-coming-soon .v4-card-header { display: none; }
-.nav-moment-cards .card-preview.card-preview-coming-soon .card-body h3 { -webkit-line-clamp: 2; }
 /* Episodes surface from deep in the star-field to the forefront. */
 @keyframes navCardIn { from { opacity: 0; transform: scale(.66) translateY(22px); filter: blur(7px); } to { opacity: 1; transform: none; filter: none; } }
 @media (prefers-reduced-motion: reduce) { .nav-moment-cards .card-preview.v4-card { animation: none; } }
 .nav-moment-cards .card-preview.v4-card .teaser,
 .nav-moment-cards .card-preview.v4-card .card-preview-tags { display: none; }
 .nav-moment-cards .card-preview.v4-card .card-body h3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* Coming-soon (roadmap) cards: all one shorter size, no role category, title
+   clamped to 2 lines (declared after the base rule so it wins). */
+.nav-moment-cards .card-preview.v4-card.card-preview-coming-soon { height: 120px; }
+.nav-moment-cards .card-preview.card-preview-coming-soon .v4-card-header { display: none; }
+.nav-moment-cards .card-preview.card-preview-coming-soon .card-body h3 { -webkit-line-clamp: 2; }
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
   background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--rc); box-shadow: 0 10px 30px -14px rgba(0,0,0,.8), 0 0 22px -12px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }

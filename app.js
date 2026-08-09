@@ -1032,37 +1032,15 @@ function wireMap() {
   });
 }
 
-// ---------- Navigator (home: shows over a star-field) ----------
-// The homepage. An ambient star-field with the "shows" (scenarios) as big
-// boxes; pick one and it opens to its episodes (cards) grouped by moment, with
-// an enabler prelude and an "up next" strip. Data: data/scenarios.json.
-function viewNavigator() {
-  state.view = 'navigator';
-  renderSpine(null);
-  mount(tpl('tpl-navigator'));
-  wireNavigator();
-}
-
-function wireNavigator() {
-  const field = document.querySelector('[data-nav-field]');
-  if (!field) return;
-  const cv = field.querySelector('[data-nav-bg]');
-  const chooserEl = field.querySelector('[data-nav-chooser]');
-  const scenariosEl = field.querySelector('[data-nav-scenarios]');
-  const sceneEl = field.querySelector('[data-nav-scene]');
-  const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
-  const prevArrowEl = field.querySelector('[data-nav-prev]');
-  const nextArrowEl = field.querySelector('[data-nav-next]');
-  const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
-  const scenarios = state.scenarios || [];
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ----- ambient star-field canvas -----
+// Ambient star-field on a fixed, viewport-sized <canvas>. Reused by the
+// navigator and the card pages so the whole experience shares one universe.
+// Self-cleans (stops the loop + resize listener) when the canvas leaves the DOM.
+function initStarfield(cv) {
+  if (!cv) return;
   const ctx = cv.getContext('2d');
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   let W = 0, H = 0;
   function measure() {
-    // The canvas is a fixed, viewport-sized backdrop, so measure its own box.
     const r = cv.getBoundingClientRect();
     W = r.width; H = r.height;
     cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1070,8 +1048,8 @@ function wireNavigator() {
   measure();
   const onResize = () => measure();
   window.addEventListener('resize', onResize);
-  // Stars are tinted with the stage palette (analysis → project mgmt), so the
-  // sky is coloured by the phases rather than plain white.
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Stars are tinted with the stage palette, so the sky is coloured by the phases.
   const starCols = ['248,113,113', '251,146,60', '52,211,153', '34,211,238', '96,165,250', '167,139,250', '252,211,77'];
   const layers = [{ n: 70, s: [.4, .9], a: [.14, .38] }, { n: 42, s: [.7, 1.4], a: [.28, .58] }, { n: 16, s: [1.4, 2.4], a: [.5, .95] }];
   const stars = [];
@@ -1100,6 +1078,35 @@ function wireNavigator() {
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+}
+
+// ---------- Navigator (home: shows over a star-field) ----------
+// The homepage. An ambient star-field with the "shows" (scenarios) as big
+// boxes; pick one and it opens to its episodes (cards) grouped by moment, with
+// an enabler prelude and an "up next" strip. Data: data/scenarios.json.
+function viewNavigator() {
+  state.view = 'navigator';
+  renderSpine(null);
+  mount(tpl('tpl-navigator'));
+  wireNavigator();
+}
+
+function wireNavigator() {
+  const field = document.querySelector('[data-nav-field]');
+  if (!field) return;
+  const cv = field.querySelector('[data-nav-bg]');
+  const chooserEl = field.querySelector('[data-nav-chooser]');
+  const scenariosEl = field.querySelector('[data-nav-scenarios]');
+  const sceneEl = field.querySelector('[data-nav-scene]');
+  const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
+  const prevArrowEl = field.querySelector('[data-nav-prev]');
+  const nextArrowEl = field.querySelector('[data-nav-next]');
+  const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
+  const scenarios = state.scenarios || [];
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ----- ambient star-field canvas -----
+  initStarfield(cv);
 
   // ----- helpers -----
   // Episodes in a show — for the by-stage "everything" show, that's every card
@@ -1139,17 +1146,7 @@ function wireNavigator() {
   }
 
   // ----- home: the shows -----
-  scenarios.forEach((sc) => {
-    const cards = scenarioCards(sc);
-    const dots = cards.map((c) => `<span class="nav-sc-dot" style="background:${tileColor(c)}"></span>`).join('');
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'nav-sc-box'; b.dataset.sc = sc.slug;
-    b.innerHTML = `
-      <div class="nav-sc-title">${sc.title}</div>
-      <div class="nav-sc-blurb">${sc.situation || ''}</div>
-      <div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
-    scenariosEl.appendChild(b);
-  });
+  scenarios.forEach((sc) => scenariosEl.appendChild(showCardBox(sc, 'nav-sc-box')));
   scenariosEl.addEventListener('click', (e) => {
     const b = e.target.closest('.nav-sc-box'); if (!b) return;
     const sc = scenarios.find((s) => s.slug === b.dataset.sc);
@@ -1160,10 +1157,14 @@ function wireNavigator() {
   // other series rather than plain text boxes.
   function showCardBox(sc, cls) {
     const cards = scenarioCards(sc);
-    const dots = cards.map((c) => `<span class="nav-sc-dot" style="background:${tileColor(c)}"></span>`).join('');
+    // One icon per role type present (deduped), not a dot per card.
+    const typeOf = (c) => (typeof c === 'string' ? (cardBySlug(c) || {}).type : c.type);
+    const order = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
+    const types = order.filter((t) => cards.some((c) => typeOf(c) === t));
+    const icons = types.map((t) => `<span class="nav-sc-ic" style="color:${roleColorVar(t)}">${ROLE_ICONS[t] || ''}</span>`).join('');
     const b = document.createElement('button');
     b.type = 'button'; b.className = cls; b.dataset.sc = sc.slug;
-    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
+    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-icons">${icons}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
     return b;
   }
 
@@ -1212,10 +1213,13 @@ function wireNavigator() {
       body.appendChild(pre);
     }
 
-    // Buckets. "byStage" builds them from the stages (whole-library browse);
-    // coming-soon cards render as shorter ghost tiles (the roadmap steps).
+    // Buckets. "byStage" builds them from the stages (whole-library browse) with
+    // available cards first, coming-soon (roadmap) last within each stage.
     const moments = sc.byStage
-      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
+      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({
+          label: s.title,
+          cards: cardsForStage(s.slug).slice().sort((a, b) => (a.coming_soon ? 1 : 0) - (b.coming_soon ? 1 : 0)).map((c) => c.slug),
+        }))
       : (sc.moments || []);
 
     // Centered content that mirrors the homepage: steps stack down the middle,
@@ -1296,6 +1300,30 @@ function wireNavigator() {
   const chooserSig = field.querySelector('[data-nav-chooser-sig]');
   fillSignature(chooserSig, 'nav-chooser-sig-ic');
 
+  // Legend — what the 5 role icons mean (revealed on scroll below the chooser).
+  const legendGrid = field.querySelector('[data-nav-legend-grid]');
+  if (legendGrid && !legendGrid.childElementCount) {
+    const roles = [
+      ['creator', 'Creator', 'Generates first drafts and assets — outlines, copy, media.'],
+      ['thought-partner', 'Thought partner', 'Thinks it through with you — pushes back, weighs the options.'],
+      ['auditor', 'Auditor', 'Checks your work against a standard and flags what’s off.'],
+      ['tool', 'Tool', 'A reusable set-up you configure once, then run again and again.'],
+      ['panel', 'Panel', 'Role-plays your audience so you can test ideas on them.'],
+    ];
+    roles.forEach(([type, name, desc]) => {
+      const item = document.createElement('div');
+      item.className = 'nav-legend-item';
+      item.style.setProperty('--rc', roleColorVar(type));
+      item.innerHTML = `<span class="nav-legend-ic">${ROLE_ICONS[type] || ''}</span><div class="nav-legend-text"><span class="nav-legend-name">${name}</span><span class="nav-legend-desc">${desc}</span></div>`;
+      legendGrid.appendChild(item);
+    });
+  }
+  const scrollCue = field.querySelector('[data-nav-scroll-cue]');
+  const legendEl = field.querySelector('[data-nav-legend]');
+  if (scrollCue && legendEl) {
+    scrollCue.addEventListener('click', () => legendEl.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
   // Shuffle the signature icons' positions every ~2.8s (FLIP), like the old
   // library hero. Only while the chooser is on screen.
   if (chooserSig) {
@@ -1344,11 +1372,17 @@ function wireNavigator() {
     });
   }
 
-  // Deep-return: if we came back here from an episode, re-open its show.
+  // Deep-return / Library: open the requested show immediately — synchronously,
+  // before the chooser can paint, so there's no home-screen flash first.
   if (state.pendingShow) {
     const sc = scenarios.find((s) => s.slug === state.pendingShow);
     state.pendingShow = null;
-    if (sc) openShow(sc);
+    if (sc) {
+      field.classList.add('showing-scene');
+      buildScene(sc);
+      sceneBodyEl.style.opacity = '1';
+      state.navShow = sc.slug;
+    }
   }
 }
 
@@ -2334,6 +2368,8 @@ function viewCardV4(slug) {
 
   mount(frag);
   wireRevealAnimation(document.querySelector('.card-v4-page'));
+  // Same universe as the navigator, so opening a card feels like the same page.
+  initStarfield(document.querySelector('[data-card-bg]'));
 
   // Tab title
   if (!state.savedTitle) state.savedTitle = document.title;

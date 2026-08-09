@@ -451,6 +451,8 @@
   </template>
 
   <template id="tpl-card-v4-page">
+    <canvas class="nav-bg" data-card-bg aria-hidden="true"></canvas>
+    <div class="nav-vignette" aria-hidden="true"></div>
     <article class="card-v4-page">
       <a class="card-v4-page-back" href="/" data-back-link>
         <span aria-hidden="true">←</span> Back to the library
@@ -685,7 +687,17 @@
             <p class="nav-chooser-line">A playbook of AI use cases for instructional designers, content developers and learning managers.</p>
             <h2 class="nav-question">What are you working on?</h2>
             <div class="nav-scenarios" data-nav-scenarios></div>
+            <button type="button" class="nav-scroll-cue" data-nav-scroll-cue>
+              <span class="nav-scroll-cue-text">What do the icons mean?</span>
+              <span class="nav-scroll-cue-chev" aria-hidden="true">↓</span>
+            </button>
           </div>
+          <section class="nav-legend" data-nav-legend aria-label="What the icons mean">
+            <div class="nav-eyebrow">The cards</div>
+            <h2 class="nav-legend-h">Every card is a kind of AI move</h2>
+            <p class="nav-legend-sub">The icon on each card tells you how you'll be working with AI.</p>
+            <div class="nav-legend-grid" data-nav-legend-grid></div>
+          </section>
           <div class="nav-scene" data-nav-scene>
             <button type="button" class="nav-exit" data-nav-exit><span aria-hidden="true">←</span> Back to the stars</button>
             <button type="button" class="nav-arrow nav-arrow-prev" data-nav-prev hidden>
