@@ -4948,15 +4948,18 @@ body.view-navigator .page { padding: 0; }
 .nav-welcome-cta:hover { transform: translateY(-2px); box-shadow: 0 22px 52px -16px var(--r-creator); }
 
 /* Chooser — the shows */
-.nav-chooser { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px; transition: opacity .4s var(--ease-smooth), transform .4s var(--ease-spring); }
+.nav-chooser { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 24px 20px; overflow-y: auto; transition: opacity .4s var(--ease-smooth), transform .4s var(--ease-spring); }
 .nav-field.showing-scene .nav-chooser { opacity: 0; transform: scale(.97); pointer-events: none; }
-.nav-eyebrow { font-family: var(--heading); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #6a6a76; margin-bottom: 6px; }
-.nav-question { font-family: var(--heading); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 600; color: #eef; margin: 0 0 10px; }
-/* Small welcome echo on the chooser — signature + one-line intro. */
-.nav-chooser-sig { display: inline-flex; gap: 13px; margin: 8px 0 14px; }
+.nav-eyebrow { font-family: var(--heading); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #6a6a76; margin-bottom: 4px; }
+/* Hero — introduces what the page is (learning + AI). */
+.nav-hero-h1 { font-family: var(--heading); font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 700; line-height: 1.12; color: #eef; margin: 0 0 8px; }
+/* Signature + one-line intro — the who-it's-for, echoing the welcome popup. */
+.nav-chooser-sig { display: inline-flex; gap: 12px; margin: 0 0 10px; }
 .nav-chooser-sig-ic { display: inline-flex; }
-.nav-chooser-sig-ic svg { width: 17px; height: 17px; }
-.nav-chooser-line { font-size: .92rem; line-height: 1.55; color: var(--text-dim); margin: 0 auto 28px; max-width: 46ch; }
+.nav-chooser-sig-ic svg { width: 16px; height: 16px; }
+.nav-chooser-line { font-size: .92rem; line-height: 1.5; color: var(--text-dim); margin: 0 auto 20px; max-width: 46ch; }
+/* Prompt above the boxes — the call to action, smaller than the hero. */
+.nav-question { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; color: #dcdce8; margin: 0 0 14px; }
 .nav-scenarios { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 728px; }
 .nav-sc-box { text-align: left; cursor: pointer; width: 224px; min-height: 146px; display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; border-radius: 16px; color: var(--text);
   background: linear-gradient(180deg, rgba(30,28,42,.66), rgba(14,13,20,.66)); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
