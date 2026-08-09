@@ -1156,8 +1156,10 @@ function wireNavigator() {
   // A show box (used on the home and for "Up next"), so related shows read as
   // other series rather than plain text boxes.
   function showCardBox(sc, cls) {
-    const cards = scenarioCards(sc);
-    // One icon per role type present (deduped), not a dot per card.
+    // Count + icons reflect the *available* cards only — coming-soon (roadmap)
+    // cards don't count toward the number or add their type icon.
+    const isLive = (c) => (typeof c === 'string' ? !(cardBySlug(c) || {}).coming_soon : true);
+    const cards = scenarioCards(sc).filter(isLive);
     const typeOf = (c) => (typeof c === 'string' ? (cardBySlug(c) || {}).type : c.type);
     const order = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
     const types = order.filter((t) => cards.some((c) => typeOf(c) === t));
@@ -1316,6 +1318,27 @@ function wireNavigator() {
       item.style.setProperty('--rc', roleColorVar(type));
       item.innerHTML = `<span class="nav-legend-ic">${ROLE_ICONS[type] || ''}</span><div class="nav-legend-text"><span class="nav-legend-name">${name}</span><span class="nav-legend-desc">${desc}</span></div>`;
       legendGrid.appendChild(item);
+    });
+  }
+  const legendLevels = field.querySelector('[data-nav-legend-levels]');
+  if (legendLevels && !legendLevels.childElementCount) {
+    const levels = [
+      ['beginner', 'Beginner', 'Start here — no prior AI set-up assumed.'],
+      ['intermediate', 'Intermediate', 'Builds on the basics you’ve already got in place.'],
+      ['advanced', 'Advanced', 'For when you’re comfortable and want to push further.'],
+    ];
+    levels.forEach(([level, name, desc]) => {
+      const item = document.createElement('div');
+      item.className = 'nav-legend-item is-level';
+      const bars = document.createElement('span');
+      bars.className = 'level-bars nav-legend-bars';
+      renderLevelBars(bars, level);
+      const text = document.createElement('div');
+      text.className = 'nav-legend-text';
+      text.innerHTML = `<span class="nav-legend-name">${name}</span><span class="nav-legend-desc">${desc}</span>`;
+      item.appendChild(bars);
+      item.appendChild(text);
+      legendLevels.appendChild(item);
     });
   }
   const scrollCue = field.querySelector('[data-nav-scroll-cue]');

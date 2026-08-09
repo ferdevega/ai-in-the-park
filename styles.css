@@ -4973,26 +4973,38 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-question { font-family: var(--heading); font-size: 1.1rem; font-weight: 600; color: #dcdce8; margin: 0 0 14px; }
 .nav-scenarios { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 728px; }
 
-/* Scroll cue at the foot of the chooser — hints there's more below. */
-.nav-scroll-cue { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
-  background: none; border: 0; cursor: pointer; color: var(--text-muted); font-family: var(--heading); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-  transition: color .2s; }
-.nav-scroll-cue:hover { color: #eef; }
-.nav-scroll-cue-chev { font-size: 15px; animation: navCueBob 1.8s ease-in-out infinite; }
-@keyframes navCueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+/* Scroll cue at the foot of the chooser — a readable pill button. */
+.nav-scroll-cue { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 9px;
+  cursor: pointer; color: #d6d6e2; font-family: var(--body); font-size: 13px; padding: 10px 18px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18); background: rgba(20,18,28,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: color .2s, border-color .2s, background .2s, transform .2s var(--ease-spring); }
+.nav-scroll-cue:hover { color: #fff; border-color: rgba(255,255,255,.36); background: rgba(30,28,42,.7); }
+.nav-scroll-cue-chev { font-size: 14px; animation: navCueBob 1.8s ease-in-out infinite; }
+@keyframes navCueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 .nav-field.showing-scene .nav-scroll-cue { display: none; }
 
-/* Legend — what the 5 role icons mean. Sits below the chooser (scroll to reach). */
+/* Legend — the kinds of card (by interaction + by level). Below the chooser. */
 .nav-legend { position: relative; z-index: 3; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; }
 .nav-field.showing-scene .nav-legend { display: none; }
 .nav-legend-h { font-family: var(--heading); font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 700; color: #eef; margin: 4px 0 8px; }
-.nav-legend-sub { font-size: .95rem; color: var(--text-dim); margin: 0 0 34px; max-width: 48ch; }
-.nav-legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 300px)); gap: 14px; justify-content: center; max-width: 940px; width: 100%; }
-.nav-legend-item { display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 18px 20px; border-radius: 16px;
+.nav-legend-sub { font-size: .95rem; color: var(--text-dim); margin: 0 0 36px; max-width: 52ch; }
+.nav-legend-cols { display: flex; gap: 30px; justify-content: center; align-items: flex-start; flex-wrap: wrap; max-width: 940px; width: 100%; }
+.nav-legend-col { flex: 1 1 320px; min-width: 258px; max-width: 448px; display: flex; flex-direction: column; }
+.nav-legend-col-h { font-family: var(--heading); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 14px; text-align: left; }
+.nav-legend-list { display: flex; flex-direction: column; gap: 10px; }
+.nav-legend-item { display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 16px 18px; border-radius: 14px;
   background: linear-gradient(180deg, rgba(30,28,42,.6), rgba(14,13,20,.6)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1px solid color-mix(in srgb, var(--rc) 34%, rgba(255,255,255,.1)); box-shadow: 0 16px 40px -20px rgba(0,0,0,.8); }
+.nav-legend-item.is-level { --rc: rgba(255,255,255,.2); border-color: rgba(255,255,255,.12); }
 .nav-legend-ic { display: inline-flex; color: var(--rc); flex: none; margin-top: 1px; }
 .nav-legend-ic svg { width: 22px; height: 22px; }
+/* Level bars, scaled up to sit alongside the role icons. */
+.nav-legend-bars { height: 20px; gap: 3px; flex: none; margin-top: 2px; width: 24px; justify-content: flex-start; }
+.nav-legend-bars .level-bar { width: 5px; }
+.nav-legend-bars .level-bar:nth-child(1) { height: 7px; }
+.nav-legend-bars .level-bar:nth-child(2) { height: 13px; }
+.nav-legend-bars .level-bar:nth-child(3) { height: 20px; }
+.nav-legend-bars .level-bar.filled { background: linear-gradient(180deg, var(--r-thought-partner), var(--r-creator)); }
 .nav-legend-text { display: flex; flex-direction: column; gap: 3px; }
 .nav-legend-name { font-family: var(--heading); font-size: 1rem; font-weight: 600; color: #f2f0f7; }
 .nav-legend-desc { font-size: .86rem; line-height: 1.5; color: var(--text-dim); }
