@@ -20,9 +20,11 @@
     "previously": ["start-with-ai"],
     "related": ["define-a-learning-strategy"],
     "moments": [
-      { "label": "Scope & estimate", "cards": ["scope-the-work", "estimate-the-effort"] },
-      { "label": "Plan the delivery", "cards": ["set-up-the-project-timeline", "line-up-the-resources"] },
-      { "label": "Set up reporting", "cards": ["define-the-reporting-strategy"] }
+      { "label": "Scope it", "cards": ["scope-the-work", "write-a-project-brief", "run-a-kickoff-meeting"] },
+      { "label": "Estimate & budget", "cards": ["estimate-the-effort", "build-a-budget"] },
+      { "label": "Plan the timeline", "cards": ["set-up-the-project-timeline"] },
+      { "label": "Line up the team", "cards": ["line-up-the-resources", "map-roles-and-responsibilities"] },
+      { "label": "Track & report", "cards": ["define-the-reporting-strategy", "track-risks-assumptions-and-issues", "draft-a-status-report"] }
     ]
   },
   {

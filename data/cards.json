@@ -442,5 +442,11 @@
   {"slug":"iterate-dont-one-shot","title":"Iterate, don’t one-shot","stage":"design","type":"thought-partner","level":"beginner","coming_soon":true},
   {"slug":"build-a-reusable-prompt-library","title":"Build a reusable prompt library","stage":"design","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"pick-the-right-ai-tool","title":"Pick the right AI tool for the job","stage":"design","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"design","type":"tool","level":"beginner","coming_soon":true}
+  {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"write-a-project-brief","title":"Write a project brief","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {"slug":"run-a-kickoff-meeting","title":"Run a kickoff meeting","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {"slug":"build-a-budget","title":"Build a budget","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
+  {"slug":"map-roles-and-responsibilities","title":"Map roles and responsibilities","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
+  {"slug":"track-risks-assumptions-and-issues","title":"Track risks, assumptions and issues","stage":"project-management","type":"auditor","level":"intermediate","coming_soon":true},
+  {"slug":"draft-a-status-report","title":"Draft a status report","stage":"project-management","type":"creator","level":"beginner","coming_soon":true}
 ]
