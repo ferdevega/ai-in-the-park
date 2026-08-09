@@ -1306,11 +1306,11 @@ function wireNavigator() {
   const legendGrid = field.querySelector('[data-nav-legend-grid]');
   if (legendGrid && !legendGrid.childElementCount) {
     const roles = [
-      ['creator', 'Creator', 'Generates first drafts and assets — outlines, copy, media.'],
-      ['thought-partner', 'Thought partner', 'Thinks it through with you — pushes back, weighs the options.'],
-      ['auditor', 'Auditor', 'Checks your work against a standard and flags what’s off.'],
-      ['tool', 'Tool', 'A reusable set-up you configure once, then run again and again.'],
-      ['panel', 'Panel', 'Role-plays your audience so you can test ideas on them.'],
+      ['creator', 'Creator', 'Drafts assets — copy, outlines, media.'],
+      ['thought-partner', 'Thought partner', 'Thinks with you; pushes back, weighs options.'],
+      ['auditor', 'Auditor', 'Checks your work against a standard.'],
+      ['tool', 'Tool', 'A reusable set-up you configure once.'],
+      ['panel', 'Panel', 'Role-plays your audience to test on.'],
     ];
     roles.forEach(([type, name, desc]) => {
       const item = document.createElement('div');
@@ -1323,9 +1323,9 @@ function wireNavigator() {
   const legendLevels = field.querySelector('[data-nav-legend-levels]');
   if (legendLevels && !legendLevels.childElementCount) {
     const levels = [
-      ['beginner', 'Beginner', 'Start here — no prior AI set-up assumed.'],
-      ['intermediate', 'Intermediate', 'Builds on the basics you’ve already got in place.'],
-      ['advanced', 'Advanced', 'For when you’re comfortable and want to push further.'],
+      ['beginner', 'Beginner', 'Start here — no AI set-up assumed.'],
+      ['intermediate', 'Intermediate', 'Builds on the basics you’ve got.'],
+      ['advanced', 'Advanced', 'For when you want to push further.'],
     ];
     levels.forEach(([level, name, desc]) => {
       const item = document.createElement('div');
@@ -1341,11 +1341,20 @@ function wireNavigator() {
       legendLevels.appendChild(item);
     });
   }
-  const scrollCue = field.querySelector('[data-nav-scroll-cue]');
-  const legendEl = field.querySelector('[data-nav-legend]');
-  if (scrollCue && legendEl) {
-    scrollCue.addEventListener('click', () => legendEl.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-  }
+  // Scroll cues (chooser → legend → about) each jump to their data-scroll-to.
+  field.querySelectorAll('[data-nav-scroll-cue]').forEach((cue) => {
+    cue.addEventListener('click', () => {
+      const target = field.querySelector(cue.getAttribute('data-scroll-to'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  // Let the top-bar About link scroll to the About section (see the link handler).
+  state.navScrollTo = (sel) => {
+    field.classList.remove('showing-scene');
+    state.navShow = null;
+    const target = field.querySelector(sel);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30);
+  };
 
   // Shuffle the signature icons' positions every ~2.8s (FLIP), like the old
   // library hero. Only while the chooser is on screen.
@@ -1406,6 +1415,14 @@ function wireNavigator() {
       sceneBodyEl.style.opacity = '1';
       state.navShow = sc.slug;
     }
+  }
+
+  // Arrived from a top-bar link that targets a section on the home (e.g. About).
+  if (state.pendingScroll) {
+    const sel = state.pendingScroll;
+    state.pendingScroll = null;
+    const target = field.querySelector(sel);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40);
   }
 }
 
@@ -2266,10 +2283,13 @@ function viewCardV4(slug) {
   const iconSVG = ROLE_ICONS[type] || '';
   const typeText = roleLabelTextForType(type) || '';
 
+  // The card page is accented by its TYPE (auditor → pink, creator → purple…),
+  // not the stage, so the colour matches the card's role.
+  const accent = roleColorVar(type) || stageColor;
   const article = frag.querySelector('.card-v4-page');
   const frame = frag.querySelector('.card-detail-frame');
-  if (article) article.style.setProperty('--stage-color', stageColor);
-  if (frame) frame.style.setProperty('--stage-color', stageColor);
+  if (article) article.style.setProperty('--stage-color', accent);
+  if (frame) frame.style.setProperty('--stage-color', accent);
 
   // Back link — return to the show we came from (if any), else the primary
   // stage, else home. Arriving from a navigator show sets state.fromShow.
@@ -3003,6 +3023,18 @@ document.addEventListener('click', (e) => {
   // href="/" won't re-navigate. Reset the navigator to the chooser instead.
   if (link.hasAttribute('data-home-link') && state.view === 'navigator' && window.location.pathname === '/') {
     if (state.navResetToChooser) state.navResetToChooser();
+    setSpineOpen(false);
+    return;
+  }
+  // Top-bar About: scroll to the About section on the home instead of the
+  // separate /about page. (In-content "Read more" links keep going to /about.)
+  if (link.matches('.topbar-links a[href="/about"]')) {
+    if (state.view === 'navigator' && state.navScrollTo) {
+      state.navScrollTo('[data-nav-about]');
+    } else {
+      state.pendingScroll = '[data-nav-about]';
+      navigate('/');
+    }
     setSpineOpen(false);
     return;
   }

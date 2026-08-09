@@ -687,7 +687,7 @@
             <p class="nav-chooser-line">A playbook of AI use cases for instructional designers, content developers and learning managers.</p>
             <h2 class="nav-question">What are you working on?</h2>
             <div class="nav-scenarios" data-nav-scenarios></div>
-            <button type="button" class="nav-scroll-cue" data-nav-scroll-cue>
+            <button type="button" class="nav-scroll-cue" data-nav-scroll-cue data-scroll-to="[data-nav-legend]">
               <span class="nav-scroll-cue-text">What type of cards can I find?</span>
               <span class="nav-scroll-cue-chev" aria-hidden="true">↓</span>
             </button>
@@ -704,6 +704,25 @@
               <div class="nav-legend-col">
                 <h3 class="nav-legend-col-h">By level</h3>
                 <div class="nav-legend-list" data-nav-legend-levels></div>
+              </div>
+            </div>
+            <button type="button" class="nav-scroll-cue nav-scroll-cue--legend" data-nav-scroll-cue data-scroll-to="[data-nav-about]">
+              <span class="nav-scroll-cue-text">Who's behind this?</span>
+              <span class="nav-scroll-cue-chev" aria-hidden="true">↓</span>
+            </button>
+          </section>
+          <section class="nav-about" data-nav-about aria-label="About">
+            <div class="nav-about-inner">
+              <img class="nav-about-photo" src="/assets/Fer.jpeg" alt="Fer with his dog Pericles" />
+              <div class="nav-about-text">
+                <div class="nav-eyebrow">The author</div>
+                <h2 class="nav-about-h">Hi, I'm Fer 👋</h2>
+                <p class="nav-about-p">An instructional designer for 15+ years, now in New York — usually walking Central Park with my dog Pericles. I've built things that worked and things that absolutely did not; you'll hear about both here.</p>
+                <p class="nav-about-p">I made this because most AI prompt libraries aren't shared by people who've done the ID work <em>without</em> AI. Everything here is something I've actually tried.</p>
+                <div class="nav-about-actions">
+                  <a class="nav-about-link" href="/about">Read more</a>
+                  <a class="nav-about-link nav-about-link--ext" href="https://www.linkedin.com/in/ferdevega/" target="_blank" rel="noopener">Work together on LinkedIn ↗</a>
+                </div>
               </div>
             </div>
           </section>
