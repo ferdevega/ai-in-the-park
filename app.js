@@ -1193,6 +1193,11 @@ function wireNavigator() {
       : (sc.moments || []);
     buckets.push(...moments);
 
+    // Two-column scene: episode grid (wraps to fill the screen) on the left,
+    // "Up next" as a slim column on the right so the grid can spread down.
+    const sceneCols = document.createElement('div');
+    sceneCols.className = 'nav-scene-cols';
+
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
     buckets.forEach((m, i) => {
@@ -1208,7 +1213,7 @@ function wireNavigator() {
       col.appendChild(cards);
       cols.appendChild(col);
     });
-    body.appendChild(cols);
+    sceneCols.appendChild(cols);
 
     const rel = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
     if (rel.length) {
@@ -1219,9 +1224,10 @@ function wireNavigator() {
       row.className = 'nav-upnext-row';
       rel.forEach((r) => row.appendChild(showCardBox(r, 'nav-sc-box nav-upnext-box')));
       up.appendChild(row);
-      body.appendChild(up);
+      sceneCols.appendChild(up);
     }
 
+    body.appendChild(sceneCols);
     sceneEl.scrollTop = 0;
   }
 

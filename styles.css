@@ -4967,13 +4967,15 @@ body.view-navigator .page { padding: 0; }
 .nav-enabler-ic { display: inline-flex; color: var(--rc); }
 .nav-enabler-ic svg { width: 13px; height: 13px; }
 
-/* Buckets laid out as one left-aligned row (horizontal-scrolls if it overflows) */
-.nav-moments { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 30px; justify-content: flex-start; align-items: flex-start; margin-top: 4px; overflow-x: auto; padding-bottom: 12px; }
+/* Two-column scene: episode grid (left, fills width + wraps down) + Up Next (right). */
+.nav-scene-cols { display: flex; gap: 40px; align-items: flex-start; }
+/* Buckets as columns that wrap to fill the screen (use the space; scroll down if needed) */
+.nav-moments { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 28px; justify-content: flex-start; align-items: flex-start; margin-top: 4px; }
 .nav-moment { flex: 0 0 auto; display: flex; flex-direction: column; }
 .nav-moment-label { display: flex; align-items: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 12px; }
 .nav-moment-num { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #0d0d10;
   background: linear-gradient(135deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner)); }
-.nav-moment-cards { display: flex; flex-direction: row; gap: 12px; }
+.nav-moment-cards { display: flex; flex-direction: column; gap: 12px; }
 /* Uniform episode-card size — fixed box, title + teaser clamped so every card
    is identical regardless of copy length. */
 .nav-moment-cards .v4-card { width: 224px; height: 246px; overflow: hidden; }
@@ -4987,9 +4989,11 @@ body.view-navigator .page { padding: 0; }
 .nav-tile-role { display: block; font-family: var(--heading); font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--rc); margin-bottom: 5px; }
 .nav-tile-ttl { display: block; font-size: 12.5px; line-height: 1.3; color: #f2f0f7; font-weight: 500; }
 
-.nav-upnext { margin: 34px 0 0; padding-top: 22px; border-top: 1px solid var(--glass-border); }
-.nav-upnext-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-.nav-upnext-row { display: flex; flex-wrap: wrap; gap: 16px; }
+/* Up Next — a slim right-hand column (1–2 shows), so it doesn't eat horizontal space */
+.nav-upnext { flex: 0 0 244px; width: 244px; }
+.nav-upnext-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin: 30px 0 12px; }
+.nav-upnext-row { display: flex; flex-direction: column; gap: 14px; }
+.nav-upnext .nav-sc-box { width: 100%; min-height: 0; }
 
 /* Browse by stage — continues the universe below the hero (glass, not tagged-on) */
 .nav-browse { background: linear-gradient(180deg, #040406 0%, var(--bg) 55%); padding: 46px 24px 46px; }
@@ -5009,10 +5013,17 @@ body.view-navigator .page { padding: 0; }
 .nav-browse-count { font-family: var(--heading); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
 
 @media (max-width: 720px) {
-  .nav-sc-box { width: 100%; max-width: 320px; min-height: 0; }
-  .nav-tile, .nav-upnext-box { width: 100%; }
-  .nav-eps .v4-card { width: 100%; }
+  /* Home shows stack one-up */
+  .nav-sc-box { width: 100%; max-width: 340px; min-height: 0; }
+  /* Show page → a mini, single-column version that fits the phone screen */
+  .nav-scene-cols { flex-direction: column; gap: 22px; }
+  .nav-moments { flex-direction: column; gap: 18px; width: 100%; }
   .nav-moment { width: 100%; }
+  .nav-moment-cards { gap: 10px; }
+  .nav-moment-cards .v4-card { width: 100%; height: auto; min-height: 0; }
+  .nav-moment-cards .v4-card [data-teaser] { display: none; }
+  .nav-upnext { width: 100%; flex: none; }
+  .nav-upnext-label { margin-top: 6px; }
 }
 @media (min-width: 721px) and (max-width: 1024px) {
   .nav-scenarios { max-width: 488px; }
