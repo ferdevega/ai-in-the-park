@@ -4953,7 +4953,7 @@ body.view-navigator .page { padding: 0; }
   font-family: var(--body); font-size: 12.5px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
   border: 1px solid rgba(255,255,255,0.12); background: rgba(10,10,14,0.55); color: #c8c8d2; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: color .25s, border-color .25s; }
 .nav-exit:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
-.nav-scene-body { max-width: 1160px; margin: 0 auto; padding: 8px 24px 56px; }
+.nav-scene-body { max-width: 1400px; margin: 0 auto; padding: 8px 24px 56px; transition: opacity .22s var(--ease-smooth); }
 .nav-scene-head { margin: 4px 0 16px; }
 .nav-scene-title { font-family: var(--heading); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; margin: 0 0 6px; }
 .nav-scene-sit { font-size: 1rem; color: var(--text-dim); margin: 0; max-width: 60ch; }
@@ -4967,18 +4967,18 @@ body.view-navigator .page { padding: 0; }
 .nav-enabler-ic { display: inline-flex; color: var(--rc); }
 .nav-enabler-ic svg { width: 13px; height: 13px; }
 
-/* Moments as columns (phases left→right) */
-.nav-moments { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; margin-top: 4px; }
-.nav-moment { width: 224px; }
+/* Buckets laid out as one left-aligned row (horizontal-scrolls if it overflows) */
+.nav-moments { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 30px; justify-content: flex-start; align-items: flex-start; margin-top: 4px; overflow-x: auto; padding-bottom: 12px; }
+.nav-moment { flex: 0 0 auto; display: flex; flex-direction: column; }
 .nav-moment-label { display: flex; align-items: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 12px; }
 .nav-moment-num { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #0d0d10;
   background: linear-gradient(135deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner)); }
-.nav-moment-cards { display: flex; flex-direction: column; gap: 12px; }
-.nav-moment-cards .v4-card { width: 100%; }
-
-.nav-eps { display: flex; flex-wrap: wrap; gap: 14px; }
-.nav-eps .v4-card { width: 224px; max-width: 100%; }
-.nav-eps .v4-card.is-enabler { opacity: .9; }
+.nav-moment-cards { display: flex; flex-direction: row; gap: 12px; }
+/* Uniform episode-card size — fixed box, title + teaser clamped so every card
+   is identical regardless of copy length. */
+.nav-moment-cards .v4-card { width: 224px; height: 246px; overflow: hidden; }
+.nav-moment-cards [data-title] { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.nav-moment-cards [data-teaser] { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
   background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--rc); box-shadow: 0 10px 30px -14px rgba(0,0,0,.8), 0 0 22px -12px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }
@@ -4989,11 +4989,7 @@ body.view-navigator .page { padding: 0; }
 
 .nav-upnext { margin: 34px 0 0; padding-top: 22px; border-top: 1px solid var(--glass-border); }
 .nav-upnext-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-.nav-upnext-row { display: flex; flex-wrap: wrap; gap: 12px; }
-.nav-upnext-box { text-align: left; cursor: pointer; width: 250px; padding: 14px 16px; border-radius: 12px; color: var(--text); background: rgba(255,255,255,.03); border: 1px solid var(--glass-border); transition: border-color .25s, transform .2s; }
-.nav-upnext-box:hover { border-color: rgba(255,255,255,.28); transform: translateY(-2px); }
-.nav-upnext-t { font-family: var(--heading); font-size: .96rem; font-weight: 600; color: #f0f0f5; margin-bottom: 3px; }
-.nav-upnext-s { font-size: .82rem; color: var(--text-dim); line-height: 1.45; }
+.nav-upnext-row { display: flex; flex-wrap: wrap; gap: 16px; }
 
 /* Browse by stage — continues the universe below the hero (glass, not tagged-on) */
 .nav-browse { background: linear-gradient(180deg, #040406 0%, var(--bg) 55%); padding: 46px 24px 46px; }

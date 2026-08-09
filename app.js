@@ -1067,9 +1067,12 @@ function wireNavigator() {
   measure();
   const onResize = () => measure();
   window.addEventListener('resize', onResize);
+  // Stars are tinted with the stage palette (analysis → project mgmt), so the
+  // sky is coloured by the phases rather than plain white.
+  const starCols = ['248,113,113', '251,146,60', '52,211,153', '34,211,238', '96,165,250', '167,139,250', '252,211,77'];
   const layers = [{ n: 70, s: [.4, .9], a: [.14, .38] }, { n: 42, s: [.7, 1.4], a: [.28, .58] }, { n: 16, s: [1.4, 2.4], a: [.5, .95] }];
   const stars = [];
-  layers.forEach((L) => { for (let i = 0; i < L.n; i++) { const ang = Math.random() * 6.28, spd = 0.00006 + Math.random() * 0.0003; stars.push({ x: Math.random(), y: Math.random(), r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), a: L.a[0] + Math.random() * (L.a[1] - L.a[0]), tw: Math.random() * 6.28, sp: .2 + Math.random() * .5, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd }); } });
+  layers.forEach((L) => { for (let i = 0; i < L.n; i++) { const ang = Math.random() * 6.28, spd = 0.00006 + Math.random() * 0.0003; stars.push({ x: Math.random(), y: Math.random(), r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), a: L.a[0] + Math.random() * (L.a[1] - L.a[0]), tw: Math.random() * 6.28, sp: .2 + Math.random() * .5, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, col: starCols[Math.floor(Math.random() * starCols.length)] }); } });
   const neb = [{ x: .28, y: .3, c: '139,92,246' }, { x: .72, y: .34, c: '6,182,212' }, { x: .5, y: .82, c: '255,111,216' }];
   let t = 0;
   function frame() {
@@ -1087,8 +1090,8 @@ function wireNavigator() {
       if (!reduce) { s.x += s.vx; s.y += s.vy; if (s.x < -.06) s.x = 1.06; if (s.x > 1.06) s.x = -.06; if (s.y < -.06) s.y = 1.06; if (s.y > 1.06) s.y = -.06; }
       const px = s.x * W + Math.sin(t * .0008 * s.sp + s.tw) * 4, py = s.y * H + Math.cos(t * .0007 * s.sp + s.tw) * 4;
       const a = s.a * (reduce ? .85 : .6 + .4 * Math.sin(t * .03 * s.sp + s.tw));
-      if (s.r > 1.2) { const gg = ctx.createRadialGradient(px, py, 0, px, py, s.r * 5); gg.addColorStop(0, `rgba(220,225,255,${a})`); gg.addColorStop(1, 'rgba(220,225,255,0)'); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(px, py, s.r * 5, 0, 6.28); ctx.fill(); }
-      ctx.fillStyle = `rgba(235,238,255,${a})`; ctx.beginPath(); ctx.arc(px, py, s.r, 0, 6.28); ctx.fill();
+      if (s.r > 1.2) { const gg = ctx.createRadialGradient(px, py, 0, px, py, s.r * 5); gg.addColorStop(0, `rgba(${s.col},${a})`); gg.addColorStop(1, `rgba(${s.col},0)`); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(px, py, s.r * 5, 0, 6.28); ctx.fill(); }
+      ctx.fillStyle = `rgba(${s.col},${a})`; ctx.beginPath(); ctx.arc(px, py, s.r, 0, 6.28); ctx.fill();
     });
     ctx.globalCompositeOperation = 'source-over';
     requestAnimationFrame(frame);
@@ -1145,8 +1148,32 @@ function wireNavigator() {
     if (sc) openShow(sc);
   });
 
-  // ----- a show: episodes grouped by moment -----
+  // A show box (used on the home and for "Up next"), so related shows read as
+  // other series rather than plain text boxes.
+  function showCardBox(sc, cls) {
+    const cards = scenarioCards(sc);
+    const dots = cards.map((c) => `<span class="nav-sc-dot" style="background:${tileColor(c)}"></span>`).join('');
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.dataset.sc = sc.slug;
+    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-dots">${dots}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
+    return b;
+  }
+
+  // ----- a show: episodes grouped into buckets -----
   function openShow(sc) {
+    const switching = field.classList.contains('showing-scene');
+    if (switching) {
+      sceneBodyEl.style.opacity = '0';
+      setTimeout(() => { buildScene(sc); sceneBodyEl.style.opacity = '1'; }, 200);
+    } else {
+      buildScene(sc);
+      sceneBodyEl.style.opacity = '1';
+      field.classList.add('showing-scene');
+    }
+    state.navShow = sc.slug;
+  }
+
+  function buildScene(sc) {
     const body = sceneBodyEl;
     body.innerHTML = '';
 
@@ -1155,31 +1182,25 @@ function wireNavigator() {
     head.innerHTML = `<h1 class="nav-scene-title">${sc.title}</h1><p class="nav-scene-sit">${sc.situation || ''}</p>`;
     body.appendChild(head);
 
-    if (sc.enablers && sc.enablers.length) {
-      const pre = document.createElement('div');
-      pre.className = 'nav-prelude';
-      pre.innerHTML = '<span class="nav-prelude-label">Set up first</span>';
-      const row = document.createElement('div');
-      row.className = 'nav-enabler-chips';
-      sc.enablers.forEach((e) => { const tl = enablerChip(e); if (tl) row.appendChild(tl); });
-      pre.appendChild(row);
-      body.appendChild(pre);
-    }
-
-    // Moments render as columns (phases left→right) so a show uses the width
-    // instead of sprawling vertically. "byStage" shows generate their columns
-    // from the stages (this is the whole-library browse).
+    // Buckets, laid out as one left-aligned row. Enablers become a leading
+    // "Set up" bucket so every card is a uniform episode in a labelled group
+    // (no special format for someone landing here directly). "byStage" shows
+    // build their buckets from the stages (the whole-library browse).
+    const buckets = [];
+    if (!sc.byStage && sc.enablers && sc.enablers.length) buckets.push({ label: 'Set up', cards: sc.enablers });
     const moments = sc.byStage
       ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).filter((c) => !c.coming_soon).map((c) => c.slug) }))
       : (sc.moments || []);
+    buckets.push(...moments);
+
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
-    moments.forEach((m, i) => {
+    buckets.forEach((m, i) => {
       const col = document.createElement('div');
       col.className = 'nav-moment';
       const lbl = document.createElement('div');
       lbl.className = 'nav-moment-label';
-      lbl.innerHTML = sc.byStage ? m.label : `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
+      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
       col.appendChild(lbl);
       const cards = document.createElement('div');
       cards.className = 'nav-moment-cards';
@@ -1196,29 +1217,34 @@ function wireNavigator() {
       up.innerHTML = '<div class="nav-upnext-label">Up next</div>';
       const row = document.createElement('div');
       row.className = 'nav-upnext-row';
-      rel.forEach((r) => {
-        const b = document.createElement('button');
-        b.type = 'button'; b.className = 'nav-upnext-box'; b.dataset.sc = r.slug;
-        b.innerHTML = `<div class="nav-upnext-t">${r.title}</div><div class="nav-upnext-s">${r.situation || ''}</div>`;
-        row.appendChild(b);
-      });
+      rel.forEach((r) => row.appendChild(showCardBox(r, 'nav-sc-box nav-upnext-box')));
       up.appendChild(row);
       body.appendChild(up);
     }
 
-    field.classList.add('showing-scene');
     sceneEl.scrollTop = 0;
   }
 
   function showChooser() {
     field.classList.remove('showing-scene');
+    state.navShow = null;
   }
 
   sceneEl.addEventListener('click', (e) => {
     if (e.target.closest('[data-nav-exit]')) { showChooser(); return; }
-    const up = e.target.closest('.nav-upnext-box');
-    if (up) { const sc = scenarios.find((s) => s.slug === up.dataset.sc); if (sc) openShow(sc); }
+    const upBox = e.target.closest('.nav-upnext-box');
+    if (upBox) { const sc = scenarios.find((s) => s.slug === upBox.dataset.sc); if (sc) openShow(sc); return; }
+    // Opening an episode: remember which show it came from so the card's back
+    // link returns to the show, not the stage library.
+    if (e.target.closest('.nav-moment-cards .v4-card')) state.fromShow = state.navShow;
   });
+
+  // Deep-return: if we came back here from an episode, re-open its show.
+  if (state.pendingShow) {
+    const sc = scenarios.find((s) => s.slug === state.pendingShow);
+    state.pendingShow = null;
+    if (sc) openShow(sc);
+  }
 }
 
 // Preview 4: Collapsible folder layout. Each stage is a folder with a header
@@ -2083,15 +2109,23 @@ function viewCardV4(slug) {
   if (article) article.style.setProperty('--stage-color', stageColor);
   if (frame) frame.style.setProperty('--stage-color', stageColor);
 
-  // Back link — points to the primary stage if we know it, else home
+  // Back link — return to the show we came from (if any), else the primary
+  // stage, else home. Arriving from a navigator show sets state.fromShow.
   const backLink = frag.querySelector('[data-back-link]');
   if (backLink) {
-    if (primaryStage) {
+    const fromShow = state.fromShow;
+    const showObj = fromShow && (state.scenarios || []).find((s) => s.slug === fromShow);
+    if (showObj) {
+      state.pendingShow = fromShow; // so returning to "/" re-opens the show
+      backLink.setAttribute('href', '/');
+      backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${showObj.title}`;
+    } else if (primaryStage) {
       backLink.setAttribute('href', `/stages/${primaryStage.slug}`);
       backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${primaryStage.title}`;
     } else {
       backLink.setAttribute('href', '/');
     }
+    state.fromShow = null;
   }
 
   // Card header — role icon + role-type text (same DNA as home shelf card)
@@ -2644,6 +2678,9 @@ function parsePath(pathname) {
 
 function route() {
   state.filters = { types: new Set(), tags: new Set(), query: '', sort: 'default' };
+  // Reset the tab title each route so a card's title doesn't stick after you
+  // navigate away; card/detail views set their own title below.
+  document.title = 'AI in the Park — Playbook for Learning Designers';
   const parts = parsePath(window.location.pathname);
 
   let bgRenderer = viewHome;
