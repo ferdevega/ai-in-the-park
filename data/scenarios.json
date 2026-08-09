@@ -14,27 +14,29 @@
   {
     "slug": "kick-off-a-new-project",
     "title": "Kick off a new project",
-    "situation": "A request landed. Work out what's needed — and who for — before you build.",
+    "situation": "Own it like a learning lead: scope the work, plan the effort, and set it up to run.",
     "assumes": [],
     "previously": ["start-with-ai"],
-    "related": ["build-a-curriculum"],
+    "related": ["define-a-learning-strategy"],
     "moments": [
-      { "label": "Set up", "cards": ["set-up-your-ai-workspace"] },
-      { "label": "Prepare", "cards": ["prep-for-a-needs-assessment-call", "build-your-stakeholder-map", "cluster-interview-transcripts-into-themes"] },
-      { "label": "Diagnose", "cards": ["diagnose-what-the-last-course-got-wrong", "root-cause-the-performance-gap"] },
-      { "label": "Design", "cards": ["build-a-learner-persona", "build-style-guide-for-your-project", "interview-a-persona-before-you-build-one"] }
+      { "label": "Scope & estimate", "cards": ["scope-the-work", "estimate-the-effort"] },
+      { "label": "Plan the delivery", "cards": ["set-up-the-project-timeline", "line-up-the-resources"] },
+      { "label": "Set up reporting", "cards": ["define-the-reporting-strategy"] }
     ]
   },
   {
-    "slug": "build-a-curriculum",
-    "title": "Build a curriculum",
-    "situation": "Shape the whole program — structure and how it's delivered.",
-    "assumes": ["set-up-your-ai-workspace", "build-a-learner-persona"],
+    "slug": "define-a-learning-strategy",
+    "title": "Define a learning strategy",
+    "situation": "Turn a request into a plan: what's needed, for whom, and how you'll deliver it.",
+    "assumes": ["set-up-your-ai-workspace"],
     "previously": ["kick-off-a-new-project"],
     "related": ["build-a-course"],
     "moments": [
-      { "label": "Structure", "cards": ["build-your-curriculum", "document-your-strategy"] },
-      { "label": "Deliver", "cards": ["choose-the-right-modality", "design-a-gamified-strategy"] }
+      { "label": "Frame the need", "cards": ["prep-for-a-needs-assessment-call", "build-your-stakeholder-map"] },
+      { "label": "Analyze the gap", "cards": ["cluster-interview-transcripts-into-themes", "diagnose-what-the-last-course-got-wrong", "root-cause-the-performance-gap", "is-training-even-the-answer"] },
+      { "label": "Know your learner", "cards": ["build-a-learner-persona", "interview-a-persona-before-you-build-one", "segment-your-audience"] },
+      { "label": "Shape the strategy", "cards": ["draft-your-strategy-pov-with-a-podcast", "build-your-curriculum", "choose-the-right-modality", "design-a-gamified-strategy", "turn-business-goals-into-measurable-objectives"] },
+      { "label": "Document & align", "cards": ["document-your-strategy", "get-stakeholder-sign-off-on-the-strategy"] }
     ]
   },
   {
@@ -42,7 +44,7 @@
     "title": "Build a course",
     "situation": "Turn a topic into a real, built module.",
     "assumes": ["set-up-your-ai-workspace", "build-a-learner-persona", "build-style-guide-for-your-project"],
-    "previously": ["build-a-curriculum"],
+    "previously": ["define-a-learning-strategy"],
     "related": ["set-up-quality-standards"],
     "moments": [
       { "label": "Draft", "cards": ["topic-to-module-outline", "build-a-mood-board-for-your-course", "design-the-characters-for-your-course"] },

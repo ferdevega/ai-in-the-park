@@ -1164,9 +1164,11 @@ function wireNavigator() {
     const order = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
     const types = order.filter((t) => cards.some((c) => typeOf(c) === t));
     const icons = types.map((t) => `<span class="nav-sc-ic" style="color:${roleColorVar(t)}">${ROLE_ICONS[t] || ''}</span>`).join('');
+    // A show with no available cards yet reads as "Coming soon", not "0 cards".
+    const countText = cards.length === 0 ? 'Coming soon' : `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
     const b = document.createElement('button');
     b.type = 'button'; b.className = cls; b.dataset.sc = sc.slug;
-    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-icons">${icons}</span><span class="nav-sc-count">${cards.length} cards</span></div>`;
+    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-icons">${icons}</span><span class="nav-sc-count">${countText}</span></div>`;
     return b;
   }
 

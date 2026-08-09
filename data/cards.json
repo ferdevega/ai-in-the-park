@@ -142,7 +142,6 @@
   },
   {
     "slug": "draft-your-strategy-pov-with-a-podcast",
-    "hidden": true,
     "title": "Synthesize your discovery into a Strategy POV",
     "stage": "analysis",
     "type": "tool",
@@ -422,5 +421,14 @@
   {"slug":"define-your-accessibility-standard","title":"Define your accessibility standard","stage":"design","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"version-and-changelog-your-content","title":"Version and changelog your content","stage":"project-management","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"simulate-a-sme-review","title":"Simulate a SME review","stage":"development","type":"panel","level":"advanced","coming_soon":true},
-  {"slug":"prep-a-sme-review-that-gets-useful-feedback","title":"Prep a SME review that gets useful feedback","stage":"development","type":"creator","level":"intermediate","coming_soon":true}
+  {"slug":"prep-a-sme-review-that-gets-useful-feedback","title":"Prep a SME review that gets useful feedback","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"is-training-even-the-answer","title":"Is training even the answer?","stage":"analysis","type":"thought-partner","level":"intermediate","coming_soon":true},
+  {"slug":"segment-your-audience","title":"Segment your audience","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"turn-business-goals-into-measurable-objectives","title":"Turn business goals into measurable objectives","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"get-stakeholder-sign-off-on-the-strategy","title":"Get stakeholder sign-off on the strategy","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"scope-the-work","title":"Scope the work","stage":"project-management","type":"thought-partner","level":"beginner","coming_soon":true},
+  {"slug":"estimate-the-effort","title":"Estimate the effort","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
+  {"slug":"set-up-the-project-timeline","title":"Set up the project timeline","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {"slug":"line-up-the-resources","title":"Line up the resources","stage":"project-management","type":"thought-partner","level":"intermediate","coming_soon":true},
+  {"slug":"define-the-reporting-strategy","title":"Define the reporting strategy","stage":"project-management","type":"creator","level":"intermediate","coming_soon":true}
 ]
