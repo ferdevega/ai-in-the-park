@@ -4988,6 +4988,8 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-scroll-cue-chev { font-size: 14px; animation: navCueBob 1.8s ease-in-out infinite; }
 @keyframes navCueBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 .nav-field.showing-scene .nav-scroll-cue { display: none; }
+/* The legend's cue flows below the cards (not absolute) so it never overlaps. */
+.nav-scroll-cue--legend { position: static; transform: none; left: auto; bottom: auto; margin: 36px auto 0; }
 
 /* Legend — the kinds of card (by interaction + by level). Below the chooser. */
 .nav-legend { position: relative; z-index: 3; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; }
