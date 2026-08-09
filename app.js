@@ -1228,13 +1228,14 @@ function wireNavigator() {
       body.appendChild(pre);
     }
 
-    // Buckets. "byStage" builds them from the stages (whole-library browse) with
-    // available cards first, coming-soon (roadmap) last within each stage.
+    // Buckets. "byStage" (Show me everything) lists only the *available* cards by
+    // stage — coming-soon roadmap cards are left out here, and stages with no
+    // available cards are dropped.
     const moments = sc.byStage
-      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({
+      ? state.stages.map((s) => ({
           label: s.title,
-          cards: cardsForStage(s.slug).slice().sort((a, b) => (a.coming_soon ? 1 : 0) - (b.coming_soon ? 1 : 0)).map((c) => c.slug),
-        }))
+          cards: cardsForStage(s.slug).filter((c) => !c.coming_soon).map((c) => c.slug),
+        })).filter((m) => m.cards.length)
       : (sc.moments || []);
 
     // Centered content that mirrors the homepage: steps stack down the middle,
@@ -1397,27 +1398,6 @@ function wireNavigator() {
         });
       });
     }, 2800);
-  }
-
-  // First-visit welcome: a brief panel over the star-field that fades into the
-  // chooser. Shown once ever (remembered in localStorage), and never when we're
-  // deep-returning into a show.
-  const welcomeEl = field.querySelector('[data-nav-welcome]');
-  const WELCOME_KEY = 'aip-nav-welcomed';
-  let alreadyWelcomed = false;
-  try { alreadyWelcomed = localStorage.getItem(WELCOME_KEY) === '1'; } catch (e) { /* private mode */ }
-  if (welcomeEl && !alreadyWelcomed && !state.pendingShow) {
-    fillSignature(welcomeEl.querySelector('[data-nav-welcome-sig]'), 'nav-welcome-sig-ic');
-    welcomeEl.hidden = false;
-    setTimeout(() => welcomeEl.classList.add('is-showing'), 30);
-    const dismiss = () => {
-      welcomeEl.classList.remove('is-showing');
-      try { localStorage.setItem(WELCOME_KEY, '1'); } catch (e) { /* private mode */ }
-      setTimeout(() => { welcomeEl.hidden = true; }, 700);
-    };
-    welcomeEl.addEventListener('click', (e) => {
-      if (e.target.closest('[data-nav-welcome-cta]') || e.target === welcomeEl) dismiss();
-    });
   }
 
   // Deep-return / Library: open the requested show immediately — synchronously,

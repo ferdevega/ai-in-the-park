@@ -4944,25 +4944,6 @@ body.view-navigator .page { padding: 0; }
 /* Lift the footer above the fixed star-field backdrop on the navigator. */
 body.view-navigator .site-footer { position: relative; z-index: 4; }
 
-/* First-visit welcome — a panel over the star-field that fades into the chooser.
-   Scrim masks the chooser behind it until it's dismissed. */
-.nav-welcome { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 24px;
-  background: radial-gradient(ellipse at 50% 42%, rgba(6,6,11,.55), rgba(3,3,6,.82));
-  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
-  opacity: 0; pointer-events: none; transform: scale(1.015); transition: opacity .6s var(--ease-smooth), transform .6s var(--ease-smooth); }
-.nav-welcome.is-showing { opacity: 1; pointer-events: auto; transform: none; }
-.nav-welcome[hidden] { display: none; }
-.nav-welcome-inner { display: flex; flex-direction: column; align-items: center; max-width: 620px; }
-.nav-welcome-h1 { font-family: var(--heading); font-size: clamp(1.7rem, 3.6vw, 2.6rem); font-weight: 700; line-height: 1.12; color: #eef; margin: 4px 0 16px; }
-.nav-welcome-line { font-size: 1.04rem; line-height: 1.6; color: var(--text-dim); margin: 0 0 26px; max-width: 52ch; }
-.nav-welcome-sig { display: inline-flex; gap: 16px; margin-bottom: 30px; }
-.nav-welcome-sig-ic { display: inline-flex; }
-.nav-welcome-sig-ic svg { width: 22px; height: 22px; }
-.nav-welcome-cta { font-family: var(--body); font-size: .98rem; padding: 13px 26px; border-radius: 999px; cursor: pointer; color: #0d0d10; font-weight: 600;
-  border: 0; background: linear-gradient(135deg, var(--r-creator), var(--r-thought-partner)); box-shadow: 0 16px 40px -16px var(--r-creator);
-  transition: transform .25s var(--ease-spring), box-shadow .3s; }
-.nav-welcome-cta:hover { transform: translateY(-2px); box-shadow: 0 22px 52px -16px var(--r-creator); }
-
 /* Chooser — the shows. Flows in the document (fills ≥1 screen, centered; grows
    and lets the window scroll if the content is taller). */
 .nav-chooser { position: relative; min-height: calc(100vh - var(--topbar-h)); display: flex; flex-direction: column; align-items: center; justify-content: safe center; text-align: center; padding: 26px 20px 48px; transition: opacity .3s var(--ease-smooth); }
