@@ -32,11 +32,11 @@
     "previously": ["kick-off-a-new-project"],
     "related": ["build-a-course"],
     "moments": [
-      { "label": "Frame the need", "cards": ["prep-for-a-needs-assessment-call", "build-your-stakeholder-map"] },
+      { "label": "Frame the need", "cards": ["prep-for-a-needs-assessment-call", "build-your-stakeholder-map", "turn-business-goals-into-measurable-objectives"] },
       { "label": "Analyze the gap", "cards": ["cluster-interview-transcripts-into-themes", "diagnose-what-the-last-course-got-wrong", "root-cause-the-performance-gap", "is-training-even-the-answer"] },
-      { "label": "Know your learner", "cards": ["build-a-learner-persona", "interview-a-persona-before-you-build-one", "segment-your-audience"] },
-      { "label": "Shape the strategy", "cards": ["draft-your-strategy-pov-with-a-podcast", "build-your-curriculum", "choose-the-right-modality", "design-a-gamified-strategy", "turn-business-goals-into-measurable-objectives"] },
-      { "label": "Document & align", "cards": ["document-your-strategy", "get-stakeholder-sign-off-on-the-strategy"] }
+      { "label": "Know your learner", "cards": ["build-a-learner-persona", "interview-your-audience", "segment-your-audience"] },
+      { "label": "Shape the strategy", "cards": ["draft-your-strategy-pov-with-a-podcast", "choose-the-right-modality", "design-a-gamified-strategy"] },
+      { "label": "Document & align", "cards": ["build-your-curriculum", "document-your-strategy", "get-stakeholder-sign-off-on-the-strategy"] }
     ]
   },
   {

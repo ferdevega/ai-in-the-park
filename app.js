@@ -1239,7 +1239,10 @@ function wireNavigator() {
       col.appendChild(lbl);
       const cards = document.createElement('div');
       cards.className = 'nav-moment-cards';
-      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+      // Available cards first, coming-soon (roadmap) cards always at the bottom.
+      const isSoon = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
+      const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
+      ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
       col.appendChild(cards);
       cols.appendChild(col);
     });

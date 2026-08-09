@@ -28,7 +28,7 @@
   },
   {
     "slug": "build-your-curriculum",
-    "title": "Build your curriculum",
+    "title": "Structure your curriculum",
     "stage": "strategy-curriculum",
     "type": "creator",
     "level": "beginner",
@@ -93,8 +93,8 @@
     "coming_soon": true
   },
   {
-    "slug": "interview-a-persona-before-you-build-one",
-    "title": "Interview a persona before you build one",
+    "slug": "interview-your-audience",
+    "title": "Interview your audience",
     "stage": "analysis",
     "type": "panel",
     "level": "advanced",
