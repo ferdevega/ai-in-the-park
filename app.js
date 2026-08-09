@@ -1263,6 +1263,36 @@ function wireNavigator() {
     if (e.target.closest('.nav-moment-cards .v4-card') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
   });
 
+  // First-visit welcome: a brief panel over the star-field that fades into the
+  // chooser. Shown once ever (remembered in localStorage), and never when we're
+  // deep-returning into a show.
+  const welcomeEl = field.querySelector('[data-nav-welcome]');
+  const WELCOME_KEY = 'aip-nav-welcomed';
+  let alreadyWelcomed = false;
+  try { alreadyWelcomed = localStorage.getItem(WELCOME_KEY) === '1'; } catch (e) { /* private mode */ }
+  if (welcomeEl && !alreadyWelcomed && !state.pendingShow) {
+    const sig = welcomeEl.querySelector('[data-nav-welcome-sig]');
+    if (sig && !sig.childElementCount) {
+      ['auditor', 'creator', 'thought-partner', 'tool', 'panel'].forEach((t) => {
+        const s = document.createElement('span');
+        s.className = 'nav-welcome-sig-ic';
+        s.style.color = roleColorVar(t);
+        s.innerHTML = ROLE_ICONS[t] || '';
+        sig.appendChild(s);
+      });
+    }
+    welcomeEl.hidden = false;
+    setTimeout(() => welcomeEl.classList.add('is-showing'), 30);
+    const dismiss = () => {
+      welcomeEl.classList.remove('is-showing');
+      try { localStorage.setItem(WELCOME_KEY, '1'); } catch (e) { /* private mode */ }
+      setTimeout(() => { welcomeEl.hidden = true; }, 700);
+    };
+    welcomeEl.addEventListener('click', (e) => {
+      if (e.target.closest('[data-nav-welcome-cta]') || e.target === welcomeEl) dismiss();
+    });
+  }
+
   // Deep-return: if we came back here from an episode, re-open its show.
   if (state.pendingShow) {
     const sc = scenarios.find((s) => s.slug === state.pendingShow);
