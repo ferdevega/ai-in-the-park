@@ -4993,15 +4993,19 @@ body.view-navigator .page { padding: 0; }
 .nav-enabler-ic { display: inline-flex; color: var(--rc); }
 .nav-enabler-ic svg { width: 13px; height: 13px; }
 
-/* Buckets stack down the centre; each is a labelled row of cards that wraps
-   at 4 across (matching the library card size for a consistent look). */
-.nav-moments { display: flex; flex-direction: column; gap: 36px; margin-top: 6px; }
-.nav-moment { width: 100%; display: flex; flex-direction: column; align-items: center; }
-.nav-moment-label { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 16px; }
+/* Steps as columns, centered like the homepage grid; the cards stack down each
+   column. Every card is one uniform size (matching the home box width), and the
+   teaser is dropped so the boxes are identical. */
+.nav-moments { display: flex; flex-direction: row; flex-wrap: wrap; gap: 22px; justify-content: center; align-items: flex-start; margin-top: 6px; }
+.nav-moment { width: 224px; display: flex; flex-direction: column; }
+.nav-moment-label { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 14px; }
 .nav-moment-num { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #0d0d10;
   background: linear-gradient(135deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner)); }
-.nav-moment-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; }
-.nav-moment-cards .card-preview.v4-card { width: 280px; min-height: 240px; flex: none; }
+.nav-moment-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+.nav-moment-cards .card-preview.v4-card { width: 224px; height: 204px; min-height: 0; flex: none; overflow: hidden; }
+.nav-moment-cards .card-preview.v4-card .teaser,
+.nav-moment-cards .card-preview.v4-card .card-preview-tags { display: none; }
+.nav-moment-cards .card-preview.v4-card .card-body h3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
   background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--rc); box-shadow: 0 10px 30px -14px rgba(0,0,0,.8), 0 0 22px -12px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }
@@ -5034,11 +5038,12 @@ body.view-navigator .page { padding: 0; }
 @media (max-width: 720px) {
   /* Home shows stack one-up */
   .nav-sc-box { width: 100%; max-width: 340px; min-height: 0; }
-  /* Show page → single column of full cards; arrows drop to compact chevrons */
+  /* Show page → step-columns stack full-width; arrows drop to compact chevrons */
   .nav-scene-body { padding: 8px 16px 84px; }
   .nav-moments { gap: 26px; }
+  .nav-moment { width: 100%; max-width: 340px; }
   .nav-moment-cards { gap: 12px; }
-  .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; }
+  .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; height: auto; min-height: 0; }
   .nav-assumes { margin-bottom: 18px; }
   .nav-arrow { max-width: none; padding: 12px; gap: 0; }
   .nav-arrow-prev { left: 10px; }
