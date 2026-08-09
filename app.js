@@ -1111,10 +1111,23 @@ function wireNavigator() {
     if (typeof entry === 'string') return cardBySlug(entry) || null;
     return { slug: entry.slug || entry.link, title: entry.title, teaser: entry.teaser || '', type: entry.type || 'tool', level: entry.level || 'beginner', linkOverride: entry.link };
   }
+  // Episodes are compact tiles (icon + short title, no teaser) so a whole
+  // methodology stays light — and mobile is just a tighter grid of the same.
   function renderEpisode(entry) {
-    const card = episodeCard(entry);
-    if (!card) return null;
-    return renderV4Card(card, {});
+    let title, type, href, soon = false;
+    if (typeof entry === 'string') {
+      const c = cardBySlug(entry); if (!c) return null;
+      title = c.title; type = c.type; href = cardHref(c); soon = !!c.coming_soon;
+    } else {
+      title = entry.title; type = entry.type || 'tool'; href = entry.link || '#';
+    }
+    const el = document.createElement(soon ? 'div' : 'a');
+    el.className = 'nav-tile2' + (soon ? ' is-soon' : '');
+    if (soon) el.setAttribute('data-subscribe-open', '');
+    else el.href = href;
+    el.style.setProperty('--rc', roleColorVar(type) || 'var(--text-dim)');
+    el.innerHTML = `<div class="nav-tile2-top"><span class="nav-tile2-ic">${ROLE_ICONS[type] || ''}</span>${soon ? '<span class="nav-tile2-soon">soon</span>' : ''}</div><div class="nav-tile2-ttl">${title}</div>`;
+    return el;
   }
   // Enablers render as a compact chip (not a full card) so they don't add height.
   function enablerChip(entry) {
@@ -1255,7 +1268,7 @@ function wireNavigator() {
     if (upBox) { const sc = scenarios.find((s) => s.slug === upBox.dataset.sc); if (sc) openShow(sc); return; }
     // Opening an episode: remember which show it came from so the card's back
     // link returns to the show, not the stage library.
-    if (e.target.closest('.nav-moment-cards .v4-card') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
+    if (e.target.closest('.nav-moment-cards .nav-tile2') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
   });
 
   // Deep-return: if we came back here from an episode, re-open its show.
