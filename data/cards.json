@@ -435,5 +435,12 @@
   {"slug":"write-on-screen-content-and-narration","title":"Write the on-screen content and narration","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"generate-scenarios-and-examples","title":"Generate realistic scenarios and examples","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"generate-a-voiceover","title":"Generate a voiceover","stage":"development","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"translate-the-module","title":"Translate the module","stage":"development","type":"tool","level":"intermediate","coming_soon":true}
+  {"slug":"translate-the-module","title":"Translate the module","stage":"development","type":"tool","level":"intermediate","coming_soon":true},
+  {"slug":"know-what-ai-is-good-and-bad-at","title":"Know what AI is good (and bad) at","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"when-not-to-use-ai","title":"When not to use AI","stage":"design","type":"thought-partner","level":"beginner","coming_soon":true},
+  {"slug":"what-is-agentic-ai","title":"What is agentic AI?","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"iterate-dont-one-shot","title":"Iterate, don’t one-shot","stage":"design","type":"thought-partner","level":"beginner","coming_soon":true},
+  {"slug":"build-a-reusable-prompt-library","title":"Build a reusable prompt library","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"pick-the-right-ai-tool","title":"Pick the right AI tool for the job","stage":"design","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"design","type":"tool","level":"beginner","coming_soon":true}
 ]
