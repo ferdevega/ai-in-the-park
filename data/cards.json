@@ -417,5 +417,10 @@
       "tune": "Where you assumed something, call it out, those become my SME questions. If the brief is too thin to design from, ask me one clarifying question first instead of guessing."
     },
     "pro_tip": "If you have actual source material, SOPs, interview transcripts, articles, drop it into a NotebookLM notebook and run this prompt in there. The outline comes back grounded in your real sources, with citations. Way less hallucinated content, and much easier to defend to an SME."
-  }
+  },
+  {"slug":"write-a-qa-rubric-for-your-course","title":"Write a QA rubric for your course","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"define-your-accessibility-standard","title":"Define your accessibility standard","stage":"design","type":"creator","level":"intermediate","coming_soon":true},
+  {"slug":"version-and-changelog-your-content","title":"Version and changelog your content","stage":"project-management","type":"tool","level":"beginner","coming_soon":true},
+  {"slug":"get-sme-feedback-from-an-ai-panel","title":"Get SME feedback from an AI panel","stage":"development","type":"panel","level":"advanced","coming_soon":true},
+  {"slug":"prep-a-sme-review-that-gets-useful-feedback","title":"Prep a SME review that gets useful feedback","stage":"development","type":"creator","level":"intermediate","coming_soon":true}
 ]

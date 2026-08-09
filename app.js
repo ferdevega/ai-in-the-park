@@ -27,8 +27,8 @@ const state = {
 // ---------- Data ----------
 async function loadData() {
   const [stagesRes, cardsRes] = await Promise.all([
-    fetch('/data/stages.json'),
-    fetch('/data/cards.json'),
+    fetch('/data/stages.json', { cache: 'no-store' }),
+    fetch('/data/cards.json', { cache: 'no-store' }),
   ]);
   state.stages = await stagesRes.json();
   state.cards = (await cardsRes.json()).filter((c) => !c.hidden);
