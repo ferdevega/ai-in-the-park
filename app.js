@@ -1263,6 +1263,20 @@ function wireNavigator() {
     if (e.target.closest('.nav-moment-cards .v4-card') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
   });
 
+  // The 5 role icons as a small "signature" — a recurring welcome motif shared
+  // by the popup and the chooser.
+  function fillSignature(sig, cls) {
+    if (!sig || sig.childElementCount) return;
+    ['auditor', 'creator', 'thought-partner', 'tool', 'panel'].forEach((t) => {
+      const s = document.createElement('span');
+      s.className = cls;
+      s.style.color = roleColorVar(t);
+      s.innerHTML = ROLE_ICONS[t] || '';
+      sig.appendChild(s);
+    });
+  }
+  fillSignature(field.querySelector('[data-nav-chooser-sig]'), 'nav-chooser-sig-ic');
+
   // First-visit welcome: a brief panel over the star-field that fades into the
   // chooser. Shown once ever (remembered in localStorage), and never when we're
   // deep-returning into a show.
@@ -1271,16 +1285,7 @@ function wireNavigator() {
   let alreadyWelcomed = false;
   try { alreadyWelcomed = localStorage.getItem(WELCOME_KEY) === '1'; } catch (e) { /* private mode */ }
   if (welcomeEl && !alreadyWelcomed && !state.pendingShow) {
-    const sig = welcomeEl.querySelector('[data-nav-welcome-sig]');
-    if (sig && !sig.childElementCount) {
-      ['auditor', 'creator', 'thought-partner', 'tool', 'panel'].forEach((t) => {
-        const s = document.createElement('span');
-        s.className = 'nav-welcome-sig-ic';
-        s.style.color = roleColorVar(t);
-        s.innerHTML = ROLE_ICONS[t] || '';
-        sig.appendChild(s);
-      });
-    }
+    fillSignature(welcomeEl.querySelector('[data-nav-welcome-sig]'), 'nav-welcome-sig-ic');
     welcomeEl.hidden = false;
     setTimeout(() => welcomeEl.classList.add('is-showing'), 30);
     const dismiss = () => {
