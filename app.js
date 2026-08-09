@@ -1102,7 +1102,11 @@ function wireNavigator() {
   requestAnimationFrame(frame);
 
   // ----- helpers -----
-  const scenarioCards = (sc) => (sc.moments || []).reduce((acc, m) => acc.concat(m.cards || []), []);
+  // Episodes in a show — for the by-stage "everything" show, that's every card
+  // across the stages (its moments are built at render time, so count the same).
+  const scenarioCards = (sc) => (sc.byStage
+    ? state.stages.filter((s) => stageHasCards(s.slug)).reduce((acc, s) => acc.concat(cardsForStage(s.slug).map((c) => c.slug)), [])
+    : (sc.moments || []).reduce((acc, m) => acc.concat(m.cards || []), []));
   function tileColor(entry) {
     const type = typeof entry === 'string' ? (cardBySlug(entry) || {}).type : entry.type;
     return roleColorVar(type) || 'var(--text-dim)';
@@ -1186,39 +1190,21 @@ function wireNavigator() {
     state.navShow = sc.slug;
   }
 
-  const isComingSoonEntry = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
-
   function buildScene(sc) {
     const body = sceneBodyEl;
     body.innerHTML = '';
 
-    // Buckets. "byStage" builds them from the stages (whole-library browse);
-    // coming-soon cards render as ghost tiles either way (the roadmap steps).
-    const moments = sc.byStage
-      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
-      : (sc.moments || []);
-    const hasComingSoon = moments.some((m) => (m.cards || []).some(isComingSoonEntry));
-
     const head = document.createElement('div');
     head.className = 'nav-scene-head';
     head.innerHTML = `<h1 class="nav-scene-title">${sc.title}</h1><p class="nav-scene-sit">${sc.situation || ''}</p>`;
-    // Filter: hide/show the coming-soon roadmap cards (only when there are any).
-    if (hasComingSoon) {
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'nav-filter-toggle' + (state.hideComingSoon ? ' is-active' : '');
-      toggle.setAttribute('data-nav-filter', '');
-      toggle.textContent = state.hideComingSoon ? 'Showing available only — show coming soon' : 'Hide coming soon';
-      head.appendChild(toggle);
-    }
     body.appendChild(head);
 
-    // "Assumes you've done" — shared prerequisite cards live in their home show
-    // and appear here as light reference chips (not repeated full cards).
+    // Reference cards — shared prerequisites that live in their home show and
+    // appear here as light chips (not repeated full cards).
     if (sc.assumes && sc.assumes.length) {
       const pre = document.createElement('div');
       pre.className = 'nav-assumes';
-      pre.innerHTML = '<span class="nav-assumes-label">Assumes you’ve done</span>';
+      pre.innerHTML = '<span class="nav-assumes-label">Cards you may find useful before you start</span>';
       const row = document.createElement('div');
       row.className = 'nav-enabler-chips';
       sc.assumes.forEach((e) => { const tl = enablerChip(e); if (tl) row.appendChild(tl); });
@@ -1226,26 +1212,26 @@ function wireNavigator() {
       body.appendChild(pre);
     }
 
+    // Buckets. "byStage" builds them from the stages (whole-library browse);
+    // coming-soon cards render as shorter ghost tiles (the roadmap steps).
+    const moments = sc.byStage
+      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
+      : (sc.moments || []);
+
     // Centered content that mirrors the homepage: steps stack down the middle,
-    // each a labelled column of cards. Empty steps (e.g. once coming-soon is
-    // filtered out) drop away, and the numbering stays sequential.
+    // each a labelled column of cards.
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
-    let stepNum = 0;
-    moments.forEach((m) => {
-      const entries = (m.cards || []).filter((c) => !(state.hideComingSoon && isComingSoonEntry(c)));
-      const cardEls = entries.map(renderEpisode).filter(Boolean);
-      if (!cardEls.length) return;
-      stepNum += 1;
+    moments.forEach((m, i) => {
       const col = document.createElement('div');
       col.className = 'nav-moment';
       const lbl = document.createElement('div');
       lbl.className = 'nav-moment-label';
-      lbl.innerHTML = `<span class="nav-moment-num">${stepNum}</span>${m.label}`;
+      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
       col.appendChild(lbl);
       const cards = document.createElement('div');
       cards.className = 'nav-moment-cards';
-      cardEls.forEach((el) => cards.appendChild(el));
+      (m.cards || []).forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
       col.appendChild(cards);
       cols.appendChild(col);
     });
@@ -1282,16 +1268,11 @@ function wireNavigator() {
     toTop();
     state.navShow = null;
   }
+  // Let the top-bar Home link reset the navigator to the chooser.
+  state.navResetToChooser = showChooser;
 
   sceneEl.addEventListener('click', (e) => {
     if (e.target.closest('[data-nav-exit]')) { showChooser(); return; }
-    // Filter: hide/show the coming-soon roadmap cards, then re-render the show.
-    if (e.target.closest('[data-nav-filter]')) {
-      state.hideComingSoon = !state.hideComingSoon;
-      const cur = scenarios.find((s) => s.slug === state.navShow);
-      if (cur) buildScene(cur);
-      return;
-    }
     // Season arc: prev/next arrows jump to the neighbouring show.
     const arrow = e.target.closest('[data-nav-prev], [data-nav-next]');
     if (arrow && arrow.dataset.sc) { const sc = scenarios.find((s) => s.slug === arrow.dataset.sc); if (sc) openShow(sc); return; }
@@ -1312,7 +1293,35 @@ function wireNavigator() {
       sig.appendChild(s);
     });
   }
-  fillSignature(field.querySelector('[data-nav-chooser-sig]'), 'nav-chooser-sig-ic');
+  const chooserSig = field.querySelector('[data-nav-chooser-sig]');
+  fillSignature(chooserSig, 'nav-chooser-sig-ic');
+
+  // Shuffle the signature icons' positions every ~2.8s (FLIP), like the old
+  // library hero. Only while the chooser is on screen.
+  if (chooserSig) {
+    const sigTimer = setInterval(() => {
+      if (!chooserSig.isConnected) { clearInterval(sigTimer); return; }
+      if (field.classList.contains('showing-scene')) return;
+      const items = Array.from(chooserSig.children);
+      if (items.length < 2) return;
+      const before = new Map(items.map((el) => [el, el.getBoundingClientRect().left]));
+      const shuffled = items.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      shuffled.forEach((el) => chooserSig.appendChild(el));
+      items.forEach((el) => {
+        const delta = before.get(el) - el.getBoundingClientRect().left;
+        el.style.transition = 'none';
+        el.style.transform = `translateX(${delta}px)`;
+        requestAnimationFrame(() => {
+          el.style.transition = 'transform .9s cubic-bezier(0.2, 0.9, 0.3, 1)';
+          el.style.transform = 'translateX(0)';
+        });
+      });
+    }, 2800);
+  }
 
   // First-visit welcome: a brief panel over the star-field that fades into the
   // chooser. Shown once ever (remembered in localStorage), and never when we're
@@ -2788,9 +2797,10 @@ function route() {
     bgRenderer = viewNavigator;
     bgPath = '/';
   } else if (parts[0] === 'library') {
-    // The old stage-shelf home, demoted to the browse-everything library.
-    bgRenderer = viewHomeV4;
+    // Library → the navigator's "show me everything" scene (whole playbook by stage).
+    bgRenderer = viewNavigator;
     bgPath = '/library';
+    state.pendingShow = 'everything';
   } else if (parts[0] === 'classic') {
     // Backup/legacy home preserved for reference
     bgRenderer = viewHome;
@@ -2930,6 +2940,13 @@ document.addEventListener('click', (e) => {
   if (!href || !href.startsWith('/') || link.target === '_blank' || link.hasAttribute('download')) return;
   if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
   e.preventDefault();
+  // Home: on the navigator the URL never changes when a show opens, so a plain
+  // href="/" won't re-navigate. Reset the navigator to the chooser instead.
+  if (link.hasAttribute('data-home-link') && state.view === 'navigator' && window.location.pathname === '/') {
+    if (state.navResetToChooser) state.navResetToChooser();
+    setSpineOpen(false);
+    return;
+  }
   if (href !== window.location.pathname) navigate(href);
   // If user clicked a tab while spine dropdown is open, close it
   setSpineOpen(false);

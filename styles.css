@@ -4924,7 +4924,7 @@ body.view-navigator .page { padding: 0; }
    star-field is a fixed backdrop pinned to the viewport, so the cards scroll
    over one continuous universe — the same page from home into a series. */
 .nav-field { position: relative; width: 100%; min-height: calc(100vh - var(--topbar-h)); background: #040406; }
-.nav-bg { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 0; }
+.nav-bg { position: fixed; top: var(--topbar-h); left: 0; width: 100vw; height: calc(100vh - var(--topbar-h)); z-index: 0; }
 .nav-grain { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 1; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 .nav-vignette { position: fixed; inset: var(--topbar-h) 0 0 0; z-index: 1; pointer-events: none;
@@ -4993,11 +4993,6 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-scene-head { margin: 10px 0 26px; text-align: center; }
 .nav-scene-title { font-family: var(--heading); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; margin: 0 0 6px; }
 .nav-scene-sit { font-size: 1rem; color: var(--text-dim); margin: 0 auto; max-width: 60ch; }
-/* Toggle to hide/show the coming-soon (roadmap) cards. */
-.nav-filter-toggle { margin-top: 16px; font-family: var(--body); font-size: 12.5px; padding: 7px 15px; border-radius: 999px; cursor: pointer; color: #c8c8d2;
-  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); transition: color .2s, border-color .2s, background .2s; }
-.nav-filter-toggle:hover { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.07); }
-.nav-filter-toggle.is-active { color: #fff; border-color: color-mix(in srgb, var(--r-creator) 60%, rgba(255,255,255,.2)); background: color-mix(in srgb, var(--r-creator) 16%, transparent); }
 
 /* Season-arc arrows — slim chevrons pinned to the field's vertical centre that
    jump to the neighbouring shows; the show name unfurls on hover. Hidden when
@@ -5042,6 +5037,10 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 .nav-moment-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; }
 .nav-moment-cards .card-preview.v4-card { width: 224px; height: 204px; min-height: 0; flex: none; overflow: hidden;
   animation: navCardIn .55s var(--ease-spring) both; animation-delay: var(--nav-in-delay, 0ms); }
+/* Coming-soon (roadmap) cards are shorter — no role category, just title + badge. */
+.nav-moment-cards .card-preview.v4-card.card-preview-coming-soon { height: 116px; }
+.nav-moment-cards .card-preview.card-preview-coming-soon .v4-card-header { display: none; }
+.nav-moment-cards .card-preview.card-preview-coming-soon .card-body h3 { -webkit-line-clamp: 2; }
 /* Episodes surface from deep in the star-field to the forefront. */
 @keyframes navCardIn { from { opacity: 0; transform: scale(.66) translateY(22px); filter: blur(7px); } to { opacity: 1; transform: none; filter: none; } }
 @media (prefers-reduced-motion: reduce) { .nav-moment-cards .card-preview.v4-card { animation: none; } }
