@@ -4953,10 +4953,36 @@ body.view-navigator .page { padding: 0; }
   font-family: var(--body); font-size: 12.5px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
   border: 1px solid rgba(255,255,255,0.12); background: rgba(10,10,14,0.55); color: #c8c8d2; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: color .25s, border-color .25s; }
 .nav-exit:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
-.nav-scene-body { max-width: 1400px; margin: 0 auto; padding: 8px 24px 56px; transition: opacity .22s var(--ease-smooth); }
-.nav-scene-head { margin: 4px 0 16px; }
+/* Centered content that mirrors the homepage chooser: up to 4 cards across on
+   wide screens (content box reaches 1168px = 4×280 + gaps), dropping to 3/2 on
+   narrower ones. Side padding reserves gutters so the arrows never clip cards. */
+.nav-scene-body { max-width: 1344px; margin: 0 auto; padding: 8px 88px 72px; transition: opacity .22s var(--ease-smooth); }
+.nav-scene-head { margin: 10px 0 26px; text-align: center; }
 .nav-scene-title { font-family: var(--heading); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 700; margin: 0 0 6px; }
-.nav-scene-sit { font-size: 1rem; color: var(--text-dim); margin: 0; max-width: 60ch; }
+.nav-scene-sit { font-size: 1rem; color: var(--text-dim); margin: 0 auto; max-width: 60ch; }
+
+/* Season-arc arrows — slim chevrons pinned to the field's vertical centre that
+   jump to the neighbouring shows; the show name unfurls on hover. Hidden when
+   there's no previously / up-next. */
+.nav-arrow { position: fixed; top: calc(50% + var(--topbar-h) / 2); transform: translateY(-50%); z-index: 6;
+  width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #c8c8d2;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(10,10,14,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: color .25s, border-color .25s, transform .28s var(--ease-spring), box-shadow .3s; }
+.nav-arrow[hidden] { display: none; }
+.nav-arrow-prev { left: 24px; }
+.nav-arrow-next { right: 24px; }
+.nav-arrow:hover { color: #fff; border-color: rgba(255,255,255,.34); box-shadow: 0 0 32px -12px rgba(167,139,250,.8); }
+.nav-arrow-prev:hover { transform: translateY(-50%) translateX(-2px); }
+.nav-arrow-next:hover { transform: translateY(-50%) translateX(2px); }
+.nav-arrow-chev { font-size: 22px; line-height: 1; }
+.nav-arrow-cap { position: absolute; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 3px; width: 168px; padding: 11px 14px; border-radius: 14px;
+  background: rgba(14,13,20,.94); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 18px 40px -18px rgba(0,0,0,.9);
+  opacity: 0; pointer-events: none; transition: opacity .2s var(--ease-smooth); }
+.nav-arrow-prev .nav-arrow-cap { left: calc(100% + 12px); text-align: left; }
+.nav-arrow-next .nav-arrow-cap { right: calc(100% + 12px); text-align: right; }
+.nav-arrow:hover .nav-arrow-cap { opacity: 1; }
+.nav-arrow-kicker { font-family: var(--heading); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
+.nav-arrow-name { font-size: 13px; font-weight: 600; color: #eef; line-height: 1.25; }
 
 .nav-prelude { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 0 0 22px; padding: 10px 16px; border-radius: 12px; border: 1px dashed rgba(255,255,255,.14); background: rgba(255,255,255,.02); }
 .nav-prelude-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
@@ -4967,28 +4993,15 @@ body.view-navigator .page { padding: 0; }
 .nav-enabler-ic { display: inline-flex; color: var(--rc); }
 .nav-enabler-ic svg { width: 13px; height: 13px; }
 
-/* Two-column scene: episode grid (left, fills width + wraps down) + Up Next (right). */
-.nav-scene-cols { display: flex; gap: 40px; align-items: flex-start; }
-/* Buckets as columns that wrap to fill the screen (use the space; scroll down if needed) */
-.nav-moments { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 28px; justify-content: flex-start; align-items: flex-start; margin-top: 4px; }
-.nav-moment { flex: 0 0 auto; width: 176px; display: flex; flex-direction: column; }
-.nav-moment-label { display: flex; align-items: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 12px; }
+/* Buckets stack down the centre; each is a labelled row of cards that wraps
+   at 4 across (matching the library card size for a consistent look). */
+.nav-moments { display: flex; flex-direction: column; gap: 36px; margin-top: 6px; }
+.nav-moment { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.nav-moment-label { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--heading); font-size: .95rem; font-weight: 600; color: #e8e8ef; margin-bottom: 16px; }
 .nav-moment-num { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #0d0d10;
   background: linear-gradient(135deg, var(--r-auditor), var(--r-creator), var(--r-thought-partner)); }
-.nav-moment-cards { display: flex; flex-direction: column; gap: 10px; }
-/* Compact episode tile — icon + short title, uniform box, no teaser */
-.nav-tile2 { display: block; width: 100%; height: 104px; box-sizing: border-box; border-radius: 12px; padding: 12px 13px; text-decoration: none; overflow: hidden;
-  background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); border: 1px solid var(--rc);
-  box-shadow: 0 8px 24px -16px rgba(0,0,0,.8), 0 0 18px -13px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }
-.nav-tile2:hover { transform: translateY(-3px); box-shadow: 0 14px 32px -16px rgba(0,0,0,.85), 0 0 24px -10px var(--rc); text-decoration: none; }
-.nav-tile2-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; color: var(--rc); }
-.nav-tile2-ic { display: inline-flex; }
-.nav-tile2-ic svg { width: 16px; height: 16px; }
-.nav-tile2-ttl { font-size: 12.5px; line-height: 1.3; color: #f2f0f7; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.nav-tile2.is-soon { border-style: dashed; border-color: rgba(255,255,255,.14); opacity: .55; cursor: pointer; box-shadow: none; }
-.nav-tile2.is-soon .nav-tile2-ic { color: #6a6a75; }
-.nav-tile2.is-soon:hover { transform: none; opacity: .75; }
-.nav-tile2-soon { font-family: var(--heading); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: #6a6a75; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; padding: 2px 6px; }
+.nav-moment-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; }
+.nav-moment-cards .card-preview.v4-card { width: 280px; min-height: 240px; flex: none; }
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
   background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--rc); box-shadow: 0 10px 30px -14px rgba(0,0,0,.8), 0 0 22px -12px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }
@@ -4998,14 +5011,8 @@ body.view-navigator .page { padding: 0; }
 .nav-tile-ttl { display: block; font-size: 12.5px; line-height: 1.3; color: #f2f0f7; font-weight: 500; }
 
 /* Assumes-you've-done — light reference chips for shared prerequisite cards */
-.nav-assumes { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 0 0 22px; }
+.nav-assumes { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 0 0 26px; }
 .nav-assumes-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); }
-
-/* Right column — Up next + Previously, so it doesn't eat horizontal space */
-.nav-side { flex: 0 0 244px; width: 244px; display: flex; flex-direction: column; gap: 26px; }
-.nav-upnext-label { font-family: var(--heading); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 12px; }
-.nav-upnext-row { display: flex; flex-direction: column; gap: 14px; }
-.nav-side .nav-sc-box { width: 100%; min-height: 0; }
 
 /* Browse by stage — continues the universe below the hero (glass, not tagged-on) */
 .nav-browse { background: linear-gradient(180deg, #040406 0%, var(--bg) 55%); padding: 46px 24px 46px; }
@@ -5027,14 +5034,17 @@ body.view-navigator .page { padding: 0; }
 @media (max-width: 720px) {
   /* Home shows stack one-up */
   .nav-sc-box { width: 100%; max-width: 340px; min-height: 0; }
-  /* Show page → a mini, single-column version that fits the phone screen */
-  .nav-scene-cols { flex-direction: column; gap: 22px; }
-  .nav-moments { flex-direction: column; gap: 18px; width: 100%; }
-  .nav-moment { width: 100%; }
-  .nav-moment-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .nav-tile2 { height: 96px; }
-  .nav-side { width: 100%; flex: none; }
-  .nav-assumes { margin-bottom: 16px; }
+  /* Show page → single column of full cards; arrows drop to compact chevrons */
+  .nav-scene-body { padding: 8px 16px 84px; }
+  .nav-moments { gap: 26px; }
+  .nav-moment-cards { gap: 12px; }
+  .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; }
+  .nav-assumes { margin-bottom: 18px; }
+  .nav-arrow { max-width: none; padding: 12px; gap: 0; }
+  .nav-arrow-prev { left: 10px; }
+  .nav-arrow-next { right: 10px; }
+  .nav-arrow-cap { display: none; }
+  .nav-arrow-chev { font-size: 24px; opacity: .9; }
 }
 @media (min-width: 721px) and (max-width: 1024px) {
   .nav-scenarios { max-width: 488px; }

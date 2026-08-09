@@ -1051,6 +1051,8 @@ function wireNavigator() {
   const scenariosEl = field.querySelector('[data-nav-scenarios]');
   const sceneEl = field.querySelector('[data-nav-scene]');
   const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
+  const prevArrowEl = field.querySelector('[data-nav-prev]');
+  const nextArrowEl = field.querySelector('[data-nav-next]');
   const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
   const scenarios = state.scenarios || [];
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1111,23 +1113,11 @@ function wireNavigator() {
     if (typeof entry === 'string') return cardBySlug(entry) || null;
     return { slug: entry.slug || entry.link, title: entry.title, teaser: entry.teaser || '', type: entry.type || 'tool', level: entry.level || 'beginner', linkOverride: entry.link };
   }
-  // Episodes are compact tiles (icon + short title, no teaser) so a whole
-  // methodology stays light — and mobile is just a tighter grid of the same.
+  // Episodes render as the full library card (renderV4Card).
   function renderEpisode(entry) {
-    let title, type, href, soon = false;
-    if (typeof entry === 'string') {
-      const c = cardBySlug(entry); if (!c) return null;
-      title = c.title; type = c.type; href = cardHref(c); soon = !!c.coming_soon;
-    } else {
-      title = entry.title; type = entry.type || 'tool'; href = entry.link || '#';
-    }
-    const el = document.createElement(soon ? 'div' : 'a');
-    el.className = 'nav-tile2' + (soon ? ' is-soon' : '');
-    if (soon) el.setAttribute('data-subscribe-open', '');
-    else el.href = href;
-    el.style.setProperty('--rc', roleColorVar(type) || 'var(--text-dim)');
-    el.innerHTML = `<div class="nav-tile2-top"><span class="nav-tile2-ic">${ROLE_ICONS[type] || ''}</span>${soon ? '<span class="nav-tile2-soon">soon</span>' : ''}</div><div class="nav-tile2-ttl">${title}</div>`;
-    return el;
+    const card = episodeCard(entry);
+    if (!card) return null;
+    return renderV4Card(card, {});
   }
   // Enablers render as a compact chip (not a full card) so they don't add height.
   function enablerChip(entry) {
@@ -1214,11 +1204,8 @@ function wireNavigator() {
       ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
       : (sc.moments || []);
 
-    // Two-column scene: episode grid (fills the width, wraps down) on the left,
-    // a slim right column (Up next + Previously) so the grid can spread down.
-    const sceneCols = document.createElement('div');
-    sceneCols.className = 'nav-scene-cols';
-
+    // Centered content that mirrors the homepage: buckets stack down the middle,
+    // each a labelled row of full cards that wraps at 4 across.
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
     moments.forEach((m, i) => {
@@ -1234,27 +1221,25 @@ function wireNavigator() {
       col.appendChild(cards);
       cols.appendChild(col);
     });
-    sceneCols.appendChild(cols);
+    body.appendChild(cols);
 
-    const side = document.createElement('div');
-    side.className = 'nav-side';
-    const addSideSection = (label, showSlugs) => {
-      const shows = (showSlugs || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
-      if (!shows.length) return;
-      const sec = document.createElement('div');
-      sec.innerHTML = `<div class="nav-upnext-label">${label}</div>`;
-      const row = document.createElement('div');
-      row.className = 'nav-upnext-row';
-      shows.forEach((r) => row.appendChild(showCardBox(r, 'nav-sc-box nav-upnext-box')));
-      sec.appendChild(row);
-      side.appendChild(sec);
-    };
-    addSideSection('Up next', sc.related);
-    addSideSection('Previously', sc.previously);
-    if (side.children.length) sceneCols.appendChild(side);
+    // Season arc: flank the scene with a "Previously" arrow (left) and an
+    // "Up next" arrow (right) that jump to the neighbouring shows.
+    const prevShow = (sc.previously || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean)[0] || null;
+    const nextShow = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean)[0] || null;
+    setArrow(prevArrowEl, prevShow);
+    setArrow(nextArrowEl, nextShow);
 
-    body.appendChild(sceneCols);
     sceneEl.scrollTop = 0;
+  }
+
+  function setArrow(el, show) {
+    if (!el) return;
+    if (!show) { el.hidden = true; el.dataset.sc = ''; return; }
+    el.hidden = false;
+    el.dataset.sc = show.slug;
+    const name = el.querySelector('.nav-arrow-name');
+    if (name) name.textContent = show.title;
   }
 
   function showChooser() {
@@ -1264,11 +1249,12 @@ function wireNavigator() {
 
   sceneEl.addEventListener('click', (e) => {
     if (e.target.closest('[data-nav-exit]')) { showChooser(); return; }
-    const upBox = e.target.closest('.nav-upnext-box');
-    if (upBox) { const sc = scenarios.find((s) => s.slug === upBox.dataset.sc); if (sc) openShow(sc); return; }
+    // Season arc: prev/next arrows jump to the neighbouring show.
+    const arrow = e.target.closest('[data-nav-prev], [data-nav-next]');
+    if (arrow && arrow.dataset.sc) { const sc = scenarios.find((s) => s.slug === arrow.dataset.sc); if (sc) openShow(sc); return; }
     // Opening an episode: remember which show it came from so the card's back
     // link returns to the show, not the stage library.
-    if (e.target.closest('.nav-moment-cards .nav-tile2') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
+    if (e.target.closest('.nav-moment-cards .v4-card') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
   });
 
   // Deep-return: if we came back here from an episode, re-open its show.
