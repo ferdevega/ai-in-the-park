@@ -1223,12 +1223,18 @@ function wireNavigator() {
     });
     body.appendChild(cols);
 
-    // Season arc: flank the scene with a "Previously" arrow (left) and an
-    // "Up next" arrow (right) that jump to the neighbouring shows.
-    const prevShow = (sc.previously || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean)[0] || null;
-    const nextShow = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean)[0] || null;
-    setArrow(prevArrowEl, prevShow);
-    setArrow(nextArrowEl, nextShow);
+    // Cards surface from the star-field to the forefront, staggered in reading order.
+    cols.querySelectorAll('.nav-moment-cards .card-preview').forEach((el, i) => {
+      el.style.setProperty('--nav-in-delay', `${i * 45}ms`);
+    });
+
+    // Season arc: the "Previously" (left) and "Up next" (right) arrows follow the
+    // show order on the home screen — the neighbouring series, skipping the
+    // by-stage "everything" catch-all.
+    const series = scenarios.filter((s) => !s.byStage);
+    const idx = series.findIndex((s) => s.slug === sc.slug);
+    setArrow(prevArrowEl, idx > 0 ? series[idx - 1] : null);
+    setArrow(nextArrowEl, idx >= 0 && idx < series.length - 1 ? series[idx + 1] : null);
 
     sceneEl.scrollTop = 0;
   }
