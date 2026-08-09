@@ -36,7 +36,7 @@ async function loadData() {
 
   // Scenarios power the /navigator route; failure here shouldn't break the app.
   try {
-    const scRes = await fetch('/data/scenarios.json');
+    const scRes = await fetch('/data/scenarios.json', { cache: 'no-store' });
     if (scRes.ok) state.scenarios = await scRes.json();
   } catch (e) {
     state.scenarios = [];
@@ -1182,25 +1182,33 @@ function wireNavigator() {
     head.innerHTML = `<h1 class="nav-scene-title">${sc.title}</h1><p class="nav-scene-sit">${sc.situation || ''}</p>`;
     body.appendChild(head);
 
-    // Buckets, laid out as one left-aligned row. Enablers become a leading
-    // "Set up" bucket so every card is a uniform episode in a labelled group
-    // (no special format for someone landing here directly). "byStage" shows
-    // build their buckets from the stages (the whole-library browse).
-    const buckets = [];
-    if (!sc.byStage && sc.enablers && sc.enablers.length) buckets.push({ label: 'Set up', cards: sc.enablers });
-    const moments = sc.byStage
-      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).filter((c) => !c.coming_soon).map((c) => c.slug) }))
-      : (sc.moments || []);
-    buckets.push(...moments);
+    // "Assumes you've done" — shared prerequisite cards live in their home show
+    // and appear here as light reference chips (not repeated full cards).
+    if (sc.assumes && sc.assumes.length) {
+      const pre = document.createElement('div');
+      pre.className = 'nav-assumes';
+      pre.innerHTML = '<span class="nav-assumes-label">Assumes you’ve done</span>';
+      const row = document.createElement('div');
+      row.className = 'nav-enabler-chips';
+      sc.assumes.forEach((e) => { const tl = enablerChip(e); if (tl) row.appendChild(tl); });
+      pre.appendChild(row);
+      body.appendChild(pre);
+    }
 
-    // Two-column scene: episode grid (wraps to fill the screen) on the left,
-    // "Up next" as a slim column on the right so the grid can spread down.
+    // Buckets. "byStage" builds them from the stages (whole-library browse);
+    // coming-soon cards render as ghost tiles either way (the roadmap steps).
+    const moments = sc.byStage
+      ? state.stages.filter((s) => stageHasCards(s.slug)).map((s) => ({ label: s.title, cards: cardsForStage(s.slug).map((c) => c.slug) }))
+      : (sc.moments || []);
+
+    // Two-column scene: episode grid (fills the width, wraps down) on the left,
+    // a slim right column (Up next + Previously) so the grid can spread down.
     const sceneCols = document.createElement('div');
     sceneCols.className = 'nav-scene-cols';
 
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
-    buckets.forEach((m, i) => {
+    moments.forEach((m, i) => {
       const col = document.createElement('div');
       col.className = 'nav-moment';
       const lbl = document.createElement('div');
@@ -1215,17 +1223,22 @@ function wireNavigator() {
     });
     sceneCols.appendChild(cols);
 
-    const rel = (sc.related || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
-    if (rel.length) {
-      const up = document.createElement('div');
-      up.className = 'nav-upnext';
-      up.innerHTML = '<div class="nav-upnext-label">Up next</div>';
+    const side = document.createElement('div');
+    side.className = 'nav-side';
+    const addSideSection = (label, showSlugs) => {
+      const shows = (showSlugs || []).map((s) => scenarios.find((x) => x.slug === s)).filter(Boolean);
+      if (!shows.length) return;
+      const sec = document.createElement('div');
+      sec.innerHTML = `<div class="nav-upnext-label">${label}</div>`;
       const row = document.createElement('div');
       row.className = 'nav-upnext-row';
-      rel.forEach((r) => row.appendChild(showCardBox(r, 'nav-sc-box nav-upnext-box')));
-      up.appendChild(row);
-      sceneCols.appendChild(up);
-    }
+      shows.forEach((r) => row.appendChild(showCardBox(r, 'nav-sc-box nav-upnext-box')));
+      sec.appendChild(row);
+      side.appendChild(sec);
+    };
+    addSideSection('Up next', sc.related);
+    addSideSection('Previously', sc.previously);
+    if (side.children.length) sceneCols.appendChild(side);
 
     body.appendChild(sceneCols);
     sceneEl.scrollTop = 0;
@@ -1242,7 +1255,7 @@ function wireNavigator() {
     if (upBox) { const sc = scenarios.find((s) => s.slug === upBox.dataset.sc); if (sc) openShow(sc); return; }
     // Opening an episode: remember which show it came from so the card's back
     // link returns to the show, not the stage library.
-    if (e.target.closest('.nav-moment-cards .v4-card')) state.fromShow = state.navShow;
+    if (e.target.closest('.nav-moment-cards .v4-card') || e.target.closest('.nav-assumes .nav-enabler-chip')) state.fromShow = state.navShow;
   });
 
   // Deep-return: if we came back here from an episode, re-open its show.
