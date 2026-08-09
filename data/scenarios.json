@@ -58,10 +58,11 @@
     "previously": ["build-a-course"],
     "related": ["build-a-course"],
     "moments": [
-      { "label": "Set the standard", "cards": ["build-style-guide-for-your-project", "write-a-qa-rubric-for-your-course", "define-your-accessibility-standard", "version-and-changelog-your-content"] },
-      { "label": "Check it yourself", "cards": ["audit-module-against-style-guide"] },
-      { "label": "Get expert eyes", "cards": ["get-sme-feedback-from-an-ai-panel", "prep-a-sme-review-that-gets-useful-feedback"] },
-      { "label": "Test with learners", "cards": ["run-a-focus-group-on-your-draft"] }
+      { "label": "Set the standard", "cards": ["build-style-guide-for-your-project", "define-your-accessibility-standard"] },
+      { "label": "Check it yourself", "cards": ["audit-module-against-style-guide", "write-a-qa-checklist-for-your-course"] },
+      { "label": "Get expert eyes", "cards": ["simulate-a-sme-review", "prep-a-sme-review-that-gets-useful-feedback"] },
+      { "label": "Test with learners", "cards": ["run-a-focus-group-on-your-draft"] },
+      { "label": "Track feedback and changes", "cards": ["version-and-changelog-your-content"] }
     ]
   },
   {
