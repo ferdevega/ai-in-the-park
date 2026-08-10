@@ -2503,6 +2503,38 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
     bodyHost.appendChild(wrap);
   };
 
+  // A secondary section that collapses on mobile (native <details>) but is
+  // forced open on desktop via CSS. Content stays in the DOM either way, so
+  // crawlers/LLMs still read it.
+  const proseNode = (html) => {
+    const b = document.createElement('div');
+    b.className = 'prose';
+    b.innerHTML = html;
+    return b;
+  };
+  const mkCollapsible = (emoji, title, sectionKey, bodyNode, extraClass) => {
+    const d = document.createElement('details');
+    d.className = 'card-section card-section-collapsible' + (extraClass ? ` ${extraClass}` : '');
+    d.setAttribute('data-section', sectionKey);
+    const s = document.createElement('summary');
+    s.className = 'card-section-heading';
+    if (emoji) {
+      const e = document.createElement('span');
+      e.className = 'card-section-heading-emoji';
+      e.setAttribute('aria-hidden', 'true');
+      e.textContent = emoji;
+      s.appendChild(e);
+    }
+    s.appendChild(document.createTextNode(title));
+    const chev = document.createElement('span');
+    chev.className = 'card-section-chev';
+    chev.setAttribute('aria-hidden', 'true');
+    chev.textContent = '›';
+    s.appendChild(chev);
+    d.append(s, bodyNode);
+    return d;
+  };
+
   if (bodyHost) {
     if (card.intro) {
       const wrap = document.createElement('div');
@@ -2523,45 +2555,15 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
     if (card.how_ai_helps && card.ai_wont) {
       const row = document.createElement('div');
       row.className = 'card-row-2col';
-      const mkMini = (emoji, title, content, sectionKey) => {
-        const w = document.createElement('div');
-        w.className = 'card-section card-mini';
-        w.setAttribute('data-section', sectionKey);
-        const h = document.createElement('h3');
-        h.className = 'card-section-heading';
-        const e = document.createElement('span');
-        e.className = 'card-section-heading-emoji';
-        e.setAttribute('aria-hidden', 'true');
-        e.textContent = emoji;
-        h.appendChild(e);
-        h.appendChild(document.createTextNode(title));
-        const body = document.createElement('div');
-        body.className = 'prose';
-        body.innerHTML = content;
-        w.append(h, body);
-        return w;
-      };
-      row.appendChild(mkMini('🤖', 'How AI can help', card.how_ai_helps, 'how'));
-      row.appendChild(mkMini('⚠️', "What AI won't do", card.ai_wont, 'wont'));
+      row.appendChild(mkCollapsible('🤖', 'How AI can help', 'how', proseNode(card.how_ai_helps), 'card-mini'));
+      row.appendChild(mkCollapsible('⚠️', "What AI won't do", 'wont', proseNode(card.ai_wont), 'card-mini'));
       bodyHost.appendChild(row);
     } else {
-      renderSection('🤖', 'How AI can help', card.how_ai_helps, { sectionKey: 'how' });
-      renderSection('⚠️', "What AI won't do", card.ai_wont, { sectionKey: 'wont' });
+      if (card.how_ai_helps) bodyHost.appendChild(mkCollapsible('🤖', 'How AI can help', 'how', proseNode(card.how_ai_helps)));
+      if (card.ai_wont) bodyHost.appendChild(mkCollapsible('⚠️', "What AI won't do", 'wont', proseNode(card.ai_wont)));
     }
 
     if (Array.isArray(card.steps) && card.steps.length) {
-      const wrap = document.createElement('div');
-      wrap.className = 'card-section';
-      wrap.setAttribute('data-section', 'steps');
-      const h = document.createElement('h3');
-      h.className = 'card-section-heading';
-      const e = document.createElement('span');
-      e.className = 'card-section-heading-emoji';
-      e.setAttribute('aria-hidden', 'true');
-      e.textContent = '⚙️';
-      h.appendChild(e);
-      h.appendChild(document.createTextNode('How to run it'));
-      wrap.appendChild(h);
       const ol = document.createElement('ol');
       ol.className = 'card-section-steps';
       card.steps.forEach((step) => {
@@ -2569,8 +2571,7 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
         li.innerHTML = step;
         ol.appendChild(li);
       });
-      wrap.appendChild(ol);
-      bodyHost.appendChild(wrap);
+      bodyHost.appendChild(mkCollapsible('⚙️', 'How to run it', 'steps', ol));
     }
   }
 

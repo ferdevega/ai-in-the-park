@@ -3095,6 +3095,33 @@ body.modal-open { overflow: hidden; }
   .card-row-2col { grid-template-columns: 1fr; gap: 12px; }
 }
 
+/* Collapsible secondary sections (How AI can help / What AI won't do / How to
+   run it). Native <details>: collapsed on phones, forced open on desktop.
+   The content is always in the DOM, so crawlers/LLMs read it regardless. */
+.card-section-collapsible { overflow: hidden; }
+.card-section-collapsible > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.card-section-collapsible > summary::-webkit-details-marker { display: none; }
+.card-section-chev {
+  margin-left: auto;
+  padding-left: 12px;
+  color: var(--text-dim, #8a8a90);
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s var(--ease-smooth, ease);
+}
+.card-section-collapsible[open] > summary .card-section-chev { transform: rotate(90deg); }
+@media (min-width: 721px) {
+  /* Desktop: always expanded, no toggle affordance. */
+  .card-section-collapsible > *:not(summary) { display: block !important; }
+  .card-section-collapsible > summary { cursor: default; pointer-events: none; }
+  .card-section-chev { display: none; }
+}
+
 /* Tool tabs — for cards that walk through how to set something up in
    multiple AI tools (e.g., Claude Project vs Custom GPT vs Gemini Gems).
    Tabs sit above content panels; panels can hold an embedded video or
@@ -5690,7 +5717,17 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
   .card-detail-aside { position: static; }
 }
 @media (max-width: 720px) {
-  .card-detail-frame { padding: 28px 22px 24px; border-radius: 16px; }
+  /* Full-bleed on phones: drop the framed box so content uses the full width,
+     sitting directly on the star-field instead of a bordered card. */
+  .card-v4-page { padding-left: 8px; padding-right: 8px; }
+  .card-detail-frame {
+    padding: 16px 14px 24px;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .card-detail-frame::after { display: none; }
   .card-detail-header {
     grid-template-columns: 1fr;
     gap: 20px;
