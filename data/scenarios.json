@@ -59,7 +59,7 @@
   },
   {
     "slug": "set-up-quality-standards",
-    "title": "Set up quality standards and checks",
+    "title": "Raise the bar",
     "situation": "Decide what “good” means, then hold your content to it.",
     "assumes": ["set-up-your-ai-workspace"],
     "previously": ["build-a-course"],
