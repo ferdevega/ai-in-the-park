@@ -246,8 +246,8 @@ const ROLE_ICONS = {
   tool: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M8 1 L14 5 L14 11 L8 15 L2 11 L2 5 Z"/></svg>',
   // Panel — three stacked lines (panel of voices)
   panel: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 4 L13 4 M3 8 L13 8 M3 12 L13 12"/></svg>',
-  // Mindset — compass (how you orient your approach to AI)
-  mindset: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M10.6 5.4 L8.8 8.8 L5.4 10.6 L7.2 7.2 Z" fill="currentColor" stroke="none"/></svg>',
+  // Mindset — a sprout (a growing way of thinking about AI)
+  mindset: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15 L8 6.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M7.8 9.2 C4.5 9.4 2.5 7.3 2.8 3.6 C6.3 3.5 8.1 5.4 7.8 9.2 Z" fill="currentColor"/><path d="M8.2 7.5 C8 4.3 9.9 2.6 13.2 2.9 C13.3 6.2 11.5 8 8.2 7.5 Z" fill="currentColor"/></svg>',
 };
 
 // Map the schema `type` field to label text + icon HTML.
