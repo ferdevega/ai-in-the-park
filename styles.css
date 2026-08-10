@@ -29,6 +29,7 @@
   --r-thought-partner: #06b6d4; /* cyan */
   --r-tool:            #34d399; /* green */
   --r-panel:           #fbbf24; /* gold */
+  --r-mindset:         #fb923c; /* warm orange */
 
   --heading: 'Space Grotesk', sans-serif;
   --body:    'Inter', sans-serif;
@@ -1183,6 +1184,7 @@ body.view-preview3 .page { padding-top: 6px; padding-bottom: 24px; }
 .v4-hero-signature-item[data-role="auditor"]         { color: var(--r-auditor); }
 .v4-hero-signature-item[data-role="tool"]            { color: var(--r-tool); }
 .v4-hero-signature-item[data-role="panel"]           { color: var(--r-panel); }
+.v4-hero-signature-item[data-role="mindset"]         { color: var(--r-mindset); }
 
 @media (max-width: 640px) {
   .v4-hero-signature { gap: 14px; margin: 4px 0 12px; }
@@ -4486,6 +4488,7 @@ body.view-download-fast .page { padding: 24px 16px 60px; background: #16171b; }
 .doc-fast-sig-icon[data-role="auditor"]         { color: #34d399; }
 .doc-fast-sig-icon[data-role="tool"]            { color: #22d3ee; }
 .doc-fast-sig-icon[data-role="panel"]           { color: #f472b6; }
+.doc-fast-sig-icon[data-role="mindset"]         { color: #fb923c; }
 
 /* 4-quadrant grid — the heart of the doc */
 .doc-fast-quads {

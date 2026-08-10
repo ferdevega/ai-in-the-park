@@ -12,7 +12,7 @@
 // so social shares (LinkedIn, Twitter) get rich previews. Once the SPA loads,
 // navigation between URLs uses history.pushState — no full page reload.
 
-const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'panel', 'tool'];
+const CARD_TYPES = ['creator', 'thought-partner', 'auditor', 'panel', 'tool', 'mindset'];
 
 const state = {
   stages: [],
@@ -246,6 +246,8 @@ const ROLE_ICONS = {
   tool: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M8 1 L14 5 L14 11 L8 15 L2 11 L2 5 Z"/></svg>',
   // Panel — three stacked lines (panel of voices)
   panel: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 4 L13 4 M3 8 L13 8 M3 12 L13 12"/></svg>',
+  // Mindset — compass (how you orient your approach to AI)
+  mindset: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M10.6 5.4 L8.8 8.8 L5.4 10.6 L7.2 7.2 Z" fill="currentColor" stroke="none"/></svg>',
 };
 
 // Map the schema `type` field to label text + icon HTML.
@@ -255,6 +257,7 @@ function roleLabelTextForType(type) {
   if (type === 'thought-partner') return 'Thought partner AI';
   if (type === 'auditor') return 'Auditor AI';
   if (type === 'panel') return 'Panel AI';
+  if (type === 'mindset') return 'Mindset';
   return null;
 }
 
@@ -277,6 +280,7 @@ function roleColorVar(type) {
   if (type === 'thought-partner') return 'var(--r-thought-partner)';
   if (type === 'auditor') return 'var(--r-auditor)';
   if (type === 'panel') return 'var(--r-panel)';
+  if (type === 'mindset') return 'var(--r-mindset)';
   return null;
 }
 
@@ -696,7 +700,7 @@ function viewDownloadFast() {
   // Populate the 5-icon signature strip in the header (static, no shuffle)
   const sig = document.querySelector('[data-doc-signature]');
   if (sig) {
-    ['creator', 'thought-partner', 'auditor', 'tool', 'panel'].forEach((k) => {
+    ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'].forEach((k) => {
       const el = document.createElement('span');
       el.className = 'doc-fast-sig-icon';
       el.setAttribute('data-role', k);
@@ -1121,7 +1125,7 @@ function wireNavigator() {
   const sceneBodyEl = field.querySelector('[data-nav-scene-body]');
   const prevArrowEl = field.querySelector('[data-nav-prev]');
   const nextArrowEl = field.querySelector('[data-nav-next]');
-  const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool' };
+  const RNAME = { creator: 'Creator', 'thought-partner': 'Thought-partner', auditor: 'Auditor', panel: 'Panel', tool: 'Tool', mindset: 'Mindset' };
   const scenarios = state.scenarios || [];
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1192,7 +1196,7 @@ function wireNavigator() {
     const isLive = (c) => (typeof c === 'string' ? !(cardBySlug(c) || {}).coming_soon : true);
     const cards = scenarioCards(sc).filter(isLive);
     const typeOf = (c) => (typeof c === 'string' ? (cardBySlug(c) || {}).type : c.type);
-    const order = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
+    const order = ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'];
     const types = order.filter((t) => cards.some((c) => typeOf(c) === t));
     const icons = types.map((t) => `<span class="nav-sc-ic" style="color:${roleColorVar(t)}">${ROLE_ICONS[t] || ''}</span>`).join('');
     // If the show has newly-added cards, the count shows "X new card(s)" in the
@@ -1335,7 +1339,7 @@ function wireNavigator() {
   // by the popup and the chooser.
   function fillSignature(sig, cls) {
     if (!sig || sig.childElementCount) return;
-    ['auditor', 'creator', 'thought-partner', 'tool', 'panel'].forEach((t) => {
+    ['mindset', 'auditor', 'creator', 'thought-partner', 'tool', 'panel'].forEach((t) => {
       const s = document.createElement('span');
       s.className = cls;
       s.style.color = roleColorVar(t);
@@ -1350,6 +1354,7 @@ function wireNavigator() {
   const legendGrid = field.querySelector('[data-nav-legend-grid]');
   if (legendGrid && !legendGrid.childElementCount) {
     const roles = [
+      ['mindset', 'Mindset', 'How to think about working with AI.'],
       ['creator', 'Creator', 'Drafts assets — copy, outlines, media.'],
       ['thought-partner', 'Thought partner', 'Thinks with you; pushes back, weighs options.'],
       ['auditor', 'Auditor', 'Checks your work against a standard.'],
@@ -1692,7 +1697,7 @@ function wireHeroSignature() {
   const host = document.querySelector('[data-hero-signature]');
   if (!host) return;
   host.innerHTML = '';
-  const keys = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
+  const keys = ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'];
   keys.forEach((k) => {
     const el = document.createElement('span');
     el.className = 'v4-hero-signature-item';
