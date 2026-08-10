@@ -24,8 +24,13 @@ const cardBySlug = (slug) => allCards.find((c) => c.slug === slug);
 const scenarios = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/scenarios.json'), 'utf8'));
 // index.html is BOTH the template and the home output, so strip any previously
 // pre-rendered #view content when reading it — keeps the build idempotent.
+// Also cache-bust styles.css / app.js with a per-build token so a deploy can
+// never serve stale CSS/JS against fresh HTML.
+const BUILD = Date.now().toString(36);
 const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
-  .replace(/<main id="view" class="page">[\s\S]*?<\/main>/, '<main id="view" class="page"></main>');
+  .replace(/<main id="view" class="page">[\s\S]*?<\/main>/, '<main id="view" class="page"></main>')
+  .replace('href="/styles.css"', `href="/styles.css?v=${BUILD}"`)
+  .replace('src="/app.js"', `src="/app.js?v=${BUILD}"`);
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) =>
