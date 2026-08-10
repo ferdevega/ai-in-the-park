@@ -1155,30 +1155,37 @@ function wireNavigator() {
     if (!card) return null;
     return renderV4Card(card, {});
   }
-  // Coming-soon cards in a step, demoted to a "Coming next" group: ghost pills
-  // that name the planned cards (so the methodology stays visible) without the
-  // weight of full cards. Native <details>: pills always shown on desktop
-  // (forced open), collapsed behind a toggle on phones.
+  // Coming-soon cards in a step, shown as "ghost cards" — dashed, muted card
+  // placeholders with a "Soon" chip. They keep the card language of the live
+  // cards above them, so it reads plainly: the method has these moves, and
+  // these ones are on the way.
   function buildComingNext(entries) {
     const soon = entries
       .map((e) => (typeof e === 'string' ? cardBySlug(e) : e))
       .filter(Boolean);
     if (!soon.length) return null;
-    const d = document.createElement('details');
-    d.className = 'coming-next';
-    const s = document.createElement('summary');
-    s.className = 'coming-next-label';
-    s.innerHTML = `<span class="cn-text">Coming next</span><span class="cn-count">${soon.length}</span><span class="cn-chev" aria-hidden="true">›</span>`;
-    const pills = document.createElement('div');
-    pills.className = 'coming-next-pills';
+    const wrap = document.createElement('div');
+    wrap.className = 'coming-next';
+    const label = document.createElement('div');
+    label.className = 'coming-next-label';
+    label.textContent = 'Coming next';
+    wrap.appendChild(label);
     soon.forEach((c) => {
-      const pill = document.createElement('span');
-      pill.className = 'cn-pill';
-      pill.textContent = c.title;
-      pills.appendChild(pill);
+      const g = document.createElement('div');
+      g.className = 'ghost-card';
+      const icon = document.createElement('span');
+      icon.className = 'ghost-card-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      const title = document.createElement('span');
+      title.className = 'ghost-card-title';
+      title.textContent = c.title;
+      const chip = document.createElement('span');
+      chip.className = 'ghost-card-soon';
+      chip.textContent = 'Soon';
+      g.append(icon, title, chip);
+      wrap.appendChild(g);
     });
-    d.append(s, pills);
-    return d;
+    return wrap;
   }
   // Enablers render as a compact chip (not a full card) so they don't add height.
   function enablerChip(entry) {
