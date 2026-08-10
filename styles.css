@@ -1482,6 +1482,45 @@ body.view-preview3 .page { padding-top: 6px; padding-bottom: 24px; }
 .card-preview.v4-card.card-preview-coming-soon .v4-card-role-icon { color: #7a746e; }
 .card-preview.v4-card.card-preview-coming-soon .teaser { display: none; }
 
+/* ---- "New" cards: cosmic-shimmer badge + count -------------------------- */
+/* Shared animated gradient ("colour out of space"). Apply to a background
+   fill (.card-new-badge) or clip it to text (.oos-text, e.g. show counts). */
+.oos {
+  background-image: linear-gradient(90deg, #a78bfa, #22d3ee, #ff6fd8, #fbbf24, #a78bfa);
+  background-size: 300% 100%;
+  animation: oosShift 5s linear infinite;
+}
+.oos-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+@keyframes oosShift { to { background-position: 300% center; } }
+@media (prefers-reduced-motion: reduce) { .oos { animation: none; } }
+
+/* Small pill anchored to the card's bottom-left corner. The level label lives
+   at bottom-right (.card-chips is flex-end), so the two never collide.
+   Scoped under .card-preview to beat the generic `.card-preview > *` rule. */
+.card-preview .card-new-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  white-space: nowrap;
+  z-index: 3;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #141414;
+  box-shadow: 0 2px 10px -2px rgba(167, 139, 250, 0.55);
+  pointer-events: none;
+}
+.nav-moment-cards .card-new-badge { left: 10px; bottom: 10px; }
+
 /* Mobile-only shelf header — hidden on desktop */
 .v4-shelf-mheader { display: none; }
 

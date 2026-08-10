@@ -50,6 +50,15 @@ const tpl = (id) => document.getElementById(id).content.cloneNode(true);
 const stageBySlug = (slug) => state.stages.find((s) => s.slug === slug);
 const cardBySlug  = (slug) => state.cards.find((c) => c.slug === slug);
 
+// A card is "new" if it's a real (non-coming-soon) card added within 30 days.
+const NEW_CARD_DAYS = 30;
+function isNewCard(card) {
+  if (!card || card.coming_soon || !card.added) return false;
+  const added = Date.parse(card.added);
+  if (Number.isNaN(added)) return false;
+  return (Date.now() - added) <= NEW_CARD_DAYS * 86400000;
+}
+
 function cardStages(card) {
   const arr = Array.isArray(card.stage) ? card.stage : [card.stage];
   return arr.map(stageBySlug).filter(Boolean);
@@ -212,6 +221,14 @@ function renderCardPreview(card, { showStageLabel = false, showLevel = true } = 
       tag.innerHTML = label;
       chips.insertBefore(tag, chips.firstChild);
     }
+  }
+
+  // "New" badge (bottom-left) for recently-added cards — cosmic shimmer.
+  if (isNewCard(card)) {
+    const badge = document.createElement('span');
+    badge.className = 'card-new-badge oos';
+    badge.textContent = 'New';
+    a.appendChild(badge);
   }
 
   return frag;
@@ -1178,11 +1195,18 @@ function wireNavigator() {
     const order = ['creator', 'thought-partner', 'auditor', 'tool', 'panel'];
     const types = order.filter((t) => cards.some((c) => typeOf(c) === t));
     const icons = types.map((t) => `<span class="nav-sc-ic" style="color:${roleColorVar(t)}">${ROLE_ICONS[t] || ''}</span>`).join('');
-    // A show with no available cards yet reads as "Coming soon", not "0 cards".
-    const countText = cards.length === 0 ? 'Coming soon' : `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
+    // If the show has newly-added cards, the count shows "X new card(s)" in the
+    // cosmic shimmer; otherwise the available-card count, or "Coming soon".
+    const newCount = cards.filter((c) => (typeof c === 'string' ? isNewCard(cardBySlug(c)) : false)).length;
+    let countText = cards.length === 0 ? 'Coming soon' : `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
+    let countClass = 'nav-sc-count';
+    if (newCount > 0) {
+      countText = `${newCount} new ${newCount === 1 ? 'card' : 'cards'}`;
+      countClass = 'nav-sc-count oos oos-text';
+    }
     const b = document.createElement('button');
     b.type = 'button'; b.className = cls; b.dataset.sc = sc.slug;
-    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-icons">${icons}</span><span class="nav-sc-count">${countText}</span></div>`;
+    b.innerHTML = `<div class="nav-sc-title">${sc.title}</div><div class="nav-sc-blurb">${sc.situation || ''}</div><div class="nav-sc-foot"><span class="nav-sc-icons">${icons}</span><span class="${countClass}">${countText}</span></div>`;
     return b;
   }
 
