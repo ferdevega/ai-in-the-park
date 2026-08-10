@@ -30,6 +30,8 @@ yarn-error.log*
 /stages/*/
 /feed.xml
 /sitemap.xml
+/llms.txt
+/llms-full.txt
 
 # Local drafts of the FAST download — regenerated from source, don't source-control
 /downloads/*.docx

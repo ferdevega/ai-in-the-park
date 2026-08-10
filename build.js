@@ -139,6 +139,74 @@ function stageContentHTML(stage) {
   return h;
 }
 
+// ---------- llms.txt / llms-full.txt (single-URL content for LLM tools) ----------
+function stripHtml(s) {
+  return String(s)
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function cardMarkdown(card) {
+  const st = stageOf(card);
+  let m = `## ${card.title}\n`;
+  if (card.teaser) m += `_${stripHtml(card.teaser)}_\n`;
+  m += `Link: ${card.linkOverride ? SITE_URL + card.linkOverride : `${SITE_URL}/cards/${card.slug}`}\n`;
+  const meta = [st && st.title, card.type, card.level].filter(Boolean).join(' · ');
+  if (meta) m += `(${meta})\n`;
+  m += '\n';
+  if (card.coming_soon) return `${m}_Coming soon._\n\n`;
+  if (card.intro) m += `${stripHtml(card.intro)}\n\n`;
+  if (card.why_matters) m += `**Why this matters:** ${stripHtml(card.why_matters)}\n\n`;
+  if (card.how_ai_helps) m += `**How AI can help:** ${stripHtml(card.how_ai_helps)}\n\n`;
+  if (card.ai_wont) m += `**What AI won't do:** ${stripHtml(card.ai_wont)}\n\n`;
+  if (Array.isArray(card.steps) && card.steps.length) {
+    m += '**How to run it:**\n';
+    card.steps.forEach((s, i) => { m += `${i + 1}. ${stripHtml(s)}\n`; });
+    m += '\n';
+  }
+  if (card.prompt_fast) {
+    m += '**The prompt (FAST):**\n';
+    ['frame', 'ask', 'shape', 'tune'].forEach((k) => {
+      if (card.prompt_fast[k]) m += `- ${k[0].toUpperCase() + k.slice(1)}: ${card.prompt_fast[k]}\n`;
+    });
+    m += '\n';
+  }
+  if (card.pro_tip) m += `**Pro tip:** ${stripHtml(card.pro_tip)}\n\n`;
+  return m;
+}
+
+function llmsTxt() {
+  let out = `# AI in the Park\n\n> ${DEFAULT_DESCRIPTION}\n\n`;
+  out += `A playbook of AI use cases for instructional designers, content developers and learning managers, organized by phase of the learning-design process. Full content: ${SITE_URL}/llms-full.txt\n\n## Cards\n`;
+  scenarios.filter((s) => !s.byStage).forEach((sc) => {
+    out += `\n### ${sc.title}\n`;
+    (sc.moments || []).forEach((m) => (m.cards || []).forEach((cd) => {
+      const c = typeof cd === 'string' && cardBySlug(cd);
+      if (!c || c.coming_soon) return;
+      const url = c.linkOverride ? SITE_URL + c.linkOverride : `${SITE_URL}/cards/${c.slug}`;
+      out += `- [${c.title}](${url}): ${stripHtml(c.teaser || '')}\n`;
+    }));
+  });
+  return out;
+}
+
+function llmsFullTxt() {
+  let out = `# AI in the Park — full playbook content\n\n${DEFAULT_DESCRIPTION}\n\nSite: ${SITE_URL}\n\n`;
+  scenarios.filter((s) => !s.byStage).forEach((sc) => {
+    out += `\n# ${sc.title}\n${sc.situation || ''}\n\n`;
+    const seen = new Set();
+    (sc.moments || []).forEach((m) => (m.cards || []).forEach((cd) => {
+      const c = typeof cd === 'string' && cardBySlug(cd);
+      if (!c || seen.has(c.slug)) return;
+      seen.add(c.slug);
+      out += cardMarkdown(c);
+    }));
+  });
+  return out;
+}
+
 // ---------- Static routes ----------
 const routes = [
   {
@@ -339,6 +407,10 @@ ${sitemapUrls.map((u) => `  <url><loc>${SITE_URL}${u}</loc></url>`).join('\n')}
 `;
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap, 'utf8');
 
+// ---------- llms.txt + llms-full.txt ----------
+fs.writeFileSync(path.join(ROOT, 'llms.txt'), llmsTxt(), 'utf8');
+fs.writeFileSync(path.join(ROOT, 'llms-full.txt'), llmsFullTxt(), 'utf8');
+
 console.log(
-  `Built: ${routes.length} static routes + ${stages.length} stages + ${cards.length} cards. RSS + sitemap written.`,
+  `Built: ${routes.length} static routes + ${stages.length} stages + ${cards.length} cards. RSS + sitemap + llms.txt written.`,
 );
