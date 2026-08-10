@@ -600,6 +600,103 @@ function viewStage(slug) {
   wireRevealAnimation(document.querySelector('.stage-v4'));
 }
 
+// ---------- Library — flat, filterable browse of every live card ----------
+// The navigator is the guided/lifecycle way in; the Library is the power-user
+// lens: one grid, filter by Stage / Difficulty / Role. Uses existing card data.
+function viewLibrary() {
+  state.view = 'library';
+  const live = state.cards.filter((c) => !c.coming_soon && !c.hidden);
+
+  const page = document.createElement('div');
+  page.className = 'library-page';
+
+  const hero = document.createElement('header');
+  hero.className = 'library-hero';
+  hero.innerHTML = '<h1 class="library-title">Library</h1><p class="library-sub">Every card, in one place. Filter by stage, difficulty, or how AI shows up.</p>';
+  page.appendChild(hero);
+
+  const filters = { stage: null, level: null, type: null };
+
+  // Facet values, derived from the live cards so empty facets never appear.
+  const stageVals = state.stages
+    .filter((s) => live.some((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(s.slug)))
+    .map((s) => ({ value: s.slug, label: s.title }));
+  const levelOrder = ['beginner', 'intermediate', 'advanced'];
+  const levelVals = levelOrder
+    .filter((l) => live.some((c) => (c.level || 'beginner') === l))
+    .map((l) => ({ value: l, label: levelLabel(l) }));
+  const typeOrder = ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'];
+  const typeVals = typeOrder
+    .filter((t) => live.some((c) => c.type === t))
+    .map((t) => ({ value: t, label: roleLabelTextForType(t) || t }));
+
+  const bar = document.createElement('div');
+  bar.className = 'library-filters';
+
+  const countEl = document.createElement('div');
+  countEl.className = 'library-count';
+
+  const grid = document.createElement('div');
+  grid.className = 'library-grid';
+
+  const apply = () => {
+    const shown = live.filter((c) =>
+      (!filters.stage || (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage)) &&
+      (!filters.level || (c.level || 'beginner') === filters.level) &&
+      (!filters.type || c.type === filters.type));
+    grid.innerHTML = '';
+    countEl.textContent = `${shown.length} ${shown.length === 1 ? 'card' : 'cards'}`;
+    if (!shown.length) {
+      grid.innerHTML = '<p class="library-empty">No cards match those filters yet.</p>';
+      return;
+    }
+    shown.forEach((c) => grid.appendChild(renderV4Card(c, {})));
+  };
+
+  const buildGroup = (facet, label, vals, colorFor) => {
+    if (!vals.length) return;
+    const group = document.createElement('div');
+    group.className = 'library-filter-group';
+    const gl = document.createElement('span');
+    gl.className = 'library-filter-label';
+    gl.textContent = label;
+    group.appendChild(gl);
+    const chips = document.createElement('div');
+    chips.className = 'library-chips';
+    const mkChip = (value, text, color) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'library-chip';
+      chip.textContent = text;
+      if (color) chip.style.setProperty('--chip-color', color);
+      chip.addEventListener('click', () => {
+        filters[facet] = filters[facet] === value ? null : value;
+        // Refresh pressed state across this group's chips.
+        chips.querySelectorAll('.library-chip').forEach((b) => b.classList.remove('is-on'));
+        if (filters[facet] !== null) chip.classList.add('is-on');
+        apply();
+      });
+      return chip;
+    };
+    vals.forEach((v) => chips.appendChild(mkChip(v.value, v.label, colorFor ? colorFor(v.value) : null)));
+    group.appendChild(chips);
+    bar.appendChild(group);
+  };
+
+  buildGroup('stage', 'Stage', stageVals, (v) => stageColorVar(stageBySlug(v)));
+  buildGroup('level', 'Difficulty', levelVals, null);
+  buildGroup('type', 'Role', typeVals, (v) => roleColorVar(v));
+
+  page.appendChild(bar);
+  page.appendChild(countEl);
+  page.appendChild(grid);
+
+  const frag = document.createDocumentFragment();
+  frag.appendChild(page);
+  mount(frag);
+  apply();
+}
+
 // Renders cards grouped into Beginner / Intermediate / Advanced sections.
 function renderGroupedCardGrid(target, cards, { countTarget } = {}) {
   target.innerHTML = '';
@@ -2167,7 +2264,7 @@ function mount(frag) {
   // Sync body class for view-specific layout rules (e.g. hide mobile picker on home).
   const v = state.view || '';
   const cls = v.startsWith('stage:') ? 'view-stage' : `view-${v || 'home'}`;
-  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-agent-builder', 'view-map', 'view-navigator', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c', 'view-download-fast');
+  document.body.classList.remove('view-home', 'view-stage', 'view-cards', 'view-recent', 'view-about', 'view-fast', 'view-agent-builder', 'view-map', 'view-navigator', 'view-notfound', 'view-preview', 'view-preview2', 'view-preview3', 'view-preview4', 'view-card-v4', 'view-design-a', 'view-design-b', 'view-design-c', 'view-download-fast', 'view-library');
   document.body.classList.add(cls);
   window.scrollTo({ top: 0 });
 }
@@ -2979,10 +3076,9 @@ function route() {
     bgRenderer = viewNavigator;
     bgPath = '/';
   } else if (parts[0] === 'library') {
-    // Library → the navigator's "show me everything" scene (whole playbook by stage).
-    bgRenderer = viewNavigator;
+    // Library → flat, filterable grid of every live card (power-user browse).
+    bgRenderer = viewLibrary;
     bgPath = '/library';
-    state.pendingShow = 'everything';
   } else if (parts[0] === 'classic') {
     // Backup/legacy home preserved for reference
     bgRenderer = viewHome;
