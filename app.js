@@ -1424,8 +1424,11 @@ function wireNavigator() {
       body.appendChild(buildStartHere(sc));
       const seriesSH = scenarios.filter((s) => !s.byStage);
       const idxSH = seriesSH.findIndex((s) => s.slug === sc.slug);
-      setArrow(prevArrowEl, idxSH > 0 ? seriesSH[idxSH - 1] : null);
-      setArrow(nextArrowEl, idxSH >= 0 && idxSH < seriesSH.length - 1 ? seriesSH[idxSH + 1] : null);
+      const prevSH = idxSH > 0 ? seriesSH[idxSH - 1] : null;
+      const nextSH = idxSH >= 0 && idxSH < seriesSH.length - 1 ? seriesSH[idxSH + 1] : null;
+      setArrow(prevArrowEl, prevSH);
+      setArrow(nextArrowEl, nextSH);
+      appendBottomNav(prevSH, nextSH);
       return;
     }
 
@@ -1499,8 +1502,32 @@ function wireNavigator() {
     // by-stage "everything" catch-all.
     const series = scenarios.filter((s) => !s.byStage);
     const idx = series.findIndex((s) => s.slug === sc.slug);
-    setArrow(prevArrowEl, idx > 0 ? series[idx - 1] : null);
-    setArrow(nextArrowEl, idx >= 0 && idx < series.length - 1 ? series[idx + 1] : null);
+    const prev = idx > 0 ? series[idx - 1] : null;
+    const next = idx >= 0 && idx < series.length - 1 ? series[idx + 1] : null;
+    setArrow(prevArrowEl, prev);
+    setArrow(nextArrowEl, next);
+    appendBottomNav(prev, next);
+  }
+
+  // In-flow prev/next at the foot of the scene, shown on phones (where the fixed
+  // side arrows overlap the full-width cards). Desktop keeps the side arrows.
+  function appendBottomNav(prev, next) {
+    if (!prev && !next) return;
+    const nav = document.createElement('div');
+    nav.className = 'nav-scene-bottomnav';
+    const mk = (target, dir) => {
+      if (!target) { const sp = document.createElement('span'); return sp; }
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `nav-scene-bottomnav-btn is-${dir}`;
+      b.innerHTML = dir === 'prev'
+        ? `<span class="bn-dir" aria-hidden="true">←</span><span class="bn-name">${target.title}</span>`
+        : `<span class="bn-name">${target.title}</span><span class="bn-dir" aria-hidden="true">→</span>`;
+      b.addEventListener('click', () => openShow(target));
+      return b;
+    };
+    nav.append(mk(prev, 'prev'), mk(next, 'next'));
+    sceneBodyEl.appendChild(nav);
   }
 
   function setArrow(el, show) {
