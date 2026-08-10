@@ -5840,25 +5840,39 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
   .card-detail-pill-icon { width: 13px; height: 13px; }
   .card-detail-role-icon { width: 48px; height: 48px; }
 
-  /* One consistent accordion for every section: hairline dividers, same heading
-     row + chevron. Strip the boxed look off the How/Won't minis and the prompt
-     wrapper so nothing stands out from the list. */
+  /* Every section is the same accordion, styled as an obvious button: bordered
+     box + circular +/− control; the open one takes the card's role colour. */
   .card-detail-main [data-card-body] > .card-row-2col { grid-template-columns: 1fr; gap: 0; margin: 0; }
   .card-row-2col .card-mini { background: none; border: none; border-radius: 0; padding: 0; }
-  .card-section-collapsible {
-    margin: 0;
-    border-top: 1px solid rgba(255,255,255,0.09);
+  /* Scoped under .card-detail-frame so it beats the .card-row-2col .card-mini
+     rule (equal specificity, later) and also reaches the prompt in the aside. */
+  .card-detail-frame .card-section-collapsible {
+    margin: 0 0 10px;
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.035);
+    overflow: hidden;
   }
-  .card-section-collapsible > summary { padding: 15px 0; }
-  .card-detail-prompt-wrap.card-section-collapsible,
-  .card-detail-related-lines.card-section-collapsible {
-    margin: 0;
-    padding: 0;
-    background: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
+  .card-detail-frame .card-section-collapsible[open] {
+    border-color: color-mix(in srgb, var(--stage-color, var(--r-creator)) 50%, transparent);
+    background: color-mix(in srgb, var(--stage-color, var(--r-creator)) 9%, transparent);
   }
+  .card-section-collapsible > summary { padding: 14px 15px; }
+  .card-section-collapsible > *:not(summary) { padding: 0 15px 15px; }
+  /* Circular +/− affordance so it plainly reads as expandable. */
+  .card-section-chev {
+    width: 24px; height: 24px; border-radius: 50%; padding: 0;
+    border: 1px solid rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    margin-left: auto; font-size: 0; color: #c9c9d0; transform: none;
+  }
+  .card-section-chev::after { content: '+'; font-size: 15px; line-height: 1; }
+  .card-section-collapsible[open] > summary .card-section-chev {
+    background: var(--stage-color, var(--r-creator));
+    border-color: var(--stage-color, var(--r-creator));
+    color: #fff; transform: none;
+  }
+  .card-section-collapsible[open] > summary .card-section-chev::after { content: '−'; }
   .card-tip-collapsible .card-pro-tip-label { display: none; }
 
   .card-detail-main [data-section="intro"] .inline-gif-wrap,
