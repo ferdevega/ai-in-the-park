@@ -2,7 +2,7 @@
   {
     "slug": "start-with-ai",
     "title": "Learn the basics of AI",
-    "situation": "New to this? Get the basics in place, once.",
+    "situation": "New to this? Get the basics here.",
     "assumes": [],
     "previously": [],
     "related": ["kick-off-a-new-project"],
@@ -15,7 +15,7 @@
   {
     "slug": "kick-off-a-new-project",
     "title": "Kick off a new project",
-    "situation": "Own it like a learning lead: scope the work, plan the effort, and set it up to run.",
+    "situation": "Scope the work, plan the effort, and set it up to run.",
     "assumes": [],
     "previously": ["start-with-ai"],
     "related": ["define-a-learning-strategy"],
@@ -30,7 +30,7 @@
   {
     "slug": "define-a-learning-strategy",
     "title": "Define a learning strategy",
-    "situation": "Turn a request into a plan: what's needed, for whom, and how you'll deliver it.",
+    "situation": "Identify needs and shape the strategy.",
     "assumes": ["set-up-your-ai-workspace"],
     "previously": ["kick-off-a-new-project"],
     "related": ["build-a-course"],
@@ -75,7 +75,7 @@
   {
     "slug": "launch-training",
     "title": "Launch training",
-    "situation": "Ship it, get people in, and see if it landed.",
+    "situation": "Ship it and measure success.",
     "assumes": ["set-up-your-ai-workspace"],
     "previously": ["set-up-quality-standards"],
     "related": [],
