@@ -121,8 +121,27 @@
     "title": "Build a mood board for your course",
     "stage": "design",
     "type": "creator",
-    "level": "beginner",
-    "coming_soon": true
+    "level": "intermediate",
+    "tags": ["mood-board", "visual-design", "art-direction", "html", "client"],
+    "added": "2026-08-09",
+    "teaser": "Hand the client an interactive set of visual directions to explore — built in minutes, not by hand.",
+    "related": [],
+    "intro": "<p>Deciding the sensory experience of a course — the look, the tone, the feel — used to take real effort. If you wanted to show a client a few directions, you built each one by hand, and every time they wanted a different format or a small change, you went back and redid it manually.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Bob.gif\" alt=\"SpongeBob making a rainbow with his hands\" class=\"inline-gif\" /><figcaption>Imagination!</figcaption></figure><p>Now you can hand the client an <span class=\"gradient-text\">interactive set of visual directions</span> to explore — multiple palettes, type, and imagery side by side — generated in moments instead of days.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>AI can produce several complete directions at once — palette, type, tone, layout — and, in a tool that renders HTML (Claude Artifacts, ChatGPT Canvas), assemble them into a single interactive page you can send to a client. Changing a direction or reformatting is a follow-up sentence, not an afternoon.</p>",
+    "ai_wont": "<p>AI doesn't know your client's actual brand rules or what they'll respond to, and text-only tools can't create the images themselves. Treat the directions as starting points to react to and curate, not a finished deliverable.</p>",
+    "steps": [
+      "Gather the inputs first: the topic, who the learners are, the emotional tone you're going for, any brand colours or fonts you must respect, and three to five words for the feel you want.",
+      "Run it in a tool that renders HTML live — Claude Artifacts or ChatGPT Canvas — so you can watch the page build. Let it produce the three directions, then react: keep, cut, or ask for a fourth.",
+      "Handle the images: if your tool can generate them, ask it to; if not, drop your own or stock photos into the labelled slots. Then send the file to the client and let them click the direction they want."
+    ],
+    "prompt_fast": {
+      "frame": "You are an art director who builds explorable visual concepts, and you write clean, single-file HTML and CSS.",
+      "ask": "Build a single-file, interactive HTML mood board with three distinct visual directions for the course below, so my client can explore and pick one.",
+      "shape": "Course: [TOPIC]\nLearners: [WHO THEY ARE — role, context, what they respond to]\nTone I'm going for: [e.g., warm and human / sharp and premium / playful]\nBrand constraints (optional): [colours as hex, fonts, anything I must keep]\nReference words for the feel: [3–5 words]\n\nBuild one self-contained HTML file (inline CSS + JS, no external build, works by opening it). Include three genuinely different directions. For each direction:\n- a short name and a one-line rationale that ties it to the learners and the tone (not just \"looks nice\"),\n- a colour palette shown as swatches with hex codes,\n- a Google-Fonts heading + body pairing, shown in situ with sample course text,\n- 4–6 tone/keyword tags,\n- an image area: if you can generate images, place them; if not, use labelled placeholders with descriptive alt text saying what image belongs there.\n\nMake it interactive: clicking a direction expands and selects it and dims the others, with a visible \"Selected\" state the client can point to.\n\nDon't:\n- Invent brand colours or fonts if I gave you specific ones — use mine.\n- Make the three directions minor variations of each other; they should feel distinct.",
+      "tune": "If my tone or brand input is thin, ask me one or two clarifying questions before building rather than guessing. Where you're assuming something about the learners, note it so I can correct it."
+    },
+    "pro_tip": "Send the client the file and ask them to reply with the name of the direction they picked and one thing they'd change. You'll get a sharper decision than \"I like the blue one,\" and you'll have it in writing."
   },
   {
     "slug": "design-the-characters-for-your-course",
