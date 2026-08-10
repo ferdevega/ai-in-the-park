@@ -600,58 +600,112 @@ function viewStage(slug) {
   wireRevealAnimation(document.querySelector('.stage-v4'));
 }
 
-// Filter chips for the "Show me everything" scene (which also serves as the
-// Library — same view, chips on top). Mutates `filters` and calls `onChange`
-// to re-render the scene's cards. Facet values are derived from live cards so
-// empty facets never appear.
+// Filters for the "Show me everything" scene (which also serves as the Library
+// — same view). A compact "Filters" button opens a panel (collapsed by default,
+// so it stays out of the way); active filters show as removable pills next to a
+// live card count. Facet values are derived from live cards so empty facets
+// never appear. Mutates `filters` and calls `onChange` to re-render the cards.
 function buildSceneFilters(filters, onChange) {
   const live = state.cards.filter((c) => !c.coming_soon && !c.hidden);
+  const matches = (c) =>
+    (!filters.stage || (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage)) &&
+    (!filters.level || (c.level || 'beginner') === filters.level) &&
+    (!filters.type || c.type === filters.type);
+
+  const facets = [
+    { key: 'type', label: 'Role', vals: ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel']
+        .filter((t) => live.some((c) => c.type === t))
+        .map((t) => ({ value: t, label: roleLabelTextForType(t) || t, color: roleColorVar(t), icon: ROLE_ICONS[t], kind: 'icon' })) },
+    { key: 'stage', label: 'Stage', vals: state.stages
+        .filter((s) => live.some((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(s.slug)))
+        .map((s) => ({ value: s.slug, label: s.title, color: stageColorVar(s), kind: 'dot' })) },
+    { key: 'level', label: 'Difficulty', vals: ['beginner', 'intermediate', 'advanced']
+        .filter((l) => live.some((c) => (c.level || 'beginner') === l))
+        .map((l) => ({ value: l, label: levelLabel(l), kind: 'bars' })) },
+  ];
+  const valOf = (key, value) => {
+    const f = facets.find((x) => x.key === key);
+    return f && f.vals.find((v) => v.value === value);
+  };
+
+  const wrap = document.createElement('div');
+  wrap.className = 'scene-filters';
   const bar = document.createElement('div');
-  bar.className = 'library-filters scene-filters';
+  bar.className = 'scene-filters-bar';
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'scene-filters-toggle';
+  const active = document.createElement('div');
+  active.className = 'scene-filters-active';
+  const count = document.createElement('span');
+  count.className = 'scene-filters-count';
+  const panel = document.createElement('div');
+  panel.className = 'scene-filters-panel';
 
-  const stageVals = state.stages
-    .filter((s) => live.some((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(s.slug)))
-    .map((s) => ({ value: s.slug, label: s.title, color: stageColorVar(s) }));
-  const levelOrder = ['beginner', 'intermediate', 'advanced'];
-  const levelVals = levelOrder
-    .filter((l) => live.some((c) => (c.level || 'beginner') === l))
-    .map((l) => ({ value: l, label: levelLabel(l) }));
-  const typeOrder = ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'];
-  const typeVals = typeOrder
-    .filter((t) => live.some((c) => c.type === t))
-    .map((t) => ({ value: t, label: roleLabelTextForType(t) || t, color: roleColorVar(t) }));
+  toggle.addEventListener('click', () => wrap.classList.toggle('is-open'));
 
-  const group = (facet, label, vals) => {
-    if (!vals.length) return;
+  const syncChips = () => panel.querySelectorAll('.vchip').forEach((ch) => {
+    ch.classList.toggle('on', filters[ch.dataset.facet] === ch.dataset.value);
+  });
+  const refresh = () => {
+    const n = ['type', 'stage', 'level'].filter((k) => filters[k]).length;
+    toggle.innerHTML = `<span class="sf-cog" aria-hidden="true">⚙</span>Filters${n ? ` <span class="sf-badge">${n}</span>` : ''}`;
+    const nm = live.filter(matches).length;
+    count.textContent = `${nm} ${nm === 1 ? 'card' : 'cards'}`;
+    active.innerHTML = '';
+    ['type', 'stage', 'level'].forEach((k) => {
+      if (!filters[k]) return;
+      const v = valOf(k, filters[k]);
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'sf-active-pill';
+      if (v && v.color) pill.style.setProperty('--c', v.color);
+      pill.innerHTML = `${v ? v.label : filters[k]}<span class="sf-x" aria-hidden="true">×</span>`;
+      pill.addEventListener('click', () => { filters[k] = null; onChange(); refresh(); syncChips(); });
+      active.appendChild(pill);
+    });
+  };
+
+  facets.forEach((f) => {
+    if (!f.vals.length) return;
     const g = document.createElement('div');
-    g.className = 'library-filter-group';
+    g.className = 'scene-filters-group';
     const gl = document.createElement('span');
-    gl.className = 'library-filter-label';
-    gl.textContent = label;
+    gl.className = 'scene-filters-glabel';
+    gl.textContent = f.label;
     g.appendChild(gl);
     const chips = document.createElement('div');
-    chips.className = 'library-chips';
-    vals.forEach((v) => {
+    chips.className = 'scene-filters-chips';
+    f.vals.forEach((v) => {
       const chip = document.createElement('button');
       chip.type = 'button';
-      chip.className = 'library-chip';
-      chip.textContent = v.label;
-      if (v.color) chip.style.setProperty('--chip-color', v.color);
+      chip.className = 'vchip';
+      chip.dataset.facet = f.key;
+      chip.dataset.value = v.value;
+      if (v.color) chip.style.setProperty('--c', v.color);
+      if (v.kind === 'icon') {
+        const ic = document.createElement('span'); ic.className = 'vchip-ic'; ic.innerHTML = v.icon || ''; chip.appendChild(ic);
+      } else if (v.kind === 'dot') {
+        const d = document.createElement('span'); d.className = 'vchip-dot'; chip.appendChild(d);
+      } else if (v.kind === 'bars') {
+        const b = document.createElement('span'); b.className = 'level-bars vchip-bars'; renderLevelBars(b, v.value); chip.appendChild(b);
+      }
+      chip.insertAdjacentText('beforeend', v.label);
       chip.addEventListener('click', () => {
-        filters[facet] = filters[facet] === v.value ? null : v.value;
-        chips.querySelectorAll('.library-chip').forEach((b) => b.classList.remove('is-on'));
-        if (filters[facet] !== null) chip.classList.add('is-on');
-        onChange();
+        filters[f.key] = filters[f.key] === v.value ? null : v.value;
+        onChange(); refresh(); syncChips();
       });
       chips.appendChild(chip);
     });
     g.appendChild(chips);
-    bar.appendChild(g);
-  };
-  group('stage', 'Stage', stageVals);
-  group('level', 'Difficulty', levelVals);
-  group('type', 'Role', typeVals);
-  return bar;
+    panel.appendChild(g);
+  });
+
+  bar.append(toggle, active, count);
+  wrap.append(bar, panel);
+  refresh();
+  syncChips();
+  return wrap;
 }
 
 // Renders cards grouped into Beginner / Intermediate / Advanced sections.

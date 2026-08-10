@@ -328,7 +328,8 @@ p  { margin: 0 0 1em; color: var(--text); }
     gap: 12px;
     padding: 8px 16px;
   }
-  .topbar-menu-toggle { display: inline-flex; }
+  /* Hamburger sits to the LEFT of the brand on mobile. */
+  .topbar-menu-toggle { display: inline-flex; order: -1; }
   .topbar-links {
     display: none;
     position: absolute;
@@ -5348,11 +5349,54 @@ body.view-library .layout { grid-template-columns: 1fr; }
   .library-grid { grid-template-columns: 1fr; gap: 12px; }
 }
 
-/* Filter chips on the "Show me everything" scene (Library === that view). */
-.scene-filters { max-width: 1000px; margin: 0 auto 24px; }
+/* Compact filter for the "Show me everything" scene (= the Library). A "Filters"
+   button opens a collapsible panel; active filters show as removable pills next
+   to a live count — so by default it's just one small row, not a wall of chips. */
+.scene-filters { max-width: 1120px; margin: 0 auto 22px; }
+.scene-filters-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.scene-filters-toggle {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font-family: var(--body); font-size: .9rem; color: var(--text);
+  padding: 8px 15px; border-radius: 999px; border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,.04); transition: border-color .18s, background .18s;
+}
+.scene-filters-toggle:hover { border-color: rgba(255,255,255,.28); }
+.scene-filters.is-open .scene-filters-toggle { border-color: rgba(255,255,255,.32); background: rgba(255,255,255,.07); }
+.sf-cog { font-size: .95rem; opacity: .8; }
+.sf-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 999px; background: var(--r-creator); color: #fff; font-size: .7rem; font-weight: 600; }
+.scene-filters-active { display: flex; flex-wrap: wrap; gap: 7px; }
+.sf-active-pill {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-size: .8rem; color: #fff;
+  padding: 5px 9px 5px 12px; border-radius: 999px;
+  border: 1px solid var(--c, var(--r-creator)); background: color-mix(in srgb, var(--c, var(--r-creator)) 24%, transparent);
+}
+.sf-x { opacity: .7; font-size: .95rem; line-height: 1; }
+.scene-filters-count { margin-left: auto; font-family: var(--heading); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+.scene-filters-panel {
+  display: none; margin-top: 12px; padding: 16px 16px 6px;
+  border: 1px solid var(--glass-border); border-radius: 14px; background: rgba(255,255,255,.03);
+}
+.scene-filters.is-open .scene-filters-panel { display: block; }
+.scene-filters-group { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.scene-filters-glabel { font-family: var(--heading); font-size: .64rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); width: 78px; flex: none; }
+.scene-filters-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.vchip {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-size: .82rem; color: var(--text);
+  padding: 6px 12px; border-radius: 999px; border: 1px solid var(--glass-border); background: rgba(255,255,255,.03);
+  transition: border-color .18s, background .18s, color .18s;
+}
+.vchip:hover { border-color: rgba(255,255,255,.28); }
+.vchip.on { border-color: var(--c, var(--r-creator)); background: color-mix(in srgb, var(--c, var(--r-creator)) 22%, transparent); color: #fff; }
+.vchip-ic { width: 14px; height: 14px; display: inline-flex; color: var(--c, var(--r-creator)); }
+.vchip-ic svg { width: 100%; height: 100%; }
+.vchip-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--r-creator)); }
+.vchip-bars { opacity: .9; }
 .nav-scene-empty { text-align: center; color: var(--text-dim); font-size: .95rem; margin: 24px 0; }
 @media (max-width: 720px) {
-  .scene-filters { margin-bottom: 18px; }
+  .scene-filters { margin-bottom: 16px; }
+  .scene-filters-group { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .scene-filters-glabel { width: auto; }
 }
 
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
@@ -5934,6 +5978,22 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
   }
   .card-section-collapsible[open] > summary .card-section-chev::after { content: '−'; }
   .card-tip-collapsible .card-pro-tip-label { display: none; }
+
+  /* Neutralize legacy spacing so every accordion is the SAME size, SAME summary
+     font, and evenly spaced (each box carries its own 10px bottom margin).
+     Without this the old [data-card-body] > * divider padding (22px) and the
+     prompt-wrap's own 22px padding made steps + the prompt taller with big gaps,
+     and .card-mini shrank the How/Won't headings. */
+  .card-detail-main [data-card-body] > * { padding: 0; border-bottom: none; }
+  .card-detail-main [data-section="intro"] { margin-bottom: 12px; }
+  .card-row-2col { display: block; margin: 0; }
+  .card-detail-body-columns { gap: 0; margin-bottom: 0; }
+  .card-detail-prompt-wrap { padding: 0; }
+  .card-detail-tip { margin: 0; }
+  .card-detail-related-lines { margin-top: 0; }
+  /* summary.card-section-heading beats the .card-mini heading rule (0,3,0) so
+     How/Won't match the rest in font-size and drop the 8px heading margin. */
+  .card-detail-frame .card-section-collapsible > summary.card-section-heading { font-size: 0.95rem; margin: 0; }
 
   .card-detail-main [data-section="intro"] .inline-gif-wrap,
   .card-detail-main [data-section="intro"] figure {
