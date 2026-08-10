@@ -1791,6 +1791,16 @@ function renderV4Card(card, opts = {}) {
       header.appendChild(typeLabel);
     }
 
+    // Difficulty bars, right-aligned in the header. Hidden on desktop (the
+    // footer shows the level there); shown on mobile, where the compact card
+    // hides the teaser + footer to fit more cards per screen.
+    if (!card.coming_soon && card.level) {
+      const hbars = document.createElement('span');
+      hbars.className = 'level-bars v4-card-header-bars';
+      renderLevelBars(hbars, card.level);
+      header.appendChild(hbars);
+    }
+
     body.insertBefore(header, body.firstChild);
   }
 

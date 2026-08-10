@@ -1523,6 +1523,29 @@ body.view-preview3 .page { padding-top: 6px; padding-bottom: 24px; }
 }
 .nav-moment-cards .card-new-badge { left: 10px; bottom: 10px; }
 
+/* Difficulty bars in the card header: desktop shows the level in the footer,
+   so hide the header copy there. Mobile flips it (see the compact rules).
+   Scoped under .card-preview.v4-card to beat the base .level-bars rule. */
+.card-preview.v4-card .v4-card-header-bars { display: none; }
+
+/* ---- Compact card tiles on phones ----------------------------------------
+   Keep the card-as-object + role identity (icon, type, colour), but drop the
+   teaser and the text-label footer; difficulty moves to bars in the header,
+   right-aligned. Roughly half the height, so ~2x cards per screen. */
+@media (max-width: 720px) {
+  .card-preview.v4-card:not(.card-preview-coming-soon) { min-height: 0; }
+  .card-preview.v4-card:not(.card-preview-coming-soon) .teaser { display: none; }
+  .card-preview.v4-card:not(.card-preview-coming-soon) .card-chips { display: none; }
+  .card-preview.v4-card .card-body { padding: 12px 15px 13px; gap: 6px; }
+  .card-preview.v4-card .v4-card-header { margin-bottom: 0; }
+  .card-preview.v4-card .v4-card-header-bars {
+    display: inline-flex;
+    align-items: flex-end;
+    margin-left: auto;
+  }
+  .card-preview.v4-card .v4-card-role-icon { width: 26px; height: 26px; }
+}
+
 /* Mobile-only shelf header — hidden on desktop */
 .v4-shelf-mheader { display: none; }
 
