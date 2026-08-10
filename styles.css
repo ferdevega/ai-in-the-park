@@ -5465,6 +5465,27 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
   font-style: italic;
   max-width: 720px;
 }
+/* Optional "Best in <tools>" line — which AI tool(s) this card works best in. */
+.card-detail-best-in {
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  max-width: 720px;
+}
+.card-detail-best-in[hidden] { display: none; }
+.card-best-in-label {
+  font-family: var(--heading);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 3px 9px;
+  margin-right: 8px;
+  white-space: nowrap;
+}
 
 /* Body — main column (content) + aside (sticky prompt on right, wider so lines are long) */
 .card-detail-body-columns {

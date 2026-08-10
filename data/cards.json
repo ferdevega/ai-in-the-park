@@ -125,6 +125,7 @@
     "tags": ["mood-board", "visual-design", "art-direction", "html", "client"],
     "added": "2026-08-09",
     "teaser": "Hand the client an interactive set of visual directions to explore — built in minutes, not by hand.",
+    "best_in": "ChatGPT (Canvas + image generation) · Claude (Artifacts — bring your own images)",
     "related": [],
     "intro": "<p>Deciding the sensory experience of a course — the look, the tone, the feel — used to take real effort. If you wanted to show a client a few directions, you built each one by hand, and every time they wanted a different format or a small change, you went back and redid it manually.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Bob.gif\" alt=\"SpongeBob making a rainbow with his hands\" class=\"inline-gif\" /><figcaption>Imagination!</figcaption></figure><p>Now you can hand the client an <span class=\"gradient-text\">interactive set of visual directions</span> to explore — multiple palettes, type, and imagery side by side — generated in moments instead of days.</p>",
     "why_matters": "",

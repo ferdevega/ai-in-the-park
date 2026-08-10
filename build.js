@@ -79,6 +79,7 @@ function cardContentHTML(card) {
   if (card.teaser) h += `<p>${esc(card.teaser)}</p>`;
   const meta = [st && st.title, card.type, card.level].filter(Boolean).join(' · ');
   if (meta) h += `<p><em>${esc(meta)}</em></p>`;
+  if (card.best_in) h += `<p><strong>Best in:</strong> ${esc(card.best_in)}</p>`;
   if (card.coming_soon) return `${h}<p>Coming soon.</p></article>`;
   if (card.intro) h += `<section>${card.intro}</section>`;
   if (card.why_matters) h += `<section><h2>Why this matters</h2>${card.why_matters}</section>`;
@@ -155,6 +156,7 @@ function cardMarkdown(card) {
   m += `Link: ${card.linkOverride ? SITE_URL + card.linkOverride : `${SITE_URL}/cards/${card.slug}`}\n`;
   const meta = [st && st.title, card.type, card.level].filter(Boolean).join(' · ');
   if (meta) m += `(${meta})\n`;
+  if (card.best_in) m += `Best in: ${card.best_in}\n`;
   m += '\n';
   if (card.coming_soon) return `${m}_Coming soon._\n\n`;
   if (card.intro) m += `${stripHtml(card.intro)}\n\n`;

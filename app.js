@@ -2328,6 +2328,17 @@ function viewCardV4(slug) {
     else teaserEl.remove();
   }
 
+  // "Best in" — optional per-card note of the AI tool(s) this works best in.
+  const bestInEl = frag.querySelector('[data-best-in]');
+  if (bestInEl) {
+    if (card.best_in) {
+      bestInEl.innerHTML = `<span class="card-best-in-label">Best in</span> ${card.best_in}`;
+      bestInEl.hidden = false;
+    } else {
+      bestInEl.remove();
+    }
+  }
+
   // Footer level bars + text (mirrors home shelf card footer)
   const levelBarsEl = frag.querySelector('[data-level-bars]');
   if (levelBarsEl) renderLevelBars(levelBarsEl, card.level);
