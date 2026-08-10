@@ -16,6 +16,7 @@
     "slug": "kick-off-a-new-project",
     "title": "Kick off a new project",
     "situation": "Scope the work, plan the effort, and set it up to run.",
+    "pilotComingNext": true,
     "assumes": [],
     "previously": ["start-with-ai"],
     "related": ["define-a-learning-strategy"],

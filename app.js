@@ -1155,6 +1155,31 @@ function wireNavigator() {
     if (!card) return null;
     return renderV4Card(card, {});
   }
+  // Coming-soon cards in a step, demoted to a "Coming next" group: ghost pills
+  // that name the planned cards (so the methodology stays visible) without the
+  // weight of full cards. Native <details>: pills always shown on desktop
+  // (forced open), collapsed behind a toggle on phones.
+  function buildComingNext(entries) {
+    const soon = entries
+      .map((e) => (typeof e === 'string' ? cardBySlug(e) : e))
+      .filter(Boolean);
+    if (!soon.length) return null;
+    const d = document.createElement('details');
+    d.className = 'coming-next';
+    const s = document.createElement('summary');
+    s.className = 'coming-next-label';
+    s.innerHTML = `<span class="cn-text">Coming next</span><span class="cn-count">${soon.length}</span><span class="cn-chev" aria-hidden="true">›</span>`;
+    const pills = document.createElement('div');
+    pills.className = 'coming-next-pills';
+    soon.forEach((c) => {
+      const pill = document.createElement('span');
+      pill.className = 'cn-pill';
+      pill.textContent = c.title;
+      pills.appendChild(pill);
+    });
+    d.append(s, pills);
+    return d;
+  }
   // Enablers render as a compact chip (not a full card) so they don't add height.
   function enablerChip(entry) {
     const c = typeof entry === 'string' ? cardBySlug(entry) : null;
@@ -1282,10 +1307,21 @@ function wireNavigator() {
       col.appendChild(lbl);
       const cards = document.createElement('div');
       cards.className = 'nav-moment-cards';
-      // Available cards first, coming-soon (roadmap) cards always at the bottom.
       const isSoon = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
-      const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
-      ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+      if (sc.pilotComingNext) {
+        // Pilot treatment: live cards as full cards; coming-soon cards demoted
+        // to a single "Coming next" group so the step spine reads as a journey,
+        // not a wall of grey. The numbered step label always shows.
+        const live = (m.cards || []).filter((c) => !isSoon(c));
+        const soon = (m.cards || []).filter(isSoon);
+        live.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+        const cn = buildComingNext(soon);
+        if (cn) cards.appendChild(cn);
+      } else {
+        // Default: available cards first, coming-soon (roadmap) at the bottom.
+        const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
+        ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+      }
       col.appendChild(cards);
       cols.appendChild(col);
     });
