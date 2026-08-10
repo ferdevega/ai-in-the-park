@@ -1394,6 +1394,10 @@ function wireNavigator() {
       }, 300);
     }
     state.navShow = sc.slug;
+    // Reflect the open show in the URL so it's shareable and survives a refresh.
+    // pushState only (no route()) — openShow already handles the transition.
+    const url = sc.byStage ? '/library' : `/show/${sc.slug}`;
+    try { if (location.pathname !== url) history.pushState({}, '', url); } catch (e) {}
   }
 
   function buildScene(sc) {
@@ -1541,6 +1545,7 @@ function wireNavigator() {
     setTimeout(() => { chooserEl.style.opacity = ''; }, 20);
     toTop();
     state.navShow = null;
+    try { if (location.pathname !== '/') history.pushState({}, '', '/'); } catch (e) {}
   }
   // Let the top-bar Home link reset the navigator to the chooser.
   state.navResetToChooser = showChooser;
@@ -3161,6 +3166,11 @@ function route() {
     bgRenderer = viewNavigator;
     bgPath = '/library';
     state.pendingShow = 'everything';
+  } else if (parts[0] === 'show' && parts[1]) {
+    // A single show (scenario), deep-linkable and refresh-safe.
+    bgRenderer = viewNavigator;
+    bgPath = `/show/${parts[1]}`;
+    state.pendingShow = parts[1];
   } else if (parts[0] === 'classic') {
     // Backup/legacy home preserved for reference
     bgRenderer = viewHome;

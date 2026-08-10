@@ -124,6 +124,19 @@ function homeOutlineHTML() {
   return h;
 }
 
+// Crawlable content for a single show (/show/<slug>) — title, situation, and
+// its steps/cards. Mirrors the home outline for one scenario.
+function showContentHTML(sc) {
+  let h = `<div class="prerender"><h1>${esc(sc.title)}</h1>`;
+  if (sc.situation) h += `<p>${esc(sc.situation)}</p>`;
+  (sc.moments || []).forEach((m) => {
+    const items = (m.cards || []).map((cd) => (typeof cd === 'string' ? cardLink(cd) : '')).filter(Boolean).join('');
+    if (items) h += `<h2>${esc(m.label)}</h2><ul>${items}</ul>`;
+  });
+  h += '<p><a href="/library">Browse the whole playbook</a></p></div>';
+  return h;
+}
+
 function cardsIndexHTML() {
   const live = cards.filter((c) => !c.coming_soon);
   let h = '<div class="prerender"><h1>All cards — AI in the Park</h1><ul>';
@@ -345,6 +358,17 @@ for (const s of stages) {
   writePage(`stages/${s.slug}/index.html`, injectView(html, stageContentHTML(s)));
 }
 
+// ---------- Per-show pages (/show/<slug>) — deep-linkable, refresh-safe ----------
+for (const sc of scenarios.filter((s) => !s.byStage)) {
+  const html = setMeta(template, {
+    title: `${sc.title} — ${SITE_NAME}`,
+    description: sc.situation || DEFAULT_DESCRIPTION,
+    url: `${SITE_URL}/show/${sc.slug}`,
+    image: OG_IMAGE,
+  });
+  writePage(`show/${sc.slug}/index.html`, injectView(html, showContentHTML(sc)));
+}
+
 // ---------- Per-card pages ----------
 for (const c of cards) {
   const html = setMeta(template, {
@@ -398,6 +422,7 @@ const sitemapUrls = [
   '/navigator',
   '/map',
   '/agent-builder',
+  ...scenarios.filter((s) => !s.byStage).map((s) => `/show/${s.slug}`),
   ...stages.map((s) => `/stages/${s.slug}`),
   ...cards.map((c) => `/cards/${c.slug}`),
 ];

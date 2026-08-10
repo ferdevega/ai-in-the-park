@@ -5870,11 +5870,12 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
   .card-detail-aside { position: static; }
 }
 @media (max-width: 720px) {
-  /* Full-bleed on phones: drop the framed box so content uses the full width,
-     sitting directly on the star-field instead of a bordered card. */
-  .card-v4-page { padding-left: 8px; padding-right: 8px; }
+  /* Full-bleed on phones: zero the page + frame side padding so content and the
+     accordions run edge-to-edge (only a small 12px gutter), not inset. */
+  body.view-card-v4 .page { padding-left: 0; padding-right: 0; }
+  .card-v4-page { padding-left: 0; padding-right: 0; }
   .card-detail-frame {
-    padding: 16px 14px 24px;
+    padding: 12px 12px 24px;
     border: none;
     background: transparent;
     border-radius: 0;

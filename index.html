@@ -486,11 +486,6 @@
         <div class="card-detail-body-columns">
           <div class="card-detail-main">
             <div data-card-body></div>
-            <div class="card-detail-tip" data-card-tip></div>
-            <details class="card-detail-related-lines card-section card-section-collapsible" data-related hidden>
-              <summary class="card-section-heading"><span class="card-section-heading-emoji" aria-hidden="true">🔗</span>Related<span class="card-section-chev" aria-hidden="true">›</span></summary>
-              <ul class="card-detail-related-list" data-related-list></ul>
-            </details>
           </div>
           <aside class="card-detail-aside">
             <details class="card-detail-prompt-wrap card-section card-section-collapsible" data-prompt-section hidden>
@@ -499,6 +494,13 @@
             </details>
           </aside>
         </div>
+
+        <!-- Pro tip + Related sit after the prompt (below the two columns) -->
+        <div class="card-detail-tip" data-card-tip></div>
+        <details class="card-detail-related-lines card-section card-section-collapsible" data-related hidden>
+          <summary class="card-section-heading"><span class="card-section-heading-emoji" aria-hidden="true">🔗</span>Related<span class="card-section-chev" aria-hidden="true">›</span></summary>
+          <ul class="card-detail-related-list" data-related-list></ul>
+        </details>
 
       </div>
     </article>
