@@ -1202,7 +1202,7 @@ function wireNavigator() {
     let countClass = 'nav-sc-count';
     if (newCount > 0) {
       countText = `${newCount} new ${newCount === 1 ? 'card' : 'cards'}`;
-      countClass = 'nav-sc-count oos oos-text';
+      countClass = 'nav-sc-count nav-sc-count--new oos';
     }
     const b = document.createElement('button');
     b.type = 'button'; b.className = cls; b.dataset.sc = sc.slug;
