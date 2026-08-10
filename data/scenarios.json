@@ -3,6 +3,7 @@
     "slug": "start-with-ai",
     "title": "Learn the basics of AI",
     "situation": "New to this? Get the basics here.",
+    "startHerePath": true,
     "assumes": [],
     "previously": [],
     "related": ["kick-off-a-new-project"],

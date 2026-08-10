@@ -1237,6 +1237,83 @@ function wireNavigator() {
     });
     return wrap;
   }
+
+  // Start here — a guided onboarding path (only on the Basics show). Two ordered
+  // setup cards, then a "what are you working on?" fork into the lifecycle; the
+  // rest of Basics sits below as ghost cards. The path owns FAST + workspace so
+  // they don't repeat below.
+  function buildStartHere(sc) {
+    const FAST = 'the-fast-prompting-model';
+    const WORKSPACE = 'set-up-your-ai-workspace';
+    const wrap = document.createElement('div');
+    wrap.className = 'start-here';
+
+    const lead = document.createElement('p');
+    lead.className = 'start-here-lead';
+    lead.textContent = 'Do these two first, then pick what you’re working on.';
+    wrap.appendChild(lead);
+
+    const path = document.createElement('div');
+    path.className = 'start-here-path';
+
+    const addNode = (n, node) => {
+      const num = document.createElement('span');
+      num.className = 'start-here-num';
+      num.textContent = String(n);
+      node.insertBefore(num, node.firstChild);
+      path.appendChild(node);
+    };
+
+    [FAST, WORKSPACE].forEach((slug, i) => {
+      const node = document.createElement('div');
+      node.className = `start-here-node sh-n${i + 1}`;
+      const card = renderEpisode(slug);
+      if (card) node.appendChild(card);
+      addNode(i + 1, node);
+    });
+
+    // The fork into the lifecycle shows.
+    const fork = document.createElement('div');
+    fork.className = 'start-here-node sh-fork';
+    const box = document.createElement('div');
+    box.className = 'start-here-fork';
+    box.innerHTML = '<p class="start-here-q">What are you working on?</p>';
+    const chips = document.createElement('div');
+    chips.className = 'start-here-chips';
+    scenarios.filter((s) => !s.byStage && s.slug !== sc.slug).forEach((s) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'start-here-chip';
+      chip.textContent = s.title;
+      chip.addEventListener('click', () => openShow(s));
+      chips.appendChild(chip);
+    });
+    box.appendChild(chips);
+    fork.appendChild(box);
+    addNode(3, fork);
+    wrap.appendChild(path);
+
+    // Everything else in Basics, below the path.
+    const allSlugs = (sc.moments || []).reduce((acc, m) => acc.concat(m.cards || []), []);
+    const rest = allSlugs.filter((s) => s !== FAST && s !== WORKSPACE);
+    const isSoon = (c) => !!(cardBySlug(c) || {}).coming_soon;
+    const liveRest = rest.filter((c) => !isSoon(c));
+    const soonRest = rest.filter(isSoon);
+    if (liveRest.length || soonRest.length) {
+      const more = document.createElement('div');
+      more.className = 'start-here-more';
+      const ml = document.createElement('div');
+      ml.className = 'start-here-more-label';
+      ml.textContent = 'More basics';
+      more.appendChild(ml);
+      liveRest.forEach((c) => { const t = renderEpisode(c); if (t) more.appendChild(t); });
+      const cn = buildComingNext(soonRest);
+      if (cn) more.appendChild(cn);
+      wrap.appendChild(more);
+    }
+
+    return wrap;
+  }
   // Enablers render as a compact chip (not a full card) so they don't add height.
   function enablerChip(entry) {
     const c = typeof entry === 'string' ? cardBySlug(entry) : null;
@@ -1339,6 +1416,17 @@ function wireNavigator() {
       sc.assumes.forEach((e) => { const tl = enablerChip(e); if (tl) row.appendChild(tl); });
       pre.appendChild(row);
       body.appendChild(pre);
+    }
+
+    // The Basics show renders as a guided "Start here" onboarding path instead
+    // of the usual step columns.
+    if (sc.startHerePath) {
+      body.appendChild(buildStartHere(sc));
+      const seriesSH = scenarios.filter((s) => !s.byStage);
+      const idxSH = seriesSH.findIndex((s) => s.slug === sc.slug);
+      setArrow(prevArrowEl, idxSH > 0 ? seriesSH[idxSH - 1] : null);
+      setArrow(nextArrowEl, idxSH >= 0 && idxSH < seriesSH.length - 1 ? seriesSH[idxSH + 1] : null);
+      return;
     }
 
     // The by-stage "Show me everything" scene doubles as the Library: filter
