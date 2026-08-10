@@ -2713,7 +2713,17 @@ function appendCardSections(card, { bodyHost, promptHost, tipHost }) {
     body.innerHTML = `<p>${card.pro_tip}</p>`;
     bubble.appendChild(body);
     wrap.append(photo, bubble);
-    tipHost.appendChild(wrap);
+    // Wrap in the shared collapsible so it accordions like every other section
+    // on mobile. On desktop the summary is hidden (see CSS) and the bubble shows
+    // as-is, so desktop is unchanged.
+    const d = document.createElement('details');
+    d.className = 'card-section card-section-collapsible card-tip-collapsible';
+    d.setAttribute('data-section', 'tip');
+    const s = document.createElement('summary');
+    s.className = 'card-section-heading';
+    s.innerHTML = `<span class="card-section-heading-emoji" aria-hidden="true">💡</span>${card.tip_label || 'Pro tip'}<span class="card-section-chev" aria-hidden="true">›</span>`;
+    d.append(s, wrap);
+    tipHost.appendChild(d);
   }
 }
 

@@ -5288,8 +5288,10 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
   .nav-sc-box { width: 100%; max-width: 340px; min-height: 0; }
   /* Show page → step-columns stack full-width; arrows drop to compact chevrons */
   .nav-scene-body { padding: 8px 16px 84px; }
-  .nav-moments { gap: 26px; }
+  /* Left-align the steps on phones — centred single columns looked off. */
+  .nav-moments { gap: 26px; justify-content: flex-start; }
   .nav-moment { width: 100%; max-width: 340px; }
+  .nav-moment-label { justify-content: flex-start; }
   .nav-moment-cards { gap: 12px; }
   .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; height: auto; min-height: 0; }
   .nav-assumes { margin-bottom: 18px; }
@@ -5780,14 +5782,45 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
     box-shadow: none;
   }
   .card-detail-frame::after { display: none; }
+
+  /* Slim header so title + classification + intro + the accordion headers all
+     fit one screen: drop the eyebrow + teaser, put the role/level in one row of
+     compact chips. */
   .card-detail-header {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding-bottom: 22px;
-    margin-bottom: 22px;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
   }
+  .card-detail-stage-tag,
+  .card-detail-teaser { display: none; }
+  .card-detail-title { font-size: 1.7rem; margin-bottom: 10px; }
+  .card-detail-header-tags { flex-direction: row; align-items: center; gap: 8px; padding-top: 0; }
+  .card-detail-pill { padding: 5px 11px; font-size: 0.64rem; gap: 6px; letter-spacing: 0.1em; }
+  .card-detail-pill-icon { width: 13px; height: 13px; }
   .card-detail-role-icon { width: 48px; height: 48px; }
-  .card-detail-prompt-wrap { padding: 18px 18px; }
+
+  /* One consistent accordion for every section: hairline dividers, same heading
+     row + chevron. Strip the boxed look off the How/Won't minis and the prompt
+     wrapper so nothing stands out from the list. */
+  .card-detail-main [data-card-body] > .card-row-2col { grid-template-columns: 1fr; gap: 0; margin: 0; }
+  .card-row-2col .card-mini { background: none; border: none; border-radius: 0; padding: 0; }
+  .card-section-collapsible {
+    margin: 0;
+    border-top: 1px solid rgba(255,255,255,0.09);
+  }
+  .card-section-collapsible > summary { padding: 15px 0; }
+  .card-detail-prompt-wrap.card-section-collapsible,
+  .card-detail-related-lines.card-section-collapsible {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+  .card-tip-collapsible .card-pro-tip-label { display: none; }
+
   .card-detail-main [data-section="intro"] .inline-gif-wrap,
   .card-detail-main [data-section="intro"] figure {
     float: none;
@@ -5795,6 +5828,10 @@ svg.is-filter .map-shdr:not(.on) { opacity: 0.22; }
     max-width: 80%;
   }
   .card-detail-related-meta { display: none; }
+}
+/* Desktop: the pro-tip bubble shows on its own (no accordion heading). */
+@media (min-width: 721px) {
+  .card-tip-collapsible > summary { display: none; }
 }
 
 /* Prompt section — big, framed, hero-of-the-page feel (Cookwell's "Method" energy) */
