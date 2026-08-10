@@ -2737,6 +2737,19 @@ function viewCardV4(slug) {
     el.style.setProperty('--reveal-delay', `${i * 120}ms`);
   });
 
+  // Desktop shows every section expanded. Genuinely set the <details> `open`
+  // (a closed <details> with overflow:hidden clips forced-open content, so the
+  // CSS display hack alone left them collapsed on desktop). Mobile stays
+  // collapsed (tap to expand).
+  const openSections = window.matchMedia && window.matchMedia('(min-width: 721px)').matches;
+  frag.querySelectorAll('.card-section-collapsible').forEach((d) => { d.open = openSections; });
+  if (!window.__cardAccordionMq && window.matchMedia) {
+    window.__cardAccordionMq = window.matchMedia('(min-width: 721px)');
+    window.__cardAccordionMq.addEventListener('change', (e) => {
+      document.querySelectorAll('.card-v4-page .card-section-collapsible').forEach((d) => { d.open = e.matches; });
+    });
+  }
+
   mount(frag);
   wireRevealAnimation(document.querySelector('.card-v4-page'));
   // Same universe as the navigator, so opening a card feels like the same page.
