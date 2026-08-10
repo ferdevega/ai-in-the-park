@@ -448,7 +448,33 @@
   {"slug":"get-stakeholder-sign-off-on-the-strategy","title":"Get stakeholder sign-off on the strategy","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"scope-the-work","title":"Scope the work","stage":"project-management","type":"thought-partner","level":"beginner","coming_soon":true},
   {"slug":"estimate-the-effort","title":"Estimate the effort","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
-  {"slug":"set-up-the-project-timeline","title":"Set up the project timeline","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {
+    "slug": "set-up-the-project-timeline",
+    "title": "Set up the project timeline",
+    "stage": "project-management",
+    "type": "creator",
+    "level": "intermediate",
+    "tags": ["timeline", "project-management", "planning", "back-planning", "kickoff"],
+    "added": "2026-08-10",
+    "teaser": "Plan the timeline like LEGO — every block has to chain to the next — and always build backwards from the launch date.",
+    "related": ["map-roles-and-responsibilities"],
+    "intro": "<p>Think of a project timeline the way you'd think about LEGO: every block has to connect to the one before it, or the build doesn't stand. Analysis feeds design, design feeds the build, the build feeds review — get one block's size wrong and everything after it shifts.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/lego.gif\" alt=\"LEGO bricks snapping together into a build\" class=\"inline-gif\" /><figcaption>Here's the LEGO for your client too</figcaption></figure><p>The habit that keeps it standing: always start from the <span class=\"gradient-text\">launch date and build backwards</span>. Give AI the date and the blocks, and it chains them into a schedule — with the review cycles and buffer most timelines quietly forget.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI your fixed launch date, your phases, and your real constraints, and it lays out a working-backwards schedule — dependencies, milestones, review and SME windows, and buffer — in one pass. Reshaping it (compress to an earlier date, add a review round, move an SME) is a follow-up sentence, not a rebuild.</p>",
+    "ai_wont": "<p>AI doesn't know your SMEs' real response times, your org's holidays, or how many rounds this particular stakeholder will demand. Give it those numbers, and treat the schedule as a first cut to negotiate — not a commitment you've already made.</p>",
+    "steps": [
+      "Gather the fixed points first: the launch date, the phases your project uses, who's on the team and for how much time, and the real constraints — holidays, SME turnaround, and how many review rounds you actually expect.",
+      "Ask AI to back-plan from the launch date: a phase-by-phase table with dates, dependencies, review and SME windows, and an explicit buffer — so the blocks chain up instead of just piling on from today.",
+      "Stress the result before you commit: have it flag the riskiest dependencies and show what happens if a review round slips a week, then adjust the buffer or the scope."
+    ],
+    "prompt_fast": {
+      "frame": "You are a seasoned learning-project manager who plans backwards from a fixed launch date and treats every phase as a block that has to connect to the one before it.",
+      "ask": "Build a working-backwards project timeline for the learning project below, starting from the launch date, with the review cycles and buffer that timelines usually forget.",
+      "shape": "Launch date (fixed): [DATE]\nWhat we're building: [SCOPE — e.g., a 45-minute eLearning module plus a job aid]\nPhases we use: [e.g., analysis, design, storyboard, build, review, deploy — or propose a standard set]\nTeam: [WHO'S AVAILABLE and how much — e.g., me full-time, one SME a few hours a week]\nConstraints: [holidays or blackout dates, known SME turnaround, how many review rounds you expect]\n\nProduce:\n- A phase-by-phase schedule as a table: phase, start date, end date, working days, owner, and what it depends on.\n- Review and SME windows as their own rows, with realistic turnaround — don't assume same-day.\n- A named buffer before the launch date.\n- A short \"risks to the date\" list: the three dependencies most likely to slip, and how far each would push the launch.\n\nWork backwards from the launch date so the dates are real. If a phase won't fit, tell me what to cut or move rather than silently compressing it.",
+      "tune": "If I left out phase lengths or review turnaround, use sensible L&D defaults but label each assumption so I can correct it. Where two phases could safely overlap, say so — but never overlap work that genuinely depends on the phase before it."
+    },
+    "pro_tip": "Re-run it once with an extra review round added. The gap between the two schedules is the buffer conversation to have with your stakeholder now — not the week the review actually slips."
+  },
   {"slug":"line-up-the-resources","title":"Line up the resources","stage":"project-management","type":"thought-partner","level":"intermediate","coming_soon":true},
   {"slug":"define-the-reporting-strategy","title":"Define the reporting strategy","stage":"project-management","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"storyboard-the-module","title":"Storyboard the module","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
