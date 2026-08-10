@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- No-flash guard: hide the crawler-only pre-rendered content when JS is on
+       (the app replaces #view anyway). Crawlers/no-JS still read it. -->
+  <script>document.documentElement.classList.add('js')</script>
+  <style>html.js .prerender{display:none}</style>
   <title>AI in the Park — Playbook for Learning Designers</title>
   <meta name="description" content="How instructional designers can actually use AI. Anecdotes, prompts, and moves that work." />
   <link rel="canonical" href="https://ai-in-the-park.vercel.app/" />

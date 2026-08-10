@@ -17,7 +17,15 @@ const cards = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/cards.json'), 'ut
   // Skip hidden cards and external/anchor cards (linkOverride → their own route,
   // e.g. FAST → /fast) — they don't get a generated /cards/<slug> page.
   .filter((c) => !c.hidden && !c.linkOverride);
-const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+// All non-hidden cards (incl. coming-soon + linkOverride) — for outline/lookups.
+const allCards = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/cards.json'), 'utf8'))
+  .filter((c) => !c.hidden);
+const cardBySlug = (slug) => allCards.find((c) => c.slug === slug);
+const scenarios = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/scenarios.json'), 'utf8'));
+// index.html is BOTH the template and the home output, so strip any previously
+// pre-rendered #view content when reading it — keeps the build idempotent.
+const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
+  .replace(/<main id="view" class="page">[\s\S]*?<\/main>/, '<main id="view" class="page"></main>');
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) =>
@@ -46,6 +54,89 @@ function writePage(relPath, html) {
   const full = path.join(ROOT, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
   fs.writeFileSync(full, html, 'utf8');
+}
+
+// ---------- Pre-rendering (so crawlers / LLMs can read the content) ----------
+// The app renders everything client-side, so the raw HTML shell is empty. We
+// inject readable HTML into #view at build time; on load, app.js clears #view
+// and renders the interactive version, so users are unaffected.
+function injectView(html, contentHTML) {
+  return html.replace(
+    '<main id="view" class="page"></main>',
+    `<main id="view" class="page">${contentHTML}</main>`,
+  );
+}
+
+function stageOf(card) {
+  const slug = Array.isArray(card.stage) ? card.stage[0] : card.stage;
+  return stages.find((s) => s.slug === slug);
+}
+
+function cardContentHTML(card) {
+  const st = stageOf(card);
+  let h = '<article class="prerender">';
+  h += `<h1>${esc(card.title)}</h1>`;
+  if (card.teaser) h += `<p>${esc(card.teaser)}</p>`;
+  const meta = [st && st.title, card.type, card.level].filter(Boolean).join(' · ');
+  if (meta) h += `<p><em>${esc(meta)}</em></p>`;
+  if (card.coming_soon) return `${h}<p>Coming soon.</p></article>`;
+  if (card.intro) h += `<section>${card.intro}</section>`;
+  if (card.why_matters) h += `<section><h2>Why this matters</h2>${card.why_matters}</section>`;
+  if (card.how_ai_helps) h += `<section><h2>How AI can help</h2>${card.how_ai_helps}</section>`;
+  if (card.ai_wont) h += `<section><h2>What AI won't do</h2>${card.ai_wont}</section>`;
+  if (Array.isArray(card.steps) && card.steps.length) {
+    h += `<section><h2>How to run it</h2><ol>${card.steps.map((s) => `<li>${s}</li>`).join('')}</ol></section>`;
+  }
+  if (card.prompt_fast) {
+    h += '<section><h2>The prompt (FAST)</h2>';
+    ['frame', 'ask', 'shape', 'tune'].forEach((k) => {
+      if (card.prompt_fast[k]) h += `<p><strong>${k[0].toUpperCase() + k.slice(1)}:</strong> ${esc(card.prompt_fast[k])}</p>`;
+    });
+    h += '</section>';
+  }
+  if (card.pro_tip) h += `<section><h2>Pro tip</h2><p>${card.pro_tip}</p></section>`;
+  if (Array.isArray(card.tags) && card.tags.length) h += `<p>Tags: ${card.tags.map(esc).join(', ')}</p>`;
+  return `${h}</article>`;
+}
+
+function cardLink(slug) {
+  const c = cardBySlug(slug);
+  if (!c) return '';
+  if (c.coming_soon) return `<li>${esc(c.title)} (coming soon)</li>`;
+  const href = c.linkOverride || `/cards/${c.slug}`;
+  return `<li><a href="${href}">${esc(c.title)}</a>${c.teaser ? ` — ${esc(c.teaser)}` : ''}</li>`;
+}
+
+function homeOutlineHTML() {
+  let h = '<div class="prerender">';
+  h += '<h1>AI in the Park — a playbook of AI use cases for instructional designers, content developers and learning managers</h1>';
+  h += '<p>The playbook, by phase of the learning-design process:</p>';
+  scenarios.filter((s) => !s.byStage).forEach((sc) => {
+    h += `<h2>${esc(sc.title)}</h2>`;
+    if (sc.situation) h += `<p>${esc(sc.situation)}</p>`;
+    (sc.moments || []).forEach((m) => {
+      const items = (m.cards || []).map((cd) => (typeof cd === 'string' ? cardLink(cd) : '')).filter(Boolean).join('');
+      if (items) h += `<h3>${esc(m.label)}</h3><ul>${items}</ul>`;
+    });
+  });
+  h += '<p><a href="/cards">Browse all cards</a></p></div>';
+  return h;
+}
+
+function cardsIndexHTML() {
+  const live = cards.filter((c) => !c.coming_soon);
+  let h = '<div class="prerender"><h1>All cards — AI in the Park</h1><ul>';
+  live.forEach((c) => { h += `<li><a href="/cards/${c.slug}">${esc(c.title)}</a>${c.teaser ? ` — ${esc(c.teaser)}` : ''}</li>`; });
+  h += '</ul></div>';
+  return h;
+}
+
+function stageContentHTML(stage) {
+  const inStage = allCards.filter((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(stage.slug));
+  let h = `<div class="prerender"><h1>${esc(stage.title)}</h1>`;
+  if (stage.summary) h += `<p>${esc(stage.summary)}</p>`;
+  h += '<ul>' + inStage.map((c) => cardLink(c.slug)).join('') + '</ul></div>';
+  return h;
 }
 
 // ---------- Static routes ----------
@@ -166,33 +257,33 @@ const routes = [
 ];
 
 for (const r of routes) {
-  writePage(r.out, setMeta(template, { ...r, image: OG_IMAGE }));
+  let html = setMeta(template, { ...r, image: OG_IMAGE });
+  // Pre-render crawlable content for the home and the all-cards index.
+  if (r.out === 'index.html') html = injectView(html, homeOutlineHTML());
+  else if (r.out === 'cards/index.html') html = injectView(html, cardsIndexHTML());
+  writePage(r.out, html);
 }
 
 // ---------- Per-stage pages ----------
 for (const s of stages) {
-  writePage(
-    `stages/${s.slug}/index.html`,
-    setMeta(template, {
-      title: `${s.title} — ${SITE_NAME}`,
-      description: s.summary || DEFAULT_DESCRIPTION,
-      url: `${SITE_URL}/stages/${s.slug}`,
-      image: OG_IMAGE,
-    }),
-  );
+  const html = setMeta(template, {
+    title: `${s.title} — ${SITE_NAME}`,
+    description: s.summary || DEFAULT_DESCRIPTION,
+    url: `${SITE_URL}/stages/${s.slug}`,
+    image: OG_IMAGE,
+  });
+  writePage(`stages/${s.slug}/index.html`, injectView(html, stageContentHTML(s)));
 }
 
 // ---------- Per-card pages ----------
 for (const c of cards) {
-  writePage(
-    `cards/${c.slug}/index.html`,
-    setMeta(template, {
-      title: `${c.title} — ${SITE_NAME}`,
-      description: c.teaser || DEFAULT_DESCRIPTION,
-      url: `${SITE_URL}/cards/${c.slug}`,
-      image: OG_IMAGE,
-    }),
-  );
+  const html = setMeta(template, {
+    title: `${c.title} — ${SITE_NAME}`,
+    description: c.teaser || DEFAULT_DESCRIPTION,
+    url: `${SITE_URL}/cards/${c.slug}`,
+    image: OG_IMAGE,
+  });
+  writePage(`cards/${c.slug}/index.html`, injectView(html, cardContentHTML(c)));
 }
 
 // ---------- RSS feed ----------
