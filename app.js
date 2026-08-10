@@ -1468,19 +1468,14 @@ function wireNavigator() {
         const cards = document.createElement('div');
         cards.className = 'nav-moment-cards';
         const isSoon = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
-        if (sc.pilotComingNext) {
-          // Pilot treatment: live cards as full cards; coming-soon cards demoted
-          // to ghost cards so the step spine reads as a journey, not a wall of grey.
-          const live = (m.cards || []).filter((c) => !isSoon(c));
-          const soon = (m.cards || []).filter(isSoon);
-          live.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
-          const cn = buildComingNext(soon);
-          if (cn) cards.appendChild(cn);
-        } else {
-          // Default: available cards first, coming-soon (roadmap) at the bottom.
-          const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
-          ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
-        }
+        // Live cards as full cards; coming-soon cards demoted to ghost cards so
+        // the step spine reads as a journey, not a wall of grey. (byStage has no
+        // coming-soon cards, so it just renders the live ones.)
+        const live = (m.cards || []).filter((c) => !isSoon(c));
+        const soon = (m.cards || []).filter(isSoon);
+        live.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+        const cn = buildComingNext(soon);
+        if (cn) cards.appendChild(cn);
         col.appendChild(cards);
         cols.appendChild(col);
       });
@@ -2564,11 +2559,11 @@ function viewCardV4(slug) {
       state.pendingShow = fromShow; // so returning to "/" re-opens the show
       backLink.setAttribute('href', '/');
       backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${showObj.title}`;
-    } else if (primaryStage) {
-      backLink.setAttribute('href', `/stages/${primaryStage.slug}`);
-      backLink.innerHTML = `<span aria-hidden="true">←</span> Back to ${primaryStage.title}`;
     } else {
-      backLink.setAttribute('href', '/');
+      // No originating show — send back to the Library (the stage grid is retired).
+      state.pendingShow = 'everything';
+      backLink.setAttribute('href', '/library');
+      backLink.innerHTML = '<span aria-hidden="true">←</span> Back to the library';
     }
     state.fromShow = null;
   }
@@ -3214,8 +3209,11 @@ function route() {
     bgRenderer = () => viewDesignTest('build-your-curriculum', parts[1]);
     bgPath = `/design-test/${parts[1]}`;
   } else if (parts[0] === 'stages' && parts[1]) {
-    bgRenderer = () => viewStage(parts[1]);
-    bgPath = `/stages/${parts[1]}`;
+    // Legacy stage grid retired — send to the Library (the "everything" scene).
+    try { history.replaceState({}, '', '/library'); } catch (e) {}
+    bgRenderer = viewNavigator;
+    bgPath = '/library';
+    state.pendingShow = 'everything';
   } else {
     bgRenderer = viewNotFound;
   }
