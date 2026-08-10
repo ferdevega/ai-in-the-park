@@ -5433,12 +5433,19 @@ body.view-library .layout { grid-template-columns: 1fr; }
   .nav-sc-box { width: 100%; max-width: 340px; min-height: 0; }
   /* Show page → step-columns stack full-width; arrows drop to compact chevrons */
   .nav-scene-body { padding: 8px 16px 84px; }
-  /* Left-align the steps on phones — centred single columns looked off. */
-  .nav-moments { gap: 26px; justify-content: flex-start; }
-  .nav-moment { width: 100%; max-width: 340px; }
-  .nav-moment-label { justify-content: flex-start; }
-  .nav-moment-cards { gap: 12px; }
-  .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; height: auto; min-height: 0; }
+  /* Steps become a numbered vertical rail (like the Basics "Start here" path):
+     a connecting line down the left, the number in the gutter, the step name
+     beside it, and the step's cards stacked beneath. */
+  .nav-moments { display: block; position: relative; max-width: 380px; margin: 0 auto; padding-left: 34px; }
+  .nav-moments::before {
+    content: ''; position: absolute; left: 11px; top: 10px; bottom: 24px; width: 2px; border-radius: 2px;
+    background: linear-gradient(var(--r-auditor), var(--r-creator), var(--r-thought-partner), #3a3a40);
+  }
+  .nav-moment { width: 100%; max-width: none; position: relative; margin-bottom: 22px; }
+  .nav-moment-label { justify-content: flex-start; position: relative; margin-bottom: 12px; }
+  .nav-moment-num { position: absolute; left: -34px; top: -1px; }
+  .nav-moment-cards { gap: 10px; }
+  .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: none; height: auto; min-height: 0; }
   .nav-assumes { margin-bottom: 18px; }
   /* Fixed side arrows overlap the full-width cards on phones — hide them and
      use the in-flow bottom nav instead. */
