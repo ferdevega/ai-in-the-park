@@ -600,27 +600,18 @@ function viewStage(slug) {
   wireRevealAnimation(document.querySelector('.stage-v4'));
 }
 
-// ---------- Library — flat, filterable browse of every live card ----------
-// The navigator is the guided/lifecycle way in; the Library is the power-user
-// lens: one grid, filter by Stage / Difficulty / Role. Uses existing card data.
-function viewLibrary() {
-  state.view = 'library';
+// Filter chips for the "Show me everything" scene (which also serves as the
+// Library — same view, chips on top). Mutates `filters` and calls `onChange`
+// to re-render the scene's cards. Facet values are derived from live cards so
+// empty facets never appear.
+function buildSceneFilters(filters, onChange) {
   const live = state.cards.filter((c) => !c.coming_soon && !c.hidden);
+  const bar = document.createElement('div');
+  bar.className = 'library-filters scene-filters';
 
-  const page = document.createElement('div');
-  page.className = 'library-page';
-
-  const hero = document.createElement('header');
-  hero.className = 'library-hero';
-  hero.innerHTML = '<h1 class="library-title">Library</h1><p class="library-sub">Every card, in one place. Filter by stage, difficulty, or how AI shows up.</p>';
-  page.appendChild(hero);
-
-  const filters = { stage: null, level: null, type: null };
-
-  // Facet values, derived from the live cards so empty facets never appear.
   const stageVals = state.stages
     .filter((s) => live.some((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(s.slug)))
-    .map((s) => ({ value: s.slug, label: s.title }));
+    .map((s) => ({ value: s.slug, label: s.title, color: stageColorVar(s) }));
   const levelOrder = ['beginner', 'intermediate', 'advanced'];
   const levelVals = levelOrder
     .filter((l) => live.some((c) => (c.level || 'beginner') === l))
@@ -628,73 +619,39 @@ function viewLibrary() {
   const typeOrder = ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel'];
   const typeVals = typeOrder
     .filter((t) => live.some((c) => c.type === t))
-    .map((t) => ({ value: t, label: roleLabelTextForType(t) || t }));
+    .map((t) => ({ value: t, label: roleLabelTextForType(t) || t, color: roleColorVar(t) }));
 
-  const bar = document.createElement('div');
-  bar.className = 'library-filters';
-
-  const countEl = document.createElement('div');
-  countEl.className = 'library-count';
-
-  const grid = document.createElement('div');
-  grid.className = 'library-grid';
-
-  const apply = () => {
-    const shown = live.filter((c) =>
-      (!filters.stage || (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage)) &&
-      (!filters.level || (c.level || 'beginner') === filters.level) &&
-      (!filters.type || c.type === filters.type));
-    grid.innerHTML = '';
-    countEl.textContent = `${shown.length} ${shown.length === 1 ? 'card' : 'cards'}`;
-    if (!shown.length) {
-      grid.innerHTML = '<p class="library-empty">No cards match those filters yet.</p>';
-      return;
-    }
-    shown.forEach((c) => grid.appendChild(renderV4Card(c, {})));
-  };
-
-  const buildGroup = (facet, label, vals, colorFor) => {
+  const group = (facet, label, vals) => {
     if (!vals.length) return;
-    const group = document.createElement('div');
-    group.className = 'library-filter-group';
+    const g = document.createElement('div');
+    g.className = 'library-filter-group';
     const gl = document.createElement('span');
     gl.className = 'library-filter-label';
     gl.textContent = label;
-    group.appendChild(gl);
+    g.appendChild(gl);
     const chips = document.createElement('div');
     chips.className = 'library-chips';
-    const mkChip = (value, text, color) => {
+    vals.forEach((v) => {
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'library-chip';
-      chip.textContent = text;
-      if (color) chip.style.setProperty('--chip-color', color);
+      chip.textContent = v.label;
+      if (v.color) chip.style.setProperty('--chip-color', v.color);
       chip.addEventListener('click', () => {
-        filters[facet] = filters[facet] === value ? null : value;
-        // Refresh pressed state across this group's chips.
+        filters[facet] = filters[facet] === v.value ? null : v.value;
         chips.querySelectorAll('.library-chip').forEach((b) => b.classList.remove('is-on'));
         if (filters[facet] !== null) chip.classList.add('is-on');
-        apply();
+        onChange();
       });
-      return chip;
-    };
-    vals.forEach((v) => chips.appendChild(mkChip(v.value, v.label, colorFor ? colorFor(v.value) : null)));
-    group.appendChild(chips);
-    bar.appendChild(group);
+      chips.appendChild(chip);
+    });
+    g.appendChild(chips);
+    bar.appendChild(g);
   };
-
-  buildGroup('stage', 'Stage', stageVals, (v) => stageColorVar(stageBySlug(v)));
-  buildGroup('level', 'Difficulty', levelVals, null);
-  buildGroup('type', 'Role', typeVals, (v) => roleColorVar(v));
-
-  page.appendChild(bar);
-  page.appendChild(countEl);
-  page.appendChild(grid);
-
-  const frag = document.createDocumentFragment();
-  frag.appendChild(page);
-  mount(frag);
-  apply();
+  group('stage', 'Stage', stageVals);
+  group('level', 'Difficulty', levelVals);
+  group('type', 'Role', typeVals);
+  return bar;
 }
 
 // Renders cards grouped into Beginner / Intermediate / Advanced sections.
@@ -1263,10 +1220,6 @@ function wireNavigator() {
     if (!soon.length) return null;
     const wrap = document.createElement('div');
     wrap.className = 'coming-next';
-    const label = document.createElement('div');
-    label.className = 'coming-next-label';
-    label.textContent = 'Coming next';
-    wrap.appendChild(label);
     soon.forEach((c) => {
       const g = document.createElement('div');
       g.className = 'ghost-card';
@@ -1388,53 +1341,70 @@ function wireNavigator() {
       body.appendChild(pre);
     }
 
-    // Buckets. "byStage" (Show me everything) lists only the *available* cards by
-    // stage — coming-soon roadmap cards are left out here, and stages with no
-    // available cards are dropped.
-    const moments = sc.byStage
-      ? state.stages.map((s) => ({
-          label: s.title,
-          cards: cardsForStage(s.slug).filter((c) => !c.coming_soon).map((c) => c.slug),
-        })).filter((m) => m.cards.length)
-      : (sc.moments || []);
+    // The by-stage "Show me everything" scene doubles as the Library: filter
+    // chips on top narrow the cards in place (no separate page). Regular shows
+    // use their fixed steps and ignore filters.
+    const filters = { stage: null, level: null, type: null };
+    const computeMoments = () => {
+      if (!sc.byStage) return (sc.moments || []);
+      return state.stages.map((s) => {
+        let cs = cardsForStage(s.slug).filter((c) => !c.coming_soon);
+        if (filters.stage) cs = cs.filter((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage));
+        if (filters.level) cs = cs.filter((c) => (c.level || 'beginner') === filters.level);
+        if (filters.type) cs = cs.filter((c) => c.type === filters.type);
+        return { label: s.title, cards: cs.map((c) => c.slug) };
+      }).filter((m) => m.cards.length);
+    };
 
     // Centered content that mirrors the homepage: steps stack down the middle,
     // each a labelled column of cards.
     const cols = document.createElement('div');
     cols.className = 'nav-moments';
-    moments.forEach((m, i) => {
-      const col = document.createElement('div');
-      col.className = 'nav-moment';
-      const lbl = document.createElement('div');
-      lbl.className = 'nav-moment-label';
-      lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
-      col.appendChild(lbl);
-      const cards = document.createElement('div');
-      cards.className = 'nav-moment-cards';
-      const isSoon = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
-      if (sc.pilotComingNext) {
-        // Pilot treatment: live cards as full cards; coming-soon cards demoted
-        // to a single "Coming next" group so the step spine reads as a journey,
-        // not a wall of grey. The numbered step label always shows.
-        const live = (m.cards || []).filter((c) => !isSoon(c));
-        const soon = (m.cards || []).filter(isSoon);
-        live.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
-        const cn = buildComingNext(soon);
-        if (cn) cards.appendChild(cn);
-      } else {
-        // Default: available cards first, coming-soon (roadmap) at the bottom.
-        const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
-        ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+    const renderCols = () => {
+      cols.innerHTML = '';
+      const moments = computeMoments();
+      if (sc.byStage && !moments.length) {
+        cols.innerHTML = '<p class="nav-scene-empty">No cards match those filters yet.</p>';
+        return;
       }
-      col.appendChild(cards);
-      cols.appendChild(col);
-    });
-    body.appendChild(cols);
+      moments.forEach((m, i) => {
+        const col = document.createElement('div');
+        col.className = 'nav-moment';
+        const lbl = document.createElement('div');
+        lbl.className = 'nav-moment-label';
+        lbl.innerHTML = `<span class="nav-moment-num">${i + 1}</span>${m.label}`;
+        col.appendChild(lbl);
+        const cards = document.createElement('div');
+        cards.className = 'nav-moment-cards';
+        const isSoon = (c) => typeof c === 'string' && !!(cardBySlug(c) || {}).coming_soon;
+        if (sc.pilotComingNext) {
+          // Pilot treatment: live cards as full cards; coming-soon cards demoted
+          // to ghost cards so the step spine reads as a journey, not a wall of grey.
+          const live = (m.cards || []).filter((c) => !isSoon(c));
+          const soon = (m.cards || []).filter(isSoon);
+          live.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+          const cn = buildComingNext(soon);
+          if (cn) cards.appendChild(cn);
+        } else {
+          // Default: available cards first, coming-soon (roadmap) at the bottom.
+          const ordered = (m.cards || []).slice().sort((a, b) => (isSoon(a) ? 1 : 0) - (isSoon(b) ? 1 : 0));
+          ordered.forEach((c) => { const tl = renderEpisode(c); if (tl) cards.appendChild(tl); });
+        }
+        col.appendChild(cards);
+        cols.appendChild(col);
+      });
+      // Cards surface from the star-field to the forefront, staggered in reading order.
+      cols.querySelectorAll('.nav-moment-cards .card-preview').forEach((el, i) => {
+        el.style.setProperty('--nav-in-delay', `${i * 45}ms`);
+      });
+    };
 
-    // Cards surface from the star-field to the forefront, staggered in reading order.
-    cols.querySelectorAll('.nav-moment-cards .card-preview').forEach((el, i) => {
-      el.style.setProperty('--nav-in-delay', `${i * 45}ms`);
-    });
+    if (sc.byStage) {
+      const fb = buildSceneFilters(filters, renderCols);
+      if (fb) body.appendChild(fb);
+    }
+    body.appendChild(cols);
+    renderCols();
 
     // Season arc: the "Previously" (left) and "Up next" (right) arrows follow the
     // show order on the home screen — the neighbouring series, skipping the
@@ -3076,9 +3046,11 @@ function route() {
     bgRenderer = viewNavigator;
     bgPath = '/';
   } else if (parts[0] === 'library') {
-    // Library → flat, filterable grid of every live card (power-user browse).
-    bgRenderer = viewLibrary;
+    // Library === the "Show me everything" scene (same view), with filter chips
+    // on top. One page, two entry points (topbar Library + the everything bar).
+    bgRenderer = viewNavigator;
     bgPath = '/library';
+    state.pendingShow = 'everything';
   } else if (parts[0] === 'classic') {
     // Backup/legacy home preserved for reference
     bgRenderer = viewHome;

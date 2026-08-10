@@ -1537,13 +1537,19 @@ body.view-preview3 .page { padding-top: 6px; padding-bottom: 24px; }
   .card-preview.v4-card:not(.card-preview-coming-soon) .teaser { display: none; }
   .card-preview.v4-card:not(.card-preview-coming-soon) .card-chips { display: none; }
   .card-preview.v4-card .card-body { padding: 12px 15px 13px; gap: 6px; }
-  .card-preview.v4-card .v4-card-header { margin-bottom: 0; }
+  .card-preview.v4-card .v4-card-header { margin-bottom: 0; padding-right: 8px; }
+  /* Bars group next to the type (left), freeing the top-right corner for the
+     "New" badge so the two never collide on the short compact card. */
   .card-preview.v4-card .v4-card-header-bars {
     display: inline-flex;
     align-items: flex-end;
-    margin-left: auto;
+    margin-left: 8px;
   }
   .card-preview.v4-card .v4-card-role-icon { width: 26px; height: 26px; }
+  .card-preview.v4-card .card-new-badge,
+  .nav-moment-cards .card-new-badge {
+    top: 9px; right: 10px; left: auto; bottom: auto;
+  }
 }
 
 /* Mobile-only shelf header — hidden on desktop */
@@ -5229,11 +5235,7 @@ body.view-navigator .site-footer { position: relative; z-index: 4; }
 /* "Coming next" group (pilot on Kick off): coming-soon cards as ghost cards —
    dashed, muted placeholders with a "Soon" chip. Same card language as the live
    cards above, so it reads as "the method has these moves; these are on the way". */
-.coming-next { width: 100%; box-sizing: border-box; margin-top: 2px; }
-.coming-next-label {
-  font-family: var(--heading); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
-  color: #6f6a64; margin: 2px 0 8px;
-}
+.coming-next { width: 100%; box-sizing: border-box; margin-top: 8px; }
 .ghost-card {
   display: flex; align-items: center; gap: 10px;
   border: 1px dashed rgba(255,255,255,.18); border-radius: 12px;
@@ -5282,6 +5284,13 @@ body.view-library .layout { grid-template-columns: 1fr; }
   .library-grid { grid-template-columns: 1fr; gap: 12px; }
 }
 
+/* Filter chips on the "Show me everything" scene (Library === that view). */
+.scene-filters { max-width: 1000px; margin: 0 auto 24px; }
+.nav-scene-empty { text-align: center; color: var(--text-dim); font-size: .95rem; margin: 24px 0; }
+@media (max-width: 720px) {
+  .scene-filters { margin-bottom: 18px; }
+}
+
 .nav-tile { width: 202px; box-sizing: border-box; border-radius: 12px; padding: 11px 13px; text-decoration: none; display: block;
   background: linear-gradient(180deg, rgba(28,26,38,.7), rgba(14,13,20,.7)); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--rc); box-shadow: 0 10px 30px -14px rgba(0,0,0,.8), 0 0 22px -12px var(--rc); transition: transform .2s var(--ease-spring), box-shadow .3s; }
@@ -5323,11 +5332,14 @@ body.view-library .layout { grid-template-columns: 1fr; }
   .nav-moment-cards { gap: 12px; }
   .nav-moment-cards .card-preview.v4-card { width: 100%; max-width: 340px; height: auto; min-height: 0; }
   .nav-assumes { margin-bottom: 18px; }
-  .nav-arrow { max-width: none; padding: 12px; gap: 0; }
-  .nav-arrow-prev { left: 10px; }
-  .nav-arrow-next { right: 10px; }
+  /* Prev/next drop to bottom-corner floating buttons so they stop overlapping
+     card text mid-screen. */
+  .nav-arrow { max-width: none; padding: 0; gap: 0; width: 44px; height: 44px;
+    top: auto; bottom: 18px; transform: none; }
+  .nav-arrow-prev { left: 12px; }
+  .nav-arrow-next { right: 12px; }
   .nav-arrow-cap { display: none; }
-  .nav-arrow-chev { font-size: 24px; opacity: .9; }
+  .nav-arrow-chev { font-size: 22px; opacity: .9; }
 }
 @media (min-width: 721px) and (max-width: 1024px) {
   .nav-scenarios { max-width: 488px; }
