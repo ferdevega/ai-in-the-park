@@ -548,7 +548,35 @@
     },
     "pro_tip": "Keep the generated file as your format — next cycle you drop in the new deck and get the same report, same structure, without rebuilding it. That's what we'll review in the next card."
   },
-  {"slug":"draft-a-status-report","title":"Draft a status report","stage":"project-management","type":"creator","level":"beginner","agentic":true,"coming_soon":true},
+  {
+    "slug": "draft-a-status-report",
+    "title": "Update your status report with an agent",
+    "stage": "project-management",
+    "type": "creator",
+    "level": "advanced",
+    "agentic": true,
+    "tags": ["status-report", "agent", "agentic", "reporting", "project-management"],
+    "added": "2026-08-11",
+    "teaser": "Set up an agent that rebuilds your status report from each new deck — in your format, with the changes flagged.",
+    "best_in": "Claude (Projects) · ChatGPT (Custom GPT or Projects) · Microsoft Copilot (agents)",
+    "related": ["build-a-status-report-in-html"],
+    "intro": "<p>Once you have a report format (the previous card), the work becomes recurring: every cycle you run the latest deck through the same steps. An agent removes that repetition. You set it up once with your format and your reporting rules; from then on you hand it the new deck and it produces the updated report — and because it can compare against the last one, it tells you what changed.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>An agent is a saved set-up — instructions plus files that persist between chats. You load your report format into it once; then each cycle you attach the new deck and it reads it, applies your format, updates the HTML report, and lists what moved since last time — new risks, a changed status, slipped dates, open decisions. You review the draft instead of assembling it.</p>",
+    "ai_wont": "<p>The agent only works from what you give it — the deck and your rules. It can misread an ambiguous slide, and it won't know context that isn't written down. It also won't decide what matters to your stakeholders or send the report for you — you review and approve before it goes out.</p>",
+    "steps": [
+      "Set the agent up once — a Claude Project, a Custom GPT, or a Copilot agent. Add your report format (the HTML file from the previous card) to its files so it always has your layout, and paste the instructions below as its set-up.",
+      "Each cycle, attach two files: the latest deck and last cycle's report. The agent returns the updated HTML report and a list of what changed.",
+      "Review, correct anything it misread, and send — then save the report file. That saved file is what you attach next cycle, so the agent can compare against it."
+    ],
+    "prompt_fast": {
+      "frame": "You are a status-report agent. My report format is saved in your files. Each cycle I give you the latest project deck and the previous report; you produce an updated report in that format and flag what changed.",
+      "ask": "When I attach a new deck, update the status report — apply my saved format, fill it from the deck, and list what changed since the previous report.",
+      "shape": "Each cycle I'll attach:\n- the latest project deck,\n- the previous cycle's report (to compare against).\nYour saved format file defines the layout and sections — follow it exactly.\n\nReturn two things:\n- the updated single-file HTML report in that format,\n- a short \"what changed / needs your attention\" list — new or escalating risks, status changes, slipped milestones, and decisions still open.",
+      "tune": "Report the deltas, not everything as new. Call out anything that regressed (green → amber). If the deck is missing something the format needs, leave a marked placeholder rather than inventing."
+    },
+    "pro_tip": "Keep each cycle's report file — it becomes next cycle's baseline, and that baseline is what lets the agent flag what changed instead of restating the whole project."
+  },
   {"slug":"package-it-for-your-lms","title":"Package it for your LMS","stage":"plan-execution","type":"tool","level":"intermediate","coming_soon":true},
   {"slug":"test-it-on-the-lms","title":"Test it on the LMS","stage":"plan-execution","type":"auditor","level":"intermediate","coming_soon":true},
   {"slug":"plan-the-rollout","title":"Plan the rollout","stage":"plan-execution","type":"creator","level":"beginner","coming_soon":true},
