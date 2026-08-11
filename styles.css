@@ -30,6 +30,7 @@
   --r-tool:            #34d399; /* green */
   --r-panel:           #fbbf24; /* gold */
   --r-mindset:         #fb923c; /* warm orange */
+  --r-agentic:         #60a5fa; /* electric blue — the agentic facet (not a role) */
 
   --heading: 'Space Grotesk', sans-serif;
   --body:    'Inter', sans-serif;
@@ -5403,6 +5404,27 @@ body.view-library .layout { grid-template-columns: 1fr; }
 .vchip-ic svg { width: 100%; height: 100%; }
 .vchip-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--r-creator)); }
 .vchip-bars { opacity: .9; }
+.vchip-ag-ic { color: var(--r-agentic); font-size: 1rem; line-height: 1; }
+
+/* ---- "Agentic" facet — a layered flag (not a role), electric-blue treatment -- */
+/* Tile footer chip (left-aligned; the level stays on the right). */
+.card-agentic-badge {
+  margin-right: auto;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Inter', sans-serif; font-size: .58rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--r-agentic);
+  border: 1px solid color-mix(in srgb, var(--r-agentic) 42%, transparent);
+  background: color-mix(in srgb, var(--r-agentic) 12%, transparent);
+  border-radius: 999px; padding: 3px 8px;
+}
+.card-agentic-badge .ag-ic { font-size: .72rem; line-height: 1; }
+/* Card-detail header pill (third pill after role + level). */
+.card-detail-pill-agentic {
+  background: color-mix(in oklab, var(--r-agentic) 16%, transparent);
+  border-color: color-mix(in oklab, var(--r-agentic) 45%, transparent);
+  color: color-mix(in srgb, var(--r-agentic) 78%, white 22%);
+}
+.card-detail-pill-agentic .ag-ic { color: var(--r-agentic); }
 .nav-scene-empty { text-align: center; color: var(--text-dim); font-size: .95rem; margin: 24px 0; }
 @media (max-width: 720px) {
   .scene-filters { margin-bottom: 16px; }

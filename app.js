@@ -610,7 +610,8 @@ function buildSceneFilters(filters, onChange) {
   const matches = (c) =>
     (!filters.stage || (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage)) &&
     (!filters.level || (c.level || 'beginner') === filters.level) &&
-    (!filters.type || c.type === filters.type);
+    (!filters.type || c.type === filters.type) &&
+    (!filters.agentic || c.agentic);
 
   const facets = [
     { key: 'type', label: 'Role', vals: ['mindset', 'creator', 'thought-partner', 'auditor', 'tool', 'panel']
@@ -622,6 +623,8 @@ function buildSceneFilters(filters, onChange) {
     { key: 'level', label: 'Difficulty', vals: ['beginner', 'intermediate', 'advanced']
         .filter((l) => live.some((c) => (c.level || 'beginner') === l))
         .map((l) => ({ value: l, label: levelLabel(l), kind: 'bars' })) },
+    { key: 'agentic', label: 'Format', vals: live.some((c) => c.agentic)
+        ? [{ value: true, label: 'Agentic', color: 'var(--r-agentic)', kind: 'agentic' }] : [] },
   ];
   const valOf = (key, value) => {
     const f = facets.find((x) => x.key === key);
@@ -645,15 +648,15 @@ function buildSceneFilters(filters, onChange) {
   toggle.addEventListener('click', () => wrap.classList.toggle('is-open'));
 
   const syncChips = () => panel.querySelectorAll('.vchip').forEach((ch) => {
-    ch.classList.toggle('on', filters[ch.dataset.facet] === ch.dataset.value);
+    ch.classList.toggle('on', String(filters[ch.dataset.facet]) === ch.dataset.value);
   });
   const refresh = () => {
-    const n = ['type', 'stage', 'level'].filter((k) => filters[k]).length;
+    const n = ['type', 'stage', 'level', 'agentic'].filter((k) => filters[k]).length;
     toggle.innerHTML = `<span class="sf-cog" aria-hidden="true">⚙</span>Filters${n ? ` <span class="sf-badge">${n}</span>` : ''}`;
     const nm = live.filter(matches).length;
     count.textContent = `${nm} ${nm === 1 ? 'card' : 'cards'}`;
     active.innerHTML = '';
-    ['type', 'stage', 'level'].forEach((k) => {
+    ['type', 'stage', 'level', 'agentic'].forEach((k) => {
       if (!filters[k]) return;
       const v = valOf(k, filters[k]);
       const pill = document.createElement('button');
@@ -689,6 +692,8 @@ function buildSceneFilters(filters, onChange) {
         const d = document.createElement('span'); d.className = 'vchip-dot'; chip.appendChild(d);
       } else if (v.kind === 'bars') {
         const b = document.createElement('span'); b.className = 'level-bars vchip-bars'; renderLevelBars(b, v.value); chip.appendChild(b);
+      } else if (v.kind === 'agentic') {
+        const s = document.createElement('span'); s.className = 'vchip-ag-ic'; s.textContent = '⟳'; chip.appendChild(s);
       }
       chip.insertAdjacentText('beforeend', v.label);
       chip.addEventListener('click', () => {
@@ -1493,7 +1498,7 @@ function wireNavigator() {
     // The by-stage "Show me everything" scene doubles as the Library: filter
     // chips on top narrow the cards in place (no separate page). Regular shows
     // use their fixed steps and ignore filters.
-    const filters = { stage: null, level: null, type: null };
+    const filters = { stage: null, level: null, type: null, agentic: null };
     const computeMoments = () => {
       if (!sc.byStage) return (sc.moments || []);
       return state.stages.map((s) => {
@@ -1501,6 +1506,7 @@ function wireNavigator() {
         if (filters.stage) cs = cs.filter((c) => (Array.isArray(c.stage) ? c.stage : [c.stage]).includes(filters.stage));
         if (filters.level) cs = cs.filter((c) => (c.level || 'beginner') === filters.level);
         if (filters.type) cs = cs.filter((c) => c.type === filters.type);
+        if (filters.agentic) cs = cs.filter((c) => c.agentic);
         return { label: s.title, cards: cs.map((c) => c.slug) };
       }).filter((m) => m.cards.length);
     };
@@ -2047,6 +2053,13 @@ function renderV4Card(card, opts = {}) {
       levelText.className = 'v4-card-level-text';
       levelText.textContent = card.level;
       chips.insertBefore(levelText, chips.firstChild);
+    }
+    // "Agentic" facet — layers on top of the role. Left-aligned in the footer.
+    if (card.agentic && !card.coming_soon) {
+      const ag = document.createElement('span');
+      ag.className = 'card-agentic-badge';
+      ag.innerHTML = '<span class="ag-ic" aria-hidden="true">⟳</span>Agentic';
+      chips.insertBefore(ag, chips.firstChild);
     }
   }
 
@@ -2662,6 +2675,17 @@ function viewCardV4(slug) {
   if (levelBarsEl) renderLevelBars(levelBarsEl, card.level);
   const levelTextEl2 = frag.querySelector('[data-level-text]');
   if (levelTextEl2) levelTextEl2.textContent = levelLabel(card.level);
+
+  // "Agentic" facet pill — a third pill alongside role + level.
+  if (card.agentic) {
+    const tags = frag.querySelector('.card-detail-header-tags');
+    if (tags) {
+      const pill = document.createElement('div');
+      pill.className = 'card-detail-pill card-detail-pill-agentic';
+      pill.innerHTML = '<span class="ag-ic" aria-hidden="true">⟳</span> Agentic';
+      tags.appendChild(pill);
+    }
+  }
 
   // Single-column flow — body, then prompt section (if any), then pro tip
   const bodyHost = frag.querySelector('[data-card-body]');

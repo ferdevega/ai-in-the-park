@@ -520,7 +520,35 @@
     "pro_tip": "Take the orphaned hand-offs list and make it the agenda for a 20-minute \"who catches this?\" conversation at kickoff."
   },
   {"slug":"track-risks-assumptions-and-issues","title":"Track risks, assumptions and issues","stage":"project-management","type":"auditor","level":"intermediate","coming_soon":true},
-  {"slug":"draft-a-status-report","title":"Draft a status report","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {
+    "slug": "build-a-status-report-in-html",
+    "title": "Build a status report in HTML",
+    "stage": "project-management",
+    "type": "creator",
+    "level": "intermediate",
+    "tags": ["status-report", "html", "reporting", "deck", "project-management"],
+    "added": "2026-08-11",
+    "teaser": "Stop fighting the format. Let AI read the messy deck and turn it into one clean HTML report.",
+    "best_in": "ChatGPT (Canvas + file upload) · Claude (Artifacts + file upload)",
+    "related": ["draft-a-status-report"],
+    "intro": "<p>Project status reports start clean. You hand out a beautiful template, and a week later it's a deck everyone has interpreted their own way — different format, different structure, a million slides that add nothing to the story.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Disaster.gif\" alt=\"A cartoon disaster unfolding\" class=\"inline-gif\" /><figcaption>Me after a week of trying to use the template.</figcaption></figure><p>You can keep fighting to make everyone follow the format — I did, for years. Or you can accept the mess is reality and let AI <span class=\"gradient-text\">interpret the slides and organize them</span> into one clean HTML report.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Hand AI the deck and it reads across the slides, pulls what actually matters — overall status, progress, risks, decisions, next steps — and lays it out as a single-file HTML report. Run it in a tool that renders HTML live (Claude Artifacts, ChatGPT Canvas) and you can watch it build, then adjust the structure once and keep it.</p>",
+    "ai_wont": "<p>AI only has what's on the slides, and it's interpreting — it can misread an ambiguous slide or over-summarise. Treat the result as a first draft to check against the deck before it goes out, not a report to forward unread.</p>",
+    "steps": [
+      "Get the deck in one place — the current status slides, as a file to upload or text to paste — plus who the report is for and what they care about.",
+      "Run it in a tool that renders HTML live (Claude Artifacts or ChatGPT Canvas) so you can watch the report build and adjust the sections on the spot.",
+      "Check it against the deck — nothing misread or invented — then save the HTML as your reusable report. That saved file is what the agent updates next time."
+    ],
+    "prompt_fast": {
+      "frame": "You are a project reporter who reads messy source material and writes for busy executives, and you produce clean, single-file HTML.",
+      "ask": "Read the project deck below and report out: interpret what's on the slides and build one single-file HTML status report from it.",
+      "shape": "Deck: [PASTE THE SLIDE TEXT, or attach the file]\nAudience: [WHO reads this — e.g., exec sponsor] and what they care about\nReporting period: [DATES]\nBrand colours (optional): [hex]\n\nProduce one self-contained HTML file (inline CSS, opens in a browser) with:\n- an overall status (Red / Amber / Green) and a one-line reason,\n- progress since the last period,\n- risks and issues, each with an owner and a next action,\n- decisions needed from the audience,\n- next steps and upcoming milestones.\nKeep it to roughly one screen, print- and email-friendly, and readable at a glance.\n\nDon't:\n- Invent anything that isn't in the deck — where something's missing, leave a clearly-marked placeholder.\n- Copy slide content verbatim; interpret and summarise it for the reader.",
+      "tune": "If a section is thin in the deck, flag it instead of padding. Where you inferred a status or a risk, note it so I can confirm before this goes out."
+    },
+    "pro_tip": "Keep the generated file as your format. Next cycle you drop in the new deck and get the same report, same structure, in seconds — which is exactly what the agent (next card) automates."
+  },
+  {"slug":"draft-a-status-report","title":"Draft a status report","stage":"project-management","type":"creator","level":"beginner","agentic":true,"coming_soon":true},
   {"slug":"package-it-for-your-lms","title":"Package it for your LMS","stage":"plan-execution","type":"tool","level":"intermediate","coming_soon":true},
   {"slug":"test-it-on-the-lms","title":"Test it on the LMS","stage":"plan-execution","type":"auditor","level":"intermediate","coming_soon":true},
   {"slug":"plan-the-rollout","title":"Plan the rollout","stage":"plan-execution","type":"creator","level":"beginner","coming_soon":true},
