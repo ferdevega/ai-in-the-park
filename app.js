@@ -2054,13 +2054,6 @@ function renderV4Card(card, opts = {}) {
       levelText.textContent = card.level;
       chips.insertBefore(levelText, chips.firstChild);
     }
-    // "Agentic" facet — layers on top of the role. Left-aligned in the footer.
-    if (card.agentic && !card.coming_soon) {
-      const ag = document.createElement('span');
-      ag.className = 'card-agentic-badge';
-      ag.innerHTML = '<span class="ag-ic" aria-hidden="true">⟳</span>Agentic';
-      chips.insertBefore(ag, chips.firstChild);
-    }
   }
 
   // Inject a header row: big role icon + type text
@@ -2081,6 +2074,16 @@ function renderV4Card(card, opts = {}) {
       typeLabel.className = 'v4-card-type';
       typeLabel.textContent = card.type.replace('-', ' ');
       header.appendChild(typeLabel);
+    }
+
+    // "Agentic" facet marker — in the header (next to the type) so it shows on
+    // both desktop and the compact mobile card, and never collides with the
+    // corner "New" badge.
+    if (card.agentic && !card.coming_soon) {
+      const ag = document.createElement('span');
+      ag.className = 'card-agentic-badge';
+      ag.innerHTML = '<span class="ag-ic" aria-hidden="true">⟳</span>Agentic';
+      header.appendChild(ag);
     }
 
     // Difficulty bars, right-aligned in the header. Hidden on desktop (the

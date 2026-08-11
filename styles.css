@@ -5407,15 +5407,15 @@ body.view-library .layout { grid-template-columns: 1fr; }
 .vchip-ag-ic { color: var(--r-agentic); font-size: 1rem; line-height: 1; }
 
 /* ---- "Agentic" facet — a layered flag (not a role), electric-blue treatment -- */
-/* Tile footer chip (left-aligned; the level stays on the right). */
+/* Tile marker — a small chip in the header, next to the type. */
 .card-agentic-badge {
-  margin-right: auto;
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: 'Inter', sans-serif; font-size: .58rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  flex: none;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'Inter', sans-serif; font-size: .55rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
   color: var(--r-agentic);
   border: 1px solid color-mix(in srgb, var(--r-agentic) 42%, transparent);
   background: color-mix(in srgb, var(--r-agentic) 12%, transparent);
-  border-radius: 999px; padding: 3px 8px;
+  border-radius: 999px; padding: 2px 7px;
 }
 .card-agentic-badge .ag-ic { font-size: .72rem; line-height: 1; }
 /* Card-detail header pill (third pill after role + level). */
