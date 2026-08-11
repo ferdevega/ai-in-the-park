@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="google-site-verification" content="WRxZteXyKk4--vpqEfzKiJ9Sw6EdqlWDAERougPt_zI" />
   <!-- No-flash guard: hide the crawler-only pre-rendered content when JS is on
-       (the app replaces #view anyway). Crawlers/no-JS still read it. -->
+       (the app replaces #view anyway). Crawlers/no-JS still read it. Also hide
+       the legacy spine chrome ("START HERE!") until the app mounts and sets a
+       view- class, so it doesn't flash on first paint. -->
   <script>document.documentElement.classList.add('js')</script>
-  <style>html.js .prerender{display:none}</style>
+  <style>html.js .prerender{display:none}html.js body:not([class*="view-"]) .spine,html.js body:not([class*="view-"]) .spine-toggle{display:none}</style>
   <title>AI in the Park — Playbook for Learning Designers</title>
   <meta name="description" content="How instructional designers can actually use AI. Anecdotes, prompts, and moves that work." />
   <link rel="canonical" href="https://ai-in-the-park.vercel.app/" />
@@ -26,7 +28,7 @@
 
   <link rel="alternate" type="application/rss+xml" title="AI in the Park 🐕‍🦺 RSS" href="/feed.xml" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%95%E2%80%8D%F0%9F%A6%BA%3C/text%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/styles.css?v=msp96fy3" />
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -1009,6 +1011,6 @@
     </a>
   </template>
 
-  <script src="/app.js"></script>
+  <script src="/app.js?v=msp96fy3"></script>
 </body>
 </html>
