@@ -523,7 +523,7 @@
     "slug": "map-roles-and-responsibilities",
     "title": "Pressure-test your RACI",
     "stage": "project-management",
-    "type": "thought-partner",
+    "type": "auditor",
     "level": "intermediate",
     "tags": ["raci", "roles", "responsibilities", "ownership", "handoffs"],
     "added": "2026-08-09",
