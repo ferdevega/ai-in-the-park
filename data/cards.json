@@ -490,7 +490,34 @@
   {"slug":"pick-the-right-ai-tool","title":"Pick the right AI tool for the job","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"give-ai-your-context","title":"Give AI your context, once","stage":"basics","type":"tool","level":"beginner","coming_soon":true},
   {"slug":"write-a-project-brief","title":"Write a project brief","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
-  {"slug":"run-a-kickoff-meeting","title":"Run a kickoff meeting","stage":"project-management","type":"creator","level":"beginner","coming_soon":true},
+  {
+    "slug": "run-a-kickoff-meeting",
+    "title": "Rehearse your kickoff with a stakeholder panel",
+    "stage": "project-management",
+    "type": "panel",
+    "level": "intermediate",
+    "tags": ["kickoff", "panel", "personas", "stakeholders", "roleplay", "project-management"],
+    "added": "2026-08-11",
+    "teaser": "Have AI role-play your stakeholders in a mock kickoff, so you meet the objections before the real meeting.",
+    "best_in": "Claude or ChatGPT — any chat that can hold distinct personas across turns",
+    "related": ["map-roles-and-responsibilities"],
+    "intro": "<p>A kickoff sets the tone — but you usually meet the hard questions (the budget, the scope, \"why are we even doing this\") live, in the room. You can rehearse it first: have AI role-play your stakeholders, each with their own priorities, reacting to your plan and pushing back on each other. The friction it surfaces predicts the friction you'll hit for real.</p><p>This is my favorite use of AI — because you're not using it to generate something, or to learn. You're using it to <span class=\"gradient-text\">simulate human behavior</span>.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Daria.gif\" alt=\"Daria looking deadpan\" class=\"inline-gif\" /><figcaption>Once you're done, you will either feel very smart, or that you have multiple personalities.</figcaption></figure>",
+    "why_matters": "",
+    "how_ai_helps": "<p>AI can hold several stakeholder personas at once — each with a distinct point of view — and run a mock kickoff, taking turns, disagreeing, and pushing back the way real people would. Because the friction shows up in the conversation, you can prepare for it before you're standing in front of the room.</p>",
+    "ai_wont": "<p>The personas are AI's guess at your stakeholders, not the real people — so anonymize the context, keep confidential details out, and use it to rehearse, not to decide. A human still owns the call and the messaging.</p>",
+    "steps": [
+      "List the people in the room who matter — three or four is plenty — with what each one cares about and how they tend to behave (impatient, risk-averse, detail-obsessed).",
+      "Give AI your kickoff agenda and what you most want to test, then run the panel with the prompt below — let them react point by point and argue with each other.",
+      "Read the friction, then take the debrief: the objections you'll face and the questions to have an answer ready for before the real kickoff."
+    ],
+    "prompt_fast": {
+      "frame": "You are a panel of stakeholders at my project kickoff. You role-play several distinct people at once — each stays in character, holds their own priorities, and reacts as that person really would. You are skeptical and realistic, not agreeable.",
+      "ask": "Run a mock kickoff for the project below. Walk my agenda point by point; at each point, have each stakeholder react in character — raising concerns, pushing back, and challenging each other — then give me a debrief of what to prepare for.",
+      "shape": "Project: [WHAT you're kicking off — goal, scope, timeline, sponsor]\nMy kickoff agenda / plan: [PASTE your agenda or the points you'll present]\nWhat I most want to test: [e.g. will they accept the timeline? the budget? the approach?]\n\nThe panel — play each of these as a distinct person:\n- [PERSONA 1 — role, e.g. \"Executive sponsor\"]: cares about [...]; tends to be [disposition — e.g. impatient, ROI-driven, risk-averse]\n- [PERSONA 2 — role, e.g. \"SME / subject lead\"]: cares about [...]; tends to be [...]\n- [PERSONA 3 — role, e.g. \"IT / delivery\"]: cares about [...]; tends to be [...]\n(Add or drop personas to match your real room.)\n\nHow the panel behaves:\n- Each persona speaks in the first person and stays in character throughout.\n- Go through my agenda point by point; after each point, let each persona react.\n- Personas disagree — with me and with each other. Surface the tension, don't smooth it over.\n- Each raises the concern their role would really raise, and flags anything I glossed over.\n- If a persona would object, they object — realistically, not politely.\n\nThen, as yourself (not in character), give me a debrief:\n- the top objections I'll face, by stakeholder,\n- the gaps or weak spots in my plan they exposed,\n- the 3-5 questions I should have an answer ready for before the real kickoff.",
+      "tune": "Keep the personas distinct — don't let them blur into one voice or all agree. If my persona details are thin, ask me one or two questions before starting rather than inventing stakeholders. Anonymize — no real names or confidential specifics."
+    },
+    "pro_tip": "Base the personas on the archetypes you actually deal with — the closer their priorities are to the real people, the better the friction matches the room. If a persona goes soft, tell it to push harder."
+  },
   {"slug":"build-a-budget","title":"Build a budget","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
   {
     "slug": "map-roles-and-responsibilities",
