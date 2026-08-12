@@ -447,7 +447,34 @@
   {"slug":"turn-business-goals-into-measurable-objectives","title":"Turn business goals into measurable objectives","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"get-stakeholder-sign-off-on-the-strategy","title":"Get stakeholder sign-off on the strategy","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"scope-the-work","title":"Scope the work","stage":"project-management","type":"thought-partner","level":"beginner","coming_soon":true},
-  {"slug":"estimate-the-effort","title":"Estimate the effort","stage":"project-management","type":"tool","level":"intermediate","coming_soon":true},
+  {
+    "slug": "estimate-the-effort",
+    "title": "List your estimate's assumptions",
+    "stage": "project-management",
+    "type": "thought-partner",
+    "level": "intermediate",
+    "tags": ["estimation", "assumptions", "unknowns", "scoping", "project-management"],
+    "added": "2026-08-11",
+    "teaser": "Every effort estimate rests on assumptions you didn't say out loud. Have AI surface them — by type — so you know what your number depends on.",
+    "best_in": "Claude or ChatGPT — both can read your estimate and project docs together",
+    "related": ["set-up-the-project-timeline"],
+    "intro": "<p>I once estimated a project where my team would build a series of 20-slide, PowerPoint-based courses. All good — until I realized the client expected each deck to be 200 slides. We'd just never discussed it out loud.</p><figure class=\"inline-gif-wrap\"><img src=\"/assets/gifs/Elle.gif\" alt=\"Elle Woods from Legally Blonde\" class=\"inline-gif\" /><figcaption>Listing your assumptions out loud: this is your Elle Woods moment.</figcaption></figure><p>When you start a project, you won't have all the answers. That's why it's critical to list what you know, what you don't, and what you're <span class=\"gradient-text\">assuming to be true</span>.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Point AI at everything you have — the rough estimate, the brief, the scope, the timeline — and it works through the estimate with you: for each phase it surfaces what you're implicitly assuming, sorts the assumptions by type, and flags the ones that would break the estimate if they're wrong.</p>",
+    "ai_wont": "<p>It reasons from what you give it and from typical patterns — it doesn't know your actual SME, your client's approval habits, or your team's real capacity. Treat the list as prompts to confirm, not facts. You decide which assumptions hold, and you own the number.</p>",
+    "steps": [
+      "Gather your sources — the rough estimate, plus the brief, scope, and plan if you have them — so it reasons from the real project, not a blank prompt.",
+      "Ask it to work through the estimate and surface the assumptions by type, flagging the ones the estimate can't survive being wrong about.",
+      "Go through the list: confirm, correct, or mark each as a risk — then caveat or re-estimate the ones you can't stand behind."
+    ],
+    "prompt_fast": {
+      "frame": "You are a delivery lead who interrogates effort estimates. You never take a number at face value — you surface the assumptions and unknowns it depends on, and you reason across whatever project documents you're given.",
+      "ask": "Work through my estimate with me. Using all the sources below, surface the assumptions each part of the estimate rests on, sorted by type, and flag the ones that would break the estimate if they're wrong.",
+      "shape": "Sources (use all of them):\n- My estimate: [paste — by phase, or a total with rough splits]\n- Project brief / scope: [paste or attach]\n- Timeline / plan: [paste or attach, if you have one]\n- What I already know is shaky: [anything]\n\nFor each part of the estimate, surface the assumptions it depends on, sorted by type:\n- Scope — what's in / out, and whether it'll grow\n- Complexity — how hard the content or build really is\n- People — SME turnaround, reviewer responsiveness, team skill, my capacity\n- Dependencies — inputs, approvals, access, or other teams you're waiting on\n- Process — number of review rounds and rework\n- Tooling / tech — the authoring tool, LMS, or integrations behaving\n\nReturn: the assumptions grouped by type (each tied to the part of the estimate it affects), the highest-risk ones flagged, and the few questions I should resolve before I commit.",
+      "tune": "Don't restate my numbers — find what they assume. Infer assumptions from the documents, not just my estimate. If the sources are thin, tell me what you'd need rather than guessing."
+    },
+    "pro_tip": "Share the assumptions list with your estimate — it reframes \"it'll take X\" as \"X, provided these hold,\" which protects you and lets people correct the shaky ones early."
+  },
   {
     "slug": "set-up-the-project-timeline",
     "title": "Set up the project timeline",
