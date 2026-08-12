@@ -5407,11 +5407,11 @@ body.view-library .layout { grid-template-columns: 1fr; }
 .vchip-ag-ic { color: var(--r-agentic); font-size: 1rem; line-height: 1; }
 
 /* ---- "Agentic" facet — a layered flag (not a role), electric-blue treatment -- */
-/* Tile marker — a small chip in the header, next to the type. */
+/* Tile marker — a small text chip in the header, next to the type. */
 .card-agentic-badge {
   flex: none;
-  display: inline-flex; align-items: center; gap: 4px;
-  font-family: 'Inter', sans-serif; font-size: .55rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  display: inline-flex; align-items: center;
+  font-family: 'Inter', sans-serif; font-size: .52rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
   color: var(--r-agentic);
   border: 1px solid color-mix(in srgb, var(--r-agentic) 42%, transparent);
   background: color-mix(in srgb, var(--r-agentic) 12%, transparent);

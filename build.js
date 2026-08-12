@@ -29,8 +29,10 @@ const scenarios = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/scenarios.jso
 const BUILD = Date.now().toString(36);
 const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
   .replace(/<main id="view" class="page">[\s\S]*?<\/main>/, '<main id="view" class="page"></main>')
-  .replace('href="/styles.css"', `href="/styles.css?v=${BUILD}"`)
-  .replace('src="/app.js"', `src="/app.js?v=${BUILD}"`);
+  // Reset any existing ?v= first, then stamp the fresh token — otherwise a
+  // second build can't re-match the ref and the token freezes.
+  .replace(/href="\/styles\.css(\?v=[^"]*)?"/, `href="/styles.css?v=${BUILD}"`)
+  .replace(/src="\/app\.js(\?v=[^"]*)?"/, `src="/app.js?v=${BUILD}"`);
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) =>

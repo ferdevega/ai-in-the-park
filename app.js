@@ -2082,7 +2082,7 @@ function renderV4Card(card, opts = {}) {
     if (card.agentic && !card.coming_soon) {
       const ag = document.createElement('span');
       ag.className = 'card-agentic-badge';
-      ag.innerHTML = '<span class="ag-ic" aria-hidden="true">⟳</span>Agentic';
+      ag.textContent = 'Agentic';
       header.appendChild(ag);
     }
 
