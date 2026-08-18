@@ -58,7 +58,26 @@
     "stage": "development",
     "type": "tool",
     "level": "beginner",
-    "coming_soon": true
+    "tags": ["video", "media-production", "copilot", "clipchamp", "microsoft-365"],
+    "added": "2026-08-15",
+    "teaser": "Turn a deck or a few bullet points into a watchable training video — narrated, on-brand, first cut in under a minute — inside Microsoft 365 Copilot.",
+    "best_in": "Microsoft 365 Copilot — needs Clipchamp enabled by your org",
+    "intro": "<p>Turning a deck into an actual video used to mean an afternoon in an editor. In the Microsoft 365 Copilot app, you describe the video — or hand it your slides — and it generates a first cut, with narration and music, in under a minute.</p><p>It's a <span class=\"gradient-text\">tool you set up once</span> — point it at your brand kit and your source — and reuse for every module.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>From a prompt, or an attached PowerPoint, Copilot builds a full draft — scenes, on-screen text, a narration voice, and background music — then lets you refine it: quick changes like the voice or music through the Edit with AI panel, or finer edits by opening it in Clipchamp. Microsoft's step-by-step is <a href=\"https://support.microsoft.com/en-us/microsoft-365-copilot/create-a-video-with-the-microsoft-365-copilot-app\" target=\"_blank\" rel=\"noopener\">here</a>.</p>",
+    "ai_wont": "<p>It gives you a fast, generic first cut — not a finished piece. The auto-narration and stock visuals are fine for internal training, not a flagship launch. Two catches worth knowing: your organization has to have Clipchamp enabled for the feature to appear, and a video generated from a sensitivity-labelled deck does <strong>not</strong> inherit that label — so re-apply protection before you share it.</p>",
+    "steps": [
+      "In the Microsoft 365 Copilot app, go to Create, then \"Create a video\" (your org needs Clipchamp enabled for this to appear).",
+      "Describe the video, or attach the deck it should be built from, and apply your brand kit if you have one — be specific, using the brief below.",
+      "Generate, then refine: use Edit with AI for the narration voice or music, or open in Clipchamp for precise trims — then Export and share."
+    ],
+    "prompt_fast": {
+      "frame": "Context: a short training video for [audience] on [topic]. Tone: [professional / friendly]. Keep it simple enough to watch at a desk.",
+      "ask": "Create a video that covers the key points below in a clear order, with narration and short on-screen text.",
+      "shape": "Build it from: [attach your deck or PowerPoint, or paste your script / bullet points]\nKey points, in order:\n- [point 1]\n- [point 2]\n- [point 3]\nAudience: [who they are]\nLength: [~2 minutes]\nBrand: [apply our brand kit, if set up]\nAvoid: [jargon, long paragraphs of on-screen text]",
+      "tune": "If a section runs long or the narration sounds off, redo just that part with Edit with AI; open Clipchamp for precise cuts. Keep on-screen text short — let the narration carry the detail."
+    },
+    "pro_tip": "Start from an existing deck rather than a blank prompt — attach the PowerPoint and Copilot has real structure and content to work from, so the first cut lands far closer to usable."
   },
   {
     "slug": "create-a-job-aid-from-a-full-module",
