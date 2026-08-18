@@ -362,6 +362,34 @@
     "pro_tip": "If AI keeps confirming whatever you said you wanted to do, it's being too agreeable. Tighten the Frame to push back harder, try \"You are a senior ID who has seen too many bad modality picks. Push back on my reasoning.\" A good session ends with you saying \"I wasn't going to do that, but actually it makes sense.\""
   },
   {
+    "slug": "check-your-content-for-ai-slop",
+    "title": "Check your content for AI slop",
+    "stage": "development",
+    "type": "auditor",
+    "level": "intermediate",
+    "tags": ["editing", "ai-slop", "voice", "quality", "auditor"],
+    "added": "2026-08-15",
+    "teaser": "AI writes with tells — hedges, hollow enthusiasm, words no one says out loud like \"delve.\" Have AI hunt them in your draft so it reads like a person wrote it.",
+    "best_in": "Claude or ChatGPT — paste the draft",
+    "related": ["audit-module-against-style-guide", "build-style-guide-for-your-project"],
+    "intro": "<p>AI-written content has tells. Readers may not name them, but they feel them — the hedging, the tidy rule-of-three, the words no one says out loud like \"delve\" and \"seamless.\" Once people spot the pattern, they trust the content less, even when it's right.</p><p>The fix is almost funny: <span class=\"gradient-text\">use AI to catch its own tells.</span> It knows the patterns better than anyone, so point it at your draft and make it hunt.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI your draft and it can flag the machine-made bits line by line — the filler words, the empty adjectives, the sentences that would be true of anything — quoting the exact phrase, saying why it reads as a tell, and offering a plainer version. You keep the parts that already sound like you.</p>",
+    "ai_wont": "<p>It can't hand you a voice you haven't defined, and left unchecked it will over-correct — flattening real style into something clipped and generic. It flags patterns; you decide what's genuinely slop versus just how you write. And it will happily use the same tells in its own suggestions, so read those too.</p>",
+    "steps": [
+      "Gather the draft, and — if you have one — a short sample of how you actually write, so AI matches your voice instead of a neutral \"good writing.\"",
+      "Ask it to flag the tells with the exact phrase, why it's a tell, and a tighter fix — not to rewrite the whole thing.",
+      "Go through the flags: cut the filler, keep what's really yours, and reject any \"fix\" that sounds more robotic than the original."
+    ],
+    "prompt_fast": {
+      "frame": "You are a blunt editor who hunts for AI writing tells and generic filler. You don't rewrite everything — you flag what sounds machine-made and show a tighter, plainer fix.",
+      "ask": "Go through my draft and flag anything that reads as AI slop or empty filler. For each, quote the phrase, say why it's a tell, and suggest a sharper version.",
+      "shape": "My draft: [paste]\n(Optional) A sample of how I actually write: [paste]\n\nFlag, with the exact phrase and a fix:\n- AI-tell words and phrases — \"delve,\" \"leverage,\" \"seamless,\" \"robust,\" \"unlock,\" \"navigate the landscape,\" \"in today's world,\" \"it's important to note,\" \"a testament to\"\n- Hollow enthusiasm and empty adjectives (\"powerful,\" \"cutting-edge,\" \"game-changing\") that add no information\n- Tidy rule-of-three lists and \"it's not X, it's Y\" constructions used for effect\n- Hedging (\"can help,\" \"may,\" \"might\") where a plain claim is truer\n- Over-explaining, and conclusions that just restate the opening\n- Sentences that would be true of almost anything — no concrete, specific detail\n\nReturn a table: phrase → why it's a tell → tighter version. Leave the lines that already sound human alone.",
+      "tune": "Don't flatten my voice or make everything terse — only flag what's genuinely generic or machine-made. If a whole section is slop, say so plainly. And check your own suggestions for the same tells before you give them to me."
+    },
+    "pro_tip": "Read it out loud. Anything you'd never actually say to a colleague is probably the slop — that test catches more than any word list."
+  },
+  {
     "slug": "audit-module-against-style-guide",
     "title": "Audit a module against your style guide",
     "stage": "development",

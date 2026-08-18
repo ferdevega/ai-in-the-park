@@ -67,7 +67,7 @@
     "related": ["build-a-course"],
     "moments": [
       { "label": "Set the standard", "cards": ["build-style-guide-for-your-project", "define-your-accessibility-standard"] },
-      { "label": "Check it yourself", "cards": ["audit-module-against-style-guide", "write-a-qa-checklist-for-your-course"] },
+      { "label": "Check it yourself", "cards": ["audit-module-against-style-guide", "check-your-content-for-ai-slop", "write-a-qa-checklist-for-your-course"] },
       { "label": "Get expert eyes", "cards": ["simulate-a-sme-review", "prep-a-sme-review-that-gets-useful-feedback"] },
       { "label": "Test with learners", "cards": ["run-a-focus-group-on-your-draft"] },
       { "label": "Track feedback and changes", "cards": ["version-and-changelog-your-content"] }
