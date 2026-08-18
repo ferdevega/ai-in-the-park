@@ -288,6 +288,34 @@
     "pro_tip": "After AI drafts the checks, run a quick test on each one: cover the answer choices, read the question, and try to answer it yourself in your own words. If your answer matches one of the choices, the question is well-written. If your answer isn't there or there's ambiguity, the check needs work."
   },
   {
+    "slug": "stress-test-your-knowledge-checks",
+    "title": "Stress-test your knowledge checks",
+    "stage": "development",
+    "type": "auditor",
+    "level": "intermediate",
+    "tags": ["assessments", "knowledge-checks", "quality", "item-writing", "auditor"],
+    "added": "2026-08-15",
+    "teaser": "AI wrote your quiz in seconds — which is exactly why you should check it. Put AI in the auditor role to catch giveaways, weak options, and the wrong difficulty before a learner does.",
+    "best_in": "Claude or ChatGPT — paste your questions, or upload the quiz",
+    "related": ["build-knowledge-checks-at-the-right-cognitive-level"],
+    "intro": "<p>AI will write you twenty quiz questions in ten seconds, and they'll look right. But looking right isn't the same as being valid — a plausible question can still give the answer away, test recall when you wanted judgement, or offer options no one would ever pick.</p><p><span class=\"gradient-text\">Plausible isn't valid.</span> So before a question reaches a learner, put AI back to work in a different role: not writing more questions, but checking the ones you already have.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI your questions and the objective they're meant to measure, and it works through them like a reviewer — flagging answers that are easy to guess, distractors that aren't credible, stems that are ambiguous or negatively worded, and items sitting at the wrong cognitive level. For each one it names the problem and suggests a fix, so you get a marked-up list you can act on, not a vague \"looks good.\"</p>",
+    "ai_wont": "<p>It checks against common item-writing rules, not against your learners or the subject-matter truth. It can't confirm the \"correct\" answer is actually correct in your context, or spot a distractor that's secretly plausible in your industry. Use it as a fast first-pass reviewer that catches the obvious flaws — then let a human, ideally an SME, confirm the calls that matter.</p>",
+    "steps": [
+      "Gather the questions and the objective each one should measure — the objective is what lets AI judge whether an item tests the right thing.",
+      "Ask it to audit the set against item-writing best practice, naming the problem and a fix for each flagged question rather than just rewriting them.",
+      "Work through the flags: fix the giveaways and weak distractors yourself, and send anything about subject accuracy to an SME."
+    ],
+    "prompt_fast": {
+      "frame": "You are an assessment reviewer who stress-tests knowledge-check questions. You don't write new questions — you find what's wrong with the ones you're given, against standard item-writing practice, and you're blunt about it.",
+      "ask": "Audit the questions below against the objective each is meant to measure. For every question, flag any flaws, name the problem, and suggest a fix.",
+      "shape": "Objective(s) the quiz should measure: [paste — e.g. \"employees can identify a phishing email\"]\nMy questions: [paste the items, with the options and the correct answer marked]\n\nCheck each question for:\n- Giveaways — grammatical cues, the longest or most detailed option being correct, \"all of the above,\" absolutes like \"always / never\"\n- Weak distractors — options no one would plausibly choose\n- Ambiguous or negatively worded stems, and double-barrelled questions\n- Wrong cognitive level — testing recall when the objective calls for applying or judging\n- Options that overlap or aren't parallel in form\n\nReturn a table: the question, the flaw(s), and a suggested fix. Flag the ones I should rewrite first.",
+      "tune": "Be strict, but if a question is fine, say so and move on — don't invent problems. Don't rewrite the whole set; point to the specific fix. If you can't tell whether the keyed answer is correct without subject knowledge, say so and leave it to me."
+    },
+    "pro_tip": "Run this on AI-generated questions especially — the ones that look most polished are the easiest to accept without reading closely. Two minutes of audit saves you from a quiz everyone passes without learning anything."
+  },
+  {
     "slug": "choose-the-right-modality",
     "title": "Choose the right modality",
     "stage": "strategy-curriculum",
