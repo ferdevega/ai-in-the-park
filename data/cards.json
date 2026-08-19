@@ -362,6 +362,34 @@
     "pro_tip": "If AI keeps confirming whatever you said you wanted to do, it's being too agreeable. Tighten the Frame to push back harder, try \"You are a senior ID who has seen too many bad modality picks. Push back on my reasoning.\" A good session ends with you saying \"I wasn't going to do that, but actually it makes sense.\""
   },
   {
+    "slug": "check-revision-against-feedback",
+    "title": "Check the revision addressed every piece of feedback",
+    "stage": "development",
+    "type": "auditor",
+    "level": "intermediate",
+    "tags": ["feedback", "revisions", "review", "quality", "auditor"],
+    "added": "2026-08-15",
+    "teaser": "After a round of feedback, a few notes always slip through — and reviewers remember the one you missed. Give AI the feedback and the new draft; it checks, item by item, what you actually addressed.",
+    "best_in": "Claude or ChatGPT — paste the feedback list and the revised draft",
+    "related": ["audit-module-against-style-guide"],
+    "intro": "<p>Feedback arrives from everywhere — inline comments, an email, notes from a review call. You revise, and a few items always slip through. And the reviewer remembers the one comment you didn't action.</p><p>Hand AI the feedback and the new version, and it reconciles them <span class=\"gradient-text\">item by item</span> — so nothing comes back as \"you ignored this.\"</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI the consolidated feedback and your revised draft, and it works down the list: for each piece of feedback it tells you whether it's addressed, partly addressed, not addressed, or unclear — and points to where in the draft. You get a status list you can act on, not a vague sense that you \"got most of it.\"</p>",
+    "ai_wont": "<p>It checks whether feedback was addressed, not whether your fix is any good — that judgement is still yours. It also can't read the intent behind vague notes like \"make it pop,\" and it only knows about the feedback you give it. Treat it as a completeness check, not a quality check.</p>",
+    "steps": [
+      "Consolidate all the feedback into one list — pull the inline comments, the email notes, and the review-call actions into a single place.",
+      "Paste that list with the revised draft and ask for an item-by-item status: addressed, partly, not addressed, or unclear, with the evidence.",
+      "Chase the misses: fix what slipped, and for anything too vague to check, go back to the reviewer rather than guess."
+    ],
+    "prompt_fast": {
+      "frame": "You are a reviewer reconciling a feedback list against a revised draft. You check, item by item, whether each piece of feedback was actually addressed, and you're literal about it.",
+      "ask": "For each piece of feedback below, tell me whether the revised draft addresses it, and show me where.",
+      "shape": "The feedback (one item per line): [paste every comment and note]\nThe revised draft: [paste or attach]\n\nFor each item, return:\n- the feedback\n- status: Addressed / Partly / Not addressed / Can't tell\n- the evidence: a quote or location in the draft, or what's missing\n\nList the Not-addressed and Partly ones first.",
+      "tune": "Judge only whether it was addressed, not whether the fix is good. If a note is too vague to check (\"make it pop\"), say so and ask me what it meant. Don't assume — if you can't find it in the draft, it's Not addressed."
+    },
+    "pro_tip": "Run this before you send the revision back. Nothing costs you credibility with a reviewer faster than missing their comment — and pasting the feedback verbatim, messy bits and all, keeps anything from getting lost in your paraphrase."
+  },
+  {
     "slug": "check-your-content-for-ai-slop",
     "title": "Check your content for AI slop",
     "stage": "development",
@@ -515,7 +543,34 @@
   {"slug":"write-a-qa-checklist-for-your-course","title":"Write a QA checklist for your course","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"define-your-accessibility-standard","title":"Define your accessibility standard","stage":"design","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"version-and-changelog-your-content","title":"Version and changelog your content","stage":"project-management","type":"tool","level":"beginner","coming_soon":true},
-  {"slug":"simulate-a-sme-review","title":"Simulate a SME review","stage":"development","type":"panel","level":"advanced","coming_soon":true},
+  {
+    "slug": "simulate-a-sme-review",
+    "title": "Simulate a SME review",
+    "stage": "development",
+    "type": "panel",
+    "level": "advanced",
+    "tags": ["sme", "review", "accuracy", "personas", "quality"],
+    "added": "2026-08-15",
+    "teaser": "Before you spend your SME's scarce time, have AI play the expert — surfacing the gaps and objections they'd raise, so the real review goes deep instead of catching typos.",
+    "best_in": "Claude or ChatGPT — any chat that can hold an expert persona; paste or attach the content",
+    "related": ["prep-a-sme-review-that-gets-useful-feedback", "run-a-focus-group-on-your-draft"],
+    "intro": "<p>A good SME's time is scarce, and it's easy to waste it on things you could have caught yourself — a wrong term, a missing caveat, a claim that's slightly out of date. AI can play the expert first: not to replace the real review, but to clear the obvious so the real one goes deep.</p><p>You're not using AI to generate or to check facts — you're using it to <span class=\"gradient-text\">rehearse the review</span> before it happens.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Tell AI who the SME is — their field, what they care about, how they tend to react — and give it your content. It reviews in character: flagging likely inaccuracies, oversimplifications, and missing caveats, and listing the questions that expert would put to you. You walk into the real review having already fixed the easy hits.</p>",
+    "ai_wont": "<p>It is not a real expert. It can be confidently wrong on specialist facts, it doesn't know your organisation's specifics, and it cannot sign off on accuracy. Use it to catch the obvious and to rehearse — never to skip the real SME. Anything that actually matters still needs a human who knows the subject.</p>",
+    "steps": [
+      "Describe the SME you'll face — role, expertise, and the things they always push on — so the persona reacts like the real one.",
+      "Give it the content and say what you most want tested (accuracy, completeness, tone for their field), then run the review in character.",
+      "Fix the obvious gaps it surfaces before the real review — and bring its list of likely questions with you, so the SME's time goes to the hard calls."
+    ],
+    "prompt_fast": {
+      "frame": "You are a subject-matter expert reviewing my content in character. You know the domain deeply, you're skeptical, and you flag what's wrong or oversimplified rather than being polite.",
+      "ask": "Review the content below as this expert would. Flag inaccuracies, oversimplifications, and missing caveats, then list the questions they'd ask me.",
+      "shape": "The expert you're playing: [role + domain — e.g. \"a compliance SME who's sat through every audit\"]; cares most about [accuracy / risk / nuance]; tends to be [blunt / detail-obsessed]\nWhat I most want checked: [accuracy? completeness? tone for their field?]\nThe content: [paste or attach]\n\nReview it in character and return:\n- Likely inaccuracies or out-of-date claims — mark how confident you are\n- Oversimplifications and missing caveats an expert would insist on\n- Anything you can't verify without being the real SME — flag it clearly\n- The questions this expert would ask me in the review",
+      "tune": "Stay in character and be tough, not agreeable. Where you're unsure of a specialist fact, say so instead of guessing — I still need the real SME to sign off. Review the content; don't rewrite it."
+    },
+    "pro_tip": "Base the persona on the actual SME you'll face — the closer to their real pet issues, the more of their objections you catch early. Then bring the AI's list of questions to the real review; it's the fastest way to make a busy expert's time count."
+  },
   {"slug":"prep-a-sme-review-that-gets-useful-feedback","title":"Prep a SME review that gets useful feedback","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"is-training-even-the-answer","title":"Is training even the answer?","stage":"analysis","type":"thought-partner","level":"intermediate","coming_soon":true},
   {"slug":"segment-your-audience","title":"Segment your audience","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
