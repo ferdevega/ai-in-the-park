@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Lion — Papeles, cartulinas e insumos gráficos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0d1117;--ink2:#161b26;--panel:#1c2230;--line:rgba(255,255,255,.08);
+  --gold:#f5a623;--gold2:#ffc44d;--amber:#e8890c;
+  --txt:#e7ebf2;--mut:#9aa4b6;--white:#fff;
+  --bg:#f4f5f7;--card:#fff;--cardline:#e7e9ee;--dark:#12161f;--dmut:#5b6472;
+  --ok:#12b886;
+  --shadow:0 10px 30px rgba(13,17,23,.10);--shadow2:0 20px 50px rgba(13,17,23,.18);
+  --r:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--dark);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.dsp{font-family:'Sora',sans-serif;letter-spacing:-.02em;line-height:1.1}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-family:'Sora';border-radius:999px;padding:13px 26px;border:0;cursor:pointer;transition:.2s;font-size:15px}
+.btn-gold{background:linear-gradient(135deg,var(--gold2),var(--amber));color:#1a1200;box-shadow:0 8px 22px rgba(232,137,12,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(232,137,12,.5)}
+.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.tag{font-family:'Sora';font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+
+.announce{background:var(--ink);color:#cbd3e1;font-size:13px;text-align:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+.announce b{color:var(--gold2)}
+
+header{position:sticky;top:0;z-index:50;background:rgba(13,17,23,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:26px;height:70px}
+.logo{display:flex;align-items:center;gap:11px;color:#fff;font-family:'Sora';font-weight:800;font-size:20px;letter-spacing:-.02em}
+.logo .mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--gold2),var(--amber));display:grid;place-items:center;font-size:22px;box-shadow:0 6px 16px rgba(232,137,12,.4)}
+.logo span{color:var(--gold2)}
+.logo small{display:block;font-family:'Inter';font-weight:500;font-size:10.5px;letter-spacing:.12em;color:var(--mut);margin-top:1px;text-transform:uppercase}
+.menu{display:flex;gap:24px;margin-left:8px}
+.menu a{color:#c3cbd9;font-size:14.5px;font-weight:500;transition:.15s}
+.menu a:hover{color:var(--gold2)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.iconbtn{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;color:#c3cbd9;background:rgba(255,255,255,.05);border:1px solid var(--line);cursor:pointer;transition:.15s;position:relative}
+.iconbtn:hover{color:#fff;background:rgba(255,255,255,.12)}
+.cartdot{position:absolute;top:-5px;right:-5px;background:var(--gold);color:#1a1200;font-size:11px;font-weight:700;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;font-family:'Sora'}
+.burger{display:none}
+
+.hero{position:relative;background:radial-gradient(1200px 600px at 78% -10%,rgba(245,166,35,.16),transparent 60%),linear-gradient(180deg,var(--ink),var(--ink2));color:#fff;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero:after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;opacity:.5;mask:radial-gradient(700px 500px at 75% 20%,#000,transparent 75%)}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding:74px 0 84px}
+.hero h1{font-size:54px;font-weight:800;margin:16px 0 18px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--gold2),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:18px;color:#c3cbd9;max-width:520px;margin-bottom:28px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:30px}
+.hero-stats{display:flex;gap:30px;flex-wrap:wrap}
+.hero-stats div b{font-family:'Sora';font-size:26px;font-weight:800;color:#fff;display:block}
+.hero-stats div span{font-size:13px;color:var(--mut)}
+
+.hviz{position:relative}
+.pcard{background:linear-gradient(160deg,var(--panel),#141a26);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow2)}
+.pcard .shot{height:200px;border-radius:14px;background:radial-gradient(300px 150px at 30% 20%,rgba(245,166,35,.25),transparent),linear-gradient(135deg,#232b3a,#0f141d);display:grid;place-items:center;font-size:78px;border:1px solid var(--line)}
+.pcard .row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px}
+.pcard h4{font-family:'Sora';font-size:17px;color:#fff}
+.pcard .brand{font-size:12px;color:var(--mut)}
+.pcard .price{font-family:'Sora';font-weight:800;font-size:24px;color:var(--gold2)}
+.pcard .cuota{font-size:12px;color:var(--mut);text-align:right}
+.float{position:absolute;background:#fff;color:var(--dark);border-radius:14px;padding:11px 15px;box-shadow:var(--shadow2);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600}
+.float .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:18px}
+.f1{top:-18px;left:-24px}
+.f2{bottom:-20px;right:-18px}
+
+.trust{background:var(--dark);color:#cfd6e2;border-bottom:1px solid var(--line)}
+.trust-in{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:18px 0}
+.trust .t{display:flex;align-items:center;gap:12px;padding:6px 10px}
+.trust .t .ic{font-size:24px}
+.trust .t b{font-family:'Sora';font-size:14px;color:#fff;display:block}
+.trust .t span{font-size:12.5px;color:var(--dmut)}
+
+section.blk{padding:74px 0}
+.head{text-align:center;max-width:640px;margin:0 auto 44px}
+.head h2{font-size:38px;font-weight:800;margin:10px 0 12px}
+.head p{color:#5b6472;font-size:17px}
+
+.cats{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.cat{background:var(--card);border:1px solid var(--cardline);border-radius:var(--r);padding:24px 14px;text-align:center;transition:.2s;cursor:pointer}
+.cat:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--gold)}
+.cat .ic{font-size:34px;margin-bottom:12px}
+.cat b{font-family:'Sora';font-size:14px;font-weight:600;display:block}
+.cat span{font-size:12px;color:#8a93a3}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.prod{background:var(--card);border:1px solid var(--cardline);border-radius:var(--r);overflow:hidden;transition:.2s;display:flex;flex-direction:column}
+.prod:hover{transform:translateY(-5px);box-shadow:var(--shadow2)}
+.prod .thumb{height:180px;position:relative;display:grid;place-items:center;font-size:62px;background:linear-gradient(150deg,#f0f2f6,#e2e6ee)}
+.prod .badge{position:absolute;top:12px;left:12px;background:var(--dark);color:#fff;font-family:'Sora';font-weight:700;font-size:11px;padding:5px 11px;border-radius:999px;letter-spacing:.04em}
+.prod .badge.hot{background:linear-gradient(135deg,var(--gold2),var(--amber));color:#1a1200}
+.prod .fav{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;color:#b3bac6;box-shadow:var(--shadow);cursor:pointer}
+.prod .fav:hover{color:#e24b4a}
+.prod .body{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1}
+.prod .cat-lbl{font-size:11.5px;color:#98a1b1;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.prod h3{font-size:15.5px;font-weight:600;font-family:'Inter';letter-spacing:0;margin:5px 0 8px;line-height:1.35}
+.stars{color:var(--gold);font-size:13px;margin-bottom:12px}
+.stars span{color:#9aa4b6;margin-left:5px}
+.prod .price{font-family:'Sora';font-weight:800;font-size:22px;margin-top:auto}
+.prod .old{font-size:13px;color:#a2abb9;text-decoration:line-through;margin-left:7px;font-weight:500;font-family:'Inter'}
+.prod .cuota{font-size:12.5px;color:var(--ok);font-weight:600;margin:3px 0 14px}
+.prod .add{margin-top:auto;width:100%;justify-content:center}
+
+.build{background:linear-gradient(120deg,var(--ink),var(--ink2));color:#fff;border-radius:26px;overflow:hidden;position:relative;border:1px solid var(--line)}
+.build:after{content:"🦁";position:absolute;right:-10px;bottom:-30px;font-size:230px;opacity:.06}
+.build-in{position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;padding:52px}
+.build h2{font-size:34px;font-weight:800;margin-bottom:14px}
+.build h2 em{font-style:normal;color:var(--gold2)}
+.build p{color:#c3cbd9;max-width:480px;margin-bottom:24px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:13px;color:#dfe5ee;font-weight:500}
+
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.wcard{background:var(--card);border:1px solid var(--cardline);border-radius:var(--r);padding:30px 26px;transition:.2s}
+.wcard:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.wcard .ic{width:56px;height:56px;border-radius:15px;background:linear-gradient(135deg,#fff2db,#ffe1b0);display:grid;place-items:center;font-size:28px;margin-bottom:16px}
+.wcard h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.wcard p{color:#5b6472;font-size:15px}
+
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.rev{background:var(--card);border:1px solid var(--cardline);border-radius:var(--r);padding:26px}
+.rev .stars{font-size:15px;margin-bottom:12px}
+.rev p{font-size:15px;color:#374050;margin-bottom:18px}
+.rev .who{display:flex;align-items:center;gap:12px}
+.rev .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--amber));display:grid;place-items:center;font-family:'Sora';font-weight:700;color:#1a1200}
+.rev .who b{font-size:14.5px;display:block;font-family:'Sora'}
+.rev .who span{font-size:12.5px;color:#8a93a3}
+
+.cta{background:linear-gradient(135deg,var(--gold2),var(--amber));border-radius:26px;padding:52px;text-align:center;color:#1a1200}
+.cta h2{font-size:36px;font-weight:800;margin-bottom:12px}
+.cta p{font-size:17px;max-width:520px;margin:0 auto 26px;color:#4a3600}
+.cta .btn-dark{background:var(--ink)}
+
+footer{background:var(--ink);color:#aab3c3;padding:60px 0 26px;border-top:1px solid var(--line);margin-top:74px}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:34px;padding-bottom:36px;border-bottom:1px solid var(--line)}
+footer h4{font-family:'Sora';color:#fff;font-size:15px;margin-bottom:16px}
+footer ul{list-style:none}
+footer li{margin-bottom:10px;font-size:14px}
+footer li a:hover{color:var(--gold2)}
+footer .about p{font-size:14px;margin:14px 0 18px;max-width:290px}
+.social{display:flex;gap:10px}
+.social a{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--line);display:grid;place-items:center;font-size:17px;transition:.15s}
+.social a:hover{background:var(--gold);color:#1a1200}
+.pay{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pay span{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:7px;padding:5px 10px;font-size:12px}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-size:13px;color:var(--dmut);flex-wrap:wrap;gap:10px}
+
+.wa{position:fixed;bottom:24px;right:24px;z-index:60;width:60px;height:60px;border-radius:50%;background:#25d366;display:grid;place-items:center;font-size:30px;box-shadow:0 10px 26px rgba(37,211,102,.5);cursor:pointer;transition:.2s;animation:pulse 2.4s infinite}
+.wa:hover{transform:scale(1.08)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+.demo{background:#fff8ec;border:1px dashed var(--amber);color:#7a5410;text-align:center;font-size:13px;padding:10px;font-weight:500}
+
+@media(max-width:960px){
+  .hero-in{grid-template-columns:1fr;gap:44px}
+  .hero h1{font-size:42px}
+  .cats{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .trust-in{grid-template-columns:repeat(2,1fr)}
+  .why,.revs{grid-template-columns:1fr}
+  .build-in{grid-template-columns:1fr;padding:38px 28px}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .menu,.nav .searchbtn{display:none}
+  .burger{display:grid}
+}
+@media(max-width:560px){
+  .hero h1{font-size:34px}
+  .head h2{font-size:28px}
+  .cats,.grid{grid-template-columns:1fr 1fr}
+  .fgrid{grid-template-columns:1fr}
+  section.blk{padding:52px 0}
+}
+</style>
+</head>
+<body>
+
+<div class="demo">🎨 Diseño de demostración — productos y precios de ejemplo (papeles e insumos gráficos), listos para reemplazar por los reales</div>
+
+<div class="announce">🚚 <b>Envío gratis</b> en compras superiores a $80.000 &nbsp;·&nbsp; 📦 <b>Venta por mayor y menor</b> &nbsp;·&nbsp; ✂️ Cortes a medida para tu proyecto</div>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><span class="mark">🦁</span> <span style="line-height:1">Lion<span style="color:var(--gold2)">Papeles</span><small>Insumos gráficos</small></span></a>
+    <nav class="menu">
+      <a href="#cats">Productos</a>
+      <a href="#destacados">Ofertas</a>
+      <a href="#mayorista">Mayorista</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="nav-right">
+      <div class="iconbtn searchbtn" title="Buscar">🔍</div>
+      <div class="iconbtn" title="Mi cuenta">👤</div>
+      <div class="iconbtn" title="Carrito">🛒<span class="cartdot">2</span></div>
+      <div class="iconbtn burger" title="Menú" onclick="document.querySelector('.menu').style.display='flex'">☰</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-in">
+    <div>
+      <span class="tag">Papeles · Cartulinas · Autoadhesivos · Laminado</span>
+      <h1>Todo en <em>papeles e insumos gráficos</em>, en un solo lugar.</h1>
+      <p class="lead">Cartulinas, papel fotográfico, afiches, vinilos autoadhesivos, films de laminado y encuadernación. Para imprentas, gráficas, oficinas, escuelas y creativos.</p>
+      <div class="hero-cta">
+        <a href="#destacados" class="btn btn-gold">Ver catálogo →</a>
+        <a href="#mayorista" class="btn btn-ghost">Precios por mayor</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>+15</b><span>años en el rubro</span></div>
+        <div><b>+500</b><span>productos en stock</span></div>
+        <div><b>4.9★</b><span>en reseñas</span></div>
+      </div>
+    </div>
+    <div class="hviz">
+      <div class="pcard">
+        <div class="shot">📄</div>
+        <div class="row">
+          <div>
+            <div class="brand">Cartulina · Lion Select</div>
+            <h4>Cartulina Bifaz 240g · 50×70cm</h4>
+          </div>
+          <div>
+            <div class="price">$1.290</div>
+            <div class="cuota">x unidad · desc. x cantidad</div>
+          </div>
+        </div>
+      </div>
+      <div class="float f1"><span class="ic" style="background:#e6f7f0">✅</span> Colores surtidos</div>
+      <div class="float f2"><span class="ic" style="background:#fff2db">✂️</span> Cortamos a medida</div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap trust-in">
+    <div class="t"><span class="ic">📦</span><div><b>Mayor y menor</b><span>Descuentos por cantidad</span></div></div>
+    <div class="t"><span class="ic">🚚</span><div><b>Envíos a todo el país</b><span>Correo y moto en el día</span></div></div>
+    <div class="t"><span class="ic">✂️</span><div><b>Cortes a medida</b><span>El tamaño que necesites</span></div></div>
+    <div class="t"><span class="ic">🏦</span><div><b>Cuotas y Mercado Pago</b><span>Todas las tarjetas</span></div></div>
+  </div>
+</div>
+
+<section class="blk" id="cats">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Categorías</span>
+      <h2>Encontrá tu papel ideal</h2>
+      <p>Todo el catálogo organizado por tipo de material para que llegues rápido a lo que buscás.</p>
+    </div>
+    <div class="cats">
+      <div class="cat"><div class="ic">📄</div><b>Cartulinas</b><span>Bifaz y colores</span></div>
+      <div class="cat"><div class="ic">📸</div><b>Papel fotográfico</b><span>Glossy y mate</span></div>
+      <div class="cat"><div class="ic">🖼️</div><b>Papel afiche</b><span>Colores surtidos</span></div>
+      <div class="cat"><div class="ic">🏷️</div><b>Autoadhesivos</b><span>Vinilos y films</span></div>
+      <div class="cat"><div class="ic">🎞️</div><b>Laminado</b><span>Bobinas y films</span></div>
+      <div class="cat"><div class="ic">📎</div><b>Encuadernación</b><span>Espirales y anillos</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="destacados" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Más vendidos</span>
+      <h2>Productos destacados</h2>
+      <p>Una selección de lo que más eligen imprentas, gráficas y creativos.</p>
+    </div>
+    <div class="grid">
+
+      <div class="prod">
+        <div class="thumb">📄<span class="badge hot">-15% OFF</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Cartulina</span>
+          <h3>Cartulina Bifaz 240g · 50×70cm · Colores surtidos</h3>
+          <div class="stars">★★★★★ <span>(214)</span></div>
+          <div class="price">$1.090<span class="old">$1.290</span></div>
+          <div class="cuota">Descuento por cantidad · desde x25u</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">📸<span class="badge">TOP</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Papel fotográfico</span>
+          <h3>Papel Fotográfico Glossy A4 180g · x50 hojas</h3>
+          <div class="stars">★★★★★ <span>(97)</span></div>
+          <div class="price">$8.900</div>
+          <div class="cuota">3 cuotas sin interés de $2.966</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">✨<span class="badge hot">NUEVO</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Papel especial</span>
+          <h3>Papel Perlado Italiano A4 · Metalizado · x20u</h3>
+          <div class="stars">★★★★☆ <span>(63)</span></div>
+          <div class="price">$6.500<span class="old">$7.800</span></div>
+          <div class="cuota">Ideal para invitaciones y tarjetería</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">🖼️<span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Papel afiche</span>
+          <h3>Papel Afiche 70×100cm · Pack x25 · Surtido</h3>
+          <div class="stars">★★★★★ <span>(158)</span></div>
+          <div class="price">$5.750</div>
+          <div class="cuota">Descuento por cantidad · escuelas</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">🏷️<span class="badge hot">COMBO</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Autoadhesivo</span>
+          <h3>Vinilo Autoadhesivo Brillante A4 · Inkjet · x50</h3>
+          <div class="stars">★★★★★ <span>(302)</span></div>
+          <div class="price">$9.990<span class="old">$12.400</span></div>
+          <div class="cuota">3 cuotas sin interés de $3.330</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">🎞️<span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Laminado</span>
+          <h3>Film para Laminado en Bobina · 33cm · 100µ</h3>
+          <div class="stars">★★★★★ <span>(88)</span></div>
+          <div class="price">$18.900</div>
+          <div class="cuota">6 cuotas sin interés de $3.150</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">🔖<span class="badge">MATE</span><span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Transparencias</span>
+          <h3>Filmina / Transparencia A4 · Inkjet · x50 hojas</h3>
+          <div class="stars">★★★★★ <span>(411)</span></div>
+          <div class="price">$7.200<span class="old">$8.500</span></div>
+          <div class="cuota">Para proyectos y serigrafía</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+      <div class="prod">
+        <div class="thumb">📎<span class="fav">♡</span></div>
+        <div class="body">
+          <span class="cat-lbl">Encuadernación</span>
+          <h3>Espirales Plásticos + Anillos de Alambre · Pack</h3>
+          <div class="stars">★★★★☆ <span>(74)</span></div>
+          <div class="price">$4.300</div>
+          <div class="cuota">Varias medidas disponibles</div>
+          <button class="btn btn-dark add">Agregar al carrito 🛒</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="mayorista" style="padding-top:0">
+  <div class="wrap">
+    <div class="build">
+      <div class="build-in">
+        <div>
+          <span class="tag">Para tu negocio</span>
+          <h2 style="margin-top:10px">Precios <em>mayoristas</em> y cortes a medida</h2>
+          <p>¿Tenés una imprenta, gráfica, librería o kiosco? Comprá por cantidad con descuentos especiales y pedí los papeles cortados en el tamaño exacto que necesitás.</p>
+          <div class="chips">
+            <span class="chip">🏭 Imprentas</span>
+            <span class="chip">🎨 Gráficas y diseño</span>
+            <span class="chip">📚 Librerías</span>
+            <span class="chip">🏫 Escuelas</span>
+            <span class="chip">✂️ Corte a medida</span>
+          </div>
+          <div style="margin-top:26px"><a href="#contacto" class="btn btn-gold">Pedir lista mayorista →</a></div>
+        </div>
+        <div style="text-align:center;font-size:130px;line-height:1">📦</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="nosotros" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Por qué Lion</span>
+      <h2>La diferencia está en la atención</h2>
+      <p>No somos un depósito que despacha cajas. Somos el proveedor de confianza para tu proyecto o tu negocio.</p>
+    </div>
+    <div class="why">
+      <div class="wcard"><div class="ic">✂️</div><h3>Cortamos a medida</h3><p>Te llevamos el papel al tamaño exacto que necesitás. Sin desperdicio ni gramajes que no usás.</p></div>
+      <div class="wcard"><div class="ic">💬</div><h3>Asesoramiento real</h3><p>Te ayudamos a elegir el gramaje y material justo para cada trabajo. Atención por WhatsApp de persona a persona.</p></div>
+      <div class="wcard"><div class="ic">📦</div><h3>Stock y precio mayorista</h3><p>Amplio stock permanente y precios por cantidad para que tu negocio siempre tenga con qué producir.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <span class="tag">Reseñas reales</span>
+      <h2>Lo que dicen nuestros clientes</h2>
+    </div>
+    <div class="revs">
+      <div class="rev">
+        <div class="stars">★★★★★</div>
+        <p>"Compro las cartulinas y el papel fotográfico para mi imprenta hace años. Calidad constante y siempre tienen stock."</p>
+        <div class="who"><div class="av">MC</div><div><b>María C.</b><span>Imprenta gráfica</span></div></div>
+      </div>
+      <div class="rev">
+        <div class="stars">★★★★★</div>
+        <p>"Me cortaron el papel perlado en la medida exacta para las invitaciones. Me asesoraron con el gramaje. Un lujo."</p>
+        <div class="who"><div class="av">JR</div><div><b>Jorgelina R.</b><span>Diseñadora / tarjetería</span></div></div>
+      </div>
+      <div class="rev">
+        <div class="stars">★★★★★</div>
+        <p>"Pedí afiches y films de laminado por mayor para la escuela. Pagué en cuotas y me llegó al otro día."</p>
+        <div class="who"><div class="av">LF</div><div><b>Lucía F.</b><span>Compra mayorista</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta">
+      <h2>¿Buscás un papel puntual?</h2>
+      <p>Escribinos por WhatsApp y te ayudamos a encontrarlo, armamos tu presupuesto mayorista o coordinamos el corte a medida.</p>
+      <a href="#" class="btn btn-dark">💬 Escribinos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="about">
+        <a href="#" class="logo"><span class="mark">🦁</span> Lion<span>Papeles</span></a>
+        <p>Tu proveedor de papeles e insumos gráficos de confianza. Venta por mayor y menor, con atención personalizada.</p>
+        <div class="social">
+          <a href="#">📘</a><a href="#">📷</a><a href="#">💬</a><a href="#">▶️</a>
+        </div>
+      </div>
+      <div>
+        <h4>Productos</h4>
+        <ul>
+          <li><a href="#">Cartulinas bifaz</a></li>
+          <li><a href="#">Papel fotográfico</a></li>
+          <li><a href="#">Papel afiche</a></li>
+          <li><a href="#">Autoadhesivos y films</a></li>
+          <li><a href="#">Laminado y encuadernación</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <ul>
+          <li><a href="#">Cómo comprar</a></li>
+          <li><a href="#">Envíos y entregas</a></li>
+          <li><a href="#">Precios mayoristas</a></li>
+          <li><a href="#">Cortes a medida</a></li>
+          <li><a href="#">Medios de pago</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>📍 Tu dirección, Ciudad</li>
+          <li>📞 (011) 0000-0000</li>
+          <li>💬 WhatsApp: 11 0000-0000</li>
+          <li>✉️ info@lioncomputers.com.ar</li>
+          <li>🕐 Lun a Sáb · 9 a 19hs</li>
+        </ul>
+        <div class="pay">
+          <span>💳 Visa</span><span>Mastercard</span><span>Mercado Pago</span><span>Efectivo</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Lion · Papeles e insumos gráficos · Todos los derechos reservados</span>
+      <span>Diseño conceptual — hecho para mostrar lo que es posible ✨</span>
+    </div>
+  </div>
+</footer>
+
+<a href="#contacto" class="wa" title="Escribinos por WhatsApp">💬</a>
+
+<script>
+document.querySelectorAll('.fav').forEach(f=>f.addEventListener('click',e=>{
+  e.stopPropagation();
+  f.textContent = f.textContent==='♡' ? '♥' : '♡';
+  f.style.color = f.textContent==='♥' ? '#e24b4a' : '';
+}));
+let n=2;const dot=document.querySelector('.cartdot');
+document.querySelectorAll('.add').forEach(b=>b.addEventListener('click',()=>{
+  n++;dot.textContent=n;dot.style.transform='scale(1.4)';
+  const t=b.textContent;b.textContent='✓ Agregado';b.style.background='#12b886';
+  setTimeout(()=>{dot.style.transform='scale(1)';b.textContent=t;b.style.background='';},1100);
+}));
+</script>
+</body>
+</html>
