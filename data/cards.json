@@ -117,7 +117,27 @@
     "stage": "analysis",
     "type": "panel",
     "level": "advanced",
-    "coming_soon": true
+    "tags": ["discovery", "interviews", "personas", "audience", "research"],
+    "added": "2026-08-15",
+    "teaser": "Can't get time with real learners yet? Have AI role-play them — so you rehearse your questions and hear the obvious answers before the conversations that actually count.",
+    "best_in": "Claude or ChatGPT — any chat that can hold a persona; paste your learner persona if you have one",
+    "related": ["build-a-learner-persona", "run-a-focus-group-on-your-draft"],
+    "intro": "<p>Talking to your audience is the best input you can get — and the hardest to schedule. So while you wait for real time with them, or to prepare for it, AI can play your audience: you run your interview questions, and hear the answers a real person might give.</p><p>You're not using AI to generate anything here — you're using it to <span class=\"gradient-text\">rehearse the conversation</span> so the real one goes further.</p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI a persona and your interview questions, and it answers in character — showing you where a question is leading or too vague, what a real person might actually say, and the follow-ups worth having ready. You refine the guide before you spend anyone's real time on it.</p>",
+    "ai_wont": "<p>A simulated learner is AI's guess, not your audience. It will sound plausible and still be wrong about their real motivations, constraints, and context. Use it to rehearse and sharpen your questions — never as a substitute for real interviews, and never as data. Don't write \"we interviewed the audience\" when you interviewed a model.</p>",
+    "steps": [
+      "Build or paste a persona — the richer the better (your learner-persona card is a good source) — and your draft interview questions.",
+      "Run the interview in character, then have it step out and critique your questions: which were leading, vague, or got a shallow answer.",
+      "Fix the guide, then interview real people — and spend that time on what the model couldn't have known."
+    ],
+    "prompt_fast": {
+      "frame": "You are a member of my target audience answering an interview in character — honestly, in your own words, with your real constraints and priorities, not as a helpful assistant.",
+      "ask": "Answer my discovery interview questions as this person, then step out of character and tell me where my questions were weak.",
+      "shape": "Who you're playing: [persona — role, context, what they care about, what frustrates them; paste your learner persona if you have one]\nMy interview questions: [paste your guide]\n\nFirst, answer each question in character — specific, sometimes unsure or off-topic, the way a real person would.\nThen, out of character, tell me:\n- which questions were leading, vague, or got a shallow answer\n- what I didn't ask that I should have\n- the follow-up questions worth having ready",
+      "tune": "Stay in character for the answers and don't be tidy — real people ramble and contradict themselves. When you step out, be honest about my questions. And remember you're a stand-in: flag anything you're guessing at that I should verify with a real person."
+    },
+    "pro_tip": "Use this to sharpen the guide, then spend your real interview time on what the model couldn't know — the specific stories, the local politics, the things that surprise you. If the AI never surprises you, you're only hearing your own assumptions."
   },
   {
     "slug": "document-your-strategy",
@@ -572,7 +592,34 @@
     "pro_tip": "Base the persona on the actual SME you'll face — the closer to their real pet issues, the more of their objections you catch early. Then bring the AI's list of questions to the real review; it's the fastest way to make a busy expert's time count."
   },
   {"slug":"prep-a-sme-review-that-gets-useful-feedback","title":"Prep a SME review that gets useful feedback","stage":"development","type":"creator","level":"intermediate","coming_soon":true},
-  {"slug":"is-training-even-the-answer","title":"Is training even the answer?","stage":"analysis","type":"thought-partner","level":"intermediate","coming_soon":true},
+  {
+    "slug": "is-training-even-the-answer",
+    "title": "Is training even the answer?",
+    "stage": "analysis",
+    "type": "thought-partner",
+    "level": "intermediate",
+    "tags": ["discovery", "performance", "root-cause", "scoping", "strategy"],
+    "added": "2026-08-15",
+    "teaser": "Half the training requests you get aren't training problems. Before you design anything, have AI pressure-test whether a course will actually change the behaviour.",
+    "best_in": "Claude or ChatGPT",
+    "related": ["root-cause-the-performance-gap", "choose-the-right-modality"],
+    "intro": "<p>\"Can you build a course on this?\" usually arrives as a solved problem — someone has already decided training is the fix. But often the real issue is a broken process, unclear expectations, a bad tool, or no incentive, and a course won't touch any of those. You build it anyway, everyone passes, and nothing changes.</p><p>A thought partner helps you ask the awkward question first: <span class=\"gradient-text\">will training actually change the behaviour?</span></p>",
+    "why_matters": "",
+    "how_ai_helps": "<p>Give AI the request and what you know about the gap, and it works through it like a performance consultant — separating a can't-do problem (people lack the skill or knowledge, where training helps) from a won't-do problem (process, tools, incentives, expectations, where training won't). It names what a course can and can't fix, and what else would have to change for the behaviour to stick.</p>",
+    "ai_wont": "<p>It doesn't know your organisation's real dynamics or politics, so it surfaces the questions rather than settling them. And \"training isn't the answer\" can be a hard thing to say to a stakeholder — AI can help you build the case, but you're the one who delivers it. Treat it as a thinking aid, not a verdict.</p>",
+    "steps": [
+      "Bring the request, the behaviour you actually want on the job, and what you think is getting in the way.",
+      "Ask it to separate skill/knowledge gaps from environment, process, and motivation gaps — and to name what training can and can't fix.",
+      "Decide: a full course, a lighter intervention (a job aid, a process fix), or pushing back on the request — and use its reasoning to make the case."
+    ],
+    "prompt_fast": {
+      "frame": "You are a performance consultant, not an order-taker. When someone asks for training, you first work out whether training will actually change the behaviour — or whether the real problem is process, tools, incentives, or expectations.",
+      "ask": "Here's a training request. Help me pressure-test whether training is the right fix before I design anything.",
+      "shape": "The request: [what they asked for — e.g. \"a course on the new expense policy\"]\nThe behaviour we actually want on the job: [what people should do differently]\nWhat's happening now / why we think there's a gap: [symptoms, data, complaints]\nWhat I already suspect is getting in the way: [anything]\n\nWork through it:\n- Is this a can't-do problem (people lack skill or knowledge — training can help) or a won't-do problem (process, tools, incentives, expectations, management — training won't fix it)?\n- What evidence would tell us which?\n- If training is only part of the answer, what else has to change for the behaviour to stick?\n- Give me a straight recommendation: full training, a lighter intervention, or push back — and why.",
+      "tune": "Be willing to tell me training isn't the answer — don't assume a course is the outcome. If you need more to judge, ask me the two or three questions that would settle it."
+    },
+    "pro_tip": "Ask this the moment a request lands, not after you've scoped a course. It's far easier to redirect \"can you build training?\" on day one than to unwind three weeks of design when you realise the real problem was a broken workflow."
+  },
   {"slug":"segment-your-audience","title":"Segment your audience","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"turn-business-goals-into-measurable-objectives","title":"Turn business goals into measurable objectives","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
   {"slug":"get-stakeholder-sign-off-on-the-strategy","title":"Get stakeholder sign-off on the strategy","stage":"strategy-curriculum","type":"creator","level":"intermediate","coming_soon":true},
